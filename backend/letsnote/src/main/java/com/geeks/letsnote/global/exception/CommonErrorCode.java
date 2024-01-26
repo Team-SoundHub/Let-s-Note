@@ -1,0 +1,19 @@
+package com.geeks.letsnote.global.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@AllArgsConstructor
+public enum CommonErrorCode implements BaseErrorCode {
+    CONFLICT(HttpStatus.CONFLICT, "COMMON_001", "리소스 중복"),
+    REQUEST_PARAMETER_BIND_FAILED(HttpStatus.BAD_REQUEST, "COMMON_002", "PARAMETER_BIND_FAILED"),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON_003", "BAD REQUEST"),
+    REFRESH_TOKEN_VALIDATION_FAILED(HttpStatus.UNAUTHORIZED, "COMMON_004", "UNAUTHORIZED_REQUEST")
+    ;
+
+    private final HttpStatus httpStatus;
+    private final String code;
+    private final String message;
+}
