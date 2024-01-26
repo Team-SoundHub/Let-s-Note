@@ -6,17 +6,31 @@ const getTransport = () => {
 };
 
 class Synth {
-  constructor(callback, samples = "audio/marimba/") {
-    this.sampler = new Tone.Sampler(scale, callback, samples);
-    this.sampler.toMaster();
+  constructor(callback, instruments = ["marimba"], samples = "audio/") {
+    this.instruments = instruments;
+    this.activeInstrument = this.instruments[0];
+    this.samplers = {};
+
+    this.instruments.forEach((instrument) => {
+      this.samplers[instrument] = new Tone.Sampler(
+        scale,
+        callback,
+        samples + instrument + "/"
+      );
+      this.samplers[instrument].toMaster();
+    });
+
     this.setVolume();
   }
 
   setVolume(volume = -12) {
-    this.sampler.volume.value = volume;
+    Object.values(this.samplers).forEach((sampler) => {
+      sampler.volume.value = volume;
+    });
   }
 
   toggle() {
+    console.log(Tone.context.state);
     if (Tone.context.state !== "running") {
       Tone.context.resume();
     }
@@ -29,11 +43,23 @@ class Synth {
   }
 
   playNote(note, time, timing = "8n") {
-    this.sampler.triggerAttackRelease(note, this.timing || timing, time);
+    this.samplers[this.activeInstrument].triggerAttackRelease(
+      note,
+      this.timing || timing,
+      time
+    );
   }
 
   setBPM(bpm = 120) {
     getTransport().bpm.value = bpm;
+  }
+
+  setInstrument(instrument) {
+    if (this.instruments.includes(instrument)) {
+      this.activeInstrument = instrument;
+    } else {
+      console.error(`Instrument "${instrument}" not found.`);
+    }
   }
 }
 
