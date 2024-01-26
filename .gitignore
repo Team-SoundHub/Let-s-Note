@@ -144,7 +144,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # mp3
-.mp3
+*.mp3
 
 
 # End of https://www.toptal.com/developers/gitignore/api/react
