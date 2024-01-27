@@ -8,17 +8,25 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CorsFilterConfig {
+    private static final String[] AUTH_WHITELIST = {
+            "/api/**"
+    };
 
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        for (String path : AUTH_WHITELIST) {
         CorsConfiguration config = new CorsConfiguration();
+
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
-        source.registerCorsConfiguration("/api/**", config);
+            source.registerCorsConfiguration(path, config);
+        }
+
         return new CorsFilter(source);
     }
 
