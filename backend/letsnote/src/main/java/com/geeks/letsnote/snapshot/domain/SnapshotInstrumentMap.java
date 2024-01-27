@@ -1,5 +1,6 @@
 package com.geeks.letsnote.snapshot.domain;
 
+import com.geeks.letsnote.instrument.Instrument;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class SnapshotInstrumentMap {
     @Column(name = "snapshot_id", nullable = false)
     private Long snapshotId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "instrument", nullable = false)
-    private String instrument;
+    private Instrument instrument;
 }
