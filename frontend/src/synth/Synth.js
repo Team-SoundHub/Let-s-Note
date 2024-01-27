@@ -27,6 +27,7 @@ class Synth {
     Object.values(this.samplers).forEach((sampler) => {
       sampler.volume.value = volume;
     });
+
   }
 
   toggle() {
@@ -47,6 +48,7 @@ class Synth {
       this.timing || timing,
       time
     );
+
   }
 
   setBPM(bpm = 120) {
@@ -56,6 +58,7 @@ class Synth {
   setInstrument(instrument) {
     this.activeInstrument = instrument;
   }
+
 }
 
 export default Synth;

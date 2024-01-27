@@ -1,3 +1,4 @@
+
 import React from "react";
 import styled from "styled-components";
 import BeatToggle from "./BeatToggle";
@@ -42,6 +43,7 @@ const BeatControls = ({
       <BeatChange
         style={{ marginBottom: 5 }}
         mode="add"
+
         onClick={() => changeColumns(1)}
       />
       <BeatChange
