@@ -61,16 +61,13 @@ class WorkSpaceContainer extends Component {
     this.setState({ columns: currentCols + diff });
   };
 
+  changeInstrument = (instrument) => {
+    this.setState({ currentInstrument: instrument });
+    this.state.synth.setInstrument(instrument);
+  };
+
   setScale = (scale) => {
     scale = [
-      "C1",
-      "D1",
-      "E1",
-      "F1",
-      "G1",
-      "A1",
-      "B1",
-      "C2",
       "D2",
       "E2",
       "F2",
@@ -78,6 +75,13 @@ class WorkSpaceContainer extends Component {
       "A2",
       "B2",
       "C3",
+      "D3",
+      "E3",
+      "F3",
+      "G3",
+      "A3",
+      "B3",
+      "C4",
     ].reverse();
     this.setState({ availableNotes: scale });
   };
@@ -103,6 +107,7 @@ class WorkSpaceContainer extends Component {
             changeColumns={this.changeColumns}
             adjustBPM={this.adjustBPM}
             bpm={this.initialBPM}
+            changeInstrument={this.changeInstrument}
           />
         </Container>
       );

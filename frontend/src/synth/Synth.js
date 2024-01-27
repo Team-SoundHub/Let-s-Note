@@ -6,7 +6,7 @@ const getTransport = () => {
 };
 
 class Synth {
-  constructor(callback, instruments = ["marimba"], samples = "audio/") {
+  constructor(callback, instruments = ["piano"], samples = "audio/") {
     this.instruments = instruments;
     this.activeInstrument = this.instruments[0];
     this.samplers = {};
@@ -30,7 +30,6 @@ class Synth {
   }
 
   toggle() {
-    console.log(Tone.context.state);
     if (Tone.context.state !== "running") {
       Tone.context.resume();
     }
@@ -55,11 +54,7 @@ class Synth {
   }
 
   setInstrument(instrument) {
-    if (this.instruments.includes(instrument)) {
-      this.activeInstrument = instrument;
-    } else {
-      console.error(`Instrument "${instrument}" not found.`);
-    }
+    this.activeInstrument = instrument;
   }
 }
 
