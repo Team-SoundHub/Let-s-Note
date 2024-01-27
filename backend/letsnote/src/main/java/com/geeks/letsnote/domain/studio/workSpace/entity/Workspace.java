@@ -20,7 +20,7 @@ public class Workspace {
     @Column(name = "owner_id", nullable = false)
     private Long ownerId;
 
-    @Column(name = "update_at")
+    @Column(name = "update_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp updateAt;
 
     @Column(name = "space_title" , length = 30)

@@ -2,6 +2,7 @@ package com.geeks.letsnote.domain.studio.workSpace.application.impl;
 
 
 import com.geeks.letsnote.domain.account.dao.AccountRepository;
+import com.geeks.letsnote.domain.account.entity.Account;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceMemberMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dao.WorkspaceMemberMapRepository;
@@ -33,7 +34,13 @@ public class WorkspaceImpl implements WorkspaceService {
 
     @Override
     public List<ResponseWorkspaces.WorkspaceDto> getAllWorkspacesByOwnerId(Long accountId) {
-        List<Workspace> workspaceList = workspaceRepository.findAllByOwnerId(accountId);
+        List<WorkspaceMemberMap> workspaceMemberMaps = workspaceMemberMapRepository.findAllByAccountId(accountId);
+        List<Workspace> workspaceList = new ArrayList<>();
+        for(WorkspaceMemberMap workspaceMemberMap : workspaceMemberMaps){
+            Optional<Workspace> workspace = workspaceRepository.findById(workspaceMemberMap.getSpaceId());
+            workspaceList.add(workspace.get());
+        }
+
         Collections.sort(workspaceList, Comparator.comparing(Workspace::getUpdateAt).reversed());
         List<ResponseWorkspaces.WorkspaceDto> workspaceDtoList = new ArrayList<>();
 
@@ -41,15 +48,19 @@ public class WorkspaceImpl implements WorkspaceService {
             List<WorkspaceMemberMap> memberMaps = workspaceMemberMapRepository.findAllBySpaceId(workspace.getSpaceId());
             List<Long> members = new ArrayList<>();
             for(WorkspaceMemberMap workspaceMemberMap : memberMaps){
-                members.add(workspaceMemberMap.getAccountId());
+                if(workspace.getOwnerId() != workspaceMemberMap.getAccountId()){
+                    members.add(workspaceMemberMap.getAccountId());
+                }
             }
+            Optional<Account> workspaceOwner = accountRepository.findById(workspace.getOwnerId());
             List<String> memberNicknames = new ArrayList<>();
             for(Long memberId : members){
-                String memberNickname = accountRepository.findNicknameById(memberId);
-                memberNicknames.add(memberNickname);
+                Optional<Account> member = accountRepository.findById(memberId);
+                memberNicknames.add(member.get().getNickname());
             }
             ResponseWorkspaces.WorkspaceDto workspaceDto = ResponseWorkspaces.WorkspaceDto.builder()
                     .spaceId(workspace.getSpaceId())
+                    .ownerNickname(workspaceOwner.get().getNickname())
                     .memberNicknames(memberNicknames)
                     .spaceTitle(workspace.getSpaceTitle())
                     .spaceContent(workspace.getSpaceContent())
@@ -69,18 +80,16 @@ public class WorkspaceImpl implements WorkspaceService {
                 .ownerId(accountId)
                 .spaceTitle(workspaceDto.spaceTitle())
                 .spaceContent(workspaceDto.spaceContent())
-                .updateAt(new Timestamp(new Date().getTime()))
                 .snapshot(false)
                 .build();
         workspaceRepository.save(workspace);
 
-        if(workspaceDto.memberAccountId() != null){
-            RequestWorkspaces.WorkspaceMemberMapDto workspaceMemberMapDto = RequestWorkspaces.WorkspaceMemberMapDto.builder()
-                    .memberAccountId(workspaceDto.memberAccountId())
-                    .spaceId(workspace.getSpaceId()).build();
+        workspaceDto.membersAccountId().add(accountId);
+        RequestWorkspaces.WorkspaceMemberMapDto workspaceMemberMapDto = RequestWorkspaces.WorkspaceMemberMapDto.builder()
+                .memberAccountId(workspaceDto.membersAccountId())
+                .spaceId(workspace.getSpaceId()).build();
 
-            workspaceMemberMapService.createWorkspaceMemberMap(workspaceMemberMapDto);
-        }
+        workspaceMemberMapService.createWorkspaceMemberMap(workspaceMemberMapDto);
 
         return ResponseWorkspaces.WorkspaceId.builder()
                 .spaceId(workspace.getSpaceId())

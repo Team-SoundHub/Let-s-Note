@@ -1,9 +1,7 @@
 package com.geeks.letsnote.domain.studio.workSpace.dto;
 
 import lombok.Builder;
-import lombok.Getter;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public record RequestWorkspaces() {
@@ -11,7 +9,7 @@ public record RequestWorkspaces() {
     public record WorkspaceDto(
             String spaceTitle,
             String spaceContent,
-            List<Long> memberAccountId
+            List<Long> membersAccountId
     ){}
 
     @Builder

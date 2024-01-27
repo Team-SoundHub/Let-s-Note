@@ -47,10 +47,12 @@ public class AccountServiceImpl implements AccountService {
 
         Long tokenWeight = ((AccountAdapter)authentication.getPrincipal()).getAccount().getTokenWeight();
         String refreshToken = refreshTokenProvider.createToken(authentication, tokenWeight);
+        Optional<Account> account = accountRepository.findByUsername(username);
 
         return ResponseAccount.Token.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .accountId(account.get().getId())
                 .build();
     }
 
