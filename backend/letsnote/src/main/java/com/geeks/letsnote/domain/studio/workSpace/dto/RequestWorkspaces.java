@@ -11,8 +11,7 @@ public record RequestWorkspaces() {
     public record WorkspaceDto(
             String spaceTitle,
             String spaceContent,
-            List<Long> memberAccountId,
-            String username
+            List<Long> memberAccountId
     ){}
 
     @Builder
