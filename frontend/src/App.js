@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 import { store } from './app/store';
 import { Route, Routes } from "react-router-dom";
 import WorkPlacePage from "./pages/WorkPlacePage";
-import ChatTestPage from "./pages/ChatTestPage";
 import LandingPage from "./pages/LandingPage";
 import MyPage from "./pages/MyPage";
 
@@ -15,8 +14,7 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/workspace/:spaceId" element={<WorkPlacePage />} />
-          <Route path="/workspace" element={<WorkPlacePage />} />
-          <Route path="/chat" element={<ChatTestPage />} />
+          <Route path="/workspace" element={<WorkPlacePage />} /> 
         </Routes>
       </Provider>
     </>
