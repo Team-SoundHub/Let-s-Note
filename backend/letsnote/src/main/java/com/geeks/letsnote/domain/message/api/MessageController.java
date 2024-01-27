@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "메세지 API", description = "메세지 관련 API 입니다.")
 @RestController
 @RequestMapping("/api/v1/messages")
 public class MessageController {
@@ -26,11 +28,7 @@ public class MessageController {
 
     @Operation(summary = "모든 메세지 출력", description = "SpaceId에 해당하는 모든 메세지를 리턴합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = MessageResponse.information.class)))
     })
     @GetMapping("/{spaceId}")
     public ResponseEntity<CommonResponse> getAllMessage(@PathVariable String spaceId){
@@ -45,11 +43,7 @@ public class MessageController {
 
     @Operation(summary = "메세지 저장", description = "AccountId로 특정 메세지를 저장합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = MessageResponse.information.class))),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
     @PostMapping("/{accountId}")
     public ResponseEntity<CommonResponse> createMessage(@RequestBody MessageReqeust.information messageInfo){
@@ -57,7 +51,7 @@ public class MessageController {
 
         CommonResponse response = CommonResponse.builder()
                 .success(true)
-                .response(messageInfo)
+                .response("")
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
