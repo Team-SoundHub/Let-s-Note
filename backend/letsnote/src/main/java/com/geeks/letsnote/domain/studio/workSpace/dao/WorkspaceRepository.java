@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WorkspaceRepository extends JpaRepository<Workspace,Long> {
+public interface WorkspaceRepository extends JpaRepository<Workspace,String> {
     List<Workspace> findAllByOwnerId(Long ownerId);
 }
