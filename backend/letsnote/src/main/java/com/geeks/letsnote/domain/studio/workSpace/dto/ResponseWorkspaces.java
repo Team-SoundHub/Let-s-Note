@@ -9,6 +9,7 @@ public record ResponseWorkspaces() {
     @Builder
     public record WorkspaceDto(
             String spaceId,
+            String ownerNickname,
             List<String> memberNicknames,
             String spaceTitle,
             String spaceContent,
