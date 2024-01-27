@@ -5,3 +5,4 @@ const WorkPlacePage = () => {
 };
 
 export default WorkPlacePage;
+ 
