@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/workspaces")
+@RequestMapping("/api/v1/workspaces")
 public class WorkspaceController {
     private final WorkspaceService workspaceService;
 
@@ -19,9 +19,9 @@ public class WorkspaceController {
         this.workspaceService = workspaceService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<CommonResponse> getAllWorkspaces(@RequestBody String userName){
-        List<ResponseWorkspaces.WorkspaceDto> getWorkspaces = workspaceService.getAllWorkspacesByUserName(userName);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<CommonResponse> getAllWorkspaces(@PathVariable("accountId") Long accountId){
+        List<ResponseWorkspaces.WorkspaceDto> getWorkspaces = workspaceService.getAllWorkspacesByOwnerId(accountId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
                 .response(getWorkspaces)
@@ -30,9 +30,9 @@ public class WorkspaceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("")
-    public ResponseEntity<CommonResponse> postWorkspace(@RequestBody RequestWorkspaces.WorkspaceDto workspaceDto){
-        String postWorkspaceId = workspaceService.createWorkspace(workspaceDto);
+    @PostMapping("/{accountId}")
+    public ResponseEntity<CommonResponse> postWorkspace(@PathVariable("accountId") Long accountId, @RequestBody RequestWorkspaces.WorkspaceDto workspaceDto){
+        ResponseWorkspaces.WorkspaceId postWorkspaceId = workspaceService.createWorkspace(workspaceDto,accountId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
                 .response(postWorkspaceId)
