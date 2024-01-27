@@ -2,6 +2,7 @@ package com.geeks.letsnote.domain.studio.workSpace.entity;
 
 import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,14 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WorkspaceInstrumentMap {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "map_id")
-    private Long mapId;
+    private String mapId;
 
     @Column(name = "space_id")
-    private Long spaceId;
+    private String spaceId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "instrument", nullable = false)
     private Instrument instrument;
+
+
+    @Builder
+    public WorkspaceInstrumentMap(String mapId, String spaceId, Instrument instrument) {
+        this.mapId = mapId;
+        this.spaceId = spaceId;
+        this.instrument = instrument;
+    }
 }
