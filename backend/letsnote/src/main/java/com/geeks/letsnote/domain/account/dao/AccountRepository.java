@@ -17,10 +17,10 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByUsername(String username);
 
-//    @Query("SELECT e.nickname FROM account e WHERE e.id IN :ids")
     List<String> findNicknameByIdIn(@Param("ids") List<Long> ids);
 
     String findNicknameByUsername(String username);
+    String findNicknameById(Long accountId);
 
     Long findIdByUsername(String username);
 

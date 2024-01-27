@@ -14,4 +14,9 @@ public record ResponseWorkspaces() {
             String spaceContent,
             Timestamp updateAt
     ){}
+
+    @Builder
+    public record WorkspaceId(
+            String spaceId
+    ){}
 }

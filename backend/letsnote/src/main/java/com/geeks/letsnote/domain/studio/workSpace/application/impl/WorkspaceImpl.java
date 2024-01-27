@@ -2,7 +2,6 @@ package com.geeks.letsnote.domain.studio.workSpace.application.impl;
 
 
 import com.geeks.letsnote.domain.account.dao.AccountRepository;
-import com.geeks.letsnote.domain.account.entity.Account;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceMemberMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dao.WorkspaceMemberMapRepository;
@@ -10,6 +9,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dao.WorkspaceRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
+import com.geeks.letsnote.domain.studio.workSpace.entity.WorkspaceMemberMap;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -32,17 +32,25 @@ public class WorkspaceImpl implements WorkspaceService {
     }
 
     @Override
-    public List<ResponseWorkspaces.WorkspaceDto> getAllWorkspacesByUserName(String userName) {
-        Optional<Account> requestAccount = accountRepository.findByUsername(userName);
-        List<Workspace> workspaceList = workspaceRepository.findAllByOwnerId(requestAccount.get().getId());
+    public List<ResponseWorkspaces.WorkspaceDto> getAllWorkspacesByOwnerId(Long accountId) {
+        List<Workspace> workspaceList = workspaceRepository.findAllByOwnerId(accountId);
         Collections.sort(workspaceList, Comparator.comparing(Workspace::getUpdateAt).reversed());
         List<ResponseWorkspaces.WorkspaceDto> workspaceDtoList = new ArrayList<>();
 
         for(Workspace workspace : workspaceList) {
-            List<Long> members = workspaceMemberMapRepository.findAccountIdsBySpaceId(workspace.getSpaceId());
+            List<WorkspaceMemberMap> memberMaps = workspaceMemberMapRepository.findAllBySpaceId(workspace.getSpaceId());
+            List<Long> members = new ArrayList<>();
+            for(WorkspaceMemberMap workspaceMemberMap : memberMaps){
+                members.add(workspaceMemberMap.getAccountId());
+            }
+            List<String> memberNicknames = new ArrayList<>();
+            for(Long memberId : members){
+                String memberNickname = accountRepository.findNicknameById(memberId);
+                memberNicknames.add(memberNickname);
+            }
             ResponseWorkspaces.WorkspaceDto workspaceDto = ResponseWorkspaces.WorkspaceDto.builder()
                     .spaceId(workspace.getSpaceId())
-                    .memberNicknames(accountRepository.findNicknameByIdIn(members))
+                    .memberNicknames(memberNicknames)
                     .spaceTitle(workspace.getSpaceTitle())
                     .spaceContent(workspace.getSpaceContent())
                     .updateAt(workspace.getUpdateAt())
@@ -55,8 +63,7 @@ public class WorkspaceImpl implements WorkspaceService {
 
     @Override
     @Transactional
-    public String createWorkspace(RequestWorkspaces.WorkspaceDto workspaceDto) {
-        Long accountId = accountRepository.findIdByUsername(workspaceDto.username());
+    public ResponseWorkspaces.WorkspaceId createWorkspace(RequestWorkspaces.WorkspaceDto workspaceDto, Long accountId) {
         Workspace workspace = Workspace.builder()
                 .spaceId(UUID.randomUUID().toString().replace("-",""))
                 .ownerId(accountId)
@@ -75,6 +82,8 @@ public class WorkspaceImpl implements WorkspaceService {
             workspaceMemberMapService.createWorkspaceMemberMap(workspaceMemberMapDto);
         }
 
-        return workspace.getSpaceId();
+        return ResponseWorkspaces.WorkspaceId.builder()
+                .spaceId(workspace.getSpaceId())
+                .build();
     }
 }
