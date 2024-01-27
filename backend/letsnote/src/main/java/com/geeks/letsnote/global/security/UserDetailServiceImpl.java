@@ -1,8 +1,8 @@
 package com.geeks.letsnote.global.security;
 
 import com.geeks.letsnote.domain.account.dao.AccountRepository;
-import com.geeks.letsnote.domain.account.domain.Account;
-import com.geeks.letsnote.domain.account.domain.AccountAdapter;
+import com.geeks.letsnote.domain.account.entity.Account;
+import com.geeks.letsnote.domain.account.entity.AccountAdapter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -2,9 +2,9 @@ package com.geeks.letsnote.domain.account.application.impl;
 
 import com.geeks.letsnote.domain.account.application.AccountService;
 import com.geeks.letsnote.domain.account.dao.AccountRepository;
-import com.geeks.letsnote.domain.account.domain.Account;
-import com.geeks.letsnote.domain.account.domain.AccountAdapter;
-import com.geeks.letsnote.domain.account.domain.Authority;
+import com.geeks.letsnote.domain.account.entity.Account;
+import com.geeks.letsnote.domain.account.entity.AccountAdapter;
+import com.geeks.letsnote.domain.account.entity.Authority;
 import com.geeks.letsnote.domain.account.dto.RequestAccount;
 import com.geeks.letsnote.domain.account.dto.ResponseAccount;
 import com.geeks.letsnote.global.exception.ApplicationException;

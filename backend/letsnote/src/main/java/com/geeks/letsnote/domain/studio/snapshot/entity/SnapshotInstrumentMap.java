@@ -1,22 +1,22 @@
-package com.geeks.letsnote.workSpace.domain;
+package com.geeks.letsnote.domain.studio.snapshot.entity;
 
-import com.geeks.letsnote.instrument.Instrument;
+import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "workspace_instrument_map")
+@Table(name = "snapshot_instrument_map")
 @Getter
 @NoArgsConstructor
-public class WorkspaceInstrumentMap {
+public class SnapshotInstrumentMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "map_id")
     private Long mapId;
 
-    @Column(name = "space_id")
-    private Long spaceId;
+    @Column(name = "snapshot_id", nullable = false)
+    private Long snapshotId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "instrument", nullable = false)

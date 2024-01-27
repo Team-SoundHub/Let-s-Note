@@ -26,7 +26,8 @@ public class SecurityConfig {
             "/favicon.ico",
             "/actuator/*",
             "/api/v1/accounts/token",
-            "/api/v1/members/register"
+            "/api/v1/members/register",
+            "/test",
     };
 
     public SecurityConfig(
@@ -42,8 +43,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, CustomJwtFilter customJwtFilter) throws Exception {
         httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptionConfig ->
                         exceptionConfig.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                                 .accessDeniedHandler(jwtAccessDeniedHandler)
