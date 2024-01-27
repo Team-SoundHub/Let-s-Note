@@ -1,6 +1,7 @@
 package com.geeks.letsnote.domain.studio.snapshot.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,12 +13,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class Snapshot {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "snapshot_id")
-    private Long snapshot_id;
+    private String snapshotId;
 
     @Column(name = "space_id", nullable = false)
-    private Long spaceId;
+    private String spaceId;
 
     @Column(name = "snapshot_title", nullable = false, length = 50)
     private String snapshotTitle;
@@ -30,4 +30,14 @@ public class Snapshot {
 
     @Column(name = "views")
     private Long views;
+
+    @Builder
+    public Snapshot(String snapshotId, String spaceId, String snapshotTitle, String snapshotContent, Timestamp updateAt, Long views) {
+        this.snapshotId = snapshotId;
+        this.spaceId = spaceId;
+        this.snapshotTitle = snapshotTitle;
+        this.snapshotContent = snapshotContent;
+        this.updateAt = updateAt;
+        this.views = views;
+    }
 }

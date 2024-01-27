@@ -15,7 +15,7 @@ public class Note {
     private Long noteId;
 
     @Column(name = "space_instrument", nullable = false)
-    private Long spaceInstrument;
+    private String spaceInstrument;
 
     @Column(name = "note_x", nullable = false)
     private Long noteX;
