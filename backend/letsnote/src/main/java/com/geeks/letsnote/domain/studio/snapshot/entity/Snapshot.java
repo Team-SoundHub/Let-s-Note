@@ -1,9 +1,8 @@
-package com.geeks.letsnote.snapshot.domain;
+package com.geeks.letsnote.domain.studio.snapshot.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.sql.Timestamp;
 
@@ -30,5 +29,5 @@ public class Snapshot {
     private Timestamp updateAt;
 
     @Column(name = "views")
-    private Long views = 0L;
+    private Long views;
 }

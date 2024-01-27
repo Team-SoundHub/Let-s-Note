@@ -1,4 +1,4 @@
-package com.geeks.letsnote.message.domain;
+package com.geeks.letsnote.domain.message.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

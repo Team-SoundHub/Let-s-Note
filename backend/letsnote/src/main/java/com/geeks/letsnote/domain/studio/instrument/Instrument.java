@@ -1,4 +1,4 @@
-package com.geeks.letsnote.instrument;
+package com.geeks.letsnote.domain.studio.instrument;
 
 public enum Instrument {
     Piano,
