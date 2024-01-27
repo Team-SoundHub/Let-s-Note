@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface WorkspaceMemberMapRepository extends JpaRepository<WorkspaceMemberMap,Long> {
     List<WorkspaceMemberMap> findAllBySpaceId(String spaceId);
+
+    List<WorkspaceMemberMap> findAllByAccountId(Long accountId);
 }
