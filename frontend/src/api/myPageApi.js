@@ -24,12 +24,9 @@ const createWorkSpace = async (spaceTitle, spaceContent, memberAccountId) => {
 
         const requestData = {
             spaceTitle: spaceTitle,
-            spaceContent: spaceContent
+            spaceContent: spaceContent, 
+            memberAccountId: memberAccountId
         };
-
-        if (memberAccountId){
-            requestData.memberAccountId = memberAccountId;
-        }
 
         const response = await axios.post(`https://letsnote-rough-wind-6773.fly.dev/api/v1/workspaces/${accountId}`, requestData, {
             headers: headers
