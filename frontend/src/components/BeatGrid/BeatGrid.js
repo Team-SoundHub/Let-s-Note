@@ -54,6 +54,7 @@ class BeatGrid extends Component {
           playing={count % columns === i}
           synth={synth}
           onClick={this.handleBoxClick}
+
         />
       );
     }

@@ -31,6 +31,7 @@ class BeatToggle extends Component {
         />
       </BeatButton>
     );
+
   }
 }
 
@@ -39,3 +40,4 @@ BeatToggle.defaultProps = {
 };
 
 export default BeatToggle;
+
