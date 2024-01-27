@@ -6,7 +6,7 @@ const getTransport = () => {
 };
 
 class Synth {
-  constructor(callback, instruments = ["piano"], samples = "audio/") {
+  constructor(callback, instruments = ["piano", "guitar"], samples = "audio/") {
     this.instruments = instruments;
     this.activeInstrument = this.instruments[0];
     this.samplers = {};
@@ -17,7 +17,7 @@ class Synth {
         callback,
         samples + instrument + "/"
       );
-      this.samplers[instrument].toMaster();
+      this.samplers[instrument].toDestination();
     });
 
     this.setVolume();
@@ -27,7 +27,6 @@ class Synth {
     Object.values(this.samplers).forEach((sampler) => {
       sampler.volume.value = volume;
     });
-
   }
 
   toggle() {
@@ -38,17 +37,22 @@ class Synth {
   }
 
   repeat(callback, timing = "8n") {
+    console.log("repeat called");
     this.timing = timing;
-    getTransport().scheduleRepeat(callback, timing);
+    const transport = getTransport();
+
+    // Clear any previously scheduled events
+    transport.cancel(0);
+
+    // Schedule the new repeating events
+    transport.scheduleRepeat((time) => {
+      callback(time, this.activeInstrument);
+    }, timing);
   }
 
-  playNote(note, time, timing = "8n") {
-    this.samplers[this.activeInstrument].triggerAttackRelease(
-      note,
-      this.timing || timing,
-      time
-    );
-
+  playNote(note, time, timing = "8n", Instrument = this.activeInstrument) {
+    const activeSampler = this.samplers[Instrument];
+    activeSampler.triggerAttackRelease(note, timing, time);
   }
 
   setBPM(bpm = 120) {
@@ -58,7 +62,6 @@ class Synth {
   setInstrument(instrument) {
     this.activeInstrument = instrument;
   }
-
 }
 
 export default Synth;
