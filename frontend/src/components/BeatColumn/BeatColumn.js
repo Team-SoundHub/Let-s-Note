@@ -31,13 +31,25 @@ class BeatColumn extends Component {
     this.state = { activeBoxes: [] };
   }
 
+  handleClick = (i) => () => {
+    const { onClick, id } = this.props;
+    // 클릭한 box의 정보를 부모 컴포넌트로 전달
+    onClick && onClick(id, i);
+    this.toggleActive(i)();
+  };
+
   toggleActive = (i) => () => {
-    const { scale } = this.props;
+    const { scale, synth } = this.props;
     this.setState((prev) => {
       const activeBoxes = [...prev.activeBoxes];
       activeBoxes[i] = !activeBoxes[i];
 
       const activeNotes = scale.filter((note, index) => activeBoxes[index]);
+
+      // 연주 코드 추가
+      if (synth && activeBoxes[i]) {
+        synth.playNote(scale[i]);
+      }
 
       return { activeBoxes, activeNotes };
     });
@@ -74,7 +86,7 @@ class BeatColumn extends Component {
           key={i.toString(10)}
           note={scale[i]}
           active={this.state.activeBoxes[i]}
-          onClick={this.toggleActive(i)}
+          onClick={this.handleClick(i)}
         />
       );
     }

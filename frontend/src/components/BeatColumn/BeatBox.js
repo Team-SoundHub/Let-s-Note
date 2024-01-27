@@ -15,6 +15,7 @@ flex: 1;은 flex-grow: 1;, flex-shrink: 1;, flex-basis: 0%;와 동일
   margin: 0.5px;
   background-color: ${(props) =>
     props.active ? props.activeColor : props.inactiveColor};
+  width: 3rem;
 `;
 
 const pickActiveColor = (note) => {

@@ -1,41 +1,43 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import BeatButton from './BeatButton'
+import React, { Component } from "react";
+import styled from "styled-components";
+import BeatButton from "./BeatButton";
 
 const Play = styled.i`
   font-size: 24px;
   color: #363636;
-  margin-left: ${props => (props.playing ? 0 : 4)}px;
-`
+  margin-left: ${(props) => (props.playing ? 0 : 4)}px;
+`;
 
 class BeatToggle extends Component {
-  state = { playing: false }
+  state = { playing: false };
 
   onClick = () => {
-    const { onClick } = this.props
+    const { onClick } = this.props;
     this.setState(
-      prev => ({
-        playing: !prev.playing
+      (prev) => ({
+        playing: !prev.playing,
       }),
       onClick
-    )
-  }
+    );
+  };
 
-  render () {
-    const { playing } = this.state
+  render() {
+    const { playing } = this.state;
     return (
       <BeatButton onClick={this.onClick}>
         <Play
           playing={playing}
-          className={`fas ${playing ? 'fa-pause' : 'fa-play'}`}
+          className={`fas ${playing ? "fa-pause" : "fa-play"}`}
         />
       </BeatButton>
-    )
+    );
+
   }
 }
 
 BeatToggle.defaultProps = {
-  onClick: () => null
-}
+  onClick: () => null,
+};
 
-export default BeatToggle
+export default BeatToggle;
+

@@ -3,17 +3,21 @@ import styled from "styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
 
 const Container = styled.div`
-  // grid 전체를  담는 container
   flex: 1;
-  width: calc(100vw - 2px);
+  width: calc((100vw - 2px) * 0.8);
   margin: 0;
   display: flex;
   background-color: ${(props) => props.background};
   border: 0.5px solid ${(props) => props.background};
+  overflow: auto;
 `;
 
 class BeatGrid extends Component {
   state = { count: -1 };
+
+  handleBoxClick = (row, column) => {
+    console.log(`Clicked: Row ${row}, Column ${column}`);
+  };
 
   trigger = (time) => {
     this.setState((prev) => ({ count: prev.count + 1 }), this.playBeat(time));
@@ -23,6 +27,15 @@ class BeatGrid extends Component {
     const { columns } = this.props;
     const activeBeat = this.state.count % columns;
     this.refs[activeBeat].playBeat(time);
+  };
+
+  activateBox = (x, y) => {
+    const { columns } = this.props;
+    const rowToActivate = x % columns;
+    const beatColumn = this.refs[rowToActivate.toString(10)];
+    if (beatColumn) {
+      beatColumn.activateBox(y);
+    }
   };
 
   renderBeatColumns = () => {
@@ -40,6 +53,8 @@ class BeatGrid extends Component {
           scale={scale}
           playing={count % columns === i}
           synth={synth}
+          onClick={this.handleBoxClick}
+
         />
       );
     }
