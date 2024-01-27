@@ -7,6 +7,8 @@ import com.geeks.letsnote.domain.account.exception.RefreshTokenValidationExcepti
 import com.geeks.letsnote.global.security.config.CustomJwtFilter;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,11 +33,7 @@ public class AccountController
 
     @Operation(summary = "토큰 발급", description = "Access Token, Refresh Token을 ResponseBody에 담아 리턴합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ResponseAccount.Token.class)))
     })
     @PostMapping("/token")
     public ResponseEntity<CommonResponse> authorize(@Valid @RequestBody RequestAccount.Login loginDto) {
@@ -57,11 +55,7 @@ public class AccountController
 
     @Operation(summary = "액세스토큰 재발급", description = "Access Token을 ResponseBody에 담아 리턴합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ResponseAccount.Refresh.class)))
     })
     @PutMapping("/token")
     public ResponseEntity<CommonResponse> refreshToken(@Valid @RequestBody RequestAccount.Refresh refreshDto) {
@@ -85,11 +79,7 @@ public class AccountController
 
     @Operation(summary = "토큰 삭제", description = "사용자 이름을 URL 파라미터값으로 받아 Refresh Token의 가중치를 변경시는 방식으로 삭제처리 합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
     @DeleteMapping("/{username}/token")
     @PreAuthorize("hasAnyRole('ADMIN')")
