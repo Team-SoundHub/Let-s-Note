@@ -1,4 +1,4 @@
-package com.geeks.letsnote.domain.account.domain;
+package com.geeks.letsnote.domain.account.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

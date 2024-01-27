@@ -1,4 +1,4 @@
-package com.geeks.letsnote.domain.account.domain;
+package com.geeks.letsnote.domain.account.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

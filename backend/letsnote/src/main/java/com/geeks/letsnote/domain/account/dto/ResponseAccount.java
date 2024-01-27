@@ -1,7 +1,7 @@
 package com.geeks.letsnote.domain.account.dto;
 
-import com.geeks.letsnote.domain.account.domain.Account;
-import com.geeks.letsnote.domain.account.domain.Authority;
+import com.geeks.letsnote.domain.account.entity.Account;
+import com.geeks.letsnote.domain.account.entity.Authority;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
