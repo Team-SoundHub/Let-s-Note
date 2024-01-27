@@ -3,34 +3,40 @@ import { useNavigate } from 'react-router-dom';
 import getMyPageInfo, { createWorkSpace } from '../api/myPageApi';
 
 const MyPage = () => {
-    const [spaceIds, setSpaceIds] = useState([]);
-    const [snapshotIds, setSnapshotIds] = useState([]);
+    const [workspaces, setWorkspaces] = useState([]);  // 작업실 목록을 저장할 상태
+    const [workSpaceTitle, setWorkSpaceTitle] = useState('');
+    const [workSpaceDesc, setWorkSpaceDesc] = useState('');
+
     const navigate = useNavigate();
 
-    const accessToken = localStorage.getItem("access");     
+    const accessToken = localStorage.getItem("access");
+    const accountId = localStorage.getItem("accountId");
 
     useEffect(() => {
         const fetchMyPageInfo = async () => {
             try {
-                const response = await getMyPageInfo(accessToken);
+                const response = await getMyPageInfo(accountId);
                 console.log(response)
                 console.log("마이페이지 인포 받음");
-                // setSpaceIds(data.spaceIds);
-                // setSnapshotIds(data.snapshotIds);
+                setWorkspaces(response.response);  // API 응답으로 받은 작업실 목록을 상태에 저장
             } catch (error) {
                 console.error('마이페이지 정보 로드 실패:', error);
             }
         };
         fetchMyPageInfo();
-    }, [accessToken]);
+    }, [accessToken, accountId]); 
 
     // 작업실 생성 함수
     const handleCreateWorkSpace = async () => {
         try {
-            const response = await createWorkSpace(accessToken);
+            // 세번째 빈 배열은 멤버 추가 기능 구현 후에 수정
+            const response = await createWorkSpace(workSpaceTitle, workSpaceDesc, []);
             console.log("작업실 생성 응답:", response);
-            // 일단은 작업실로 바로 가기
-            // 후에 방 생성 화면 뜨고, 방 제목과 설명 입력받고, 멤버 추가 기능 구현 필요
+            
+            // 방 생성 모달, 멤버 추가 기능 구현 필요
+
+            console.log("작업실 생성 완료");
+            navigate(`/workspace/${response.spaceId}`);
         } catch (error) {
             console.error("작업실 생성 오류:", error);
         }
@@ -38,16 +44,30 @@ const MyPage = () => {
     }
 
     // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
-    // 
     return (
         <div>
             <h1>MyPage</h1>
-            <button onClick={handleCreateWorkSpace}> 새 작업실 </button>
-            {/* {spaceIds.map((id, index) => (
-                <div key={id} onClick={() => navigate(`/workspace/${id}`)}>
-                    작업실 {index + 1}
+            <form onSubmit={handleCreateWorkSpace}>
+                <h2>새 작업실 만들기</h2>
+                <input 
+                    type="text" 
+                    placeholder="작업실 이름" 
+                    value={workSpaceTitle} 
+                    onChange={e => setWorkSpaceTitle(e.target.value)}
+                />
+                <input 
+                    type="text" 
+                    placeholder="작업실 설명 (옵션)" 
+                    value={workSpaceDesc} 
+                    onChange={e => setWorkSpaceDesc(e.target.value)}
+                />
+                <button type="submit">새 작업실</button>
+            </form>            
+            {workspaces.map((workspace, index) => (
+                <div key={workspace.spaceId} onClick={() => navigate(`/workspace/${workspace.spaceId}`)}>
+                    작업실 {index + 1}: {workspace.spaceTitle}
                 </div>
-            ))} */}
+            ))}
         </div>
     );
 };

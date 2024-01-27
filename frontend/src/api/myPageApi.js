@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-const getMyPageInfo = async (accessToken) => {
+const accessToken = localStorage.getItem('access');
+const accountId = localStorage.getItem('accountId');
+
+const getMyPageInfo = async () => {    
     try {
-        const response = await axios.get('https://letsnote-rough-wind-6773.fly.dev/api/v1/workspaces', {
+        const response = await axios.get(`https://letsnote-rough-wind-6773.fly.dev/api/v1/workspaces/${accountId}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -13,10 +16,23 @@ const getMyPageInfo = async (accessToken) => {
     }
 }
 
-const createWorkSpace = async (accessToken) => {
+const createWorkSpace = async (spaceTitle, spaceContent, memberAccountId) => {
     try {
-        const response = await axios.post('https://letsnote-rough-wind-6773.fly.dev/api/v1/workspaces',{
-            accesstoken: accessToken,        
+        const headers = {
+            Authorization: `Bearer ${accessToken}`
+        };
+
+        const requestData = {
+            spaceTitle: spaceTitle,
+            spaceContent: spaceContent
+        };
+
+        if (memberAccountId){
+            requestData.memberAccountId = memberAccountId;
+        }
+
+        const response = await axios.post(`https://letsnote-rough-wind-6773.fly.dev/api/v1/workspaces/${accountId}`, requestData, {
+            headers: headers
         });
         return response.data;
     } catch (error) {
