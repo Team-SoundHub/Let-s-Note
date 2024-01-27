@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import login from '../api/loginApi';
+import backgroundImage from '../assets/landing.png';
+
 
 const LandingPage = () => {
     const navigate = useNavigate(); 
@@ -53,7 +55,12 @@ const LandingPage = () => {
     }
 
     return (
-        <div>
+        <div style={{ 
+            backgroundImage: `url(${backgroundImage})`, 
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center',
+            minHeight: '100vh'  // 최소 높이를 뷰포트 높이로 설정
+        }}>
             <h1> LandingPage </h1>
             {isLoggedIn ? <div> 로그인 되었습니다 </div> : <div> 로그인 해주세요 </div>}        
             
