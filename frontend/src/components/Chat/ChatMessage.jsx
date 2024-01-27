@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import socket from '../../utils/io';
+// import socket from '../../utils/io';
 
 const StyledContainer = styled.div`
   padding: 10px; 
@@ -57,53 +57,53 @@ const ProfileImage = styled.img`
   margin-right: 10px;
 `;
 
-const ChatMessage = ({ messageList, user }) => {
-    const [localMessageList, setLocalMessageList] = useState([]);
+// 확인 필요: 메시지에 담겨오는 유저 정보가 닉네임인지 다른 userId인지?
+// 내가 prop으로 넘겨와서 비교중인건 닉네임. 다르면 수정 필요
+const ChatMessage = ({ messageList = [], nickname }) => {
+    const [localMessageList, setLocalMessageList] = useState(messageList);
 
-    // 받아오는 
     useEffect(() => {
-        socket.on("receiveMessage", (message) => {
-            setLocalMessageList(prev => [...prev, message]);
-        });
+        // WebSocket 구독 로직은 WebSocketContainer에서 처리되므로, 여기서는 Redux 상태를 감시
+        setLocalMessageList(messageList);
+    }, [messageList]);
 
-        return () => {
-            socket.off("receiveMessage");
-        }
-    },[]);
+    // 만약에 작업실 안에서 보낸 메시지가 포함이 안되면, 로컬에서 처리하는 식으로 바꾸기
 
     return (
         <div>
             {localMessageList.map((message, index) => {
                 return (
                     <StyledContainer key={message._id}>
-                        {message.user.name === "system" ? (
-                            <SystemMessageContainer>
-                                <SystemMessage>{message.chat}</SystemMessage>
-                            </SystemMessageContainer>
-                        ) : message.user.name === user.name ? (
-                            <MyMessageContainer>
-                                {user.name}
-                                <MyMessage>{message.chat}</MyMessage>
-                                {/* {message.time} */}
-                            </MyMessageContainer>
-                        ) : (
-                            <OthersMessageContainer>
-                                <ProfileImage
+                        {
+                            // message.nickname === "system" ? (
+                            //     <SystemMessageContainer>
+                            //         <SystemMessage>{message.chat}</SystemMessage>
+                            //     </SystemMessageContainer>
+                            // ) : 
+                            message.user.nickname === nickname ? (
+                                <MyMessageContainer>
+                                    {nickname}
+                                    <MyMessage>{message.chat}</MyMessage>
+                                    {message.timestamp}
+                                </MyMessageContainer>
+                            ) : (
+                                <OthersMessageContainer>
+                                    {/* <ProfileImage
                                     src="/profile.jpeg"
                                     style={
                                         (index === 0
                                             ? { visibility: "visible" }
-                                            : messageList[index - 1].user.name === user.name) ||
-                                            messageList[index - 1].user.name === "system"
+                                            : messageList[index - 1].user.nickname === user.name) ||
+                                            messageList[index - 1].user.nickname === "system"
                                             ? { visibility: "visible" }
                                             : { visibility: "hidden" }
                                     }
-                                />
-                                {user.name}
-                                <OthersMessage>{message.chat}</OthersMessage>
-                                {/* {message.time} */}
-                            </OthersMessageContainer>
-                        )}
+                                /> */}
+                                    {message.user.nickname}
+                                    <OthersMessage>{message.chat}</OthersMessage>
+                                    {message.timestamp}
+                                </OthersMessageContainer>
+                            )}
                     </StyledContainer>
                 );
             })}

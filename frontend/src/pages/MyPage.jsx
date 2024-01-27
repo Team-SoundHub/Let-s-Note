@@ -1,15 +1,55 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import getMyPageInfo, { createWorkSpace } from '../api/myPageApi';
 
-// 렌더링 될 때 해당 유저의 spaceId 리스트, snapshot 리스트 요청 보내기
-// 방 목록 표시는 일단 버튼 뿌려주는 식으로 ㄱㄱ
 const MyPage = () => {
-  return (
-    <div>
-        <button>
+    const [spaceIds, setSpaceIds] = useState([]);
+    const [snapshotIds, setSnapshotIds] = useState([]);
+    const navigate = useNavigate();
 
-        </button>
-    </div>
-  )
-}
+    const accessToken = localStorage.getItem("access");     
 
-export default MyPage
+    useEffect(() => {
+        const fetchMyPageInfo = async () => {
+            try {
+                const response = await getMyPageInfo(accessToken);
+                console.log(response)
+                console.log("마이페이지 인포 받음");
+                // setSpaceIds(data.spaceIds);
+                // setSnapshotIds(data.snapshotIds);
+            } catch (error) {
+                console.error('마이페이지 정보 로드 실패:', error);
+            }
+        };
+        fetchMyPageInfo();
+    }, [accessToken]);
+
+    // 작업실 생성 함수
+    const handleCreateWorkSpace = async () => {
+        try {
+            const response = await createWorkSpace(accessToken);
+            console.log("작업실 생성 응답:", response);
+            // 일단은 작업실로 바로 가기
+            // 후에 방 생성 화면 뜨고, 방 제목과 설명 입력받고, 멤버 추가 기능 구현 필요
+        } catch (error) {
+            console.error("작업실 생성 오류:", error);
+        }
+
+    }
+
+    // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
+    // 
+    return (
+        <div>
+            <h1>MyPage</h1>
+            <button onClick={handleCreateWorkSpace}> 새 작업실 </button>
+            {/* {spaceIds.map((id, index) => (
+                <div key={id} onClick={() => navigate(`/workspace/${id}`)}>
+                    작업실 {index + 1}
+                </div>
+            ))} */}
+        </div>
+    );
+};
+
+export default MyPage;
