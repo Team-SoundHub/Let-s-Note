@@ -30,11 +30,10 @@ public class Message {
     private Timestamp timestamp;
 
     @Builder
-    public Message(Long messageId, String spaceId, Long accountId, String msgContent, Timestamp timestamp) {
+    public Message(Long messageId, String spaceId, Long accountId, String msgContent) {
         this.messageId = messageId;
         this.spaceId = spaceId;
         this.accountId = accountId;
         this.msgContent = msgContent;
-        this.timestamp = timestamp;
     }
 }
