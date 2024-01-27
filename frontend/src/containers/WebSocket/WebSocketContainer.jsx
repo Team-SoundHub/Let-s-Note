@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import { setInnerContent } from "../../app/slices/innerContentSlice";
+import { addMessage } from "../../app/slices/chatSlice";
 
 export const stompClient = new StompJS.Client({
   brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker",
@@ -19,7 +20,18 @@ export const sendCoordinate = (instrument, x, y) => {
   });
 };
 
-const WebSocketContainer = () => {
+export const sendMessage = (spaceId, nickname, message) => {
+    stompClient.publish({
+        destination: "/chat/sendmessage",
+        body: JSON.stringify({
+            spaceId: spaceId,
+            nickname: nickname,
+            message: message,
+        })
+    })
+}
+
+const WebSocketContainer = ({spaceId}) => {
   const dispatch = useDispatch();
   stompClient.webSocketFactory = function () {
     return new SockJS(
@@ -34,7 +46,14 @@ const WebSocketContainer = () => {
       console.log(inner_content);
       dispatch(setInnerContent(inner_content));
     });
+
+    stompClient.subscribe(`/chat/${spaceId}`, (response) => {
+        const message = JSON.parse(response.body);
+        console.log(message);
+        dispatch(addMessage({ spaceId, message }));
+      });
   };
+
 
   stompClient.onWebSocketError = (error) => {
     console.error("Error with websocket", error);

@@ -4,6 +4,7 @@ import { fetchChatMessages } from '../../app/slices/chatSlice';
 import styled from 'styled-components'
 import ChatInput from '../../components/Chat/ChatInput';
 import ChatMessage from '../../components/Chat/ChatMessage';
+import { sendMessage } from '../WebSocket/WebSocketContainer';
 
 const StyledChatContainer = styled.div`
     height: 100vh;   
@@ -26,12 +27,16 @@ const ChatContainer = ({ spaceId }) => {
     }, [dispatch, spaceId]); // 작업실이 바뀌면 메시지 목록 새로 받아오기
 
     // 로컬스토리지에서 닉네임 꺼내기
-    // const nickname = localStorage.getItem("nickname");
+    const nickname = localStorage.getItem("nickname");
+
+    const handleSendMessage = (message) => {
+        sendMessage(spaceId, nickname, message);
+    }
 
     return (
         <StyledChatContainer>
-            <ChatMessage messageList={chatMessages/* .메시지 목록 */} user={"임시닉넴"} />
-            <ChatInput />
+            <ChatMessage messageList={chatMessages} nickname={nickname} />
+            <ChatInput onSendMessage={handleSendMessage} />
         </StyledChatContainer>
     )
 }

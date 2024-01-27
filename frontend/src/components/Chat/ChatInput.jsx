@@ -1,9 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import socket from '../../utils/io';
 
-// 스타일드 컴포넌트 생성
 const InputArea = styled.div`
   background-color: red;
   min-height: 50px;
@@ -59,22 +57,19 @@ const StyledButton = styled.button`
 `;
 
 
-const ChatInput = () => {
+const ChatInput = ({ onSendMessage }) => {
   const [message, setMessage] = useState("");
-  
-  // socket으로 메시지 전송
-  const sendMessage = (event) => {
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if (message) {
-      socket.emit("sendMessage", message); // 메시지 전송
-      setMessage(""); // 입력 필드 초기화
-    }
-  }
+    onSendMessage(message);
+    setMessage(''); // 입력 필드 다시 초기화
+  };
 
   return (
     <InputArea>
       <PlusButton>+</PlusButton>
-      <InputContainer onSubmit={sendMessage}>
+      <InputContainer onSubmit={handleSubmit}>
         <StyledInput
           type="text"
           placeholder="채팅을 입력하세요"
@@ -84,7 +79,7 @@ const ChatInput = () => {
 
         <StyledButton
           disabled={message === ""}
-          type="submit"
+          type="submit"          
         >
           전송
         </StyledButton>
