@@ -1,6 +1,6 @@
 package com.geeks.letsnote.domain.account.dao;
 
-import com.geeks.letsnote.domain.account.domain.Account;
+import com.geeks.letsnote.domain.account.entity.Account;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 

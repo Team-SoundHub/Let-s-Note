@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-import { setInnerContent } from "../../module/innerContentSlice";
+import { setInnerContent } from "../../app/slices/innerContentSlice";
 
 export const stompClient = new StompJS.Client({
   brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker",
