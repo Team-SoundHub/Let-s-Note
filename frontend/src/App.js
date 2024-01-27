@@ -14,7 +14,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/workplace" element={<WorkPlacePage />} />
+          <Route path="/workspace" element={<WorkPlacePage />} />
           <Route path="/chat" element={<ChatTestPage />} />
         </Routes>
       </Provider>

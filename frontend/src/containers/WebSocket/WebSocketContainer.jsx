@@ -5,10 +5,10 @@ import BeatGrid from "../../components/BeatGrid/BeatGrid";
 const WebSocketContainer = () => {
     // 포트는 테스트하시는 스프링부트 포트로 변경해야 합니다!!
     const stompClient = new StompJS.Client({
-        brokerURL: 'ws://localhost:9807/letsnote/socketbroker'
+        brokerURL: 'ws://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker'
     });
     stompClient.webSocketFactory= function () {
-        return new SockJS("http://localhost:9807/letsnote/socketbroker");
+        return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker");
     };
 
     stompClient.onConnect = (frame) => {
