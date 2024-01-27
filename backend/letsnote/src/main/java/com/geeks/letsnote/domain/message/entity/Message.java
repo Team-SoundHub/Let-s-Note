@@ -26,7 +26,7 @@ public class Message {
     @Column(name = "msg_content", nullable = false)
     private String msgContent;
 
-    @Column(name = "timestamp")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp timestamp;
 
     @Builder
