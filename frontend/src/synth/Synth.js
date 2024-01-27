@@ -37,8 +37,8 @@ class Synth {
   }
 
   repeat(callback, timing = "8n") {
+    console.log("repeat called");
     this.timing = timing;
-    const activeSampler = this.samplers[this.activeInstrument];
     const transport = getTransport();
 
     // Clear any previously scheduled events
@@ -46,12 +46,12 @@ class Synth {
 
     // Schedule the new repeating events
     transport.scheduleRepeat((time) => {
-      callback(time, activeSampler);
+      callback(time, this.activeInstrument);
     }, timing);
   }
 
-  playNote(note, time, timing = "8n") {
-    const activeSampler = this.samplers[this.activeInstrument];
+  playNote(note, time, timing = "8n", Instrument = this.activeInstrument) {
+    const activeSampler = this.samplers[Instrument];
     activeSampler.triggerAttackRelease(note, timing, time);
   }
 
