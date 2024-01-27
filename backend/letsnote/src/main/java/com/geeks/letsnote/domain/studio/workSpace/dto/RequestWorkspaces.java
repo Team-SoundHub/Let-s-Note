@@ -6,7 +6,6 @@ import lombok.Getter;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Getter
 public record RequestWorkspaces() {
     @Builder
     public record WorkspaceDto(
