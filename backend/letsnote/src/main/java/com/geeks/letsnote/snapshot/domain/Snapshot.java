@@ -30,5 +30,5 @@ public class Snapshot {
     private Timestamp updateAt;
 
     @Column(name = "views")
-    private Long views;
+    private Long views = 0L;
 }
