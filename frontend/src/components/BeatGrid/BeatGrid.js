@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
+import { sendCoordinate } from "../../containers/WebSocket/WebSocketContainer";
 
 const Container = styled.div`
   flex: 1;
@@ -16,26 +17,24 @@ class BeatGrid extends Component {
   state = { count: -1 };
 
   handleBoxClick = (row, column) => {
-    console.log(`Clicked: Row ${row}, Column ${column}`);
+    console.log(
+      `Clicked: Row ${row}, Column ${column}, Instrument ${this.props.synth.activeInstrument}`
+    );
+    const instrument = this.props.synth.activeInstrument;
+    sendCoordinate(instrument, row, column);
   };
 
   trigger = (time) => {
-    this.setState((prev) => ({ count: prev.count + 1 }), this.playBeat(time));
+    this.setState(
+      (prev) => ({ count: prev.count + 1 }),
+      () => this.playBeat(time)
+    );
   };
 
-  playBeat = (time) => () => {
+  playBeat = (time) => {
     const { columns } = this.props;
     const activeBeat = this.state.count % columns;
     this.refs[activeBeat].playBeat(time);
-  };
-
-  activateBox = (x, y) => {
-    const { columns } = this.props;
-    const rowToActivate = x % columns;
-    const beatColumn = this.refs[rowToActivate.toString(10)];
-    if (beatColumn) {
-      beatColumn.activateBox(y);
-    }
   };
 
   renderBeatColumns = () => {
@@ -54,7 +53,6 @@ class BeatGrid extends Component {
           playing={count % columns === i}
           synth={synth}
           onClick={this.handleBoxClick}
-
         />
       );
     }
