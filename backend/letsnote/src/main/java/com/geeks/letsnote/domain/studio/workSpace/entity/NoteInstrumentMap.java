@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "workspace_instrument_map")
+@Table(name = "note_instrument_map")
 @Getter
 @NoArgsConstructor
-public class WorkspaceInstrumentMap {
+public class NoteInstrumentMap {
     @Id
     @Column(name = "map_id")
     private String mapId;
@@ -24,7 +24,7 @@ public class WorkspaceInstrumentMap {
 
 
     @Builder
-    public WorkspaceInstrumentMap(String mapId, String spaceId, Instrument instrument) {
+    public NoteInstrumentMap(String mapId, String spaceId, Instrument instrument) {
         this.mapId = mapId;
         this.spaceId = spaceId;
         this.instrument = instrument;
