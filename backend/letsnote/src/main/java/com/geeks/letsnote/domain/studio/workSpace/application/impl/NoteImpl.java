@@ -35,9 +35,13 @@ public class NoteImpl implements NoteService {
     }
 
     @Override
-    @Transactional
     public void clickNote(String mapId, RequestNotes.NoteDto note) {
-        noteRepository.save(Note.builder().noteX(note.noteX()).noteY(note.noteY()).spaceInstrument(mapId).build());
+        noteRepository.save(Note.builder().spaceInstrument(mapId).noteX(note.noteX()).noteY(note.noteY()).build());
+    }
+
+    @Override
+    public void deleteNotes() {
+        noteRepository.deleteAll();
     }
 
 
