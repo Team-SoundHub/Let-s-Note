@@ -6,12 +6,12 @@ import { setInnerContent } from "../../app/slices/innerContentSlice";
 import { addMessage } from "../../app/slices/chatSlice";
 
 export const stompClient = new StompJS.Client({
-  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker",
+  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
 });
 
 export const sendCoordinate = (instrument, x, y) => {
   stompClient.publish({
-    destination: "/editor/coordinate",
+    destination: "/app/editor/coordinate",
     body: JSON.stringify({
       instrument: instrument,
       x: x,
@@ -20,40 +20,36 @@ export const sendCoordinate = (instrument, x, y) => {
   });
 };
 
-export const sendMessage = (spaceId, nickname, message) => {
-    stompClient.publish({
-        destination: "/chat/sendmessage",
-        body: JSON.stringify({
-            spaceId: spaceId,
-            nickname: nickname,
-            message: message,
-        })
-    })
-}
+export const sendMessage = (message, nickname, spaceId) => {
+  stompClient.publish({
+    destination: "/app/chat/sendMessage",
+    body: JSON.stringify({
+      msgContent: message,
+      accountId: 1,
+      spaceId: spaceId,
+    }),
+  });
+};
 
-const WebSocketContainer = ({spaceId}) => {
+const WebSocketContainer = ({ spaceId }) => {
   const dispatch = useDispatch();
   stompClient.webSocketFactory = function () {
-    return new SockJS(
-      "https://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker"
-    );
+    return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
   };
 
   stompClient.onConnect = (frame) => {
     console.log("Connected: " + frame);
-    stompClient.subscribe("/network/result", (response) => {
+    stompClient.subscribe("/topic/editor/coordinate", (response) => {
       const inner_content = JSON.parse(response.body);
       console.log(inner_content);
       dispatch(setInnerContent(inner_content));
     });
 
-    stompClient.subscribe(`/chat/${spaceId}`, (response) => {
-        const message = JSON.parse(response.body);
-        console.log(message);
-        dispatch(addMessage({ spaceId, message }));
-      });
+    stompClient.subscribe(`/topic/chat/public`, (response) => {
+      const message = JSON.parse(response.body);
+      dispatch(addMessage({ spaceId, message }));
+    });
   };
-
 
   stompClient.onWebSocketError = (error) => {
     console.error("Error with websocket", error);
