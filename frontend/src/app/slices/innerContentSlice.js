@@ -2,7 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const innerContentSlice = createSlice({
   name: "innerContent",
-  initialState: { innerContent: null },
+  initialState: {
+    innerContent: {
+      instrument: "piano",
+      x: null,
+      y: null,
+    },
+  },
   reducers: {
     setInnerContent: (state, action) => {
       state.innerContent = action.payload;

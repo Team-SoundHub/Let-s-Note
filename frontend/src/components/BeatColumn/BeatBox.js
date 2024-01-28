@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -36,27 +37,46 @@ const pickActiveColor = (note, instrument) => {
 };
 
 const BeatBox = ({
-  active,
+  active: propActive,
   note,
   onClick,
   inactiveColor,
   activeColor,
   activeInstrument,
+  col,
+  row,
 }) => {
+  const [active, setActive] = useState(propActive);
   const [instrument, setInstrument] = useState("piano");
 
+  const innerContent = useSelector((state) => state.innerContent.innerContent);
+
   useEffect(() => {
-    if (active) {
+    if (propActive) {
       setInstrument(activeInstrument);
     }
-  }, [active]);
+  }, [propActive]);
+
+  useEffect(() => {
+    // Check if x and y match col and row
+    if (innerContent.x === col && innerContent.y === row && !active) {
+      setActive(true);
+      setInstrument(innerContent.instrument);
+    } else if (innerContent.x === col && innerContent.y === row && active) {
+      setActive(false);
+      setInstrument(innerContent.instrument);
+    }
+  }, [innerContent]);
 
   return (
     <Container
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
-      onClick={onClick}
+      onClick={() => {
+        setActive(!active);
+        onClick();
+      }}
       instrument={instrument}
       activeInstrument={activeInstrument}
       note={note}

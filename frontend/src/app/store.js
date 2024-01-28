@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import chatReducer from './slices/chatSlice'
-import { innerContentSlice } from "../app/slices/innerContentSlice";
+import { configureStore } from "@reduxjs/toolkit";
+import chatReducer from "./slices/chatSlice";
+import innerContentReducer from "./slices/innerContentSlice";
 
 export const store = configureStore({
   reducer: {
-    chat: chatReducer, 
-    innerContent: innerContentSlice,
-  }
-})
+    chat: chatReducer,
+    innerContent: innerContentReducer,
+  },
+});
