@@ -26,15 +26,14 @@ public class Message {
     @Column(name = "msg_content", nullable = false)
     private String msgContent;
 
-    @Column(name = "timestamp")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp timestamp;
 
     @Builder
-    public Message(Long messageId, String spaceId, Long accountId, String msgContent, Timestamp timestamp) {
+    public Message(Long messageId, String spaceId, Long accountId, String msgContent) {
         this.messageId = messageId;
         this.spaceId = spaceId;
         this.accountId = accountId;
         this.msgContent = msgContent;
-        this.timestamp = timestamp;
     }
 }
