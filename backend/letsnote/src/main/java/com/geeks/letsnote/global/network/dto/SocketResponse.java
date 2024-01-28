@@ -14,4 +14,13 @@ public record SocketResponse() {
             Integer y
     ){
     }
+
+    @Builder
+    public record chat(
+            @NotNull
+            Long accountId,
+            @NotNull
+            String msgContent
+    ){
+    }
 }
