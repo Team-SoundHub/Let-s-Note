@@ -92,7 +92,8 @@ class BeatColumn extends Component {
   }
 
   renderBoxes = () => {
-    const { scale, foreground } = this.props;
+    const { scale, foreground, synth } = this.props;
+    console.log("active instrument: ", synth.activeInstrument);
     const boxes = [];
     for (let i = 0; i < scale.length; i++) {
       boxes.push(
@@ -101,7 +102,10 @@ class BeatColumn extends Component {
           key={i.toString(10)}
           note={scale[i]}
           active={this.state.activeBoxes[i]}
-          onClick={this.handleClick(i)}
+          onClick={
+            synth.activeInstrument === "All" ? null : this.handleClick(i)
+          }
+          activeInstrument={synth.activeInstrument}
         />
       );
     }
