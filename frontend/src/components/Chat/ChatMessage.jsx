@@ -59,7 +59,8 @@ const ProfileImage = styled.img`
 
 // 확인 필요: 메시지에 담겨오는 유저 정보가 닉네임인지 다른 userId인지?
 // 내가 prop으로 넘겨와서 비교중인건 닉네임. 다르면 수정 필요
-const ChatMessage = ({ messageList = [], nickname }) => {
+const ChatMessage = ({ messageList = [] }) => {
+    const nickname = localStorage.getItem("nickname");
     const [localMessageList, setLocalMessageList] = useState(messageList);
 
     useEffect(() => {
@@ -74,36 +75,11 @@ const ChatMessage = ({ messageList = [], nickname }) => {
             {localMessageList.map((message, index) => {
                 return (
                     <StyledContainer key={message._id}>
-                        {
-                            // message.nickname === "system" ? (
-                            //     <SystemMessageContainer>
-                            //         <SystemMessage>{message.chat}</SystemMessage>
-                            //     </SystemMessageContainer>
-                            // ) : 
-                            message.user.nickname === nickname ? (
-                                <MyMessageContainer>
-                                    {nickname}
-                                    <MyMessage>{message.chat}</MyMessage>
-                                    {message.timestamp}
-                                </MyMessageContainer>
-                            ) : (
-                                <OthersMessageContainer>
-                                    {/* <ProfileImage
-                                    src="/profile.jpeg"
-                                    style={
-                                        (index === 0
-                                            ? { visibility: "visible" }
-                                            : messageList[index - 1].user.nickname === user.name) ||
-                                            messageList[index - 1].user.nickname === "system"
-                                            ? { visibility: "visible" }
-                                            : { visibility: "hidden" }
-                                    }
-                                /> */}
-                                    {message.user.nickname}
-                                    <OthersMessage>{message.chat}</OthersMessage>
-                                    {message.timestamp}
-                                </OthersMessageContainer>
-                            )}
+                        <MyMessageContainer>
+                            {message.accountId}
+                            <MyMessage>{message.msgContent}</MyMessage>
+                            {message.timestamp}
+                        </MyMessageContainer>
                     </StyledContainer>
                 );
             })}
