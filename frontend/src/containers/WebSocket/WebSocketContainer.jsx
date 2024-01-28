@@ -6,7 +6,7 @@ import { setInnerContent } from "../../app/slices/innerContentSlice";
 import { addMessage } from "../../app/slices/chatSlice";
 
 export const stompClient = new StompJS.Client({
-  brokerURL: "ws://localhost:9807/letsnote/ws",
+  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
 });
 
 export const sendCoordinate = (instrument, x, y) => {
