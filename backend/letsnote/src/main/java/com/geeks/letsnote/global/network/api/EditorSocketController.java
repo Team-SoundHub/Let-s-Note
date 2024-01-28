@@ -1,5 +1,7 @@
 package com.geeks.letsnote.global.network.api;
 
+import com.geeks.letsnote.domain.message.application.MessageService;
+import com.geeks.letsnote.domain.message.dto.MessageReqeust;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -15,7 +17,15 @@ import java.util.Set;
 public class EditorSocketController {
 
 	private final Set<String> connectedUsers = new HashSet<>();
-	@MessageMapping("/coordinate")
+
+	private final MessageService messageService;
+
+    public EditorSocketController(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+
+    @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
 	public SocketResponse.content coordinateInfo(SocketRequest.content content) throws Exception {
 		connectedUsers.remove(content.userName());
@@ -34,6 +44,13 @@ public class EditorSocketController {
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
 	public SocketResponse.chat sendMessage(@Payload SocketRequest.chat chatMessage) {
+		Long accountId = 1L;
+		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
+				.spaceId("1")
+				.accountId(accountId)
+				.msgContent(chatMessage.msgContent())
+				.build();
+		messageService.createMessage(messageInfo);
 		return new SocketResponse.chat(chatMessage.accountId(), chatMessage.msgContent());
 	}
 
