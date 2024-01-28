@@ -29,8 +29,8 @@ const ChatContainer = ({ spaceId }) => {
     // 로컬스토리지에서 닉네임 꺼내기
     const nickname = localStorage.getItem("nickname");
 
-    const handleSendMessage = (message) => {
-        sendMessage(spaceId, nickname, message);
+    const handleSendMessage = (message, nickname) => {
+        sendMessage(message, nickname, 1);
     }
 
     return (
