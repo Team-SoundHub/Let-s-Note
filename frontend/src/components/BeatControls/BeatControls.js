@@ -1,4 +1,3 @@
-
 import React from "react";
 import styled from "styled-components";
 import BeatToggle from "./BeatToggle";
@@ -37,13 +36,13 @@ const BeatControls = ({
   <Container>
     <BeatReset onClick={onReset} />
     <BeatToggle onClick={onPlay} />
+    <InstrumentChange instrument="All" changeInstrument={changeInstrument} />
     <InstrumentChange instrument="piano" changeInstrument={changeInstrument} />
     <InstrumentChange instrument="guitar" changeInstrument={changeInstrument} />
     <BeatChangeContainer>
       <BeatChange
         style={{ marginBottom: 5 }}
         mode="add"
-
         onClick={() => changeColumns(1)}
       />
       <BeatChange
