@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-// import socket from '../../utils/io';
 
 const StyledContainer = styled.div`
   padding: 10px; 
@@ -57,8 +56,7 @@ const ProfileImage = styled.img`
   margin-right: 10px;
 `;
 
-// 확인 필요: 메시지에 담겨오는 유저 정보가 닉네임인지 다른 userId인지?
-// 내가 prop으로 넘겨와서 비교중인건 닉네임. 다르면 수정 필요
+
 const ChatMessage = ({ messageList = [] }) => {
     const nickname = localStorage.getItem("nickname");
     const [localMessageList, setLocalMessageList] = useState(messageList);

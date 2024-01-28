@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import WorkPlacePage from "./pages/WorkPlacePage";
 import LandingPage from "./pages/LandingPage";
 import MyPage from "./pages/MyPage";
+import MySnapshotPage from "./pages/MySnapshotPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/workspace/:spaceId" element={<WorkPlacePage />} />
           <Route path="/workspace" element={<WorkPlacePage />} /> 
+          <Route path="/mysnapshot" element={<MySnapshotPage />} /> 
         </Routes>
       </Provider>
     </>

@@ -7,9 +7,8 @@ import ChatMessage from '../../components/Chat/ChatMessage';
 import { sendMessage } from '../WebSocket/WebSocketContainer';
 
 const StyledChatContainer = styled.div`
-    height: 100vh;   
-    min-width: 25rem;
-    max-width: 25rem;
+    height: 97vh;   
+    width: 20vw;
     position: fixed;
     right: 0;
     top: 0;
@@ -35,7 +34,7 @@ const ChatContainer = ({ spaceId }) => {
 
     return (
         <StyledChatContainer>
-            <ChatMessage messageList={chatMessages} nickname={nickname} />
+            <ChatMessage messageList={chatMessages} />
             <ChatInput onSendMessage={handleSendMessage} />
         </StyledChatContainer>
     )

@@ -52,7 +52,8 @@ const MyPage = () => {
                 console.log("작업실 생성 완료될뻔 했는데 안됨");                
             }
     
-            navigate(`/workspace/${response.spaceId}`);
+            // navigate(`/workspace/${response.spaceId}`);
+            navigate(`/workspace`);
         } catch (error) {
             console.error("작업실 생성 오류:", error);
         }
