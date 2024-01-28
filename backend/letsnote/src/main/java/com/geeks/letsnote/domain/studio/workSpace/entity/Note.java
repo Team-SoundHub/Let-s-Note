@@ -18,10 +18,10 @@ public class Note {
     @Column(name = "space_instrument", nullable = false)
     private String spaceInstrument;
 
-    @Column(name = "note_x", nullable = false , unique = true)
+    @Column(name = "note_x", nullable = false )
     private Long noteX;
 
-    @Column(name = "note_y", nullable = false, unique = true)
+    @Column(name = "note_y", nullable = false )
     private Long noteY;
 
     @Builder
