@@ -12,6 +12,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dao.WorkspaceRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
+import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
 import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
 import com.geeks.letsnote.domain.studio.workSpace.entity.WorkspaceMemberMap;
 import jakarta.transaction.Transactional;
@@ -26,6 +27,7 @@ public class WorkspaceImpl implements WorkspaceService {
     private final WorkspaceMemberMapRepository workspaceMemberMapRepository;
     private final WorkspaceMemberMapService workspaceMemberMapService;
     private final NoteInstrumentMapService noteInstrumentMapService;
+
 
     public WorkspaceImpl(WorkspaceRepository workspaceRepository, AccountRepository accountRepository, WorkspaceMemberMapRepository workspaceMemberMapRepository, WorkspaceMemberMapService workspaceMemberMapService, NoteInstrumentMapService noteInstrumentMapService) {
         this.workspaceRepository = workspaceRepository;
@@ -78,8 +80,9 @@ public class WorkspaceImpl implements WorkspaceService {
     @Override
     @Transactional
     public ResponseWorkspaces.WorkspaceId createWorkspace(RequestWorkspaces.WorkspaceDto workspaceDto, Long accountId) {
+        String spaceId = UUID.randomUUID().toString().replace("-","");
         Workspace workspace = Workspace.builder()
-                .spaceId(UUID.randomUUID().toString().replace("-",""))
+                .spaceId(spaceId)
                 .ownerId(accountId)
                 .spaceTitle(workspaceDto.spaceTitle())
                 .spaceContent(workspaceDto.spaceContent())
@@ -90,9 +93,12 @@ public class WorkspaceImpl implements WorkspaceService {
         workspaceDto.membersAccountId().add(accountId);
         RequestWorkspaces.WorkspaceMemberMapDto workspaceMemberMapDto = RequestWorkspaces.WorkspaceMemberMapDto.builder()
                 .memberAccountId(workspaceDto.membersAccountId())
-                .spaceId(workspace.getSpaceId()).build();
+                .spaceId(workspace.getSpaceId())
+                .build();
 
         workspaceMemberMapService.createWorkspaceMemberMap(workspaceMemberMapDto);
+
+        noteInstrumentMapService.createWorkspaceInstrumentMap(spaceId);
 
         return ResponseWorkspaces.WorkspaceId.builder()
                 .spaceId(workspace.getSpaceId())
@@ -110,5 +116,10 @@ public class WorkspaceImpl implements WorkspaceService {
         allNotes.add(drumNotes);
 
         return allNotes;
+    }
+
+    @Override
+    public void deleteAllWorkspaces() {
+        workspaceRepository.deleteAll();
     }
 }

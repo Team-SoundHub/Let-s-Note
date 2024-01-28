@@ -3,6 +3,7 @@ package com.geeks.letsnote.domain.studio.workSpace.api;
 
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
 import com.geeks.letsnote.domain.message.dto.MessageResponse;
+import com.geeks.letsnote.domain.studio.workSpace.application.NoteService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
@@ -27,10 +28,12 @@ import java.util.List;
 public class WorkspaceController {
     private final WorkspaceService workspaceService;
     private final NoteInstrumentMapService noteInstrumentMapService;
+    private final NoteService noteService;
 
-    public WorkspaceController(WorkspaceService workspaceService, NoteInstrumentMapService noteInstrumentMapService) {
+    public WorkspaceController(WorkspaceService workspaceService, NoteInstrumentMapService noteInstrumentMapService, NoteService noteService) {
         this.workspaceService = workspaceService;
         this.noteInstrumentMapService = noteInstrumentMapService;
+        this.noteService = noteService;
     }
 
     @Operation(summary = "모든 워크스페이스 출력", description = "AccountId에 해당하는 모든 메세지를 리턴합니다.")
@@ -77,6 +80,13 @@ public class WorkspaceController {
     @PostMapping("/space-id")
     public ResponseEntity<CommonResponse> clickNote(@RequestParam("v") String spaceId, @RequestBody RequestNotes.NoteDto note){
         noteInstrumentMapService.clickOnNote(spaceId,note);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/test")
+    public ResponseEntity<CommonResponse> deleteAllWorkspacesForDBClean(){
+        workspaceService.deleteAllWorkspaces();
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -8,6 +8,8 @@ import com.geeks.letsnote.domain.studio.workSpace.entity.Note;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,18 +22,26 @@ public class NoteImpl implements NoteService {
 
 
     @Override
-    public ResponseNotes.Note getNoteByMapId(String mapId) {
-        Optional<Note> note = noteRepository.findBySpaceInstrument(mapId);
-        return ResponseNotes.Note.builder()
-                .noteX(note.get().getNoteX())
-                .noteY(note.get().getNoteY())
-                .build();
+    public List<ResponseNotes.Note> getNoteByMapId(String mapId) {
+        List<Note> notes = noteRepository.findAllBySpaceInstrument(mapId);
+        List<ResponseNotes.Note> noteDto = new ArrayList<>();
+        for(Note note : notes){
+            noteDto.add(ResponseNotes.Note.builder()
+                    .noteY(note.getNoteY())
+                    .noteX(note.getNoteX())
+                    .build());
+        }
+        return noteDto;
     }
 
     @Override
-    @Transactional
     public void clickNote(String mapId, RequestNotes.NoteDto note) {
-        noteRepository.save(Note.builder().noteX(note.noteX()).noteY(note.noteY()).spaceInstrument(mapId).build());
+        noteRepository.save(Note.builder().spaceInstrument(mapId).noteX(note.noteX()).noteY(note.noteY()).build());
+    }
+
+    @Override
+    public void deleteNotes() {
+        noteRepository.deleteAll();
     }
 
 

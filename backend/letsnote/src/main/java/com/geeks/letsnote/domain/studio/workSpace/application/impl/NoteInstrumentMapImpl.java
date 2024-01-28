@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,12 +28,8 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
     @Override
     public ResponseNotes.Notes getAllInstrumentNoteBySpaceId(String spaceId, Instrument instrument) {
-        List<NoteInstrumentMap> getAllNoteMaps = noteInstrumentMapRepository.findAllBySpaceIdAndInstrument(spaceId,instrument);
-        List<ResponseNotes.Note> notes = new ArrayList<>();
-        for(NoteInstrumentMap noteInstrumentMap : getAllNoteMaps){
-            ResponseNotes.Note note = noteService.getNoteByMapId(noteInstrumentMap.getMapId());
-            notes.add(note);
-        }
+        Optional<NoteInstrumentMap> noteInstrumentMapper = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,instrument);
+        List<ResponseNotes.Note> notes = noteService.getNoteByMapId(noteInstrumentMapper.get().getMapId());
         ResponseNotes.Notes getNotes = ResponseNotes.Notes.builder()
                 .instrument(instrument)
                 .notes(notes).build();
@@ -41,9 +38,23 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
     @Override
     @Transactional
+    public void createWorkspaceInstrumentMap(String spaceId) {
+        String pianoMapId = UUID.randomUUID().toString().replace("-","");
+        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(pianoMapId).instrument(Instrument.Piano).spaceId(spaceId).build());
+
+        String guitarMapId = UUID.randomUUID().toString().replace("-","");
+        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(guitarMapId).instrument(Instrument.Drum).spaceId(spaceId).build());
+
+        String drumMapId = UUID.randomUUID().toString().replace("-","");
+        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(drumMapId).instrument(Instrument.Guitar).spaceId(spaceId).build());
+    }
+
+
+    @Override
+    @Transactional
     public void clickOnNote(String spaceId, RequestNotes.NoteDto note) {
-        String mapId = UUID.randomUUID().toString().replace("-","");
-        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(mapId).instrument(note.instrument()).spaceId(spaceId).build());
-        noteService.clickNote(mapId,note);
+        Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,note.instrument());
+
+        noteService.clickNote(noteInstrumentMap.get().getMapId(),note);
     }
 }

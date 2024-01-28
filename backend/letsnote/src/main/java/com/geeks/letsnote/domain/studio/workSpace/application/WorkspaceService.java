@@ -11,4 +11,6 @@ public interface WorkspaceService {
     ResponseWorkspaces.WorkspaceId createWorkspace(RequestWorkspaces.WorkspaceDto workspaceDto, Long accountId);
 
     List<ResponseNotes.Notes> getAllNoteOfWorkspace(String spaceId);
+
+    void deleteAllWorkspaces();
 }

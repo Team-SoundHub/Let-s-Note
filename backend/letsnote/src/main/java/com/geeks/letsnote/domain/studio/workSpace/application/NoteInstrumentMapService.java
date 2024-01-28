@@ -8,4 +8,5 @@ public interface NoteInstrumentMapService {
     ResponseNotes.Notes getAllInstrumentNoteBySpaceId (String spaceId, Instrument instrument);
 
     void clickOnNote(String spaceId, RequestNotes.NoteDto note);
+    void createWorkspaceInstrumentMap(String spaceId);
 }
