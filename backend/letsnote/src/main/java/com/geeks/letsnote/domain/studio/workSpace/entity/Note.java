@@ -1,6 +1,7 @@
 package com.geeks.letsnote.domain.studio.workSpace.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,12 @@ public class Note {
 
     @Column(name = "note_y", nullable = false)
     private Long noteY;
+
+    @Builder
+    public Note(Long noteId, String spaceInstrument, Long noteX, Long noteY) {
+        this.noteId = noteId;
+        this.spaceInstrument = spaceInstrument;
+        this.noteX = noteX;
+        this.noteY = noteY;
+    }
 }

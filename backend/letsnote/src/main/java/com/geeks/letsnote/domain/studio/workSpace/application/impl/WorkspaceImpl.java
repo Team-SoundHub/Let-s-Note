@@ -3,18 +3,20 @@ package com.geeks.letsnote.domain.studio.workSpace.application.impl;
 
 import com.geeks.letsnote.domain.account.dao.AccountRepository;
 import com.geeks.letsnote.domain.account.entity.Account;
+import com.geeks.letsnote.domain.studio.instrument.Instrument;
+import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceMemberMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dao.WorkspaceMemberMapRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dao.WorkspaceRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
+import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
 import com.geeks.letsnote.domain.studio.workSpace.entity.WorkspaceMemberMap;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -22,14 +24,15 @@ public class WorkspaceImpl implements WorkspaceService {
     private final WorkspaceRepository workspaceRepository;
     private final AccountRepository accountRepository;
     private final WorkspaceMemberMapRepository workspaceMemberMapRepository;
-
     private final WorkspaceMemberMapService workspaceMemberMapService;
+    private final NoteInstrumentMapService noteInstrumentMapService;
 
-    public WorkspaceImpl(WorkspaceRepository workspaceRepository, AccountRepository accountRepository, WorkspaceMemberMapRepository workspaceMemberMapRepository, WorkspaceMemberMapService workspaceMemberMapService) {
+    public WorkspaceImpl(WorkspaceRepository workspaceRepository, AccountRepository accountRepository, WorkspaceMemberMapRepository workspaceMemberMapRepository, WorkspaceMemberMapService workspaceMemberMapService, NoteInstrumentMapService noteInstrumentMapService) {
         this.workspaceRepository = workspaceRepository;
         this.accountRepository = accountRepository;
         this.workspaceMemberMapRepository = workspaceMemberMapRepository;
         this.workspaceMemberMapService = workspaceMemberMapService;
+        this.noteInstrumentMapService = noteInstrumentMapService;
     }
 
     @Override
@@ -94,5 +97,18 @@ public class WorkspaceImpl implements WorkspaceService {
         return ResponseWorkspaces.WorkspaceId.builder()
                 .spaceId(workspace.getSpaceId())
                 .build();
+    }
+
+    @Override
+    public List<ResponseNotes.Notes> getAllNoteOfWorkspace(String spaceId) {
+        List<ResponseNotes.Notes> allNotes = new ArrayList<>();
+        ResponseNotes.Notes pianoNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId, Instrument.Piano);
+        allNotes.add(pianoNotes);
+        ResponseNotes.Notes guitarNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId, Instrument.Guitar);
+        allNotes.add(guitarNotes);
+        ResponseNotes.Notes drumNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId,Instrument.Drum);
+        allNotes.add(drumNotes);
+
+        return allNotes;
     }
 }
