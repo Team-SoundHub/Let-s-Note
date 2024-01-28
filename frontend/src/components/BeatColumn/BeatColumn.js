@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import BeatBox from "./BeatBox";
 import Subject from "../../observer/Subject";
@@ -124,4 +125,12 @@ class BeatColumn extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    innerContent: state.innerContent.innerContent,
+  };
+};
+
 export default BeatColumn;
+
+// export default connect(mapStateToProps)(BeatColumn);
