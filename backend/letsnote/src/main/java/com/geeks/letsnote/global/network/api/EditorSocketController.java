@@ -16,8 +16,6 @@ import java.util.Set;
 @Controller
 public class EditorSocketController {
 
-	private final Set<String> connectedUsers = new HashSet<>();
-
 	private final MessageService messageService;
 
     public EditorSocketController(MessageService messageService) {
@@ -28,17 +26,7 @@ public class EditorSocketController {
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
 	public SocketResponse.content coordinateInfo(SocketRequest.content content) throws Exception {
-		connectedUsers.remove(content.userName());
-		Thread.sleep(100);
-
-		for (String user : connectedUsers) {
-			SocketResponse.content response = new SocketResponse.content(content.instrument(), content.x(), content.y());
-		}
-
-		// Add the sender back to the set
-		connectedUsers.add(content.userName());
-
-		return null;
+		return new SocketResponse.content(content.instrument(), content.x(), content.y());
 	}
 
 	@MessageMapping("/chat/sendMessage")

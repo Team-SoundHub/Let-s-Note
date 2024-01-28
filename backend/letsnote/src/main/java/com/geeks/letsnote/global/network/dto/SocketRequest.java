@@ -9,8 +9,6 @@ public record SocketRequest() {
 	@Builder
 	public record content(
 			@NotNull
-			String userName,
-			@NotNull
 			String instrument,
 			@NotNull
 			Integer x,
