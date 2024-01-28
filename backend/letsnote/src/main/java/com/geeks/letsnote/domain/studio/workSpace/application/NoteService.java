@@ -9,4 +9,6 @@ public interface NoteService {
     List<ResponseNotes.Note> getNoteByMapId(String mapId);
 
     void clickNote(String mapId, RequestNotes.NoteDto note);
+
+    void deleteNotes();
 }

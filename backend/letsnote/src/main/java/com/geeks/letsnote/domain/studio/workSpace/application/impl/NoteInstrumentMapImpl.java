@@ -28,8 +28,8 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
     @Override
     public ResponseNotes.Notes getAllInstrumentNoteBySpaceId(String spaceId, Instrument instrument) {
-        NoteInstrumentMap noteInstrumentMapper = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,instrument);
-        List<ResponseNotes.Note> notes = noteService.getNoteByMapId(noteInstrumentMapper.getMapId());
+        Optional<NoteInstrumentMap> noteInstrumentMapper = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,instrument);
+        List<ResponseNotes.Note> notes = noteService.getNoteByMapId(noteInstrumentMapper.get().getMapId());
         ResponseNotes.Notes getNotes = ResponseNotes.Notes.builder()
                 .instrument(instrument)
                 .notes(notes).build();
@@ -43,18 +43,18 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
         noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(pianoMapId).instrument(Instrument.Piano).spaceId(spaceId).build());
 
         String guitarMapId = UUID.randomUUID().toString().replace("-","");
-        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(guitarMapId).instrument(Instrument.Piano).spaceId(spaceId).build());
+        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(guitarMapId).instrument(Instrument.Drum).spaceId(spaceId).build());
 
         String drumMapId = UUID.randomUUID().toString().replace("-","");
-        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(drumMapId).instrument(Instrument.Piano).spaceId(spaceId).build());
+        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(drumMapId).instrument(Instrument.Guitar).spaceId(spaceId).build());
     }
 
 
     @Override
     @Transactional
     public void clickOnNote(String spaceId, RequestNotes.NoteDto note) {
-        String mapId = UUID.randomUUID().toString().replace("-","");
-        noteInstrumentMapRepository.save(NoteInstrumentMap.builder().mapId(mapId).instrument(note.instrument()).spaceId(spaceId).build());
-        noteService.clickNote(mapId,note);
+        Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,note.instrument());
+
+        noteService.clickNote(noteInstrumentMap.get().getMapId(),note);
     }
 }
