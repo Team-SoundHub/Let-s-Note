@@ -1,82 +1,81 @@
-import React from 'react';
-import * as StompJS from '@stomp/stompjs';
-import * as SockJS from 'sockjs-client'
-import BeatGrid from "../../components/BeatGrid/BeatGrid";
-const WebSocketContainer = () => {
-    // 포트는 테스트하시는 스프링부트 포트로 변경해야 합니다!!
-    const stompClient = new StompJS.Client({
-        brokerURL: 'ws://localhost:9807/letsnote/socketbroker'
-    });
-    stompClient.webSocketFactory= function () {
-        return new SockJS("http://localhost:9807/letsnote/socketbroker");
-    };
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import * as StompJS from "@stomp/stompjs";
+import * as SockJS from "sockjs-client";
+import { setInnerContent } from "../../app/slices/innerContentSlice";
+import { addMessage } from "../../app/slices/chatSlice";
 
-    stompClient.onConnect = (frame) => {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/network/result', (response) => {
-            showResult(JSON.parse(response.body));
-            const inner_content = JSON.parse(response.body);
-            BeatGrid.activateBox(inner_content.x, inner_content.y);
-        });
-    };
+export const stompClient = new StompJS.Client({
+  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker",
+});
 
+export const sendCoordinate = (instrument, x, y) => {
+  stompClient.publish({
+    destination: "/editor/coordinate",
+    body: JSON.stringify({
+      instrument: instrument,
+      x: x,
+      y: y,
+    }),
+  });
+};
 
-    stompClient.onWebSocketError = (error) => {
-        console.error('Error with websocket', error);
-    };
+export const sendMessage = (spaceId, nickname, message) => {
+    stompClient.publish({
+        destination: "/chat/sendmessage",
+        body: JSON.stringify({
+            spaceId: spaceId,
+            nickname: nickname,
+            message: message,
+        })
+    })
+}
 
-    stompClient.onStompError = (frame) => {
-        console.error('Broker reported error: ' + frame.headers['message']);
-        console.error('Additional details: ' + frame.body);
-    };
-
-    function connect() {
-        stompClient.activate();
-    }
-
-    function disconnect() {
-        stompClient.deactivate();
-        console.log("Disconnected");
-    }
-
-    function sendCoordinate() {
-        stompClient.publish({
-            destination: "/editor/coordinate",
-            body: JSON.stringify(
-                {
-                    'instrument': '기타',
-                    'x': 1,
-                    'y': 2
-                }
-            )
-        });
-    }
-
-    function showResult(content) {
-
-        // Create a table row with cells for each property
-        const newRow = document.createElement("tr");
-        newRow.innerHTML = "<td>" + content.instrument + "</td><td>" + content.x + "</td><td>" + content.y + "</td>";
-
-        // Append the new row to the table
-        document.getElementById("result").appendChild(newRow);
-    }
-
-    return (
-        <div>
-            <button onClick={connect}>
-                난 커넥션
-            </button>
-            <button onClick={disconnect}>
-                난 디스커넥션
-            </button>
-            <button onClick={sendCoordinate}>
-                좌표 보내기
-            </button>
-            <table id="result">
-            </table>
-        </div>
+const WebSocketContainer = ({spaceId}) => {
+  const dispatch = useDispatch();
+  stompClient.webSocketFactory = function () {
+    return new SockJS(
+      "https://letsnote-rough-wind-6773.fly.dev/letsnote/socketbroker"
     );
+  };
+
+  stompClient.onConnect = (frame) => {
+    console.log("Connected: " + frame);
+    stompClient.subscribe("/network/result", (response) => {
+      const inner_content = JSON.parse(response.body);
+      console.log(inner_content);
+      dispatch(setInnerContent(inner_content));
+    });
+
+    stompClient.subscribe(`/chat/${spaceId}`, (response) => {
+        const message = JSON.parse(response.body);
+        console.log(message);
+        dispatch(addMessage({ spaceId, message }));
+      });
+  };
+
+
+  stompClient.onWebSocketError = (error) => {
+    console.error("Error with websocket", error);
+  };
+
+  stompClient.onStompError = (frame) => {
+    console.error("Broker reported error: " + frame.headers["message"]);
+    console.error("Additional details: " + frame.body);
+  };
+
+  useEffect(() => {
+    // Component mount logic, including connecting WebSocket
+    stompClient.activate();
+
+    // Cleanup function to disconnect WebSocket when component is unmounted
+    return () => {
+      stompClient.deactivate();
+      console.log("WebSocket disconnected");
+    };
+  }, []);
+
+  return <></>;
 };
 
 export default WebSocketContainer;
