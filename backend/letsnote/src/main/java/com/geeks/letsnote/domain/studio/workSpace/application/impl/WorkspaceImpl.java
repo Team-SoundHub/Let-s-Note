@@ -117,4 +117,9 @@ public class WorkspaceImpl implements WorkspaceService {
 
         return allNotes;
     }
+
+    @Override
+    public void deleteAllWorkspaces() {
+        workspaceRepository.deleteAll();
+    }
 }
