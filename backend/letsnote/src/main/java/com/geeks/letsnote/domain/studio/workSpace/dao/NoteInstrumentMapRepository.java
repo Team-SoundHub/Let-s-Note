@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface NoteInstrumentMapRepository extends JpaRepository<NoteInstrumentMap,String> {
     List<NoteInstrumentMap> findAllBySpaceIdAndInstrument(String spaceId,Instrument instrument);
+
+    NoteInstrumentMap findBySpaceIdAndInstrument(String spaceId, Instrument instrument);
 }
