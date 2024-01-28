@@ -25,16 +25,16 @@ const Button = styled.button`
   }
 `;
 
-const WorkSpaceHeader = () => {
+const WorkSpaceHeader = ({onOpenModal}) => {
     const navigate = useNavigate();
 
     // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
     // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
 
-    const handleCreateSnapShot = () => {
-        navigate('/mysnapshot')
+    // const handleCreateSnapShot = () => {
+    //     navigate('/mysnapshot')
 
-    }
+    // }
 
     // const handleCreateSnapShot = async() => {
     //     try {
@@ -47,7 +47,7 @@ const WorkSpaceHeader = () => {
     
     return (
         <Header>
-            <Button onClick={handleCreateSnapShot}>발매하기</Button>
+            <Button onClick={onOpenModal}>발간하기</Button>
         </Header>
     )
 }

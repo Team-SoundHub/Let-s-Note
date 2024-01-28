@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import login from '../api/loginApi';
-import backgroundImage from '../assets/landing.png';
+import backgroundImage from '../assets/landing2.png';
 
 
 const LandingPage = () => {
@@ -31,18 +31,8 @@ const LandingPage = () => {
                 localStorage.setItem('nickname', nicknames[rand]);
                 localStorage.setItem('accountId', accountId);
                 
-                console.log("로그인 완료");
-
-                const a = localStorage.getItem('access');
-                const b = localStorage.getItem('refresh');
-                const c = localStorage.getItem('nickname');
-                const d = localStorage.getItem('accountId');
-                
-                console.log("access", a);
-                console.log("refresh", b);
-                console.log("nickname", c);
-                console.log("accountId", d);
-
+                console.log("로그인 완료");                
+            
                 setIsLoggedIn(true);
                 
                 // 로그인 버전 화면으로 리렌더링하기
@@ -62,9 +52,9 @@ const LandingPage = () => {
             backgroundSize: 'cover', 
             backgroundPosition: 'center',
             minHeight: '100vh'  // 최소 높이를 뷰포트 높이로 설정
-        }}>
-            <h1> LandingPage </h1>
-            {isLoggedIn ? <div> 로그인 되었습니다 </div> : <div> 로그인 해주세요 </div>}        
+        }}>            
+            {isLoggedIn ? <div style={{color:'blue'}}> 로그인 되었습니다 </div> 
+            : <div style={{color:'red'}}> 로그인을 해주세요 </div>}        
             
             <form onSubmit={handleLogin}>
                 <h2>로그인</h2>
