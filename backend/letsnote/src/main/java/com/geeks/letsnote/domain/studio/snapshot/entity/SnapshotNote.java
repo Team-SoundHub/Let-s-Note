@@ -15,7 +15,7 @@ public class SnapshotNote {
     private Long noteId;
 
     @Column(name = "snapshot_instrument", nullable = false)
-    private Long snapshotInstrument;
+    private String snapshotInstrument;
 
     @Column(name = "note_x", nullable = false)
     private Long noteX;

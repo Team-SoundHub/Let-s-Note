@@ -12,7 +12,8 @@ public record ResponseAccount() {
     @Builder
     public record Token(
             String accessToken,
-            String refreshToken
+            String refreshToken,
+            Long accountId
     ) {
     }
 

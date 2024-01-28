@@ -11,12 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SnapshotInstrumentMap {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "map_id")
-    private Long mapId;
+    private String mapId;
 
     @Column(name = "snapshot_id", nullable = false)
-    private Long snapshotId;
+    private String snapshotId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "instrument", nullable = false)
