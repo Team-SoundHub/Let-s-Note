@@ -10,7 +10,8 @@ const Container = styled.div`
   display: flex;
   background-color: ${(props) => props.background};
   border: 0.5px solid ${(props) => props.background};
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: auto;
 `;
 
 class BeatGrid extends Component {
@@ -38,7 +39,8 @@ class BeatGrid extends Component {
   };
 
   renderBeatColumns = () => {
-    const { scale, synth, columns, background, foreground } = this.props;
+    const { scale, drumScale, synth, columns, background, foreground } =
+      this.props;
     const { count } = this.state;
     const cols = [];
     for (let i = 0; i < columns; i++) {
@@ -50,6 +52,7 @@ class BeatGrid extends Component {
           key={i.toString(10)}
           id={i}
           scale={scale}
+          drumScale={drumScale}
           playing={count % columns === i}
           synth={synth}
           onClick={this.handleBoxClick}

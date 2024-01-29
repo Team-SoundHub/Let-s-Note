@@ -186,4 +186,4 @@ const ChatContainer = ({ spaceId }) => {
     )
 }
 
-export default ChatContainer
+export default ChatContainer;
