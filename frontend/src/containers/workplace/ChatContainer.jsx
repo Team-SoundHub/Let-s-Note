@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components'
 import ChatInput from '../../components/Chat/ChatInput';
 import ChatMessage from '../../components/Chat/ChatMessage';
 import { sendMessage } from '../WebSocket/WebSocketContainer';
+import chatImage from '../../assets/bubble-chat2.png';
 
 const StyledChatContainer = styled.div`
     height: 80vh;
@@ -14,55 +15,70 @@ const StyledChatContainer = styled.div`
     top: 50%;
     background-color: white;
     border: 1px solid gray;
-    border-radius: 10px;
-    transform: translateY(-50%) translateX(100%);
-    transition: transform 0.4s ease-out;
+    border-radius: 10px;      
+    // transition: transform 0.4s ease-out;
+    &:hover {
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);         
+    }
 
     ${({ isVisible }) =>
         isVisible &&
         css`
-        transform: translateY(-50%) translateX(0);
+        transform: translateY(-50%) translateX(0);        
     `}
 `;
 
-// const ChatTab = styled.div`
-//     height: 40vh;  
-//     width: 3px;  
-//     position: fixed;
-//     right: -10px;
-//     top: 50%;
-//     transform: translateY(-50%);
-//     background-color: gray;
-//     color: white;
-//     border-radius: 10px;
-//     padding: 5px 10px;
-//     cursor: pointer;
-// `;
-
 const ChatTab = styled.div`
     position: fixed;
-    right: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #007bff;
-    color: white;
-    padding: 8px 12px;
+    right: 2rem;
+    top: 10%;
+    transform: translateY(-50%);    
+    background-image: url(${chatImage});    
+    background-size: cover; // 이미지 크기를 컨테이너에 맞게 조절
+    border-radius: 50%;
+    width: 50px; 
+    height: 50px; 
     cursor: pointer;
-    border-radius: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;  // 부드러운 효과를 위한 전환
 
+    &:hover {
+        box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+        transform: translateY(-50%) scale(1.1); 
+    }
+`;
+
+
+const ChatHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #49C5B6; 
+    color: white;
+    cursor: move; // 드래그 가능한 커서 모양
+
+    &:hover {
+        background-color: #277A70;
+    }
+`;
+
+
+const CloseButton = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    cursor: pointer;
+    color: white;
     &:after {
-        content: '';
-        position: absolute;
-        border-style: solid;
-        border-width: 10px 10px 10px 0;
-        border-color: transparent #007bff transparent transparent;
-        display: block;
-        width: 0;
-        z-index: 1;
-        right: -10px;
-        top: 50%;
-        transform: translateY(-50%);
+        content: 'x';
+        font-size: 1.3rem;
+        font-weight: bold;        
+    }
+
+    &:hover {
+        transform: scale(1.1);
+        color: black;
     }
 `;
 
@@ -70,8 +86,7 @@ const ChatTab = styled.div`
 const ChatContainer = ({ spaceId }) => {
     const dispatch = useDispatch();
     const chatMessages = useSelector(state => state.chat.spaces[spaceId]) // 해당 채팅방 메시지 가져오기
-    const [isVisible, setIsVisible] = useState(false);
-    const chatContainerRef = useRef();
+    const [isVisible, setIsVisible] = useState(false);    
 
     const accountId = localStorage.getItem("accountId")
 
@@ -81,33 +96,89 @@ const ChatContainer = ({ spaceId }) => {
     }, [dispatch, spaceId]); // 작업실이 바뀌면 메시지 목록 새로 받아오기
 
     const handleSendMessage = (message, nickname) => {
-        sendMessage(message, nickname, 1, accountId); 
+        sendMessage(message, nickname, 1, accountId);
         // sendMessage(message, nickname, spaceId, accountId); // 방 분리 후에 이걸로 대체
     }
 
 
     // 채팅창 토글 관련 로직
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (chatContainerRef.current && !chatContainerRef.current.contains(event.target)) {
-                setIsVisible(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [chatContainerRef]);
+    const closeChatContainer = (e) => {
+        e.stopPropagation() // 이벤트 버블링(상위 컴포넌트로 이벤트가 전파되어 드래그앤드롭으로 인식) 방지
+        setIsVisible(false);
+    };
 
     const toggleChatContainer = () => {
         setIsVisible(!isVisible);
     };
 
+    // 드래그앤드롭 관련 상태와 로직
+    const chatContainerRef = useRef();
+    const chatHeaderRef = useRef();
+    const closeButtonRef = useRef();
+    const [isDragging, setIsDragging] = useState(false);
+    const [originalPosition, setOriginalPosition] = useState({ x: 0, y: 0 });
+    const [translate, setTranslate] = useState({ x: 0, y: 0 });
+
+    const handleMouseDown = (e) => {        
+        if (e.target === closeButtonRef.current) {
+            e.stopPropagation()
+            setIsVisible(false);
+            console.log("헤더 클릭");
+            return;
+        }        
+
+        if (e.target === chatHeaderRef.current) {
+            setIsDragging(true);
+            setOriginalPosition({
+                x: e.clientX - translate.x,
+                y: e.clientY - translate.y,
+            });
+            console.log("채팅창 x:", e.clientX - translate.x, "채팅창 y:", e.clientY - translate.y);
+        }
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        const newX = e.clientX - originalPosition.x;
+        const newY = e.clientY - originalPosition.y;
+        setTranslate({ x: newX, y: newY });
+    };
+
+    const handleMouseUp = () => { // 헤더 드롭시 액션
+        setIsDragging(false);
+    };
+
+    useEffect(() => {
+        if (isDragging) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDragging, originalPosition]);
+
     return (
         <>
-            <ChatTab onClick={toggleChatContainer}>채팅</ChatTab>
-            <StyledChatContainer ref={chatContainerRef} isVisible={isVisible}>
+            <ChatTab onClick={toggleChatContainer}></ChatTab>
+            <StyledChatContainer
+                ref={chatContainerRef}
+                isVisible={isVisible} 
+                style={{                    
+                    transform: `
+                    translateY(-50%) 
+                    translateX(${isVisible ? '0' : '100%'}) 
+                    translate(${translate.x}px, ${translate.y}px)
+                `, 
+                    display: isVisible ? 'block' : 'none'
+                }}
+            >                
+                <ChatHeader ref={chatHeaderRef} onMouseDown={handleMouseDown}>                
+                    <div> 채팅하기 </div>
+                </ChatHeader>                                        
+                    <CloseButton ref={closeButtonRef} onClick={closeChatContainer} />
                 <ChatMessage messageList={chatMessages} />
                 <ChatInput handleSendMessage={handleSendMessage} />
             </StyledChatContainer>

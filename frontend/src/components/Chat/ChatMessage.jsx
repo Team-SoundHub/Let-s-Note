@@ -57,28 +57,28 @@ const OthersMessage = styled.div`
 const ProfileImage = styled.div`
   width: 38px;
   height: 38px;
-  border-radius: 50%; /* 원 모양으로 고정 */
+  border-radius: 50%; 
   margin-right: 10px;
-  background-color: #ccc; /* 원의 배경색 */
+  background-color: #ccc; 
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 14px;
   font-weight: bold;
-  color: #333; /* 글자색 */
+  color: #333;
 
   @media screen and (max-width: 768px) {    
-      width: 15px;  // 크기를 줄임
-      height: 15px; // 크기를 줄임
-      border-radius: 50%; /* 원 모양으로 고정 */
+      width: 15px;  
+      height: 15px; 
+      border-radius: 50%; 
       margin-right: 10px;
-      background-color: #ccc; /* 원의 배경색 */
+      background-color: #ccc; 
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 14px;
       font-weight: bold;
-      color: #333; /* 글자색 */    
+      color: #333; 
   }
 `;
 
@@ -88,17 +88,32 @@ const ChatMessage = ({ messageList = [] }) => {
   const [localMessageList, setLocalMessageList] = useState(messageList);
   const messagesEndRef = useRef(null);  // 스크롤 위치를 위한 ref
 
+  // useEffect(() => {
+  //   // WebSocket 구독 로직은 WebSocketContainer에서 처리되므로, 여기서는 Redux 상태를 감시
+  //   setLocalMessageList(messageList);
+  // }, [messageList]);
 
   useEffect(() => {
-    // WebSocket 구독 로직은 WebSocketContainer에서 처리되므로, 여기서는 Redux 상태를 감시
-    setLocalMessageList(messageList);
-  }, [messageList]);
+    // messageList에 새 메시지가 추가된 경우에만 localMessageList 업데이트
+    if (messageList.length !== localMessageList.length) {
+      setLocalMessageList(messageList);
+    }
+  }, [messageList, localMessageList.length]);
 
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    console.log(localMessageList);
+    // console.log(localMessageList);
   }, [localMessageList]);
+
+  const renderMessageContent = (message) => {
+    // 이미지 URL인 경우 이미지로 표시
+    if (message.msgContent.startsWith('http')) {
+      return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px'}} />;
+    }
+    // 텍스트 메시지인 경우
+    return <span>{message.msgContent}</span>;
+  };
 
   return (
     <MessagesContainer>
@@ -110,7 +125,8 @@ const ChatMessage = ({ messageList = [] }) => {
                 {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage> */}
                 <ProfileImage>{1}</ProfileImage>
                 {message.nickname}
-                <MyMessage>{message.msgContent}</MyMessage>
+                {/* <MyMessage>{message.msgContent}</MyMessage> */}
+                <MyMessage>{renderMessageContent(message)}</MyMessage>
                 {message.timestamp}
               </MyMessageContainer>
             ) : (
@@ -118,7 +134,8 @@ const ChatMessage = ({ messageList = [] }) => {
                 {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage>                 */}
                 <ProfileImage>{2}</ProfileImage>                
                 {message.nickname}
-                <OthersMessage>{message.msgContent}</OthersMessage>
+                {/* <OthersMessage>{message.msgContent}</OthersMessage> */}
+                <OthersMessage>{renderMessageContent(message)}</OthersMessage>
                 {message.timestamp}
               </OthersMessageContainer>
             )
