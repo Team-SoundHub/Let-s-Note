@@ -35,12 +35,14 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional
     @Override
-    public void createMessage(MessageReqeust.information messageInfo) {
+    public MessageResponse.information createMessage(MessageReqeust.information messageInfo) {
         Message message = Message.builder().
                 accountId(messageInfo.accountId()).
                 msgContent(messageInfo.msgContent()).
                 spaceId(messageInfo.spaceId()).
                 build();
-        messageRepository.save(message);
+        Message result = messageRepository.save(message);
+
+        return new MessageResponse.information(result.getAccountId(), result.getMsgContent(), result.getTimestamp());
     }
 }

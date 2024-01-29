@@ -79,7 +79,7 @@ public class WorkspaceController {
 
     @PostMapping("/space-id")
     public ResponseEntity<CommonResponse> clickNote(@RequestParam("v") String spaceId, @RequestBody RequestNotes.NoteDto note){
-        noteInstrumentMapService.clickOnNote(spaceId,note);
+        noteInstrumentMapService.clickNoteMap(spaceId,note);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

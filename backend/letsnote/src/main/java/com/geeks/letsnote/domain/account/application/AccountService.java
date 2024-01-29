@@ -21,4 +21,7 @@ public interface AccountService {
     void UpdateAccountRefreshToken(String username, String refreshToken);
 
     boolean refreshTokenValidationCheck(String refreshToken);
+
+    ResponseAccount.NickName getNicknameFromAccountId(Long accountId);
+
 }

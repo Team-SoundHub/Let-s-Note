@@ -6,7 +6,9 @@ import com.geeks.letsnote.domain.studio.workSpace.application.NoteService;
 import com.geeks.letsnote.domain.studio.workSpace.dao.NoteInstrumentMapRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
+import com.geeks.letsnote.domain.studio.workSpace.entity.Note;
 import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
+import com.geeks.letsnote.global.network.dto.SocketRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,10 +53,13 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
 
     @Override
-    @Transactional
-    public void clickOnNote(String spaceId, RequestNotes.NoteDto note) {
+    public void clickNoteMap(String spaceId, RequestNotes.NoteDto note) {
         Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,note.instrument());
-
         noteService.clickNote(noteInstrumentMap.get().getMapId(),note);
+    }
+
+    @Override
+    public void deleteNoteBySpaceIdAndInstrument(SocketRequest.Content content){
+        ;
     }
 }
