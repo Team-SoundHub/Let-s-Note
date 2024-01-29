@@ -1,5 +1,6 @@
 package com.geeks.letsnote.global.network.dto;
 
+import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -26,4 +27,9 @@ public record SocketRequest() {
 			String msgContent
 	){
 	}
+	@Builder
+	public record SpaceInstrument(
+			String spaceId,
+			Instrument instrument
+	){}
 }

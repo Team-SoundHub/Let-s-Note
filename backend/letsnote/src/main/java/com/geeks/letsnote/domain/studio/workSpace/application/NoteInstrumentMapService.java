@@ -11,5 +11,5 @@ public interface NoteInstrumentMapService {
     void clickNoteMap(String spaceId, RequestNotes.NoteDto note);
     void createWorkspaceInstrumentMap(String spaceId);
 
-    void deleteNoteBySpaceIdAndInstrument(SocketRequest.Content content);
+    void deleteNoteBySpaceIdAndInstrument(SocketRequest.SpaceInstrument spaceInstrument);
 }
