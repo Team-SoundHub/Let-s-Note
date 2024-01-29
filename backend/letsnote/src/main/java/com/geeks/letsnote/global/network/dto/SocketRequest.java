@@ -7,7 +7,9 @@ import lombok.Builder;
 public record SocketRequest() {
 
 	@Builder
-	public record content(
+	public record Content(
+			@NotNull
+			String spaceId,
 			@NotNull
 			String instrument,
 			@NotNull
@@ -17,7 +19,7 @@ public record SocketRequest() {
 	){
 	}
 	@Builder
-	public record chat(
+	public record Chat(
 			@NotNull
 			Long accountId,
 			@NotNull
