@@ -91,6 +91,23 @@ class BeatColumn extends Component {
     Subject.unsubscribe("reset", this.resetColumn);
   }
 
+  setActiveBoxes = (row, value) => {
+    this.setState((prev) => {
+      const newActiveBoxes = [...prev.activeBoxes];
+      newActiveBoxes[row] = value;
+      return { activeBoxes: newActiveBoxes };
+    });
+  };
+
+  setActiveInstrument = (row, instrument) => {
+    this.setState((prev) => {
+      const newActiveInstrument = [...prev.activeInstrument];
+      console.log(newActiveInstrument);
+      newActiveInstrument[row] = instrument;
+      return { activeInstrument: newActiveInstrument };
+    });
+  };
+
   renderBoxes = () => {
     const { scale, foreground, synth, id } = this.props;
     const boxes = [];
@@ -101,6 +118,8 @@ class BeatColumn extends Component {
           key={i.toString(10)}
           note={scale[i]}
           active={this.state.activeBoxes[i]}
+          setActiveBoxes={this.setActiveBoxes}
+          setActiveInstrument={this.setActiveInstrument}
           onClick={
             synth.activeInstrument === "All" ? null : this.handleClick(i)
           }
