@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import BeatBox from "./BeatBox";
+import DrumBox from "./DrumBox";
 import Subject from "../../observer/Subject";
 
 const Container = styled.div`
@@ -8,10 +9,11 @@ const Container = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   background-color: ${(props) => props.background};
   margin-left: ${(props) => (props.id % 2 === 1 ? 0 : 2)}px;
+  margin-bottom: 3px;
 `;
 
 const Overlay = styled.div`
@@ -32,10 +34,16 @@ class BeatColumn extends Component {
   }
 
   handleClick = (i) => () => {
-    const { onClick, id } = this.props;
+    const { onClick, id, synth } = this.props;
+    const instrument = synth.activeInstrument;
     // 클릭한 box의 정보를 부모 컴포넌트로 전달
     onClick && onClick(id, i);
-    this.toggleActive(i)();
+    console.log(instrument);
+    if (instrument !== "drum") {
+      this.toggleActive(i)();
+    } else {
+      this.toggleDrumActive(i)();
+    }
   };
 
   toggleActive = (i) => () => {
@@ -62,11 +70,38 @@ class BeatColumn extends Component {
     });
   };
 
+  toggleDrumActive = (i) => () => {
+    console.log("toggle handle drum");
+    const { scale, drumScale, synth } = this.props;
+    const idx = i - scale.length;
+    this.setState((prev) => {
+      const activeBoxes = [...prev.activeBoxes];
+      const activeInstrument = [...prev.activeInstrument];
+
+      activeBoxes[i] = !activeBoxes[i];
+      activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
+
+      const activeNotes = drumScale.map((note, index) => ({
+        note,
+        isActive: activeBoxes[i],
+        instrument: activeInstrument[i], // Add instrument information
+      }));
+
+      // 연주 코드 추가
+      if (synth && activeBoxes[i]) {
+        console.log(idx);
+        synth.playNote(drumScale[idx]);
+      }
+
+      return { activeBoxes, activeInstrument, activeNotes };
+    });
+  };
+
   playBeat = (time) => {
-    const { synth, scale } = this.props;
+    const { synth, scale, drumScale } = this.props;
     const { activeBoxes, activeInstrument } = this.state;
 
-    const activeNotes = scale
+    const activeNotes = [...scale, ...drumScale]
       .map((note, index) => ({
         note,
         isActive: activeBoxes[index],
@@ -90,9 +125,25 @@ class BeatColumn extends Component {
   componentWillUnmount() {
     Subject.unsubscribe("reset", this.resetColumn);
   }
+  setActiveBoxes = (row, value) => {
+    this.setState((prev) => {
+      const newActiveBoxes = [...prev.activeBoxes];
+      newActiveBoxes[row] = value;
+      return { activeBoxes: newActiveBoxes };
+    });
+  };
+
+  setActiveInstrument = (row, instrument) => {
+    this.setState((prev) => {
+      const newActiveInstrument = [...prev.activeInstrument];
+      console.log(newActiveInstrument);
+      newActiveInstrument[row] = instrument;
+      return { activeInstrument: newActiveInstrument };
+    });
+  };
 
   renderBoxes = () => {
-    const { scale, foreground, synth, id } = this.props;
+    const { scale, drumScale, foreground, synth, id } = this.props;
     const boxes = [];
     for (let i = 0; i < scale.length; i++) {
       boxes.push(
@@ -101,8 +152,31 @@ class BeatColumn extends Component {
           key={i.toString(10)}
           note={scale[i]}
           active={this.state.activeBoxes[i]}
+          setActiveBoxes={this.setActiveBoxes}
+          setActiveInstrument={this.setActiveInstrument}
           onClick={
-            synth.activeInstrument === "All" ? null : this.handleClick(i)
+            synth.activeInstrument === "All" ||
+            synth.activeInstrument === "drum"
+              ? null
+              : this.handleClick(i)
+          }
+          activeInstrument={synth.activeInstrument}
+          col={id}
+          row={i}
+        />
+      );
+    }
+    for (let i = scale.length; i < scale.length + 2; i++) {
+      boxes.push(
+        <DrumBox
+          inactiveColor={foreground}
+          key={i.toString(10)}
+          note={drumScale[i - scale.length]}
+          active={this.state.activeBoxes[i]}
+          setActiveBoxes={this.setActiveBoxes}
+          setActiveInstrument={this.setActiveInstrument}
+          onClick={
+            synth.activeInstrument === "drum" ? this.handleClick(i) : null
           }
           activeInstrument={synth.activeInstrument}
           col={id}
