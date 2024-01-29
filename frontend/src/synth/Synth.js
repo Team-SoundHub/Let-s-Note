@@ -49,6 +49,11 @@ class Synth {
     getTransport().toggle();
   }
 
+  stop() {
+    const transport = getTransport();
+    transport.stop();
+  }
+
   repeat(callback, timing = "8n") {
     this.timing = timing;
     const transport = getTransport();

@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import BeatButton from "./BeatButton";
 
-const Play = styled.i`
+const Stop = styled.i`
   font-size: 24px;
   color: #363636;
   margin-left: ${(props) => (props.playing ? 0 : 4)}px;
 `;
 
-class BeatToggle extends Component {
+class BeatStop extends Component {
   state = { playing: false };
 
   onClick = () => {
@@ -25,18 +25,15 @@ class BeatToggle extends Component {
     const { playing } = this.state;
     return (
       <BeatButton onClick={this.onClick}>
-        <Play
-          playing={playing}
-          className={`fas ${playing ? "fa-pause" : "fa-play"}`}
-        />
-        재생
+        <Stop playing={playing} className={"fas fa-stop"} />
+        정지
       </BeatButton>
     );
   }
 }
 
-BeatToggle.defaultProps = {
+BeatStop.defaultProps = {
   onClick: () => null,
 };
 
-export default BeatToggle;
+export default BeatStop;
