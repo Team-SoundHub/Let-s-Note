@@ -161,4 +161,9 @@ public class AccountServiceImpl implements AccountService {
         String username = refreshTokenProvider.getUsernameFromToken(refreshToken);
         return accountRepository.existsByUsernameAndRefreshToken(username, refreshToken);
     }
+
+    @Override
+    public ResponseAccount.NickName getNicknameFromAccountId(Long accountId) {
+        return new ResponseAccount.NickName(accountRepository.findNicknameById(accountId));
+    }
 }
