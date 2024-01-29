@@ -9,6 +9,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
+import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -86,6 +87,13 @@ public class WorkspaceController {
     @DeleteMapping("/test")
     public ResponseEntity<CommonResponse> deleteAllWorkspacesForDBClean(){
         workspaceService.deleteAllWorkspaces();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/test-inst")
+    public ResponseEntity<CommonResponse> deleteAllInstrumentBySpaceId(@RequestBody SocketRequest.SpaceInstrument spaceInstrument){
+        noteInstrumentMapService.deleteNoteBySpaceIdAndInstrument(spaceInstrument);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
