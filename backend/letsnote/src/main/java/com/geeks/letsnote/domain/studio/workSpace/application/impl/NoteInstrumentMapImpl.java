@@ -60,6 +60,8 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
     @Override
     public void deleteNoteBySpaceIdAndInstrument(SocketRequest.Content content){
-        ;
+        if(content.instrument().equals("All")){
+
+        }
     }
 }

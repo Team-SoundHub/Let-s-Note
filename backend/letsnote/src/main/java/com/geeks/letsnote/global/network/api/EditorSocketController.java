@@ -31,13 +31,13 @@ public class EditorSocketController {
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
-	public SocketResponse.content coordinateInfo(SocketRequest.Content content) throws Exception {
-		return new SocketResponse.content(content.instrument(), content.x(), content.y());
+	public SocketResponse.Content coordinateInfo(SocketRequest.Content content) throws Exception {
+		return new SocketResponse.Content(content.instrument(), content.x(), content.y());
 	}
 
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
-	public SocketResponse.chat sendMessage(@Payload SocketRequest.Chat chatMessage) {
+	public SocketResponse.Chat sendMessage(@Payload SocketRequest.Chat chatMessage) {
 		Long accountId = 1L;
 		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
 				.spaceId("1")
@@ -46,17 +46,17 @@ public class EditorSocketController {
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
+		return new SocketResponse.Chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
 	}
 
 	@MessageMapping("/chat/addUser")
 	@SendTo("/topic/chat/public")
-	public SocketResponse.chat addUser(@Payload SocketRequest.Chat chatMessage,
+	public SocketResponse.Chat addUser(@Payload SocketRequest.Chat chatMessage,
 									   SimpMessageHeaderAccessor headerAccessor) {
 
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
 		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
-		return new SocketResponse.chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
+		return new SocketResponse.Chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
 	}
 
 

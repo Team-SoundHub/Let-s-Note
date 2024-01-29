@@ -6,7 +6,7 @@ import lombok.Builder;
 
 public record SocketResponse() {
     @Builder
-    public record content(
+    public record Content(
             @NotNull
             String instrument,
             @NotNull
@@ -17,7 +17,7 @@ public record SocketResponse() {
     }
 
     @Builder
-    public record chat(
+    public record Chat(
             @NotNull
             Long accountId,
             @NotNull

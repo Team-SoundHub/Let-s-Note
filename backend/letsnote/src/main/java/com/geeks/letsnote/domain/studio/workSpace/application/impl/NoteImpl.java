@@ -56,7 +56,6 @@ public class NoteImpl implements NoteService {
 
     @Override
     public void deleteAllNoteByMap() {
-        ;
     }
 
 
