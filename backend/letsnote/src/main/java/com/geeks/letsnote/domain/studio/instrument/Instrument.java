@@ -4,4 +4,5 @@ public enum Instrument {
     Piano,
     Guitar,
     Drum,
+    All,
 }

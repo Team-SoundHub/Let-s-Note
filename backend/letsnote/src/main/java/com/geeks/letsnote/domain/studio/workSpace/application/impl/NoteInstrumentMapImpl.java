@@ -6,13 +6,11 @@ import com.geeks.letsnote.domain.studio.workSpace.application.NoteService;
 import com.geeks.letsnote.domain.studio.workSpace.dao.NoteInstrumentMapRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
-import com.geeks.letsnote.domain.studio.workSpace.entity.Note;
 import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -59,7 +57,10 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
     }
 
     @Override
-    public void deleteNoteBySpaceIdAndInstrument(SocketRequest.Content content){
-        ;
+    public void deleteNoteBySpaceIdAndInstrument(SocketRequest.SpaceInstrument spaceInstrument){
+        if(spaceInstrument.instrument().equals(Instrument.All)){
+            List<String> noteInstrumentMapIds = noteInstrumentMapRepository.findAllMapIdsBySpaceId(spaceInstrument.spaceId());
+            noteService.deleteAllInstrumentNotesByMapId(noteInstrumentMapIds);
+        }
     }
 }

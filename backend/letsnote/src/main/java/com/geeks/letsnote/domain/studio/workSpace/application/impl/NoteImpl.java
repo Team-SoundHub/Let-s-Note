@@ -56,7 +56,12 @@ public class NoteImpl implements NoteService {
 
     @Override
     public void deleteAllNoteByMap() {
-        ;
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllInstrumentNotesByMapId(List<String> noteInstrumentMapIds) {
+        noteRepository.deleteAllBySpaceInstruments(noteInstrumentMapIds);
     }
 
 

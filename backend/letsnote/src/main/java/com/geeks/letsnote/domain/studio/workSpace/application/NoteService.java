@@ -13,4 +13,6 @@ public interface NoteService {
     void deleteAllDatabaseNotes();
 
     void deleteAllNoteByMap();
+
+    void deleteAllInstrumentNotesByMapId(List<String> noteInstrumentMapIds);
 }
