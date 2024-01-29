@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MessageService {
     List<MessageResponse.information> getAllMessageBySpaceId(String spaceId);
-    void createMessage(MessageReqeust.information messageInfo);
+    MessageResponse.information createMessage(MessageReqeust.information messageInfo);
 }
