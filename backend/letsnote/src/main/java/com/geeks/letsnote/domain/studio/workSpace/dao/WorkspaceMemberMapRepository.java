@@ -4,9 +4,11 @@ import com.geeks.letsnote.domain.studio.workSpace.entity.WorkspaceMemberMap;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface WorkspaceMemberMapRepository extends JpaRepository<WorkspaceMemberMap,Long> {
 
     @Query("SELECT w.spaceId FROM WorkspaceMemberMap w WHERE w.accountId = :accountId")

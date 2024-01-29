@@ -40,13 +40,13 @@ public class WorkspaceImpl implements WorkspaceService {
     @Override
     public List<ResponseWorkspaces.WorkspaceDto> getAllWorkspacesByOwnerId(Long accountId) {
         List<String> workSpaceIdsFromAccountId = workspaceMemberMapRepository.findSpaceIdsByAccountId(accountId);
-        List<Workspace> workspaceList = workspaceRepository.findWorkSpacesByOwnerIdsOrderByUpdateAt(workSpaceIdsFromAccountId);
+        List<Workspace> workspaceList = workspaceRepository.findWorkSpacesBySpaceIdsOrderByUpdateAt(workSpaceIdsFromAccountId);
         List<ResponseWorkspaces.WorkspaceDto> workspaceDtoList = new ArrayList<>();
 
         for(Workspace workspace : workspaceList) {
             List<Long> accountIdsFromSpaceId = workspaceMemberMapRepository.findAccountIdsBySpaceId(workspace.getSpaceId());
             List<String> memberNickNames = accountRepository.findMemberNickNamesFromAccountIds(accountIdsFromSpaceId);
-            String ownerNickName = accountRepository.findNicknameById(workspace.getOwnerId());
+            String ownerNickName = accountRepository.findOneNicknameById(workspace.getOwnerId());
 
             ResponseWorkspaces.WorkspaceDto workspaceDto = ResponseWorkspaces.WorkspaceDto.builder()
                     .spaceId(workspace.getSpaceId())

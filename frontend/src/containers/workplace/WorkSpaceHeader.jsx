@@ -34,6 +34,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #ddd;
+  height: 5vh;
 `;
 
 const ButtonContainer = styled.div`
@@ -75,10 +76,15 @@ const WorkSpaceHeader = ({ onOpenModal }) => {
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
+  // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
+  // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
 
   // const handleCreateSnapShot = () => {
   //     navigate('/mysnapshot')
+  // const handleCreateSnapShot = () => {
+  //     navigate('/mysnapshot')
 
+  // }
   // }
 
   // const handleCreateSnapShot = async() => {

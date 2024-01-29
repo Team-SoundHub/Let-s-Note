@@ -14,8 +14,6 @@ const Container = styled.div`
       ? "lightgray"
       : props.inactiveColor};
   width: 3rem;
-
-  margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0.5)}px;
 `;
 
 const pickActiveColor = (instrument) => {
@@ -24,8 +22,8 @@ const pickActiveColor = (instrument) => {
       return "#FF0000";
     case "guitar":
       return "#00FF00";
-    case "C":
-      return instrument === "piano" ? "#2929DF" : "#0000FF";
+    case "drum":
+      return "#0000FF";
     case "D":
       return "#DF9329";
     case "E":
@@ -39,7 +37,7 @@ const pickActiveColor = (instrument) => {
   }
 };
 
-const BeatBox = ({
+const DrumBox = ({
   active: propActive,
   note,
   onClick,
@@ -48,51 +46,44 @@ const BeatBox = ({
   activeInstrument,
   setActiveBoxes,
   setActiveInstrument,
+  scaleLength,
   col,
   row,
 }) => {
   const [active, setActive] = useState(propActive);
-  const [instrument, setInstrument] = useState("piano");
-
   const innerContent = useSelector((state) => state.innerContent.innerContent);
 
   useEffect(() => {
-    // Check if x and y match col and row
-    if (innerContent.x === col && innerContent.y === row && !active) {
+    if (
+      innerContent.instrument === "drum" &&
+      innerContent.x === col &&
+      innerContent.y === row &&
+      !active
+    ) {
       setActive(true);
-      setInstrument(innerContent.instrument);
       setActiveBoxes(row, true);
       setActiveInstrument(row, innerContent.instrument);
-    } else if (innerContent.x === col && innerContent.y === row && active) {
+    } else if (
+      innerContent.instrument === "drum" &&
+      innerContent.x === col &&
+      innerContent.y === row &&
+      active
+    ) {
       setActive(false);
-      setInstrument(undefined);
       setActiveBoxes(row, false);
       setActiveInstrument(row, undefined);
     }
   }, [innerContent]);
-
-  useEffect(() => {
-    console.log("instrument: ", instrument);
-  }, [instrument]);
-
   return (
     <Container
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
       onClick={() => (onClick === null ? null : onClick())}
-      instrument={instrument}
-      activeInstrument={activeInstrument}
       note={note}
       col={col}
     />
   );
 };
 
-BeatBox.defaultProps = {
-  active: false,
-  activeColor: "red",
-  onClick: () => null,
-};
-
-export default BeatBox;
+export default DrumBox;

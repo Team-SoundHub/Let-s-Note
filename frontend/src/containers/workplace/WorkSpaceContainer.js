@@ -7,23 +7,27 @@ import { availableNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 
 const Container = styled.div`
+  margin-top: 1rem;
   background-color: #303030;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   width: 100vw;
-  height: 90vh;
+  height: calc(85vh - 1rem);
 `;
 
 class WorkSpaceContainer extends Component {
   constructor(props) {
     super(props);
 
+    const drumNotes = [36, 38];
+
     this.state = {
       loading: true,
       columns: Math.floor(window.innerWidth / 50),
       availableNotes,
+      drumNotes,
       synth: null,
     };
     this.initialBPM = 160;
@@ -66,28 +70,41 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setInstrument(instrument);
   };
 
-  setScale = (scale) => {
+  setInstrumentScale = (scale) => {
     scale = [
-      "D2",
-      "E2",
-      "F2",
-      "G2",
-      "A2",
-      "B2",
-      "C3",
-      "D3",
-      "E3",
-      "F3",
-      "G3",
-      "A3",
-      "B3",
+      "B4",
+      "A4",
+      "G4",
+      "F4",
+      "E4",
+      "D4",
       "C4",
+      "B3",
+      "A3",
+      "G3",
+      "F3",
+      "E3",
+      "D3",
+      "C3",
+      "B2",
+      "A2",
+      "G2",
+      "F2",
+      "E2",
+      "D2",
     ].reverse();
     this.setState({ availableNotes: scale });
   };
 
+  setDrumScale = () => {
+    const drumScale = [36, 38];
+
+    // Update the state to set the drum scale
+    this.setState({ drumNotes: drumScale });
+  };
+
   render() {
-    const { loading, columns, synth, availableNotes } = this.state;
+    const { loading, columns, synth, availableNotes, drumNotes } = this.state;
 
     if (loading) {
       return <Loading />;
@@ -98,6 +115,7 @@ class WorkSpaceContainer extends Component {
             ref="BeatGrid"
             synth={synth}
             scale={availableNotes}
+            drumScale={drumNotes}
             columns={columns}
             background="#34AEA5"
             foreground="#ffffff"

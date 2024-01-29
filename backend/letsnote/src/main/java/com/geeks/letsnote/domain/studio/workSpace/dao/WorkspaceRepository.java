@@ -9,9 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WorkspaceRepository extends JpaRepository<Workspace,String> {
-    List<Workspace> findAllByOwnerId(Long ownerId);
+public interface WorkspaceRepository extends JpaRepository<Workspace, String> {
 
-    @Query("SELECT w FROM Workspace w WHERE w.ownerId IN :accountIds ORDER BY w.updateAt")
-    List<Workspace> findWorkSpacesByOwnerIdsOrderByUpdateAt(@Param("accountIds")List<String> accountIds);
+    @Query("SELECT w FROM Workspace w WHERE w.spaceId IN :spaceIds ORDER BY w.updateAt")
+    List<Workspace> findWorkSpacesBySpaceIdsOrderByUpdateAt(@Param("spaceIds")List<String> spaceIds);
 }

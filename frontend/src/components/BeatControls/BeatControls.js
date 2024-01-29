@@ -39,6 +39,7 @@ const BeatControls = ({
     <InstrumentChange instrument="All" changeInstrument={changeInstrument} />
     <InstrumentChange instrument="piano" changeInstrument={changeInstrument} />
     <InstrumentChange instrument="guitar" changeInstrument={changeInstrument} />
+    <InstrumentChange instrument="drum" changeInstrument={changeInstrument} />
     <BeatChangeContainer>
       <BeatChange
         style={{ marginBottom: 5 }}

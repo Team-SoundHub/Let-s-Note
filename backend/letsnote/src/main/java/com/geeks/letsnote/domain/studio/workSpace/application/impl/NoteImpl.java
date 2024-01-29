@@ -5,6 +5,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dao.NoteRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.entity.Note;
+import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,5 +65,9 @@ public class NoteImpl implements NoteService {
         noteRepository.deleteAllBySpaceInstruments(noteInstrumentMapIds);
     }
 
-
+    @Override
+    @Transactional
+    public void deleteInstrumentNotesByMapId(String mapId) {
+        noteRepository.deleteAllBySpaceInstrument(mapId);
+    }
 }

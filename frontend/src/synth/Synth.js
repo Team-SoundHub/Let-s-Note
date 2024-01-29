@@ -5,18 +5,31 @@ const getTransport = () => {
   return Tone.Transport;
 };
 
+const drumSamples = {
+  36: "audio/drum/36.mp3",
+  38: "audio/drum/38.mp3",
+};
+
 class Synth {
-  constructor(callback, instruments = ["piano", "guitar"], samples = "audio/") {
+  constructor(
+    callback,
+    instruments = ["piano", "guitar", "drum"],
+    samples = "audio/"
+  ) {
     this.instruments = instruments;
     this.activeInstrument = this.instruments[0];
     this.samplers = {};
 
     this.instruments.forEach((instrument) => {
-      this.samplers[instrument] = new Tone.Sampler(
-        scale,
-        callback,
-        samples + instrument + "/"
-      );
+      if (instrument !== "drum") {
+        this.samplers[instrument] = new Tone.Sampler(
+          scale,
+          callback,
+          samples + instrument + "/"
+        );
+      } else {
+        this.samplers[instrument] = new Tone.Sampler(drumSamples);
+      }
       this.samplers[instrument].toDestination();
     });
 
@@ -37,7 +50,6 @@ class Synth {
   }
 
   repeat(callback, timing = "8n") {
-    console.log("repeat called");
     this.timing = timing;
     const transport = getTransport();
 

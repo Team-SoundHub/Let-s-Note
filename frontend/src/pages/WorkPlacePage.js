@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
 import WebSocketContainer from "../containers/WebSocket/WebSocketContainer";
 import ChatContainer from "../containers/workplace/ChatContainer";
-import WorkSpaceHeader from '../containers/workplace/WorkSpaceHeader';
-import ReleaseModal from '../components/WorkSpace/ReleaseModal';
+import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
+import ReleaseModal from "../components/WorkSpace/ReleaseModal";
+
+const Container = styled.div`
+  height: 100vh;
+`;
 
 const WorkPlacePage = () => {
   const navigate = useNavigate();
@@ -25,20 +30,16 @@ const WorkPlacePage = () => {
     setIsReleaseModalOpen(false);
   };
 
-
   return (
-    <>      
+    <Container>
       <WebSocketContainer spaceId={spaceId} />
-      <WorkSpaceHeader onOpenModal={handleModalOpen} />      
+      <WorkSpaceHeader onOpenModal={handleModalOpen} />
       {isReleaseModalOpen && (
-        <ReleaseModal
-          onClose={handleModalClose}
-          onPublish={handlePublish}
-        />
+        <ReleaseModal onClose={handleModalClose} onPublish={handlePublish} />
       )}
       <WorkSpaceContainer />
       <ChatContainer spaceId={spaceId} />
-    </>
+    </Container>
   );
 };
 
