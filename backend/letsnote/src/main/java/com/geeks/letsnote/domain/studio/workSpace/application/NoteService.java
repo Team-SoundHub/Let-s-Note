@@ -15,4 +15,6 @@ public interface NoteService {
     void deleteAllNoteByMap();
 
     void deleteAllInstrumentNotesByMapId(List<String> noteInstrumentMapIds);
+
+    void deleteInstrumentNotesByMapId(String mapId);
 }
