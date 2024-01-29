@@ -1,7 +1,10 @@
 package com.geeks.letsnote.global.network.api;
 
+import com.geeks.letsnote.domain.account.application.AccountService;
+import com.geeks.letsnote.domain.account.dto.ResponseAccount;
 import com.geeks.letsnote.domain.message.application.MessageService;
 import com.geeks.letsnote.domain.message.dto.MessageReqeust;
+import com.geeks.letsnote.domain.message.dto.MessageResponse;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,8 +21,11 @@ public class EditorSocketController {
 
 	private final MessageService messageService;
 
-    public EditorSocketController(MessageService messageService) {
+	private final AccountService accountService;
+
+    public EditorSocketController(MessageService messageService, AccountService accountService) {
         this.messageService = messageService;
+        this.accountService = accountService;
     }
 
 
@@ -38,8 +44,9 @@ public class EditorSocketController {
 				.accountId(accountId)
 				.msgContent(chatMessage.msgContent())
 				.build();
-		messageService.createMessage(messageInfo);
-		return new SocketResponse.chat(chatMessage.accountId(), chatMessage.msgContent());
+		MessageResponse.information result = messageService.createMessage(messageInfo);
+		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
+		return new SocketResponse.chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
 	}
 
 	@MessageMapping("/chat/addUser")
@@ -47,8 +54,9 @@ public class EditorSocketController {
 	public SocketResponse.chat addUser(@Payload SocketRequest.chat chatMessage,
 									   SimpMessageHeaderAccessor headerAccessor) {
 
-		headerAccessor.getSessionAttributes().put("username", chatMessage.accountId());
-		return new SocketResponse.chat(chatMessage.accountId(), chatMessage.msgContent());
+		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
+		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
+		return new SocketResponse.chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
 	}
 
 

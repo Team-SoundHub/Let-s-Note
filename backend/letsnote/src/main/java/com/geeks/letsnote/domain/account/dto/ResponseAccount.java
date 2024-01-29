@@ -47,4 +47,10 @@ public record ResponseAccount() {
                     .build();
         }
     }
+    @Builder
+    public record NickName(
+            @NotNull
+            String nickname
+    ){
+    }
 }

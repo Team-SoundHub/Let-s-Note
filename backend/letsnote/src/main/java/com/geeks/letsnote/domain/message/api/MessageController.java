@@ -47,11 +47,11 @@ public class MessageController {
     })
     @PostMapping("/{accountId}")
     public ResponseEntity<CommonResponse> createMessage(@RequestBody MessageReqeust.information messageInfo){
-        messageService.createMessage(messageInfo);
+        MessageResponse.information result = messageService.createMessage(messageInfo);
 
         CommonResponse response = CommonResponse.builder()
                 .success(true)
-                .response("")
+                .response(result)
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
