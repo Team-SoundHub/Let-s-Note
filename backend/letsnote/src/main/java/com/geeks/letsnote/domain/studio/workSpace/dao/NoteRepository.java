@@ -21,4 +21,9 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     @Modifying
     @Query("DELETE FROM Note n WHERE n.spaceInstrument IN :noteInstrumentMapIds")
     void deleteAllBySpaceInstruments(@Param("noteInstrumentMapIds") List<String> noteInstrumentMapIds);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Note n WHERE n.spaceInstrument = :mapId")
+    void deleteAllBySpaceInstrument(@Param("mapId")String mapId);
 }

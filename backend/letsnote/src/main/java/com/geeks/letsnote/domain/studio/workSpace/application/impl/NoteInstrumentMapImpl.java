@@ -62,5 +62,9 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
             List<String> noteInstrumentMapIds = noteInstrumentMapRepository.findAllMapIdsBySpaceId(spaceInstrument.spaceId());
             noteService.deleteAllInstrumentNotesByMapId(noteInstrumentMapIds);
         }
+        else{
+            Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceInstrument.spaceId(), spaceInstrument.instrument());
+            noteService.deleteInstrumentNotesByMapId(noteInstrumentMap.get().getMapId());
+        }
     }
 }
