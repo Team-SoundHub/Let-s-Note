@@ -19,6 +19,7 @@ const LandingPage = () => {
             const {
                 accessToken, 
                 refreshToken,
+                // nickname,
                 accountId
             } = response.response;
             var rand = Math.floor(Math.random() * 8);

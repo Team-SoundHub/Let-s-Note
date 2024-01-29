@@ -54,11 +54,32 @@ const OthersMessage = styled.div`
   font-size: 12px;
 `;
 
-const ProfileImage = styled.img`
+const ProfileImage = styled.div`
   width: 38px;
   height: 38px;
-  border-radius: 100px;
+  border-radius: 50%; /* 원 모양으로 고정 */
   margin-right: 10px;
+  background-color: #ccc; /* 원의 배경색 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333; /* 글자색 */
+
+  @media screen and (max-width: 768px) {    
+      width: 15px;  // 크기를 줄임
+      height: 15px; // 크기를 줄임
+      border-radius: 50%; /* 원 모양으로 고정 */
+      margin-right: 10px;
+      background-color: #ccc; /* 원의 배경색 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333; /* 글자색 */    
+  }
 `;
 
 
@@ -76,25 +97,36 @@ const ChatMessage = ({ messageList = [] }) => {
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    console.log(localMessageList);
   }, [localMessageList]);
-
-  // 만약에 작업실 안에서 보낸 메시지가 포함이 안되면, 로컬에서 처리하는 식으로 바꾸기
 
   return (
     <MessagesContainer>
-      {localMessageList.map((message, index) => {
+      {localMessageList.map((message) => {
         return (
           <StyledContainer key={message._id}>
-            <MyMessageContainer>
-              {message.accountId}
-              <MyMessage>{message.msgContent}</MyMessage>
-              {message.timestamp}
-
-            </MyMessageContainer>
+            {message.nickname === nickname ? (
+              <MyMessageContainer>
+                {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage> */}
+                <ProfileImage>{1}</ProfileImage>
+                {message.nickname}
+                <MyMessage>{message.msgContent}</MyMessage>
+                {message.timestamp}
+              </MyMessageContainer>
+            ) : (
+              <OthersMessageContainer>
+                {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage>                 */}
+                <ProfileImage>{2}</ProfileImage>                
+                {message.nickname}
+                <OthersMessage>{message.msgContent}</OthersMessage>
+                {message.timestamp}
+              </OthersMessageContainer>
+            )
+            }
           </StyledContainer>
         )
       })}
-      <div ref={messagesEndRef} />  {/* 스크롤 위치 조절을 위한 요소 */}
+      <div ref={messagesEndRef} />
     </MessagesContainer>
   );
 };

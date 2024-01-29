@@ -20,13 +20,14 @@ export const sendCoordinate = (instrument, x, y) => {
   });
 };
 
-export const sendMessage = (message, nickname, spaceId) => {
+export const sendMessage = (message, nickname, spaceId, accountId) => {
     stompClient.publish({
         destination: "/app/chat/sendMessage",
         body: JSON.stringify({
             msgContent: message,
-            accountId: 1,
+            nickname: nickname,
             spaceId: spaceId,
+            accountId: accountId
         })
     })
 }

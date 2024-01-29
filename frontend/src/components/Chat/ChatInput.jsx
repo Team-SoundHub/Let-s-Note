@@ -57,37 +57,34 @@ const StyledButton = styled.button`
 `;
 
 
-const ChatInput = ({ onSendMessage }) => {
+const ChatInput = ({ handleSendMessage }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (message !== "") {
-        localStorage.setItem("message", message);
-      onSendMessage(message);
-      setMessage(''); // Reset the input field
-    }
+    handleSendMessage(message, "닉네임");
+    setMessage('');
   };
 
   return (
-      <InputArea>
-        <PlusButton>+</PlusButton>
-        <InputContainer onSubmit={handleSubmit}>
-          <StyledInput
-              type="text"
-              placeholder="채팅을 입력하세요"
-              value={message}
-              onChange={(event) => setMessage(event.target.value)}
-          />
+    <InputArea>
+      <PlusButton>+</PlusButton>
+      <InputContainer onSubmit={handleSubmit}>      
+        <StyledInput
+          type="text"
+          placeholder="채팅을 입력하세요"
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+        />
 
-          <StyledButton
-              disabled={message === ""}
-              type="submit"
-          >
-            전송
-          </StyledButton>
-        </InputContainer>
-      </InputArea>
+        <StyledButton
+          disabled={message === ""}
+          type="submit"
+        >
+          전송
+        </StyledButton>
+      </InputContainer>
+    </InputArea>
   );
 };
 
