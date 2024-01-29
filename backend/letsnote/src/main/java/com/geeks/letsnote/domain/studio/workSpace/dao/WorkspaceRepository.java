@@ -12,6 +12,6 @@ import java.util.List;
 public interface WorkspaceRepository extends JpaRepository<Workspace,String> {
     List<Workspace> findAllByOwnerId(Long ownerId);
 
-    @Query("SELECT w.spaceId FROM Workspace w WHERE w.ownerId IN :accountIds ORDER BY w.updateAt")
-    List<Workspace> findSpaceIdsByOwnerIdsOrderByUpdateAt(@Param("accountIds")List<String> accountIds);
+    @Query("SELECT w FROM Workspace w WHERE w.ownerId IN :accountIds ORDER BY w.updateAt")
+    List<Workspace> findWorkSpacesByOwnerIdsOrderByUpdateAt(@Param("accountIds")List<String> accountIds);
 }
