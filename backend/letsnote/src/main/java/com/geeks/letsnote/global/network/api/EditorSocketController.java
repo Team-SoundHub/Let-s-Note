@@ -31,13 +31,13 @@ public class EditorSocketController {
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
-	public SocketResponse.content coordinateInfo(SocketRequest.content content) throws Exception {
+	public SocketResponse.content coordinateInfo(SocketRequest.Content content) throws Exception {
 		return new SocketResponse.content(content.instrument(), content.x(), content.y());
 	}
 
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
-	public SocketResponse.chat sendMessage(@Payload SocketRequest.chat chatMessage) {
+	public SocketResponse.chat sendMessage(@Payload SocketRequest.Chat chatMessage) {
 		Long accountId = 1L;
 		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
 				.spaceId("1")
@@ -51,7 +51,7 @@ public class EditorSocketController {
 
 	@MessageMapping("/chat/addUser")
 	@SendTo("/topic/chat/public")
-	public SocketResponse.chat addUser(@Payload SocketRequest.chat chatMessage,
+	public SocketResponse.chat addUser(@Payload SocketRequest.Chat chatMessage,
 									   SimpMessageHeaderAccessor headerAccessor) {
 
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
