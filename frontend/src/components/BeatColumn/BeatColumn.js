@@ -102,6 +102,7 @@ class BeatColumn extends Component {
   setActiveInstrument = (row, instrument) => {
     this.setState((prev) => {
       const newActiveInstrument = [...prev.activeInstrument];
+      console.log(newActiveInstrument);
       newActiveInstrument[row] = instrument;
       return { activeInstrument: newActiveInstrument };
     });

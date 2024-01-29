@@ -54,12 +54,6 @@ const BeatBox = ({
   const innerContent = useSelector((state) => state.innerContent.innerContent);
 
   useEffect(() => {
-    if (propActive) {
-      setInstrument(activeInstrument);
-    }
-  }, [propActive]);
-
-  useEffect(() => {
     // Check if x and y match col and row
     if (innerContent.x === col && innerContent.y === row && !active) {
       setActive(true);
@@ -68,11 +62,15 @@ const BeatBox = ({
       setActiveInstrument(row, innerContent.instrument);
     } else if (innerContent.x === col && innerContent.y === row && active) {
       setActive(false);
-      setInstrument(innerContent.instrument);
+      setInstrument(undefined);
       setActiveBoxes(row, false);
-      setActiveInstrument(row, null);
+      setActiveInstrument(row, undefined);
     }
   }, [innerContent]);
+
+  useEffect(() => {
+    console.log("instrument: ", instrument);
+  }, [instrument]);
 
   return (
     <Container
@@ -80,7 +78,6 @@ const BeatBox = ({
       activeColor={activeColor}
       inactiveColor={inactiveColor}
       onClick={() => {
-        setActive(!active);
         onClick();
       }}
       instrument={instrument}
@@ -94,7 +91,6 @@ BeatBox.defaultProps = {
   active: false,
   activeColor: "red",
   onClick: () => null,
-  instrument: "piano",
 };
 
 export default BeatBox;
