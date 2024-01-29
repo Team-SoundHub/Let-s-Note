@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-// import { createSnapshot } from '../../api/workspaceApi';
 
 // 메시지가 나타나는 애니메이션
 const fadeIn = keyframes`
@@ -108,8 +107,7 @@ const WorkSpaceHeader = ({ onOpenModal }) => {
 
   return (
     <Header>
-      <ButtonContainer>
-        <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
+      <ButtonContainer>        
         <SnapshotButton onClick={handleShare}>공유하기</SnapshotButton>
       </ButtonContainer>
       {displayMessage && <Message show={showMessage}>클립보드에 주소가 복사되었습니다.</Message>}

@@ -6,7 +6,7 @@ import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from '../containers/workplace/WorkSpaceHeader';
 import ReleaseModal from '../components/WorkSpace/ReleaseModal';
 
-const WorkPlacePage = () => {
+const SnapshotPage = () => {
   const navigate = useNavigate();
   const { spaceId } = useParams(); // 현재 spaceId 얻기
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
@@ -36,10 +36,9 @@ const WorkPlacePage = () => {
           onPublish={handlePublish}
         />
       )}
-      <WorkSpaceContainer />
-      <ChatContainer spaceId={spaceId} />
+      <WorkSpaceContainer />      
     </>
   );
 };
 
-export default WorkPlacePage;
+export default SnapshotPage;
