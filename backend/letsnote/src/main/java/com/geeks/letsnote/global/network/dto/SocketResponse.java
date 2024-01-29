@@ -1,11 +1,12 @@
 package com.geeks.letsnote.global.network.dto;
 
+import com.geeks.letsnote.domain.account.dto.ResponseAccount;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 public record SocketResponse() {
     @Builder
-    public record content(
+    public record Content(
             @NotNull
             String instrument,
             @NotNull
@@ -16,11 +17,13 @@ public record SocketResponse() {
     }
 
     @Builder
-    public record chat(
+    public record Chat(
             @NotNull
             Long accountId,
             @NotNull
-            String msgContent
+            String msgContent,
+            @NotNull
+            String nickName
     ){
     }
 }

@@ -54,11 +54,32 @@ const OthersMessage = styled.div`
   font-size: 12px;
 `;
 
-const ProfileImage = styled.img`
+const ProfileImage = styled.div`
   width: 38px;
   height: 38px;
-  border-radius: 100px;
+  border-radius: 50%; 
   margin-right: 10px;
+  background-color: #ccc; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+
+  @media screen and (max-width: 768px) {    
+      width: 15px;  
+      height: 15px; 
+      border-radius: 50%; 
+      margin-right: 10px;
+      background-color: #ccc; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333; 
+  }
 `;
 
 
@@ -67,34 +88,62 @@ const ChatMessage = ({ messageList = [] }) => {
   const [localMessageList, setLocalMessageList] = useState(messageList);
   const messagesEndRef = useRef(null);  // 스크롤 위치를 위한 ref
 
+  // useEffect(() => {
+  //   // WebSocket 구독 로직은 WebSocketContainer에서 처리되므로, 여기서는 Redux 상태를 감시
+  //   setLocalMessageList(messageList);
+  // }, [messageList]);
 
   useEffect(() => {
-    // WebSocket 구독 로직은 WebSocketContainer에서 처리되므로, 여기서는 Redux 상태를 감시
-    setLocalMessageList(messageList);
-  }, [messageList]);
+    // messageList에 새 메시지가 추가된 경우에만 localMessageList 업데이트
+    if (messageList.length !== localMessageList.length) {
+      setLocalMessageList(messageList);
+    }
+  }, [messageList, localMessageList.length]);
 
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // console.log(localMessageList);
   }, [localMessageList]);
 
-  // 만약에 작업실 안에서 보낸 메시지가 포함이 안되면, 로컬에서 처리하는 식으로 바꾸기
+  const renderMessageContent = (message) => {
+    // 이미지 URL인 경우 이미지로 표시
+    if (message.msgContent.startsWith('http')) {
+      return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px'}} />;
+    }
+    // 텍스트 메시지인 경우
+    return <span>{message.msgContent}</span>;
+  };
 
   return (
     <MessagesContainer>
-      {localMessageList.map((message, index) => {
+      {localMessageList.map((message) => {
         return (
           <StyledContainer key={message._id}>
-            <MyMessageContainer>
-              {message.accountId}
-              <MyMessage>{message.msgContent}</MyMessage>
-              {message.timestamp}
-
-            </MyMessageContainer>
+            {message.nickname === nickname ? (
+              <MyMessageContainer>
+                {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage> */}
+                <ProfileImage>{1}</ProfileImage>
+                {message.nickname}
+                {/* <MyMessage>{message.msgContent}</MyMessage> */}
+                <MyMessage>{renderMessageContent(message)}</MyMessage>
+                {message.timestamp}
+              </MyMessageContainer>
+            ) : (
+              <OthersMessageContainer>
+                {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage>                 */}
+                <ProfileImage>{2}</ProfileImage>                
+                {message.nickname}
+                {/* <OthersMessage>{message.msgContent}</OthersMessage> */}
+                <OthersMessage>{renderMessageContent(message)}</OthersMessage>
+                {message.timestamp}
+              </OthersMessageContainer>
+            )
+            }
           </StyledContainer>
         )
       })}
-      <div ref={messagesEndRef} />  {/* 스크롤 위치 조절을 위한 요소 */}
+      <div ref={messagesEndRef} />
     </MessagesContainer>
   );
 };

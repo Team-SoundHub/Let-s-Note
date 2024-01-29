@@ -39,34 +39,19 @@ public class WorkspaceImpl implements WorkspaceService {
 
     @Override
     public List<ResponseWorkspaces.WorkspaceDto> getAllWorkspacesByOwnerId(Long accountId) {
-        List<WorkspaceMemberMap> workspaceMemberMaps = workspaceMemberMapRepository.findAllByAccountId(accountId);
-        List<Workspace> workspaceList = new ArrayList<>();
-        for(WorkspaceMemberMap workspaceMemberMap : workspaceMemberMaps){
-            Optional<Workspace> workspace = workspaceRepository.findById(workspaceMemberMap.getSpaceId());
-            workspaceList.add(workspace.get());
-        }
-
-        Collections.sort(workspaceList, Comparator.comparing(Workspace::getUpdateAt).reversed());
+        List<String> workSpaceIdsFromAccountId = workspaceMemberMapRepository.findSpaceIdsByAccountId(accountId);
+        List<Workspace> workspaceList = workspaceRepository.findWorkSpacesBySpaceIdsOrderByUpdateAt(workSpaceIdsFromAccountId);
         List<ResponseWorkspaces.WorkspaceDto> workspaceDtoList = new ArrayList<>();
 
         for(Workspace workspace : workspaceList) {
-            List<WorkspaceMemberMap> memberMaps = workspaceMemberMapRepository.findAllBySpaceId(workspace.getSpaceId());
-            List<Long> members = new ArrayList<>();
-            for(WorkspaceMemberMap workspaceMemberMap : memberMaps){
-                if(workspace.getOwnerId() != workspaceMemberMap.getAccountId()){
-                    members.add(workspaceMemberMap.getAccountId());
-                }
-            }
-            Optional<Account> workspaceOwner = accountRepository.findById(workspace.getOwnerId());
-            List<String> memberNicknames = new ArrayList<>();
-            for(Long memberId : members){
-                Optional<Account> member = accountRepository.findById(memberId);
-                memberNicknames.add(member.get().getNickname());
-            }
+            List<Long> accountIdsFromSpaceId = workspaceMemberMapRepository.findAccountIdsBySpaceId(workspace.getSpaceId());
+            List<String> memberNickNames = accountRepository.findMemberNickNamesFromAccountIds(accountIdsFromSpaceId);
+            String ownerNickName = accountRepository.findOneNicknameById(workspace.getOwnerId());
+
             ResponseWorkspaces.WorkspaceDto workspaceDto = ResponseWorkspaces.WorkspaceDto.builder()
                     .spaceId(workspace.getSpaceId())
-                    .ownerNickname(workspaceOwner.get().getNickname())
-                    .memberNicknames(memberNicknames)
+                    .ownerNickname(ownerNickName)
+                    .memberNicknames(memberNickNames)
                     .spaceTitle(workspace.getSpaceTitle())
                     .spaceContent(workspace.getSpaceContent())
                     .updateAt(workspace.getUpdateAt())
@@ -118,6 +103,9 @@ public class WorkspaceImpl implements WorkspaceService {
         return allNotes;
     }
 
+
+
+    //for db delete
     @Override
     public void deleteAllWorkspaces() {
         workspaceRepository.deleteAll();

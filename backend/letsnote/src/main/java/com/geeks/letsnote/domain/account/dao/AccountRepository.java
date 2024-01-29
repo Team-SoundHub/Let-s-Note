@@ -17,11 +17,11 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByUsername(String username);
 
-    List<String> findNicknameByIdIn(@Param("ids") List<Long> ids);
-
-    String findNicknameByUsername(String username);
     String findNicknameById(Long accountId);
 
-    Long findIdByUsername(String username);
+    @Query("SELECT a.nickname FROM Account a WHERE a.id = :accountId")
+    String findOneNicknameById(@Param("accountId") Long accountId);
 
+    @Query("SELECT w.nickname FROM Account w WHERE w.id IN :accountIds")
+    List<String> findMemberNickNamesFromAccountIds(@Param("accountIds")List<Long> accountIdsFromSpaceId);
 }
