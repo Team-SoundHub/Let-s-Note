@@ -43,6 +43,8 @@ const BeatBox = ({
   inactiveColor,
   activeColor,
   activeInstrument,
+  setActiveBoxes,
+  setActiveInstrument,
   col,
   row,
 }) => {
@@ -62,9 +64,13 @@ const BeatBox = ({
     if (innerContent.x === col && innerContent.y === row && !active) {
       setActive(true);
       setInstrument(innerContent.instrument);
+      setActiveBoxes(row, true);
+      setActiveInstrument(row, innerContent.instrument);
     } else if (innerContent.x === col && innerContent.y === row && active) {
       setActive(false);
       setInstrument(innerContent.instrument);
+      setActiveBoxes(row, false);
+      setActiveInstrument(row, null);
     }
   }, [innerContent]);
 
