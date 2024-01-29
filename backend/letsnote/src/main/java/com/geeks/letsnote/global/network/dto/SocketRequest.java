@@ -29,7 +29,9 @@ public record SocketRequest() {
 	}
 	@Builder
 	public record SpaceInstrument(
+			@NotNull
 			String spaceId,
+			@NotNull
 			Instrument instrument
 	){}
 }
