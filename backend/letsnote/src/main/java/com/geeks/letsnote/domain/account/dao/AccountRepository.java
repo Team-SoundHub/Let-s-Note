@@ -24,4 +24,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Long findIdByUsername(String username);
 
+    @Query("SELECT w.nickname FROM Account w WHERE w.id IN :accountIds")
+    List<String> findMemberNickNamesFromAccountIds(@Param("accountIds")List<Long> accountIdsFromSpaceId);
 }
