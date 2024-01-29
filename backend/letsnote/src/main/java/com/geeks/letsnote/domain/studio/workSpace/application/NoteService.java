@@ -10,5 +10,7 @@ public interface NoteService {
 
     void clickNote(String mapId, RequestNotes.NoteDto note);
 
-    void deleteNotes();
+    void deleteAllDatabaseNotes();
+
+    void deleteAllNoteByMap();
 }

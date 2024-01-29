@@ -35,13 +35,28 @@ public class NoteImpl implements NoteService {
     }
 
     @Override
+    @Transactional
     public void clickNote(String mapId, RequestNotes.NoteDto note) {
-        noteRepository.save(Note.builder().spaceInstrument(mapId).noteX(note.noteX()).noteY(note.noteY()).build());
+        Optional<Note> noteEntity = noteRepository.findBySpaceInstrumentAndNoteXAndNoteY(mapId, note.noteX(),note.noteY());
+        if(noteEntity.isEmpty()){
+            noteRepository.save(Note.builder().spaceInstrument(mapId).noteX(note.noteX()).noteY(note.noteY()).build());
+        }
+        else {
+            noteRepository.deleteById(noteEntity.get().getNoteId());
+        }
+    }
+
+
+
+    //for delete database
+    @Override
+    public void deleteAllDatabaseNotes() {
+        noteRepository.deleteAll();
     }
 
     @Override
-    public void deleteNotes() {
-        noteRepository.deleteAll();
+    public void deleteAllNoteByMap() {
+        ;
     }
 
 

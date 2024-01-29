@@ -10,4 +10,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     Optional<Note> findBySpaceInstrument(String mapId);
 
     List<Note> findAllBySpaceInstrument(String mapId);
+
+    Optional<Note> findBySpaceInstrumentAndNoteXAndNoteY(String mapId, Long noteX, Long noteY);
 }
