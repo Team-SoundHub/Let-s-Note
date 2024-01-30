@@ -51,8 +51,8 @@ const ShareButton = styled.button`
   background-size: 70%; 
   background-position: center; // 이미지 위치 조절
   background-repeat: no-repeat; // 이미지 반복 방지
-  width: 40px; 
-  height: 40px; 
+  width: 30px; 
+  height: 30px; 
   border: none;
   border-radius: 50%;
   cursor: pointer;  
@@ -67,7 +67,7 @@ const Message = styled.div`
   color: grey;
   padding: 5px 10px;
   position: fixed;
-  top: 20px;
+  top: 1px;
   left: 10%;
   // transform: translateX(50%);
   border-radius: 4px;
@@ -82,14 +82,17 @@ const SnapshotHeader = ({ onOpenModal }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
 
+  const handleGoBack = () => {
+    navigate('/mypage');
+  }  
 
-  const handleShare = () => {    
+  const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     setShowMessage(true);
     setDisplayMessage(true);
 
     setTimeout(() => { // 메시지 애니메이션 시작
-      setShowMessage(false);       
+      setShowMessage(false);
 
       setTimeout(() => { // 애니메이션이 완료된 후 display 상태 변경
         setDisplayMessage(false);
@@ -100,7 +103,8 @@ const SnapshotHeader = ({ onOpenModal }) => {
 
   return (
     <Header>
-      <ButtonContainer>        
+      <button onClick={handleGoBack}> ⬅️ </button>
+      <ButtonContainer>
         <ShareButton onClick={handleShare}></ShareButton>
       </ButtonContainer>
       {displayMessage && <Message show={showMessage}>클립보드에 주소가 복사되었습니다. 친구들에게 공유해보세요! </Message>}

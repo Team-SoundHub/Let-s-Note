@@ -1,9 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import getMyPageInfo, { createWorkSpace } from '../api/myPageApi';
+import { getMyPageInfo, createWorkSpace, getMySnapshotInfo } from '../api/myPageApi';
 import styled from 'styled-components';
 import WorkSpaceCard from '../components/WorkSpace/WorkSpaceCard';
 import CreateSpaceModal from '../components/MyPage/CreateSpaceModal';
+
+const SectionTitle = styled.h2`
+  margin: 20px 0;
+`;
+
+const WorkSpacesSection = styled.div`
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px 0;
+`;
+
+const SnapshotsSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3열 그리드
+  gap: 20px;
+  padding: 20px 0;
+`;
+
+const Divider = styled.hr`
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  margin: 20px 0;
+`;
 
 const CardContainer = styled.div`
   display: flex;
@@ -15,7 +40,9 @@ const CardContainer = styled.div`
 const MyPage = () => {
     const navigate = useNavigate();
 
-    const [workspaces, setWorkspaces] = useState([]);  // 작업실 목록을 저장할 상태
+    const [workspaces, setWorkspaces] = useState([]);  // 작업실 목록을 저장하는 상태
+    const [snapshots, setSnapshots] = useState([]);  // 스냅샷 목록을 저장하는 상태
+
     const [workSpaceTitle, setWorkSpaceTitle] = useState('');
     const [workSpaceDesc, setWorkSpaceDesc] = useState('');
 
@@ -34,9 +61,8 @@ const MyPage = () => {
         try {
             const response = await createWorkSpace(title, description, []);
             if (response) {
+                navigate(`/workspace/${response.response.spaceId}`);
                 console.log("작업실 생성 완료");
-                // navigate(`/workspace/${response.spaceId}`);
-                navigate(`/workspace`);
             } else {
                 console.log("작업실 생성 실패");
             }
@@ -60,30 +86,64 @@ const MyPage = () => {
             }
         };
         fetchMyPageInfo();
+
+        const fetchMySnapshotInfo = async () => {
+            try {
+                const response = await getMySnapshotInfo(accountId);
+                console.log(response)
+                console.log("스냅샷 인포 받음");
+                setSnapshots(response.response);  // API 응답으로 받은 스냅샷 목록을 상태에 저장
+            } catch (error) {
+                console.error('스냅샷 정보 로드 실패:', error);
+            }
+        };
+        fetchMySnapshotInfo();
+
     }, [accessToken, accountId]);
 
     // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
     return (
         <div>
             <h1>MyPage</h1>
-            <button onClick={handleModalOpen}>새 작업실 만들기</button>
-            {isCreateModalOpen && (
-                <CreateSpaceModal
-                    onClose={handleModalClose}
-                    onPublish={handleCreateWorkSpace}
-                />
-            )}
-            <h2> 내 작업실 </h2>
-            {workspaces.map((workspace, index) => (
-                <div key={workspace.spaceId} onClick={() => navigate(`/workspace/${workspace.spaceId}`)}>
-                    <WorkSpaceCard
-                        spaceTitle={workspace.spaceTitle}
-                        spaceContent={workspace.spaceContent}
-                        memberNicknames={workspace.memberNicknames}
-                        updateAt={workspace.updateAt}
+            <SectionTitle>내 작업실</SectionTitle>
+            <WorkSpacesSection>
+                <button onClick={handleModalOpen}>새 작업실 만들기</button>
+                {isCreateModalOpen && (
+                    <CreateSpaceModal
+                        onClose={handleModalClose}
+                        onPublish={handleCreateWorkSpace}
                     />
-                </div>
-            ))}
+                )}
+
+                {workspaces.map((workspace) => (
+                    <div key={workspace.spaceId} onClick={() => navigate(`/workspace/${workspace.spaceId}`)}>
+                        <WorkSpaceCard
+                            spaceTitle={workspace.spaceTitle}
+                            spaceContent={workspace.spaceContent}
+                            ownerNickname={workspace.ownerNickname}
+                            memberNicknames={workspace.memberNicknames}
+                            updateAt={workspace.updateAt}
+                        />
+                    </div>
+                ))}
+            </WorkSpacesSection>
+
+            <Divider />
+
+            <SectionTitle> 내 스냅샷 </SectionTitle>
+            <SnapshotsSection>
+                {snapshots.map((snapshot) => (
+                    <div key={snapshot.snapshotId} onClick={() => navigate(`/snapshot/${snapshot.snapshotId}`)}>
+                        <WorkSpaceCard
+                            spaceTitle={snapshot.snapshotTitle}
+                            snapshotContent={snapshot.snapshotContent}
+                            ownerNickname={snapshot.ownerNickname}
+                            memberNicknames={snapshot.memberNicknames}
+                            updateAt={snapshot.updateAt}
+                        />
+                    </div>
+                ))}
+            </SnapshotsSection>
         </div>
     );
 };

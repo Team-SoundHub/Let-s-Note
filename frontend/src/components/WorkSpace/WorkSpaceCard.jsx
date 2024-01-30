@@ -17,7 +17,7 @@ const Card = styled.div`
 
 const Title = styled.h2`
   margin: 0;
-  color: #333;
+  color: black;
   font-weight: bold;
 `;
 
@@ -37,11 +37,12 @@ const EditDate = styled.p`
   text-align: right;
 `;
 
-const WorkSpaceCard = ({ spaceTitle, spaceContent, memberNicknames, updateAt }) => {
+const WorkSpaceCard = ({ spaceTitle, spaceContent, ownerNickname, memberNicknames, updateAt }) => {
   return (
     <Card>
       <Title>{spaceTitle}</Title>
       <Description>{spaceContent}</Description>
+      <Members>방장: {ownerNickname}</Members>
       <Members>참여 멤버: {memberNicknames.join(', ')}</Members>
       <EditDate>최근 편집일: {new Date(updateAt).toLocaleString()}</EditDate>
     </Card>
