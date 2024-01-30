@@ -3,6 +3,7 @@ package com.geeks.letsnote.global.network.dto;
 import com.geeks.letsnote.domain.account.dto.ResponseAccount;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import java.sql.Timestamp;
 
 public record SocketResponse() {
     @Builder
@@ -21,7 +22,9 @@ public record SocketResponse() {
             @NotNull
             String msgContent,
             @NotNull
-            String nickName
+            Timestamp timeStamp,
+            @NotNull
+            String nickname
     ){
     }
 }

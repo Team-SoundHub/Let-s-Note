@@ -12,10 +12,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
-
 @Controller
 public class EditorSocketController {
 
@@ -46,18 +42,18 @@ public class EditorSocketController {
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
+		return new SocketResponse.Chat(result.msgContent(), result.timestamp(), nickName.nickname());
 	}
 
-	@MessageMapping("/chat/addUser")
-	@SendTo("/topic/chat/public")
-	public SocketResponse.Chat addUser(@Payload SocketRequest.Chat chatMessage,
-									   SimpMessageHeaderAccessor headerAccessor) {
-
-		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
-		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
-	}
+//	@MessageMapping("/chat/addUser")
+//	@SendTo("/topic/chat/public")
+//	public SocketResponse.Chat addUser(@Payload SocketRequest.Chat chatMessage,
+//									   SimpMessageHeaderAccessor headerAccessor) {
+//
+//		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
+//		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
+//		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
+//	}
 
 
 }
