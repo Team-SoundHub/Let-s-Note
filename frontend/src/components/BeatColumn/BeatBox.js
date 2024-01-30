@@ -51,11 +51,20 @@ const BeatBox = ({
   visualizeInstrument,
   col,
   row,
+  isSnapshot
 }) => {
   const [active, setActive] = useState(propActive);
   const [instrument, setInstrument] = useState("piano");
 
   const innerContent = useSelector((state) => state.innerContent.innerContent);
+
+  const handleClick = () => {
+    if (isSnapshot) {
+      // isSnapshot이 true일 경우 onClick 이벤트 무시
+      return;
+    }
+    onClick && onClick();
+  };
 
   useEffect(() => {
     // Check if x and y match col and row
@@ -81,7 +90,7 @@ const BeatBox = ({
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
-      onClick={() => (onClick === null ? null : onClick())}
+      onClick={handleClick}
       instrument={instrument}
       activeInstrument={activeInstrument}
       visualizeInstrument={visualizeInstrument}

@@ -26,7 +26,7 @@ const WorkPlacePage = () => {
 
   const handlePublish = (title, description) => {
     console.log("발간하기", title, description);
-    navigate("/mysnapshot");
+    // navigate('/mysnapshot');
     setIsReleaseModalOpen(false);
   };
 

@@ -179,6 +179,7 @@ class WorkSpaceContainer extends Component {
                 background="#34AEA5"
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
+                isSnapshot={this.props.isSnapshot} 
               />
             </RightPanel>
           </GridContainer>

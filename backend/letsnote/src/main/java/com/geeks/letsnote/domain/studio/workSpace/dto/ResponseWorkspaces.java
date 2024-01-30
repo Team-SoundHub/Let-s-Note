@@ -20,4 +20,10 @@ public record ResponseWorkspaces() {
     public record WorkspaceId(
             String spaceId
     ){}
+
+    @Builder
+    public record WorkspaceIn(
+            List<ResponseNotes.Notes> notesList,
+            boolean isSnapshotExist
+    ){}
 }

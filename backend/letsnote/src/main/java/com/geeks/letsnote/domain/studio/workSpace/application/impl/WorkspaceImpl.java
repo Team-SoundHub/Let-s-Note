@@ -2,8 +2,8 @@ package com.geeks.letsnote.domain.studio.workSpace.application.impl;
 
 
 import com.geeks.letsnote.domain.account.dao.AccountRepository;
-import com.geeks.letsnote.domain.account.entity.Account;
 import com.geeks.letsnote.domain.studio.instrument.Instrument;
+import com.geeks.letsnote.domain.studio.snapshot.application.SnapshotService;
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceMemberMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
@@ -12,9 +12,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dao.WorkspaceRepository;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
-import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
 import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
-import com.geeks.letsnote.domain.studio.workSpace.entity.WorkspaceMemberMap;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +25,16 @@ public class WorkspaceImpl implements WorkspaceService {
     private final WorkspaceMemberMapRepository workspaceMemberMapRepository;
     private final WorkspaceMemberMapService workspaceMemberMapService;
     private final NoteInstrumentMapService noteInstrumentMapService;
+    private final SnapshotService snapshotService;
 
 
-    public WorkspaceImpl(WorkspaceRepository workspaceRepository, AccountRepository accountRepository, WorkspaceMemberMapRepository workspaceMemberMapRepository, WorkspaceMemberMapService workspaceMemberMapService, NoteInstrumentMapService noteInstrumentMapService) {
+    public WorkspaceImpl(WorkspaceRepository workspaceRepository, AccountRepository accountRepository, WorkspaceMemberMapRepository workspaceMemberMapRepository, WorkspaceMemberMapService workspaceMemberMapService, NoteInstrumentMapService noteInstrumentMapService, SnapshotService snapshotService) {
         this.workspaceRepository = workspaceRepository;
         this.accountRepository = accountRepository;
         this.workspaceMemberMapRepository = workspaceMemberMapRepository;
         this.workspaceMemberMapService = workspaceMemberMapService;
         this.noteInstrumentMapService = noteInstrumentMapService;
+        this.snapshotService = snapshotService;
     }
 
     @Override
@@ -71,7 +71,6 @@ public class WorkspaceImpl implements WorkspaceService {
                 .ownerId(accountId)
                 .spaceTitle(workspaceDto.spaceTitle())
                 .spaceContent(workspaceDto.spaceContent())
-                .snapshot(false)
                 .build();
         workspaceRepository.save(workspace);
 
@@ -91,7 +90,7 @@ public class WorkspaceImpl implements WorkspaceService {
     }
 
     @Override
-    public List<ResponseNotes.Notes> getAllNoteOfWorkspace(String spaceId) {
+    public ResponseWorkspaces.WorkspaceIn getAllNoteOfWorkspace(String spaceId) {
         List<ResponseNotes.Notes> allNotes = new ArrayList<>();
         ResponseNotes.Notes pianoNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId, Instrument.Piano);
         allNotes.add(pianoNotes);
@@ -100,7 +99,12 @@ public class WorkspaceImpl implements WorkspaceService {
         ResponseNotes.Notes drumNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId,Instrument.Drum);
         allNotes.add(drumNotes);
 
-        return allNotes;
+        boolean isSnapshotExist = snapshotService.findSnapshotExist(spaceId);
+
+
+        return ResponseWorkspaces.WorkspaceIn.builder()
+                .notesList(allNotes)
+                .isSnapshotExist(isSnapshotExist).build();
     }
 
 

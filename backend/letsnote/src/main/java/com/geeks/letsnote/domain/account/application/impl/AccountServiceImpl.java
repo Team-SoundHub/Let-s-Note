@@ -164,6 +164,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResponseAccount.NickName getNicknameFromAccountId(Long accountId) {
-        return new ResponseAccount.NickName(accountRepository.findNicknameById(accountId));
+        return new ResponseAccount.NickName(accountRepository.findOneNicknameById(accountId));
     }
 }

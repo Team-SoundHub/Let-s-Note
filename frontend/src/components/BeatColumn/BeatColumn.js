@@ -182,6 +182,7 @@ class BeatColumn extends Component {
           visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
+          isSnapshot={this.props.isSnapshot} 
         />
       );
     }
