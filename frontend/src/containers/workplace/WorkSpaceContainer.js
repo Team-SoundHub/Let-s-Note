@@ -60,7 +60,7 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       drumNotes,
       synth: null,
-      visualizeInstrument: [true, false, false],
+      visualizeInstrument: [true, true, true],
     };
     this.initialBPM = 160;
   }
