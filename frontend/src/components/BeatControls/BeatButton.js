@@ -1,22 +1,24 @@
-import styled from 'styled-components'
+import tw from "tailwind-styled-components";
 
-const BeatButton = styled.div`
-  width: ${props => props.size || 50}px;
-  height: ${props => props.size || 50}px;
-  margin: 8px;
-  border-radius: ${props => props.size / 2 || 25}px;;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  -webkit-transition: box-shadow 200ms;
-  transition: box-shadow 200ms;
-  transition-timing-function: ease-in-out;
+const BeatButton = tw.button`
+  text-gray-900 
+  bg-[#49C5B6]
+  hover:bg-gradient-to-l 
+    hover:from-teal-200 
+    hover:to-lime-200 
+  focus:ring-4 
+  focus:outline-none 
+  focus:ring-lime-200 
+  dark:focus:ring-teal-700 
+  font-medium 
+  rounded-full
+  text-sm 
+  px-3
+  py-3 
+  text-center
 
-  &:hover {
-    box-shadow: 0 0 5px 3px #FFFFFF40;
-  }
-`
+  mx-1
+  my-2
+`;
 
-export default BeatButton
+export default BeatButton;

@@ -1,11 +1,18 @@
 import React, { Component } from "react";
-import styled from "styled-components";
+import tw from "tailwind-styled-components";
 import BeatButton from "./BeatButton";
+import play from "../../assets/control/play-svgrepo-com.svg";
+import pause from "../../assets/control/pause-svgrepo-com.svg";
 
-const Play = styled.i`
-  font-size: 24px;
-  color: #363636;
-  margin-left: ${(props) => (props.playing ? 0 : 4)}px;
+const Container = tw.div`
+  flex
+  items-center
+  justify-center
+`;
+
+const Play = tw.img`
+  w-5
+  h-5
 `;
 
 class BeatToggle extends Component {
@@ -23,14 +30,13 @@ class BeatToggle extends Component {
 
   render() {
     const { playing } = this.state;
+    const iconSrc = playing ? pause : play;
     return (
-      <BeatButton onClick={this.onClick}>
-        <Play
-          playing={playing}
-          className={`fas ${playing ? "fa-pause" : "fa-play"}`}
-        />
-        재생
-      </BeatButton>
+      <Container>
+        <BeatButton onClick={this.onClick}>
+          <Play src={iconSrc} />
+        </BeatButton>
+      </Container>
     );
   }
 }

@@ -1,17 +1,24 @@
 import React from "react";
-import styled from "styled-components";
+import tw from "tailwind-styled-components";
 import BeatButton from "./BeatButton";
+import reset from "../../assets/control/reset-svgrepo-com.svg";
 
-const ResetIcon = styled.i`
-  font-size: 24px;
-  color: #363636;
+const Container = tw.div`
+  ml-2
+  items-center
+`;
+
+const ResetIcon = tw.img`
+  w-5
+  h-5
 `;
 
 const BeatReset = ({ onClick }) => (
-  <BeatButton onClick={onClick}>
-    <ResetIcon className="fas fa-redo-alt" />
-    리셋
-  </BeatButton>
+  <Container>
+    <BeatButton onClick={onClick}>
+      <ResetIcon src={reset} />
+    </BeatButton>
+  </Container>
 );
 
 export default BeatReset;

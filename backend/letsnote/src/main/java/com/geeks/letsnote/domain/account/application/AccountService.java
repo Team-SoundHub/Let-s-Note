@@ -24,4 +24,5 @@ public interface AccountService {
 
     ResponseAccount.NickName getNicknameFromAccountId(Long accountId);
 
+    boolean checkPathVariableWithTokenUser(Long accountId);
 }

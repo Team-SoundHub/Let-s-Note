@@ -7,13 +7,14 @@ const Container = styled.div`
   margin: 0.5px;
   background-color: ${(props) =>
     props.active &&
-    (props.activeInstrument === "All" ||
-      props.activeInstrument === props.instrument)
+    props.visualizeInstrument[
+      props.instrumentList.indexOf(props.instrument)
+    ] === true
       ? pickActiveColor(props.instrument)
       : props.col % 8 < 4
       ? "lightgray"
       : props.inactiveColor};
-  width: 3rem;
+  width: 2rem;
 
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0.5)}px;
 `;
@@ -21,11 +22,11 @@ const Container = styled.div`
 const pickActiveColor = (instrument) => {
   switch (instrument) {
     case "piano":
-      return "#FF0000";
+      return "rgb(248 113 113)";
     case "guitar":
-      return "#00FF00";
-    case "C":
-      return instrument === "piano" ? "#2929DF" : "#0000FF";
+      return "rgb(74 222 128)";
+    case "drum":
+      return "rgb(250 204 21)";
     case "D":
       return "#DF9329";
     case "E":
@@ -48,14 +49,30 @@ const BeatBox = ({
   activeInstrument,
   setActiveBoxes,
   setActiveInstrument,
+  visualizeInstrument,
   col,
   row,
-  isSnapshot
+  isSnapshot,
 }) => {
   const [active, setActive] = useState(propActive);
   const [instrument, setInstrument] = useState("piano");
 
   const innerContent = useSelector((state) => state.innerContent.innerContent);
+  const notes = useSelector((state) => state.innerContent.notes);
+
+  useEffect(() => {    
+    // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
+    const activeNote = notes.find(n => n.x === col && n.y === row);
+    if (activeNote && !active) {      
+      // 해당하는 노트가 있으면, isActive 상태를 true로 설정
+      setActive(true);
+      setInstrument(activeNote.instrument);  
+      setActiveBoxes(row, true);
+      setActiveInstrument(row, activeNote.instrument); 
+    }
+  }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
+
+  const instrumentList = ["piano", "guitar", "drum"];
 
   const handleClick = () => {
     if (isSnapshot) {
@@ -68,6 +85,7 @@ const BeatBox = ({
   useEffect(() => {
     // Check if x and y match col and row
     if (innerContent.x === col && innerContent.y === row && !active) {
+      console.log(`노트 찍기: x: ${innerContent.x}, y:${innerContent.y}`)
       setActive(true);
       setInstrument(innerContent.instrument);
       setActiveBoxes(row, true);
@@ -92,8 +110,10 @@ const BeatBox = ({
       onClick={handleClick}
       instrument={instrument}
       activeInstrument={activeInstrument}
+      visualizeInstrument={visualizeInstrument}
       note={note}
       col={col}
+      instrumentList={instrumentList}
     />
   );
 };

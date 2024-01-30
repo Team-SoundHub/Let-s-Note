@@ -69,10 +69,10 @@ const Message = styled.div`
 `;
 
 
-const WorkSpaceHeader = ({ onOpenModal }) => {
+const WorkSpaceHeader = ({ onOpenModal, isSnapshotExist }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
-  const [displayMessage, setDisplayMessage] = useState(false);
+  const [displayMessage, setDisplayMessage] = useState(false);  
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가

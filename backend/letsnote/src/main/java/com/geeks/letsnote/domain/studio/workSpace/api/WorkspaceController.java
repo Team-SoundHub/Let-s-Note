@@ -1,6 +1,7 @@
 package com.geeks.letsnote.domain.studio.workSpace.api;
 
 
+import com.geeks.letsnote.domain.account.application.AccountService;
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
 import com.geeks.letsnote.domain.message.dto.MessageResponse;
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteService;
@@ -30,11 +31,13 @@ public class WorkspaceController {
     private final WorkspaceService workspaceService;
     private final NoteInstrumentMapService noteInstrumentMapService;
     private final NoteService noteService;
+    private final AccountService accountService;
 
-    public WorkspaceController(WorkspaceService workspaceService, NoteInstrumentMapService noteInstrumentMapService, NoteService noteService) {
+    public WorkspaceController(WorkspaceService workspaceService, NoteInstrumentMapService noteInstrumentMapService, NoteService noteService, AccountService accountService) {
         this.workspaceService = workspaceService;
         this.noteInstrumentMapService = noteInstrumentMapService;
         this.noteService = noteService;
+        this.accountService = accountService;
     }
 
     @Operation(summary = "모든 워크스페이스 출력", description = "AccountId에 해당하는 모든 메세지를 리턴합니다.")
@@ -58,6 +61,10 @@ public class WorkspaceController {
     })
     @PostMapping("/{accountId}")
     public ResponseEntity<CommonResponse> postWorkspace(@PathVariable("accountId") Long accountId, @RequestBody RequestWorkspaces.WorkspaceDto workspaceDto){
+        boolean checkUser = accountService.checkPathVariableWithTokenUser(accountId);
+        if(!checkUser){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         ResponseWorkspaces.WorkspaceId postWorkspaceId = workspaceService.createWorkspace(workspaceDto,accountId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)

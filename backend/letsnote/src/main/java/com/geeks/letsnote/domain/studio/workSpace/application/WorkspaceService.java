@@ -2,6 +2,7 @@ package com.geeks.letsnote.domain.studio.workSpace.application;
 
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
+import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
 
 import java.util.List;
 
@@ -12,4 +13,11 @@ public interface WorkspaceService {
     ResponseWorkspaces.WorkspaceIn getAllNoteOfWorkspace(String spaceId);
 
     void deleteAllWorkspaces();
+
+    List<String> getSpaceIdsFromAccountId(Long accountId);
+
+    List<String> getMemberNicknamesFromWorkspace(Workspace workspace);
+    String getOwnerNicknameFromWorkspace(Workspace workspace);
+
+    Workspace getById(String workspaceId);
 }

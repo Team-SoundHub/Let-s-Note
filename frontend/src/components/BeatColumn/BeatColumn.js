@@ -5,15 +5,15 @@ import DrumBox from "./DrumBox";
 import Subject from "../../observer/Subject";
 
 const Container = styled.div`
-  flex: 1;
   display: flex;
   position: relative;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: ${(props) => props.background};
-  margin-left: ${(props) => (props.id % 2 === 1 ? 0 : 2)}px;
-  margin-bottom: 3px;
+  margin-left: ${(props) => (props.id === 0 || props.id % 2 === 1 ? 1 : 3)}px;
+  margin-bottom: 1px;
+  width: 2rem;
 `;
 
 const Overlay = styled.div`
@@ -59,7 +59,7 @@ class BeatColumn extends Component {
         note,
         isActive: activeBoxes[index],
         instrument: activeInstrument[index], // Add instrument information
-      }));
+      }));           
 
       // 연주 코드 추가
       if (synth && activeBoxes[i]) {
@@ -160,7 +160,8 @@ class BeatColumn extends Component {
   };
 
   renderBoxes = () => {
-    const { scale, drumScale, foreground, synth, id } = this.props;
+    const { scale, drumScale, foreground, synth, id, visualizeInstrument } =
+      this.props;
     const boxes = [];
     for (let i = 0; i < scale.length; i++) {
       boxes.push(
@@ -178,9 +179,10 @@ class BeatColumn extends Component {
               : this.handleClick(i)
           }
           activeInstrument={synth.activeInstrument}
+          visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
-          isSnapshot={this.props.isSnapshot} 
+          isSnapshot={this.props.isSnapshot}
         />
       );
     }
@@ -197,6 +199,7 @@ class BeatColumn extends Component {
             synth.activeInstrument === "drum" ? this.handleClick(i) : null
           }
           activeInstrument={synth.activeInstrument}
+          visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
         />
