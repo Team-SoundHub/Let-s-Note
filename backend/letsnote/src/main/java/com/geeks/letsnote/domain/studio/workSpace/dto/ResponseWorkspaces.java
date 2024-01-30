@@ -26,4 +26,10 @@ public record ResponseWorkspaces() {
             List<ResponseNotes.Notes> notesList,
             boolean isSnapshotExist
     ){}
+
+    @Builder
+    public record WorkspaceMembers(
+            String ownerNickname,
+            List<String> membersNickname
+    ){}
 }

@@ -137,4 +137,13 @@ public class WorkspaceImpl implements WorkspaceService {
     public Workspace getById(String workspaceId) {
         return workspaceRepository.findById(workspaceId).get();
     }
+
+    @Override
+    public ResponseWorkspaces.WorkspaceMembers getMemberNicknamesFromSpaceId(String spaceId) {
+        Optional<Workspace> workspace = workspaceRepository.findById(spaceId);
+        return ResponseWorkspaces.WorkspaceMembers.builder()
+                .membersNickname(getMemberNicknamesFromWorkspace(workspace.get()))
+                .ownerNickname(getOwnerNicknameFromWorkspace(workspace.get()))
+                .build();
+    }
 }

@@ -20,4 +20,6 @@ public interface WorkspaceService {
     String getOwnerNicknameFromWorkspace(Workspace workspace);
 
     Workspace getById(String workspaceId);
+
+    ResponseWorkspaces.WorkspaceMembers getMemberNicknamesFromSpaceId(String spaceId);
 }
