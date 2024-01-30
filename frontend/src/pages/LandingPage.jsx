@@ -21,15 +21,12 @@ const LandingPage = () => {
                 refreshToken,
                 // nickname,
                 accountId
-            } = response.response;
-            var rand = Math.floor(Math.random() * 8);
-            let nicknames;
-            nicknames = ["손정원", "이찬우", "김주영"]
+            } = response.response;            
 
             if (accessToken && refreshToken) {
                 localStorage.setItem('access', accessToken);
                 localStorage.setItem('refresh', refreshToken);
-                localStorage.setItem('nickname', "손정원");
+                localStorage.setItem('nickname', "테스트용입니다.");
                 localStorage.setItem('accountId', accountId);
                 
                 console.log("로그인 완료");                

@@ -103,7 +103,7 @@ const ChatMessage = ({ messageList = [] }) => {
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    console.log(localMessageList);
+    console.log("localMessageList: ", localMessageList);
   }, [localMessageList]);
 
   const renderMessageContent = (message) => {
@@ -113,11 +113,13 @@ const ChatMessage = ({ messageList = [] }) => {
     }
     // 텍스트 메시지인 경우
     return <span>{message.msgContent}</span>;
-  };
+  };  
 
   return (
     <MessagesContainer>
       {localMessageList.map((message) => {
+        console.log("메시지응답 닉네임", message.nickname);
+        console.log("로컬스토리지 닉네임", nickname);
         return (
           <StyledContainer key={message._id}>
             {message.nickname === nickname ? (

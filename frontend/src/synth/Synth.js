@@ -71,7 +71,7 @@ class Synth {
     const activeSampler = this.samplers[Instrument];
     activeSampler.triggerAttackRelease(note, timing, time);
   }
-
+  
   setBPM(bpm = 120) {
     getTransport().bpm.value = bpm;
   }
