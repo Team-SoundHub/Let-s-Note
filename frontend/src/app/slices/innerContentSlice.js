@@ -25,8 +25,7 @@ export const innerContentSlice = createSlice({
             x: note.noteX,
             y: note.noteY,  
             instrument: instrumentGroup.instrument.toLowerCase()
-          });
-          console.log(`dispatch에 추가 - inst: ${instrumentGroup.instrument.toLowerCase()} x:${note.noteX} y:${note.noteY}`)
+          });          
         });
       });
       

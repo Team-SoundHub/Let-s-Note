@@ -59,9 +59,7 @@ class BeatColumn extends Component {
         note,
         isActive: activeBoxes[index],
         instrument: activeInstrument[index], // Add instrument information
-      }));
-
-      console.log("연주 activeNotes:", activeNotes);      
+      }));           
 
       // 연주 코드 추가
       if (synth && activeBoxes[i]) {

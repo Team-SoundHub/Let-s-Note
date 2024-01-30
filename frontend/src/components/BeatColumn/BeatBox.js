@@ -62,8 +62,7 @@ const BeatBox = ({
   useEffect(() => {    
     // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
     const activeNote = notes.find(n => n.x === col && n.y === row);
-    if (activeNote && !active) {
-      console.log(`activeNote: x:${activeNote.x} y:${activeNote.y} inst:${activeNote.instrument}`);
+    if (activeNote && !active) {      
       // 해당하는 노트가 있으면, isActive 상태를 true로 설정
       setActive(true);
       setInstrument(activeNote.instrument);  
