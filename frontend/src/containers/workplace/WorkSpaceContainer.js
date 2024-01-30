@@ -50,6 +50,12 @@ class WorkSpaceContainer extends Component {
     this.state.synth.toggle();
   };
 
+  stop = () => {
+    const { BeatGrid } = this.refs;
+    BeatGrid.setState({ count: -1 });
+    this.state.synth.stop();
+  };
+
   next = () => {
     this.state.synth.nextBeat();
   };
@@ -123,6 +129,7 @@ class WorkSpaceContainer extends Component {
           />
           <BeatControls
             onPlay={this.play}
+            onStop={this.stop}
             changeColumns={this.changeColumns}
             adjustBPM={this.adjustBPM}
             bpm={this.initialBPM}
