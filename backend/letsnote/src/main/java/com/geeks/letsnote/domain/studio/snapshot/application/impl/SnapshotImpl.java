@@ -45,6 +45,7 @@ public class SnapshotImpl implements SnapshotService {
         snapshotRepository.save(snapshot);
 
         snapshotInstrumentMapService.createSnapshotInstrumentMap(snapshotId, spaceId);
+        workspaceService.increaseSnapshotCount(spaceId);
 
         return ResponseSnapshot.SnapshotId.builder()
                 .snapshotId(snapshotId)
