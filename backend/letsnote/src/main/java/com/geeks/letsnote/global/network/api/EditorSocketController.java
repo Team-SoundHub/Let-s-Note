@@ -34,15 +34,14 @@ public class EditorSocketController {
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
 	public SocketResponse.Chat sendMessage(@Payload SocketRequest.Chat chatMessage) {
-		Long accountId = 1L;
 		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
-				.spaceId("1")
-				.accountId(accountId)
+				.spaceId(chatMessage.spaceId())
+				.accountId(chatMessage.accountId())
 				.msgContent(chatMessage.msgContent())
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.Chat(result.msgContent(), result.timestamp(), nickName.nickname());
+		return new SocketResponse.Chat(nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
 //	@MessageMapping("/chat/addUser")

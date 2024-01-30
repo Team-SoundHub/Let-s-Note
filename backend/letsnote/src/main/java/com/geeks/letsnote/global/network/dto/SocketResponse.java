@@ -20,11 +20,11 @@ public record SocketResponse() {
     @Builder
     public record Chat(
             @NotNull
+            String nickname,
+            @NotNull
             String msgContent,
             @NotNull
-            Timestamp timeStamp,
-            @NotNull
-            String nickname
+            Timestamp timeStamp
     ){
     }
 }
