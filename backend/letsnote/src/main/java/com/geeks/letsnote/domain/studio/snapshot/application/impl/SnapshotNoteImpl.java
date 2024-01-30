@@ -4,6 +4,7 @@ import com.geeks.letsnote.domain.studio.snapshot.application.SnapshotNoteService
 import com.geeks.letsnote.domain.studio.snapshot.dao.SnapshotNoteRepository;
 import com.geeks.letsnote.domain.studio.snapshot.entity.SnapshotNote;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
+import com.geeks.letsnote.domain.studio.workSpace.entity.Note;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,18 +28,5 @@ public class SnapshotNoteImpl implements SnapshotNoteService {
             snapshotNoteEntities.add(SnapshotNote.builder().noteX(note.noteX()).noteY(note.noteY()).snapshotInstrument(mapId).build());
         }
         snapshotNoteRepository.saveAll(snapshotNoteEntities);
-    }
-
-    @Override
-    public List<ResponseNotes.Note> getSnapshotNoteByMapId(String mapId) {
-        List<SnapshotNote> notes = snapshotNoteRepository.findAllBySnapshotInstrument(mapId);
-        List<ResponseNotes.Note> noteDto = new ArrayList<>();
-        for(SnapshotNote snapshotNote : notes){
-            noteDto.add(ResponseNotes.Note.builder()
-                    .noteY(snapshotNote.getNoteY())
-                    .noteX(snapshotNote.getNoteX())
-                    .build());
-        }
-        return noteDto;
     }
 }

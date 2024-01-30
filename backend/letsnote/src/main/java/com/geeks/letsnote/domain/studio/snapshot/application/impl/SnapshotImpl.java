@@ -1,6 +1,5 @@
 package com.geeks.letsnote.domain.studio.snapshot.application.impl;
 
-import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import com.geeks.letsnote.domain.studio.snapshot.application.SnapshotInstrumentMapService;
 import com.geeks.letsnote.domain.studio.snapshot.application.SnapshotService;
 import com.geeks.letsnote.domain.studio.snapshot.dao.SnapshotRepository;
@@ -8,7 +7,6 @@ import com.geeks.letsnote.domain.studio.snapshot.dto.RequestSnapshot;
 import com.geeks.letsnote.domain.studio.snapshot.dto.ResponseSnapshot;
 import com.geeks.letsnote.domain.studio.snapshot.entity.Snapshot;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
-import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -53,9 +51,9 @@ public class SnapshotImpl implements SnapshotService {
 
     @Override
     public boolean findSnapshotExist(String spaceId) {
-        List<Snapshot> findSnapshot = snapshotRepository.findAllBySpaceId(spaceId);
+        Optional<Snapshot> findSnapshot = snapshotRepository.findBySpaceId(spaceId);
 
-        return findSnapshot.size() > 0 ? true : false;
+        return findSnapshot.isPresent() ? true : false;
     }
 
     @Override
@@ -77,18 +75,5 @@ public class SnapshotImpl implements SnapshotService {
         }
 
         return snapshotDtoList;
-    }
-
-    @Override
-    public List<ResponseNotes.Notes> getAllNotesOfSnapshot(String snapshotId) {
-        List<ResponseNotes.Notes> allNotes = new ArrayList<>();
-        ResponseNotes.Notes pianoNotes = snapshotInstrumentMapService.getAllInstrumentNoteBySpaceId(snapshotId, Instrument.Piano);
-        allNotes.add(pianoNotes);
-        ResponseNotes.Notes guitarNotes = snapshotInstrumentMapService.getAllInstrumentNoteBySpaceId(snapshotId, Instrument.Guitar);
-        allNotes.add(guitarNotes);
-        ResponseNotes.Notes drumNotes = snapshotInstrumentMapService.getAllInstrumentNoteBySpaceId(snapshotId, Instrument.Drum);
-        allNotes.add(drumNotes);
-
-        return allNotes;
     }
 }
