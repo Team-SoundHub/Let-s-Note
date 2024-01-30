@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
 import { sendCoordinate } from "../../containers/WebSocket/WebSocketContainer";
 
 const Container = styled.div`
   flex: 1;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
   margin: 0;
   display: flex;
   background-color: ${(props) => props.background};
@@ -39,8 +41,15 @@ class BeatGrid extends Component {
   };
 
   renderBeatColumns = () => {
-    const { scale, drumScale, synth, columns, background, foreground } =
-      this.props;
+    const {
+      scale,
+      drumScale,
+      synth,
+      columns,
+      background,
+      foreground,
+      visualizeInstrument,
+    } = this.props;
     const { count } = this.state;
     const cols = [];
     for (let i = 0; i < columns; i++) {
@@ -56,6 +65,7 @@ class BeatGrid extends Component {
           playing={count % columns === i}
           synth={synth}
           onClick={this.handleBoxClick}
+          visualizeInstrument={visualizeInstrument}
           isSnapshot={this.props.isSnapshot}
         />
       );

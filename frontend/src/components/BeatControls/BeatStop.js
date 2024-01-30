@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import styled from "styled-components";
+import tw from "tailwind-styled-components";
 import BeatButton from "./BeatButton";
+import stop from "../../assets/control/stop-svgrepo-com.svg";
 
-const Stop = styled.i`
-  font-size: 24px;
-  color: #363636;
-  margin-left: ${(props) => (props.playing ? 0 : 4)}px;
+const Stop = tw.img`
+  w-5
+  h-5
 `;
 
 class BeatStop extends Component {
@@ -25,8 +25,7 @@ class BeatStop extends Component {
     const { playing } = this.state;
     return (
       <BeatButton onClick={this.onClick}>
-        <Stop playing={playing} className={"fas fa-stop"} />
-        정지
+        <Stop playing={playing} src={stop} />
       </BeatButton>
     );
   }
