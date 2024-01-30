@@ -4,6 +4,12 @@ import BeatButton from "./BeatButton";
 import play from "../../assets/control/play-svgrepo-com.svg";
 import pause from "../../assets/control/pause-svgrepo-com.svg";
 
+const Container = tw.div`
+  flex
+  items-center
+  justify-center
+`;
+
 const Play = tw.img`
   w-5
   h-5
@@ -26,9 +32,11 @@ class BeatToggle extends Component {
     const { playing } = this.state;
     const iconSrc = playing ? pause : play;
     return (
-      <BeatButton onClick={this.onClick}>
-        <Play src={iconSrc} />
-      </BeatButton>
+      <Container>
+        <BeatButton onClick={this.onClick}>
+          <Play src={iconSrc} />
+        </BeatButton>
+      </Container>
     );
   }
 }

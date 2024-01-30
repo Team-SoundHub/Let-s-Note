@@ -15,7 +15,9 @@ const Container = tw.div`
   justify-between
   w-full
   px-4
-  my-2
+  mb-2
+  mt-2
+  border-2
 `;
 
 const LeftSection = tw.div`
@@ -70,7 +72,6 @@ const BeatControls = ({
     <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
 
     <RightSection>
-      <InstrumentChange instrument="All" changeInstrument={changeInstrument} />
       <InstrumentChange
         instrument="piano"
         changeInstrument={changeInstrument}

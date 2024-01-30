@@ -11,9 +11,9 @@ const Container = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   background-color: ${(props) => props.background};
-  margin-left: ${(props) => (props.id % 2 === 1 ? 1 : 3)}px;
-  margin-bottom: 3px;
-  width: 3rem;
+  margin-left: ${(props) => (props.id === 0 || props.id % 2 === 1 ? 1 : 3)}px;
+  margin-bottom: 1px;
+  width: 2rem;
 `;
 
 const Overlay = styled.div`
@@ -182,7 +182,7 @@ class BeatColumn extends Component {
           visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
-          isSnapshot={this.props.isSnapshot} 
+          isSnapshot={this.props.isSnapshot}
         />
       );
     }
@@ -199,6 +199,7 @@ class BeatColumn extends Component {
             synth.activeInstrument === "drum" ? this.handleClick(i) : null
           }
           activeInstrument={synth.activeInstrument}
+          visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
         />

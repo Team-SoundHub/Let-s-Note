@@ -12,7 +12,7 @@ const Container = styled.div`
 `;
 
 const Label = styled.span`
-  color: white;
+  color: #49c5b6;
   font-size: 16px;
   font-weight: 700;
   width: 100%;

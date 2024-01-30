@@ -2,9 +2,7 @@ import tw from "tailwind-styled-components";
 
 const BeatButton = tw.button`
   text-gray-900 
-  bg-gradient-to-r 
-    from-teal-200 
-    to-lime-200 
+  bg-[#49C5B6]
   hover:bg-gradient-to-l 
     hover:from-teal-200 
     hover:to-lime-200 
@@ -18,8 +16,9 @@ const BeatButton = tw.button`
   px-3
   py-3 
   text-center
-  me-2 
-  mb-2
+
+  mx-1
+  my-2
 `;
 
 export default BeatButton;
