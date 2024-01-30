@@ -57,7 +57,7 @@ public record ResponseAccount() {
     @Builder
     public record AccountId(
             @NotNull
-            Long AccountId
+            Long accountId
     ){
     }
 
