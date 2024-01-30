@@ -7,7 +7,9 @@ import java.sql.Timestamp;
 
 public record SocketResponse() {
     @Builder
-    public record Content(
+    public record Coordinate(
+            @NotNull
+            String spaceId,
             @NotNull
             String instrument,
             @NotNull
@@ -19,6 +21,8 @@ public record SocketResponse() {
 
     @Builder
     public record Chat(
+            @NotNull
+            String spaceId,
             @NotNull
             String nickname,
             @NotNull

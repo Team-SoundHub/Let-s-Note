@@ -31,13 +31,15 @@ public class EditorSocketController {
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
-	public SocketResponse.Content coordinateInfo(@Valid @Payload SocketRequest.Content content) throws Exception {
-		return new SocketResponse.Content(content.instrument(), content.x(), content.y());
+	public SocketResponse.Coordinate coordinateInfo(@Valid @Payload SocketRequest.Coordinate coordinate) {
+		String spaceId = "23dbaeebfe9a4f0db43dfc71b7ca3bb1";
+		return new SocketResponse.Coordinate(spaceId, coordinate.instrument(), coordinate.x(), coordinate.y());
 	}
 
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
 	public SocketResponse.Chat sendMessage(@Valid @Payload SocketRequest.Chat chatMessage) {
+		String spaceId = "23dbaeebfe9a4f0db43dfc71b7ca3bb1";
 		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
 				.spaceId(chatMessage.spaceId())
 				.accountId(chatMessage.accountId())
@@ -45,13 +47,36 @@ public class EditorSocketController {
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.Chat(nickName.nickname(), result.msgContent(), result.timestamp());
+		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
 	@MessageMapping("/workspace/{workSpaceId}/join}")
 	@SendTo("/topic/workspace/{workSpaceId}/join}")
 	public SocketResponse.WorkSpace joinWorkSpace(@Valid @Header("accountId")Long accountId, @DestinationVariable String workSpaceId, StompHeaderAccessor stompHeaderAccessor) {
 		return new SocketResponse.WorkSpace(workSpaceId);
+	}
+
+	@MessageMapping("/workspace/{workSpaceId}/chat/sendMessage")
+	@SendTo("/topic/workspace/{workSpaceId}/chat/public")
+	public SocketResponse.Chat sendWorkSpaceMessage(
+			@Valid @Payload SocketRequest.Chat chatMessage,
+			@DestinationVariable String spaceId) {
+
+		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
+				.spaceId(spaceId)
+				.accountId(chatMessage.accountId())
+				.msgContent(chatMessage.msgContent())
+				.build();
+		MessageResponse.information result = messageService.createMessage(messageInfo);
+		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
+
+		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
+	}
+
+	@MessageMapping("/workspace/{workSpaceId}/editor/sendCoordinate")
+	@SendTo("/topic/workspace/{workSpaceId}/editor/public")
+	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String workSpaceId) throws Exception {
+		return new SocketResponse.Coordinate(workSpaceId, content.instrument(), content.x(), content.y());
 	}
 
 	@MessageExceptionHandler
