@@ -6,6 +6,9 @@ import BeatChange from "./BeatChange";
 import BeatReset from "./BeatReset";
 import Subject from "../../observer/Subject";
 import InstrumentChange from "./InstrumentChange";
+import BeatStop from "./BeatStop";
+import { sendInstrumentReset } from "../../containers/WebSocket/WebSocketContainer";
+
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -28,6 +31,7 @@ const onReset = () => {
 
 const BeatControls = ({
   onPlay,
+  onStop,
   bpm,
   adjustBPM,
   changeColumns,
@@ -36,6 +40,7 @@ const BeatControls = ({
   <Container>
     <BeatReset onClick={onReset} />
     <BeatToggle onClick={onPlay} />
+    <BeatStop onClick={onStop} />
     <InstrumentChange instrument="All" changeInstrument={changeInstrument} />
     <InstrumentChange instrument="piano" changeInstrument={changeInstrument} />
     <InstrumentChange instrument="guitar" changeInstrument={changeInstrument} />

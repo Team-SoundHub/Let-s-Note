@@ -5,7 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import WorkPlacePage from "./pages/WorkPlacePage";
 import LandingPage from "./pages/LandingPage";
 import MyPage from "./pages/MyPage";
-import MySnapshotPage from "./pages/MySnapshotPage";
+import SnapshotPage from "./pages/SnapshotPage";
+
 
 const App = () => {
   return (
@@ -15,8 +16,9 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/workspace/:spaceId" element={<WorkPlacePage />} />
-          <Route path="/workspace" element={<WorkPlacePage />} /> 
-          <Route path="/mysnapshot" element={<MySnapshotPage />} /> 
+          {/* <Route path="/snapshot/:snapshotId" element={<SnapshotPage />} />            */}
+          <Route path="/workspace" element={<WorkPlacePage />} />           
+          <Route path="/snapshot" element={<SnapshotPage />} /> 
         </Routes>
       </Provider>
     </>

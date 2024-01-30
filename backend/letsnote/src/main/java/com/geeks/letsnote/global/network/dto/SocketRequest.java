@@ -22,6 +22,8 @@ public record SocketRequest() {
 	@Builder
 	public record Chat(
 			@NotNull
+			String spaceId,
+			@NotNull
 			Long accountId,
 			@NotNull
 			String msgContent

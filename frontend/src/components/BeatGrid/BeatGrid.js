@@ -5,7 +5,7 @@ import { sendCoordinate } from "../../containers/WebSocket/WebSocketContainer";
 
 const Container = styled.div`
   flex: 1;
-  width: calc((100vw - 2px) * 0.8);
+  width: 100vw;
   margin: 0;
   display: flex;
   background-color: ${(props) => props.background};
@@ -56,6 +56,7 @@ class BeatGrid extends Component {
           playing={count % columns === i}
           synth={synth}
           onClick={this.handleBoxClick}
+          isSnapshot={this.props.isSnapshot}
         />
       );
     }
