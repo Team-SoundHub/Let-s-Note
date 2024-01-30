@@ -19,8 +19,6 @@ public record SocketResponse() {
     @Builder
     public record Chat(
             @NotNull
-            Long accountId,
-            @NotNull
             String msgContent,
             @NotNull
             String nickName

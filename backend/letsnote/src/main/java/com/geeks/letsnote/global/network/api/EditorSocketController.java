@@ -46,7 +46,7 @@ public class EditorSocketController {
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.Chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
+		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
 	}
 
 	@MessageMapping("/chat/addUser")
@@ -56,7 +56,7 @@ public class EditorSocketController {
 
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
 		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
-		return new SocketResponse.Chat(chatMessage.accountId(), chatMessage.msgContent(), nickName.nickname());
+		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
 	}
 
 
