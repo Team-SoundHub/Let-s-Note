@@ -31,14 +31,16 @@ export const sendCoordinate = (instrument, x, y) => {
 };
 
 
-export const sendMessage = (message, nickname, spaceId, accountId) => {
+// export const sendMessage = (message, nickname, spaceId, accountId) => {
+export const sendMessage = (message, accountId) => {
+  console.log(message, accountId);
   stompClient.publish({
     destination: "/app/chat/sendMessage",
     body: JSON.stringify({
       msgContent: message,
-      nickname: nickname,
-      spaceId: spaceId,
       accountId: accountId,
+      // nickname: nickname,
+      // spaceId: spaceId,
     }),
   });
 };

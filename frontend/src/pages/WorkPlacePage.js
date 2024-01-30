@@ -6,6 +6,7 @@ import WebSocketContainer from "../containers/WebSocket/WebSocketContainer";
 import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import ReleaseModal from "../components/WorkSpace/ReleaseModal";
+import getWorkspaceInfo from "../api/workSpaceApi";
 
 const Container = styled.div`
   height: 100vh;
@@ -25,7 +26,7 @@ const WorkPlacePage = () => {
   };
 
   const handlePublish = (title, description) => {
-    console.log("발간하기", title, description);
+    console.log("스냅샷 저장하기", title, description);
     // navigate('/mysnapshot');
     setIsReleaseModalOpen(false);
   };
