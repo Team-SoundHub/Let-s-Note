@@ -5,6 +5,7 @@ import reset from "../../assets/control/reset-svgrepo-com.svg";
 
 const Container = tw.div`
   ml-2
+  items-center
 `;
 
 const ResetIcon = tw.img`

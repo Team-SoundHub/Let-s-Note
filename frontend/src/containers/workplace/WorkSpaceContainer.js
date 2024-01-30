@@ -10,7 +10,7 @@ import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVi
 
 const Container = styled.div`
   margin-top: 1rem;
-  background-color: #303030;
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -25,7 +25,7 @@ const GridContainer = tw.div`
   items-center
   justify-start
   w-full
-  bg-gray-800
+  bg-white
   p-4
   h-screen
 `;
@@ -46,7 +46,7 @@ const RightPanel = tw.div`
   flex-shrink-0
 `;
 
-const instrumentOptions = ["All", "piano", "guitar", "drum"];
+export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
 class WorkSpaceContainer extends Component {
   constructor(props) {
@@ -56,11 +56,11 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: Math.floor(window.innerWidth / 50),
+      columns: 30,
       availableNotes,
       drumNotes,
       synth: null,
-      visualizeInstrument: "piano",
+      visualizeInstrument: [true, false, false],
     };
     this.initialBPM = 160;
   }
@@ -98,7 +98,7 @@ class WorkSpaceContainer extends Component {
 
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
-    if (currentCols + diff < 4 || currentCols + diff > 30) return;
+    if (currentCols + diff < 30 || currentCols + diff > 60) return;
 
     this.setState({ columns: currentCols + diff });
   };
@@ -109,7 +109,29 @@ class WorkSpaceContainer extends Component {
   };
 
   changeVisualizeInstrument = (instrument) => {
-    this.setState({ visualizeInstrument: instrument });
+    const { visualizeInstrument } = this.state;
+
+    // Find the index of the clicked instrument
+    const instrumentIndex = instrumentOptions.indexOf(instrument);
+
+    if (instrumentIndex !== -1) {
+      let newVisualizeInstrument;
+
+      if (instrumentIndex === 0) {
+        // Set all bits to 1 for "All" instrument
+        newVisualizeInstrument = new Array(visualizeInstrument.length).fill(
+          true
+        );
+      } else {
+        // Toggle the value at the found index
+        newVisualizeInstrument = [...visualizeInstrument];
+        newVisualizeInstrument[instrumentIndex - 1] =
+          !newVisualizeInstrument[instrumentIndex - 1];
+      }
+
+      // Update the state with the new array
+      this.setState({ visualizeInstrument: newVisualizeInstrument });
+    }
   };
 
   setInstrumentScale = (scale) => {
@@ -179,7 +201,7 @@ class WorkSpaceContainer extends Component {
                 background="#34AEA5"
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
-                isSnapshot={this.props.isSnapshot} 
+                isSnapshot={this.props.isSnapshot}
               />
             </RightPanel>
           </GridContainer>

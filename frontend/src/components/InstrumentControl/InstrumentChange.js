@@ -31,11 +31,11 @@ const InstrumentChange = ({ instrument, changeInstrument }) => {
   const getBgColor = (instrument) => {
     switch (instrument) {
       case "piano":
-        return "bg-red-500";
+        return "bg-red-400";
       case "guitar":
-        return "bg-green-500";
+        return "bg-green-400";
       case "drum":
-        return "bg-yellow-500";
+        return "bg-yellow-400";
       case "all":
         return "bg-white";
       default:

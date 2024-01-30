@@ -7,13 +7,14 @@ const Container = styled.div`
   margin: 0.5px;
   background-color: ${(props) =>
     props.active &&
-    (props.visualizeInstrument === "All" ||
-      props.visualizeInstrument === props.instrument)
+    props.visualizeInstrument[
+      props.instrumentList.indexOf(props.instrument)
+    ] === true
       ? pickActiveColor(props.instrument)
       : props.col % 8 < 4
       ? "lightgray"
       : props.inactiveColor};
-  width: 3rem;
+  width: 2rem;
 
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0.5)}px;
 `;
@@ -21,11 +22,11 @@ const Container = styled.div`
 const pickActiveColor = (instrument) => {
   switch (instrument) {
     case "piano":
-      return "#FF0000";
+      return "rgb(248 113 113)";
     case "guitar":
-      return "#00FF00";
-    case "C":
-      return instrument === "piano" ? "#2929DF" : "#0000FF";
+      return "rgb(74 222 128)";
+    case "drum":
+      return "rgb(250 204 21)";
     case "D":
       return "#DF9329";
     case "E":
@@ -51,12 +52,14 @@ const BeatBox = ({
   visualizeInstrument,
   col,
   row,
-  isSnapshot
+  isSnapshot,
 }) => {
   const [active, setActive] = useState(propActive);
   const [instrument, setInstrument] = useState("piano");
 
   const innerContent = useSelector((state) => state.innerContent.innerContent);
+
+  const instrumentList = ["piano", "guitar", "drum"];
 
   const handleClick = () => {
     if (isSnapshot) {
@@ -96,6 +99,7 @@ const BeatBox = ({
       visualizeInstrument={visualizeInstrument}
       note={note}
       col={col}
+      instrumentList={instrumentList}
     />
   );
 };
