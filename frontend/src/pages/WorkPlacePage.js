@@ -7,7 +7,7 @@ import WebSocketContainer from "../containers/WebSocket/WebSocketContainer";
 import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import ReleaseModal from "../components/WorkSpace/ReleaseModal";
-import getWorkspaceInfo from "../api/workspaceApi";
+import getWorkspaceInfo from "../api/workSpaceApi";
 import { setNotesList } from "../app/slices/innerContentSlice";
 
 const Container = styled.div`
