@@ -10,6 +10,8 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -41,5 +43,16 @@ public class SnapshotInstrumentMapImpl implements SnapshotInstrumentMapService {
         snapshotInstrumentMapRepository.save(SnapshotInstrumentMap.builder().mapId(drumMapId).instrument(Instrument.Drum).snapshotId(snapshotId).build());
         ResponseNotes.Notes drumNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId , Instrument.Drum);
         snapshotNoteService.storeSnapshotNotesByMap(drumNotes,pianoMapId);
+    }
+
+    @Override
+    public ResponseNotes.Notes getAllInstrumentNoteBySpaceId(String snapshotId, Instrument instrument) {
+        Optional<SnapshotInstrumentMap> snapshotInstrumentMapper = snapshotInstrumentMapRepository.findBySnapshotIdAndInstrument(snapshotId,instrument);
+        List<ResponseNotes.Note> notes = snapshotNoteService.getSnapshotNoteByMapId(snapshotInstrumentMapper.get().getMapId());
+        ResponseNotes.Notes instrumentNotes = ResponseNotes.Notes.builder()
+                .instrument(instrument)
+                .notes(notes)
+                .build();
+        return instrumentNotes;
     }
 }

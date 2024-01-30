@@ -11,8 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface SnapshotRepository extends JpaRepository<Snapshot, String> {
-    Optional<Snapshot> findBySpaceId(String spaceId);
-
     @Query("SELECT s FROM Snapshot s WHERE s.spaceId IN :spaceIds ORDER BY s.updateAt")
     List<Snapshot> findAllBySpaceIdsOrderByUpdateAt(@Param("spaceIds") List<String> spaceIds);
+
+    List<Snapshot> findAllBySpaceId(String spaceId);
 }
