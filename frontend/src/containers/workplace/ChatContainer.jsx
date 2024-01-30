@@ -95,11 +95,9 @@ const ChatContainer = ({ spaceId }) => {
         dispatch(fetchChatMessages(spaceId));
     }, [dispatch, spaceId]); // 작업실이 바뀌면 메시지 목록 새로 받아오기
 
-    const handleSendMessage = (message, accountId, spaceId) => {
-        console.log("ChatContainer - 핸들센드1");
-        sendMessage(message, accountId, spaceId);
-        console.log("ChatContainer - 핸들센드2");
-        // sendMessage(message, nickname, spaceId, accountId); // 방 분리 후에 이걸로 대체
+    const handleSendMessage = (message) => {        
+        sendMessage(message, accountId, "a9f4c68ffc214db09e7d54c70cfb84cb");
+        // sendMessage(message, accountId, spaceId);             
     }
 
 

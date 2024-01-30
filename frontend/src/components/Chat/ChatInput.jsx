@@ -99,7 +99,7 @@ const ChatInput = ({ handleSendMessage }) => {
       dispatch(uploadImage(selectedFile));
     } else {
       console.log("Chatinput-Send 1");
-      handleSendMessage(message, 1, 1);
+      handleSendMessage(message);
       console.log("Chatinput-Send 2");
     }
     setMessage('');

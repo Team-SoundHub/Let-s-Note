@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
@@ -7,6 +8,7 @@ import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import ReleaseModal from "../components/WorkSpace/ReleaseModal";
 import getWorkspaceInfo from "../api/workspaceApi";
+import { setNotesList } from "../app/slices/innerContentSlice";
 
 const Container = styled.div`
   height: 100vh;
@@ -14,6 +16,8 @@ const Container = styled.div`
 
 const WorkPlacePage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { spaceId } = useParams(); // 현재 spaceId 얻기
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [workspaceInfo, setWorkspaceInfo] = useState({ notesList: [], isSnapshotExist: false });
@@ -22,16 +26,20 @@ const WorkPlacePage = () => {
   useEffect(() => {
     const fetchWorkspaceInfo = async () => {
       try {
-        const response = await getWorkspaceInfo(spaceId);
-        setWorkspaceInfo(response.response);        
-        console.log("작업실 입장:", workspaceInfo);
+        const response = await getWorkspaceInfo(spaceId);                
+        setWorkspaceInfo(response.response);
+        
+        // notesList 전체를 Redux store에 저장
+        dispatch(setNotesList(response.response.notesList));
+        
+        console.log("작업실 입장 - workspaceInfo:", response.response);
       } catch (error) {
         console.error('Error fetching workspace info:', error);
       }
     };
-
+  
     fetchWorkspaceInfo();
-  }, [spaceId]);
+  }, [spaceId, dispatch]);
 
   const handleModalOpen = () => {
     setIsReleaseModalOpen(true);
@@ -54,7 +62,7 @@ const WorkPlacePage = () => {
       {isReleaseModalOpen && (
         <ReleaseModal onClose={handleModalClose} onPublish={handlePublish} />
       )}
-      <WorkSpaceContainer notesList={workspaceInfo.notesList}  />
+      <WorkSpaceContainer notesList={workspaceInfo.notesList} />
       <ChatContainer spaceId={spaceId} />
     </Container>
   );
