@@ -6,7 +6,7 @@ import WebSocketContainer from "../containers/WebSocket/WebSocketContainer";
 import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import ReleaseModal from "../components/WorkSpace/ReleaseModal";
-import getWorkspaceInfo from "../api/workSpaceApi";
+import getWorkspaceInfo from "../api/workspaceApi";
 
 const Container = styled.div`
   height: 100vh;
@@ -16,6 +16,22 @@ const WorkPlacePage = () => {
   const navigate = useNavigate();
   const { spaceId } = useParams(); // 현재 spaceId 얻기
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
+  const [workspaceInfo, setWorkspaceInfo] = useState({ notesList: [], isSnapshotExist: false });
+
+  // 작업실 입장 시 데이터 요청
+  useEffect(() => {
+    const fetchWorkspaceInfo = async () => {
+      try {
+        const response = await getWorkspaceInfo(spaceId);
+        setWorkspaceInfo(response.response);        
+        console.log("작업실 입장:", workspaceInfo);
+      } catch (error) {
+        console.error('Error fetching workspace info:', error);
+      }
+    };
+
+    fetchWorkspaceInfo();
+  }, [spaceId]);
 
   const handleModalOpen = () => {
     setIsReleaseModalOpen(true);
@@ -34,11 +50,11 @@ const WorkPlacePage = () => {
   return (
     <Container>
       <WebSocketContainer spaceId={spaceId} />
-      <WorkSpaceHeader onOpenModal={handleModalOpen} />
+      <WorkSpaceHeader onOpenModal={handleModalOpen} isSnapshotExist={workspaceInfo.isSnapshotExist} />
       {isReleaseModalOpen && (
         <ReleaseModal onClose={handleModalClose} onPublish={handlePublish} />
       )}
-      <WorkSpaceContainer />
+      <WorkSpaceContainer notesList={workspaceInfo.notesList}  />
       <ChatContainer spaceId={spaceId} />
     </Container>
   );

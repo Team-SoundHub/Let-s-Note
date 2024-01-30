@@ -32,15 +32,15 @@ export const sendCoordinate = (instrument, x, y) => {
 
 
 // export const sendMessage = (message, nickname, spaceId, accountId) => {
-export const sendMessage = (message, accountId) => {
-  console.log(message, accountId);
+export const sendMessage = (message, accountId, spaceId) => {
+  console.log("웹소켓 채팅 요청:", message, accountId);
   stompClient.publish({
     destination: "/app/chat/sendMessage",
     body: JSON.stringify({
       msgContent: message,
-      accountId: accountId,
+      accountId: 1,
       // nickname: nickname,
-      // spaceId: spaceId,
+      spaceId: 1,
     }),
   });
 };
@@ -62,7 +62,7 @@ const WebSocketContainer = ({ spaceId }) => {
 
     stompClient.subscribe(`/topic/chat/public`, (response) => {
         const message = JSON.parse(response.body);
-        console.log("채팅 소켓 통신:", message);
+        console.log("채팅 소켓 응답:", message);
         dispatch(addMessage({ spaceId, message }));
       });
 

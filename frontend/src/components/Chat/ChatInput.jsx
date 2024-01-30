@@ -98,9 +98,9 @@ const ChatInput = ({ handleSendMessage }) => {
     if (selectedFile) {
       dispatch(uploadImage(selectedFile));
     } else {
-      console.log("Dsadsa");
-      handleSendMessage(message, 1);
-      console.log("아아아아");
+      console.log("Chatinput-Send 1");
+      handleSendMessage(message, 1, 1);
+      console.log("Chatinput-Send 2");
     }
     setMessage('');
     setSelectedFile(null);
