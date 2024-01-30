@@ -115,10 +115,8 @@ const WorkSpaceHeader = ({ onOpenModal }) => {
   return (
     <Header>
       <ButtonContainer>
-        <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
-        <SnapshotButton onClick={handleShare}>공유하기</SnapshotButton>
-      </ButtonContainer>
-      {displayMessage && <Message show={showMessage}>클립보드에 주소가 복사되었습니다.</Message>}
+        <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>        
+      </ButtonContainer>      
     </Header>
   )
 }

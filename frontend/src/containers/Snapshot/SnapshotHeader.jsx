@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+import shareIcon from '../../assets/shareIcon2.png'
 
 // 메시지가 나타나는 애니메이션
 const fadeIn = keyframes`
@@ -33,6 +34,8 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #ddd;
+  width: 100wv;
+  height: 5vh;
 `;
 
 const ButtonContainer = styled.div`
@@ -41,13 +44,19 @@ const ButtonContainer = styled.div`
   margin-left: auto; 
 `;
 
-const SnapshotButton = styled.button`  
+const ShareButton = styled.button`  
   color: black;
-  backgorund-color: #f3f3f3;
-  padding: 10px 20px;
+  background-color: #49C5B6;
+  background-image: url(${shareIcon}); 
+  background-size: 70%; 
+  background-position: center; // 이미지 위치 조절
+  background-repeat: no-repeat; // 이미지 반복 방지
+  width: 40px; 
+  height: 40px; 
   border: none;
-  border-radius: 4px;
+  border-radius: 50%;
   cursor: pointer;  
+  font-size: large;
 
   &:hover {
     transform: scale(1.1);
@@ -59,7 +68,8 @@ const Message = styled.div`
   padding: 5px 10px;
   position: fixed;
   top: 20px;
-  left: 30rem;
+  left: 10%;
+  // transform: translateX(50%);
   border-radius: 4px;
   display: ${({ show }) => (show ? 'block' : 'none')};
   animation: ${({ show }) => show ? fadeIn : fadeOut} 0.5s ease-out;
@@ -67,30 +77,13 @@ const Message = styled.div`
 `;
 
 
-const WorkSpaceHeader = ({ onOpenModal }) => {
+const SnapshotHeader = ({ onOpenModal }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
 
-  // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
-  // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
 
-  // const handleCreateSnapShot = () => {
-  //     navigate('/mysnapshot')
-
-  // }
-
-  // const handleCreateSnapShot = async() => {
-  //     try {
-  //         const response = await createSnapshot(spaceId);
-  //         console.log(response);
-  //     } catch (error) {
-  //         console.error('발매하기 오류:', error);
-  //     }
-  // }
-
-  const handleShare = () => {
-    const snapshotUrl = "스냅샷 url 불러오는 로직 필요";
+  const handleShare = () => {    
     navigator.clipboard.writeText(window.location.href);
     setShowMessage(true);
     setDisplayMessage(true);
@@ -108,11 +101,11 @@ const WorkSpaceHeader = ({ onOpenModal }) => {
   return (
     <Header>
       <ButtonContainer>        
-        <SnapshotButton onClick={handleShare}>공유하기</SnapshotButton>
+        <ShareButton onClick={handleShare}></ShareButton>
       </ButtonContainer>
-      {displayMessage && <Message show={showMessage}>클립보드에 주소가 복사되었습니다.</Message>}
+      {displayMessage && <Message show={showMessage}>클립보드에 주소가 복사되었습니다. 친구들에게 공유해보세요! </Message>}
     </Header>
   )
 }
 
-export default WorkSpaceHeader;
+export default SnapshotHeader;

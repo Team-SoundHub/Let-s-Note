@@ -96,7 +96,7 @@ const ChatContainer = ({ spaceId }) => {
     }, [dispatch, spaceId]); // 작업실이 바뀌면 메시지 목록 새로 받아오기
 
     const handleSendMessage = (message, nickname) => {
-        sendMessage(message, nickname, 1, accountId);
+        sendMessage(message, accountId);
         // sendMessage(message, nickname, spaceId, accountId); // 방 분리 후에 이걸로 대체
     }
 
