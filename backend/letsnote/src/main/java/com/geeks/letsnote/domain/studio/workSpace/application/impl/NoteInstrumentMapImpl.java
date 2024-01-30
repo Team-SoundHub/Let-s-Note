@@ -32,7 +32,8 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
         List<ResponseNotes.Note> notes = noteService.getNoteByMapId(noteInstrumentMapper.get().getMapId());
         ResponseNotes.Notes getNotes = ResponseNotes.Notes.builder()
                 .instrument(instrument)
-                .notes(notes).build();
+                .notes(notes)
+                .build();
         return getNotes;
     }
 
