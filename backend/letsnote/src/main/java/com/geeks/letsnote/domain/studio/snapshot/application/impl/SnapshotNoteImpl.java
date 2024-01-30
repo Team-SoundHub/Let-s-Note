@@ -29,4 +29,17 @@ public class SnapshotNoteImpl implements SnapshotNoteService {
         }
         snapshotNoteRepository.saveAll(snapshotNoteEntities);
     }
+
+    @Override
+    public List<ResponseNotes.Note> getSnapshotNoteByMapId(String mapId) {
+        List<SnapshotNote> notes = snapshotNoteRepository.findAllBySnapshotInstrument(mapId);
+        List<ResponseNotes.Note> noteDto = new ArrayList<>();
+        for(SnapshotNote snapshotNote : notes){
+            noteDto.add(ResponseNotes.Note.builder()
+                    .noteY(snapshotNote.getNoteY())
+                    .noteX(snapshotNote.getNoteX())
+                    .build());
+        }
+        return noteDto;
+    }
 }
