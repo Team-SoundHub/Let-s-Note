@@ -125,6 +125,7 @@ class WorkSpaceContainer extends Component {
             columns={columns}
             background="#34AEA5"
             foreground="#ffffff"
+            isSnapshot={this.props.isSnapshot} 
           />
           <BeatControls
             onPlay={this.play}

@@ -62,30 +62,6 @@ const MyPage = () => {
         fetchMyPageInfo();
     }, [accessToken, accountId]);
 
-    // // 작업실 생성 함수
-    // const handleCreateWorkSpace = async (event) => {
-    //     event.preventDefault(); // 페이지 새로고침 방지
-    //     console.log("호출됨");
-    //     try {
-    //         // 세번째 빈 배열은 멤버 추가 기능 구현 후에 수정
-    //         const response = await createWorkSpace(workSpaceTitle, workSpaceDesc, []);
-    //         console.log("작업실 생성 응답:", response);
-
-    //         // 방 생성 모달, 멤버 추가 기능 구현 필요
-
-    //         if(response){
-    //             console.log("작업실 생성 완료");
-    //         } else{
-    //             console.log("작업실 생성 완료될뻔 했는데 안됨");                
-    //         }
-
-    //         // navigate(`/workspace/${response.spaceId}`);
-    //         navigate(`/workspace`);
-    //     } catch (error) {
-    //         console.error("작업실 생성 오류:", error);
-    //     }
-    // }
-
     // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
     return (
         <div>

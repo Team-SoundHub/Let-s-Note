@@ -30,6 +30,7 @@ export const sendCoordinate = (instrument, x, y) => {
   });
 };
 
+
 export const sendMessage = (message, nickname, spaceId, accountId) => {
   stompClient.publish({
     destination: "/app/chat/sendMessage",
@@ -42,6 +43,7 @@ export const sendMessage = (message, nickname, spaceId, accountId) => {
   });
 };
 
+
 const WebSocketContainer = ({ spaceId }) => {
   const dispatch = useDispatch();
   stompClient.webSocketFactory = function () {
@@ -52,14 +54,16 @@ const WebSocketContainer = ({ spaceId }) => {
     console.log("Connected: " + frame);
     stompClient.subscribe("/topic/editor/coordinate", (response) => {
       const inner_content = JSON.parse(response.body);
-      console.log(inner_content);
+      console.log("노트 소켓 통신:", inner_content);
       dispatch(setInnerContent(inner_content));
     });
 
     stompClient.subscribe(`/topic/chat/public`, (response) => {
-      const message = JSON.parse(response.body);
-      dispatch(addMessage({ spaceId, message }));
-    });
+        const message = JSON.parse(response.body);
+        console.log("채팅 소켓 통신:", message);
+        dispatch(addMessage({ spaceId, message }));
+      });
+
   };
 
   stompClient.onWebSocketError = (error) => {

@@ -180,6 +180,7 @@ class BeatColumn extends Component {
           activeInstrument={synth.activeInstrument}
           col={id}
           row={i}
+          isSnapshot={this.props.isSnapshot} 
         />
       );
     }
