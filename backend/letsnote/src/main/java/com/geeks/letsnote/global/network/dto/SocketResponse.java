@@ -27,4 +27,12 @@ public record SocketResponse() {
             Timestamp timeStamp
     ){
     }
+
+    @Builder
+    public record WorkSpace(
+            @NotNull
+            String space_id
+    ){
+    }
+
 }
