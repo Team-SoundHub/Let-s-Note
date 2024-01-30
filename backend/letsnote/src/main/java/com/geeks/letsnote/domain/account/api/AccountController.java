@@ -92,4 +92,19 @@ public class AccountController
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/nickname/{accountId}")
+    public ResponseEntity<CommonResponse> getAccountNickname(@PathVariable("accountId") Long accountId){
+        if(!accountService.checkPathVariableWithTokenUser(accountId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(accountId);
+
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response(nickName)
+                .build();
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
