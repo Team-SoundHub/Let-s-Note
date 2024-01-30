@@ -25,7 +25,7 @@ public class Snapshot {
     @Column(name = "snapshot_content", nullable = false, length = 255)
     private String snapshotContent;
 
-    @Column(name = "update_at")
+    @Column(name = "update_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp updateAt;
 
     @Column(name = "views")

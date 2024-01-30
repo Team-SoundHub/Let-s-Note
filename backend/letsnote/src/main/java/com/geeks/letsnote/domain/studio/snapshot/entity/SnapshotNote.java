@@ -1,6 +1,7 @@
 package com.geeks.letsnote.domain.studio.snapshot.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,12 @@ public class SnapshotNote {
 
     @Column(name = "note_y", nullable = false)
     private Long noteY;
+
+    @Builder
+    public SnapshotNote(Long noteId, String snapshotInstrument, Long noteX, Long noteY) {
+        this.noteId = noteId;
+        this.snapshotInstrument = snapshotInstrument;
+        this.noteX = noteX;
+        this.noteY = noteY;
+    }
 }
