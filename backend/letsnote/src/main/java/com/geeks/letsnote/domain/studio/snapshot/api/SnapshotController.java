@@ -4,6 +4,7 @@ import com.geeks.letsnote.domain.account.application.AccountService;
 import com.geeks.letsnote.domain.studio.snapshot.application.SnapshotService;
 import com.geeks.letsnote.domain.studio.snapshot.dto.RequestSnapshot;
 import com.geeks.letsnote.domain.studio.snapshot.dto.ResponseSnapshot;
+import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,26 @@ import java.util.List;
 public class SnapshotController {
     private final SnapshotService snapshotService;
     private final AccountService accountService;
+    private final WorkspaceService workspaceService;
 
-    public SnapshotController(SnapshotService snapshotService, AccountService accountService) {
+    public SnapshotController(SnapshotService snapshotService, AccountService accountService, WorkspaceService workspaceService) {
         this.snapshotService = snapshotService;
         this.accountService = accountService;
+        this.workspaceService = workspaceService;
     }
 
     @PostMapping("/space-id")
     public ResponseEntity<CommonResponse> postSnapshot(@RequestParam("v") String spaceId,
                                                        @RequestBody RequestSnapshot.SnapshotDto snapshotDto) {
+        boolean checkMaxCountSnapshot = workspaceService.checkMaxCountSnapshot(spaceId);
+
+        if(!checkMaxCountSnapshot){
+            CommonResponse response = CommonResponse.builder()
+                    .success(false)
+                    .response("Max snapshot Count")
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+        }
         ResponseSnapshot.SnapshotId snapshotId = snapshotService.createSnapshot(spaceId , snapshotDto);
         CommonResponse response = CommonResponse.builder()
                 .success(true)

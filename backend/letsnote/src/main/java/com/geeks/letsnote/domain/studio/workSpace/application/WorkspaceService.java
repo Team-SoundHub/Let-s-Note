@@ -22,4 +22,8 @@ public interface WorkspaceService {
     Workspace getById(String workspaceId);
 
     ResponseWorkspaces.WorkspaceMembers getMemberNicknamesFromSpaceId(String spaceId);
+
+    boolean checkMaxCountSnapshot(String spaceId);
+
+    void increaseSnapshotCount(String spaceId);
 }

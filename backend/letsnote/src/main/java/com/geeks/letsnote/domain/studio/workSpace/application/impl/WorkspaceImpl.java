@@ -73,6 +73,7 @@ public class WorkspaceImpl implements WorkspaceService {
                 .ownerId(accountId)
                 .spaceTitle(workspaceDto.spaceTitle())
                 .spaceContent(workspaceDto.spaceContent())
+                .snapshotCount(0)
                 .build();
         workspaceRepository.save(workspace);
 
@@ -145,5 +146,18 @@ public class WorkspaceImpl implements WorkspaceService {
                 .membersNickname(getMemberNicknamesFromWorkspace(workspace.get()))
                 .ownerNickname(getOwnerNicknameFromWorkspace(workspace.get()))
                 .build();
+    }
+
+    @Override
+    public boolean checkMaxCountSnapshot(String spaceId) {
+        Optional<Workspace> workspace = workspaceRepository.findById(spaceId);
+
+        return workspace.get().getSnapshotCount() <= 15 ? true : false;
+    }
+
+    @Override
+    @Transactional
+    public void increaseSnapshotCount(String spaceId) {
+        workspaceRepository.incrementSnapshotCount(spaceId);
     }
 }

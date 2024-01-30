@@ -29,12 +29,16 @@ public class Workspace {
     @Column(name = "space_content", length = 255)
     private String spaceContent;
 
+    @Column(name = "snapshot_count")
+    private Integer snapshotCount;
+
     @Builder
-    public Workspace(String spaceId, Long ownerId, Timestamp updateAt, String spaceTitle, String spaceContent) {
+    public Workspace(String spaceId, Long ownerId, Timestamp updateAt, String spaceTitle, String spaceContent, Integer snapshotCount) {
         this.spaceId = spaceId;
         this.ownerId = ownerId;
         this.updateAt = updateAt;
         this.spaceTitle = spaceTitle;
         this.spaceContent = spaceContent;
+        this.snapshotCount = snapshotCount;
     }
 }
