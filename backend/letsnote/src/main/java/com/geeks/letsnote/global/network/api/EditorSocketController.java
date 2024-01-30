@@ -5,41 +5,29 @@ import com.geeks.letsnote.domain.account.dto.ResponseAccount;
 import com.geeks.letsnote.domain.message.application.MessageService;
 import com.geeks.letsnote.domain.message.dto.MessageReqeust;
 import com.geeks.letsnote.domain.message.dto.MessageResponse;
-import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceMemberMapService;
-import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
-import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
-import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
+import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
-import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 
 import java.io.IOException;
-import java.util.List;
+
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class EditorSocketController {
 
 	private final MessageService messageService;
 	private final AccountService accountService;
-	private final CustomWebSocketHandlerDecorator decorator;
-
-	public EditorSocketController(MessageService messageService, AccountService accountService, CustomWebSocketHandlerDecorator customWebSocketHandlerDecorator){
-        this.messageService = messageService;
-        this.accountService = accountService;
-        this.decorator = customWebSocketHandlerDecorator;
-	}
+	private final CustomWebSocketHandlerDecorator customWebSocketHandlerDecorator;
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
@@ -73,7 +61,7 @@ public class EditorSocketController {
 		if (exception instanceof AccessDeniedException) {
 			String sessionId = stompHeaderAccessor.getSessionId();
 			log.info("session = {}, connection remove", sessionId);
-			decorator.closeSession(sessionId);
+			customWebSocketHandlerDecorator.closeSession(sessionId);
 		}
 //		사소한 예외일 경우 사용
 //		else if (exception instanceof CommonException) {
@@ -81,12 +69,10 @@ public class EditorSocketController {
 //		}
 		else {
 			String sessionId = stompHeaderAccessor.getSessionId();
-			decorator.closeSession(sessionId);
+			customWebSocketHandlerDecorator.closeSession(sessionId);
 		}
 
 		return "server exception: " + exception.getMessage() + "server session clear";
 	}
-
-
 
 }
