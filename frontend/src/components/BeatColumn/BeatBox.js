@@ -57,6 +57,19 @@ const BeatBox = ({
   const [instrument, setInstrument] = useState("piano");
 
   const innerContent = useSelector((state) => state.innerContent.innerContent);
+  const notes = useSelector((state) => state.innerContent.notes);
+
+  useEffect(() => {    
+    // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
+    const activeNote = notes.find(n => n.x === col && n.y === row);
+    if (activeNote && !active) {      
+      // 해당하는 노트가 있으면, isActive 상태를 true로 설정
+      setActive(true);
+      setInstrument(activeNote.instrument);  
+      setActiveBoxes(row, true);
+      setActiveInstrument(row, activeNote.instrument); 
+    }
+  }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
 
   const handleClick = () => {
     if (isSnapshot) {
@@ -69,6 +82,7 @@ const BeatBox = ({
   useEffect(() => {
     // Check if x and y match col and row
     if (innerContent.x === col && innerContent.y === row && !active) {
+      console.log(`노트 찍기: x: ${innerContent.x}, y:${innerContent.y}`)
       setActive(true);
       setInstrument(innerContent.instrument);
       setActiveBoxes(row, true);
