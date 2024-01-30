@@ -103,7 +103,7 @@ const ChatMessage = ({ messageList = [] }) => {
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    // console.log(localMessageList);
+    console.log(localMessageList);
   }, [localMessageList]);
 
   const renderMessageContent = (message) => {

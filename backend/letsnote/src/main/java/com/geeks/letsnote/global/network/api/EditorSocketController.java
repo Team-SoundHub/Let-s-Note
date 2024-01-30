@@ -54,5 +54,4 @@ public class EditorSocketController {
 //		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
 //	}
 
-
 }

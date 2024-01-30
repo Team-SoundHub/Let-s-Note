@@ -9,6 +9,16 @@ export const stompClient = new StompJS.Client({
   brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
 });
 
+export const sendInstrumentReset = (instrument, spaceId) => {
+  stompClient.publish({
+    destination: "",
+    body: JSON.stringify({
+      instrument: instrument,
+      spaceId: spaceId,
+    }),
+  });
+};
+
 export const sendCoordinate = (instrument, x, y) => {
   stompClient.publish({
     destination: "/app/editor/coordinate",
@@ -20,40 +30,41 @@ export const sendCoordinate = (instrument, x, y) => {
   });
 };
 
-export const sendMessage = (message, nickname, spaceId, accountId) => {
-    stompClient.publish({
-        destination: "/app/chat/sendMessage",
-        body: JSON.stringify({
-            msgContent: message,
-            nickname: nickname,
-            spaceId: spaceId,
-            accountId: accountId
-        })
-    })
-}
 
-const WebSocketContainer = ({spaceId}) => {
+export const sendMessage = (message, nickname, spaceId, accountId) => {
+  stompClient.publish({
+    destination: "/app/chat/sendMessage",
+    body: JSON.stringify({
+      msgContent: message,
+      nickname: nickname,
+      spaceId: spaceId,
+      accountId: accountId,
+    }),
+  });
+};
+
+
+const WebSocketContainer = ({ spaceId }) => {
   const dispatch = useDispatch();
   stompClient.webSocketFactory = function () {
-    return new SockJS(
-      "https://letsnote-rough-wind-6773.fly.dev/letsnote/ws"
-    );
+    return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
   };
 
   stompClient.onConnect = (frame) => {
     console.log("Connected: " + frame);
     stompClient.subscribe("/topic/editor/coordinate", (response) => {
       const inner_content = JSON.parse(response.body);
-      console.log(inner_content);
+      console.log("노트 소켓 통신:", inner_content);
       dispatch(setInnerContent(inner_content));
     });
 
     stompClient.subscribe(`/topic/chat/public`, (response) => {
         const message = JSON.parse(response.body);
+        console.log("채팅 소켓 통신:", message);
         dispatch(addMessage({ spaceId, message }));
       });
-  };
 
+  };
 
   stompClient.onWebSocketError = (error) => {
     console.error("Error with websocket", error);
