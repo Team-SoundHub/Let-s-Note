@@ -62,6 +62,8 @@ public class WorkspaceImpl implements WorkspaceService {
         return workspaceDtoList;
     }
 
+
+
     @Override
     @Transactional
     public ResponseWorkspaces.WorkspaceId createWorkspace(RequestWorkspaces.WorkspaceDto workspaceDto, Long accountId) {
@@ -107,11 +109,32 @@ public class WorkspaceImpl implements WorkspaceService {
                 .isSnapshotExist(isSnapshotExist).build();
     }
 
-
-
     //for db delete
     @Override
     public void deleteAllWorkspaces() {
         workspaceRepository.deleteAll();
+    }
+
+    @Override
+    public List<String> getSpaceIdsFromAccountId(Long accountId) {
+        List<String> workSpaceIdsFromAccountId = workspaceMemberMapRepository.findSpaceIdsByAccountId(accountId);
+        return workSpaceIdsFromAccountId;
+    }
+
+    @Override
+    public List<String> getMemberNicknamesFromWorkspace(Workspace workspace) {
+        List<Long> accountIdsFromSpaceId = workspaceMemberMapRepository.findAccountIdsBySpaceId(workspace.getSpaceId());
+        List<String> memberNickNames = accountRepository.findMemberNickNamesFromAccountIds(accountIdsFromSpaceId);
+        return memberNickNames;
+    }
+
+    @Override
+    public String getOwnerNicknameFromWorkspace(Workspace workspace) {
+        return accountRepository.findOneNicknameById(workspace.getOwnerId());
+    }
+
+    @Override
+    public Workspace getById(String workspaceId) {
+        return workspaceRepository.findById(workspaceId).get();
     }
 }

@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -165,5 +167,16 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public ResponseAccount.NickName getNicknameFromAccountId(Long accountId) {
         return new ResponseAccount.NickName(accountRepository.findOneNicknameById(accountId));
+    }
+
+    @Override
+    public boolean checkPathVariableWithTokenUser(Long accountId) {
+        Optional<Account> checkAccount = accountRepository.findById(accountId);
+        if(checkAccount.isEmpty()){
+            return false;
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userPrincipal = (User) authentication.getPrincipal();
+        return userPrincipal.getUsername().equals(checkAccount.get().getUsername()) ? true : false;
     }
 }
