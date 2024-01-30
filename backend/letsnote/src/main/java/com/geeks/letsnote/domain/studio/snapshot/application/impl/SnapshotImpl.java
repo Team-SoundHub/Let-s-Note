@@ -7,10 +7,13 @@ import com.geeks.letsnote.domain.studio.snapshot.dto.RequestSnapshot;
 import com.geeks.letsnote.domain.studio.snapshot.dto.ResponseSnapshot;
 import com.geeks.letsnote.domain.studio.snapshot.entity.Snapshot;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
+import com.geeks.letsnote.domain.studio.workSpace.entity.Workspace;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,13 +33,14 @@ public class SnapshotImpl implements SnapshotService {
     @Transactional
     public ResponseSnapshot.SnapshotId createSnapshot(String spaceId, RequestSnapshot.SnapshotDto snapshotDto) {
         String snapshotId = UUID.randomUUID().toString().replace("-","");
-        snapshotRepository.save(Snapshot.builder()
+        Snapshot snapshot = Snapshot.builder()
                 .snapshotContent(snapshotDto.snapshotContent())
                 .snapshotId(snapshotId)
                 .snapshotTitle(snapshotDto.snapshotTitle())
                 .spaceId(spaceId)
                 .views(0L)
-                .build());
+                .build();
+        snapshotRepository.save(snapshot);
 
         snapshotInstrumentMapService.createSnapshotInstrumentMap(snapshotId, spaceId);
 
@@ -50,5 +54,26 @@ public class SnapshotImpl implements SnapshotService {
         Optional<Snapshot> findSnapshot = snapshotRepository.findBySpaceId(spaceId);
 
         return findSnapshot.isPresent() ? true : false;
+    }
+
+    @Override
+    public List<ResponseSnapshot.SnapshotDto> getAllSnapshotsByAccountId(Long accountId) {
+        List<String> spaceIdsFromAccountId = workspaceService.getSpaceIdsFromAccountId(accountId);
+        List<Snapshot> snapshotList = snapshotRepository.findAllBySpaceIdsOrderByUpdateAt(spaceIdsFromAccountId);
+        List<ResponseSnapshot.SnapshotDto> snapshotDtoList = new ArrayList<>();
+
+        for(Snapshot snapshot : snapshotList){
+            Workspace snapshotWorkspace = workspaceService.getById(snapshot.getSpaceId());
+            ResponseSnapshot.SnapshotDto snapshotDto = ResponseSnapshot.SnapshotDto.builder()
+                    .snapshotContent(snapshot.getSnapshotContent())
+                    .snapshotId(snapshot.getSnapshotId())
+                    .snapshotTitle(snapshot.getSnapshotTitle())
+                    .memberNicknames(workspaceService.getMemberNicknamesFromWorkspace(snapshotWorkspace))
+                    .ownerNickname(workspaceService.getOwnerNicknameFromWorkspace(snapshotWorkspace))
+                    .updateAt(snapshot.getUpdateAt()).build();
+            snapshotDtoList.add(snapshotDto);
+        }
+
+        return snapshotDtoList;
     }
 }
