@@ -92,7 +92,7 @@ public class WorkspaceImpl implements WorkspaceService {
     }
 
     @Override
-    public ResponseWorkspaces.WorkspaceIn getAllNoteOfWorkspace(String spaceId) {
+    public ResponseWorkspaces.WorkspaceIn getAllNotesOfWorkspace(String spaceId) {
         List<ResponseNotes.Notes> allNotes = new ArrayList<>();
         ResponseNotes.Notes pianoNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId, Instrument.Piano);
         allNotes.add(pianoNotes);

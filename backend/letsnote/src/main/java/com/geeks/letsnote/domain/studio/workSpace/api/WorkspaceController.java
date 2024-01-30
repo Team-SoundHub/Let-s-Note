@@ -8,7 +8,6 @@ import com.geeks.letsnote.domain.studio.workSpace.application.NoteService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
-import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
@@ -76,7 +75,7 @@ public class WorkspaceController {
 
     @GetMapping("/space-id")
     public ResponseEntity<CommonResponse> getAllNote(@RequestParam("v") String spaceId){
-        ResponseWorkspaces.WorkspaceIn allNotes = workspaceService.getAllNoteOfWorkspace(spaceId);
+        ResponseWorkspaces.WorkspaceIn allNotes = workspaceService.getAllNotesOfWorkspace(spaceId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
                 .response(allNotes)

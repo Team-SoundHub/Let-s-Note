@@ -10,7 +10,7 @@ public interface WorkspaceService {
     List<ResponseWorkspaces.WorkspaceDto> getAllWorkspacesByOwnerId(Long accountId);
     ResponseWorkspaces.WorkspaceId createWorkspace(RequestWorkspaces.WorkspaceDto workspaceDto, Long accountId);
 
-    ResponseWorkspaces.WorkspaceIn getAllNoteOfWorkspace(String spaceId);
+    ResponseWorkspaces.WorkspaceIn getAllNotesOfWorkspace(String spaceId);
 
     void deleteAllWorkspaces();
 
