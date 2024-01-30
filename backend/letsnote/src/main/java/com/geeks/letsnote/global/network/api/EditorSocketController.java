@@ -12,10 +12,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
-
 @Controller
 public class EditorSocketController {
 
@@ -38,26 +34,24 @@ public class EditorSocketController {
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
 	public SocketResponse.Chat sendMessage(@Payload SocketRequest.Chat chatMessage) {
-		Long accountId = 1L;
 		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
-				.spaceId("1")
-				.accountId(accountId)
+				.spaceId(chatMessage.spaceId())
+				.accountId(chatMessage.accountId())
 				.msgContent(chatMessage.msgContent())
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
+		return new SocketResponse.Chat(nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-	@MessageMapping("/chat/addUser")
-	@SendTo("/topic/chat/public")
-	public SocketResponse.Chat addUser(@Payload SocketRequest.Chat chatMessage,
-									   SimpMessageHeaderAccessor headerAccessor) {
-
-		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
-		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
-	}
-
+//	@MessageMapping("/chat/addUser")
+//	@SendTo("/topic/chat/public")
+//	public SocketResponse.Chat addUser(@Payload SocketRequest.Chat chatMessage,
+//									   SimpMessageHeaderAccessor headerAccessor) {
+//
+//		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
+//		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
+//		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
+//	}
 
 }
