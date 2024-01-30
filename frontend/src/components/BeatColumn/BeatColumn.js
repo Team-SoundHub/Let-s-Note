@@ -5,15 +5,15 @@ import DrumBox from "./DrumBox";
 import Subject from "../../observer/Subject";
 
 const Container = styled.div`
-  flex: 1;
   display: flex;
   position: relative;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: ${(props) => props.background};
-  margin-left: ${(props) => (props.id % 2 === 1 ? 0 : 2)}px;
+  margin-left: ${(props) => (props.id % 2 === 1 ? 1 : 3)}px;
   margin-bottom: 3px;
+  width: 3rem;
 `;
 
 const Overlay = styled.div`
@@ -162,7 +162,8 @@ class BeatColumn extends Component {
   };
 
   renderBoxes = () => {
-    const { scale, drumScale, foreground, synth, id } = this.props;
+    const { scale, drumScale, foreground, synth, id, visualizeInstrument } =
+      this.props;
     const boxes = [];
     for (let i = 0; i < scale.length; i++) {
       boxes.push(
@@ -180,6 +181,7 @@ class BeatColumn extends Component {
               : this.handleClick(i)
           }
           activeInstrument={synth.activeInstrument}
+          visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
           isSnapshot={this.props.isSnapshot} 
