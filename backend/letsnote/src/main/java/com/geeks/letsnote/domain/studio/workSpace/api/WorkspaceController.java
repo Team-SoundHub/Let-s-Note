@@ -104,4 +104,15 @@ public class WorkspaceController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/nickname/space-id")
+    public ResponseEntity<CommonResponse> getMembersNickname(@RequestParam("v") String spaceId){
+        ResponseWorkspaces.WorkspaceMembers members = workspaceService.getMemberNicknamesFromSpaceId(spaceId);
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response(members)
+                .build();
+
+        return new ResponseEntity<>(response,HttpStatus.FOUND);
+    }
 }
