@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import tw from "tailwind-styled-components";
 import BeatGrid from "../../components/BeatGrid/BeatGrid";
 import Synth from "../../synth/Synth";
 import Loading from "../../components/Loading";
 import { availableNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
+import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -13,9 +15,38 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  width: 100vw;
-  height: calc(85vh - 1rem);
+  width: 100%;
+  height: 90%;
 `;
+
+const GridContainer = tw.div`
+  flex
+  flex-row
+  items-center
+  justify-start
+  w-full
+  bg-gray-800
+  p-4
+  h-screen
+`;
+
+const LeftPanel = tw.div`
+  w-[5%]
+  h-full
+  flex-shrink-0
+  bg-white
+  mr-2
+  items-center
+  justify-center
+`;
+
+const RightPanel = tw.div`
+  w-[95%]
+  h-full
+  flex-shrink-0
+`;
+
+const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
 class WorkSpaceContainer extends Component {
   constructor(props) {
@@ -29,6 +60,7 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       drumNotes,
       synth: null,
+      visualizeInstrument: "piano",
     };
     this.initialBPM = 160;
   }
@@ -76,6 +108,10 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setInstrument(instrument);
   };
 
+  changeVisualizeInstrument = (instrument) => {
+    this.setState({ visualizeInstrument: instrument });
+  };
+
   setInstrumentScale = (scale) => {
     scale = [
       "B4",
@@ -110,22 +146,42 @@ class WorkSpaceContainer extends Component {
   };
 
   render() {
-    const { loading, columns, synth, availableNotes, drumNotes } = this.state;
+    const {
+      loading,
+      columns,
+      synth,
+      availableNotes,
+      drumNotes,
+      visualizeInstrument,
+    } = this.state;
 
     if (loading) {
       return <Loading />;
     } else {
       return (
         <Container>
-          <BeatGrid
-            ref="BeatGrid"
-            synth={synth}
-            scale={availableNotes}
-            drumScale={drumNotes}
-            columns={columns}
-            background="#34AEA5"
-            foreground="#ffffff"
-          />
+          <GridContainer>
+            <LeftPanel>
+              {instrumentOptions.map((instrument, index) => (
+                <InstrumentVisualize
+                  instrument={instrument}
+                  changeVisualizeInstrument={this.changeVisualizeInstrument}
+                />
+              ))}
+            </LeftPanel>
+            <RightPanel>
+              <BeatGrid
+                ref="BeatGrid"
+                synth={synth}
+                scale={availableNotes}
+                drumScale={drumNotes}
+                columns={columns}
+                background="#34AEA5"
+                foreground="#ffffff"
+                visualizeInstrument={visualizeInstrument}
+              />
+            </RightPanel>
+          </GridContainer>
           <BeatControls
             onPlay={this.play}
             onStop={this.stop}

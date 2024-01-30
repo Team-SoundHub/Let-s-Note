@@ -7,8 +7,8 @@ const Container = styled.div`
   margin: 0.5px;
   background-color: ${(props) =>
     props.active &&
-    (props.activeInstrument === "All" ||
-      props.activeInstrument === props.instrument)
+    (props.visualizeInstrument === "All" ||
+      props.visualizeInstrument === props.instrument)
       ? pickActiveColor(props.instrument)
       : props.col % 8 < 4
       ? "lightgray"
@@ -48,6 +48,7 @@ const BeatBox = ({
   activeInstrument,
   setActiveBoxes,
   setActiveInstrument,
+  visualizeInstrument,
   col,
   row,
 }) => {
@@ -83,6 +84,7 @@ const BeatBox = ({
       onClick={() => (onClick === null ? null : onClick())}
       instrument={instrument}
       activeInstrument={activeInstrument}
+      visualizeInstrument={visualizeInstrument}
       note={note}
       col={col}
     />
