@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-// import { createSnapshot } from '../../api/workspaceApi';
 
 // 메시지가 나타나는 애니메이션
 const fadeIn = keyframes`
@@ -76,14 +75,9 @@ const WorkSpaceHeader = ({ onOpenModal, isSnapshotExist }) => {
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
-  // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
-  // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
 
   // const handleCreateSnapShot = () => {
   //     navigate('/mysnapshot')
-  // const handleCreateSnapShot = () => {
-  //     navigate('/mysnapshot')
-
   // }
   // }
 
@@ -96,8 +90,7 @@ const WorkSpaceHeader = ({ onOpenModal, isSnapshotExist }) => {
   //     }
   // }
 
-  const handleShare = () => {
-    const snapshotUrl = "스냅샷 url 불러오는 로직 필요";
+  const handleShare = () => {    
     navigator.clipboard.writeText(window.location.href);
     setShowMessage(true);
     setDisplayMessage(true);
@@ -111,9 +104,13 @@ const WorkSpaceHeader = ({ onOpenModal, isSnapshotExist }) => {
     }, 2000);
   }
 
+  const handleGoBack = () => {
+    navigate('/mypage');
+  }  
 
   return (
     <Header>
+      <button onClick={handleGoBack}> ⬅️ </button>
       <ButtonContainer>
         <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>        
       </ButtonContainer>      

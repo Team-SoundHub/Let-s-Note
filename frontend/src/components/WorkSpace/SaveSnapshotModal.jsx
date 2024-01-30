@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-
 const ModalBackground = styled.div`
   position: fixed;
   top: 0;
@@ -21,14 +20,14 @@ const ModalContent = styled.div`
   border-radius: 10px;  
 `;
 
-const ReleaseModal = ({ onClose, onPublish }) => {
+const SaveSnapshotModal = ({ onClose, onSave }) => {
     const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState('');    
 
     return (
         <ModalBackground onClick={onClose}>
             <ModalContent onClick={e => e.stopPropagation()}>
-                <h2>스냅샷 발간하기</h2>
+                <h2>스냅샷 저장하기</h2>
                 <div>
                     작품 이름을 정해주세요<br/>
                     <input
@@ -46,10 +45,10 @@ const ReleaseModal = ({ onClose, onPublish }) => {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
-                <button onClick={() => onPublish(title, description)}>생성</button>
+                <button onClick={() => onSave(title, description)}>생성</button>
             </ModalContent>
         </ModalBackground>
     );
 };
 
-export default ReleaseModal;
+export default SaveSnapshotModal;

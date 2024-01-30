@@ -6,20 +6,22 @@ import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
 import WebSocketContainer from "../containers/WebSocket/WebSocketContainer";
 import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
-import ReleaseModal from "../components/WorkSpace/ReleaseModal";
-import getWorkspaceInfo from "../api/workSpaceApi";
+import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
+import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
+import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import { setNotesList } from "../app/slices/innerContentSlice";
 
 const Container = styled.div`
   height: 100vh;
 `;
 
-const WorkPlacePage = () => {
-  const navigate = useNavigate();
+const WorkPlacePage = () => {  
   const dispatch = useDispatch();
 
   const { spaceId } = useParams(); // 현재 spaceId 얻기
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
+  const [snapshotCreated, setSnapshotCreated] = useState(false);
+  const [snapshotUrl, setSnapshotUrl] = useState("");
   const [workspaceInfo, setWorkspaceInfo] = useState({ notesList: [], isSnapshotExist: false });
 
   // 작업실 입장 시 데이터 요청
@@ -49,19 +51,31 @@ const WorkPlacePage = () => {
     setIsReleaseModalOpen(false);
   };
 
-  const handlePublish = (title, description) => {
-    console.log("스냅샷 저장하기", title, description);
-    // navigate('/mysnapshot');
-    setIsReleaseModalOpen(false);
+  const handleSave = async (title, description) => {
+    try {
+      const response = await createSnapshot(spaceId, title, description);
+      setSnapshotUrl(`https://우리 도메인/snapshots/${response.response.snapshotId}`);
+      setSnapshotCreated(true);
+      setIsReleaseModalOpen(false);
+    } catch (error) {
+      console.error('스냅샷 저장 오류:', error);
+    }
   };
+
+  const handleCloseSnapshotModal = () => {
+    setSnapshotCreated(false);
+  }
 
   return (
     <Container>
       <WebSocketContainer spaceId={spaceId} />
       <WorkSpaceHeader onOpenModal={handleModalOpen} isSnapshotExist={workspaceInfo.isSnapshotExist} />
       {isReleaseModalOpen && (
-        <ReleaseModal onClose={handleModalClose} onPublish={handlePublish} />
+        <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
       )}
+      {snapshotCreated && (
+        <SaveCompleteModal onClose={handleCloseSnapshotModal} snapshotUrl={snapshotUrl} />
+      )}      
       <WorkSpaceContainer notesList={workspaceInfo.notesList} />
       <ChatContainer spaceId={spaceId} />
     </Container>
