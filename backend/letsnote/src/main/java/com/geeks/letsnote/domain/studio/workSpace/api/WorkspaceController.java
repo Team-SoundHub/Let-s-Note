@@ -69,7 +69,7 @@ public class WorkspaceController {
 
     @GetMapping("/space-id")
     public ResponseEntity<CommonResponse> getAllNote(@RequestParam("v") String spaceId){
-        List<ResponseNotes.Notes> allNotes = workspaceService.getAllNoteOfWorkspace(spaceId);
+        ResponseWorkspaces.WorkspaceIn allNotes = workspaceService.getAllNoteOfWorkspace(spaceId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
                 .response(allNotes)
