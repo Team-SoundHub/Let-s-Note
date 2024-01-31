@@ -19,7 +19,7 @@ const Container = styled.div`
 `;
 
 const spaceId = localStorage.getItem("spaceId");
-const accountId = localStorage.getItem("accountId");
+const accountId = sessionStorage.getItem("accountId");
 
 const WorkPlacePage = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const WorkPlacePage = () => {
         // notesList 전체를 Redux store에 저장
         dispatch(setNotesList(response.response.notesList));
 
-        console.log("작업실 입장 - workspaceInfo:", response.response);
+        console.log("작업실 입장 - workspaceInfo:", response.response.notesList);
       } catch (error) {
         console.error("Error fetching workspace info:", error);
       }

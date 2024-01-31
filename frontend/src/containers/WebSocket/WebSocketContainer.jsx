@@ -5,8 +5,8 @@ import * as SockJS from "sockjs-client";
 import { setInnerContent } from "../../app/slices/innerContentSlice";
 import { addMessage } from "../../app/slices/chatSlice";
 
-const accessToken = localStorage.getItem("access");
-const accountId = localStorage.getItem("accountId");
+const accessToken = sessionStorage.getItem("access");
+const accountId = sessionStorage.getItem("accountId");
 const space_id = localStorage.getItem("spaceId");
 
 export const stompClient = new StompJS.Client({

@@ -85,8 +85,8 @@ const MyPage = () => {
     }
   };
 
-  const accessToken = localStorage.getItem("access");
-  const accountId = localStorage.getItem("accountId");
+  const accessToken = sessionStorage.getItem("access");
+  const accountId = sessionStorage.getItem("accountId");
 
   useEffect(() => {
     const fetchMyPageInfo = async () => {

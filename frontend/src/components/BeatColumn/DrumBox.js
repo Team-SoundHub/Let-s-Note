@@ -62,25 +62,48 @@ const DrumBox = ({
   visualizeInstrument,
   col,
   row,
+  isSnapshot,
 }) => {
   const [active, setActive] = useState(propActive);
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const instrumentList = ["piano", "guitar", "drum"];
   const notes = useSelector((state) => state.innerContent.notes);
+  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotesList);
+
+  // useEffect(() => {
+  //   // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
+  //   const activeNote = notes.find((n) => n.x === col && n.y === row);
+  //   if (activeNote && !active) {
+  //     console.log(
+  //       `activeNote: x:${activeNote.x} y:${activeNote.y} inst:${activeNote.instrument}`
+  //     );
+  //     // 해당하는 노트가 있으면, isActive 상태를 true로 설정
+  //     setActive(true);
+  //     setActiveBoxes(row, true);
+  //     setActiveInstrument(row, activeNote.instrument);
+  //   }
+  // }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
 
   useEffect(() => {
-    // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
-    const activeNote = notes.find((n) => n.x === col && n.y === row);
+    let activeNote;
+    
+    if (isSnapshot) {
+      // 스냅샷 모드에서 스냅샷 노트 리스트를 사용
+      activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
+      console.log("스냅샷 드럼:", activeNote);
+    } else {
+      // 기존 모드에서 일반 노트 리스트를 사용
+      activeNote = notes.find((n) => n.x === col && n.y === row);
+      console.log("작업실 드럼:", activeNote);
+    }
+  
     if (activeNote && !active) {
-      console.log(
-        `activeNote: x:${activeNote.x} y:${activeNote.y} inst:${activeNote.instrument}`
-      );
-      // 해당하는 노트가 있으면, isActive 상태를 true로 설정
+      // 해당하는 노트가 있으면 상태 업데이트
       setActive(true);
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
     }
-  }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
+  }, [snapshotNotes, notes, col, row, active, isSnapshot, setActiveBoxes, setActiveInstrument]);
 
   useEffect(() => {
     if (

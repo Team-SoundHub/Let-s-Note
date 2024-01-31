@@ -1,6 +1,6 @@
 import axiosInstance from './axiosInstance';
 
-const accountId = localStorage.getItem('accountId');
+const accountId = sessionStorage.getItem('accountId');
 
 const getMyNickname = async () => {
     try {    
