@@ -54,7 +54,7 @@ const WorkPlacePage = () => {
     const fetchMemberList = async () => {
       try {
         const memberResponse = await getMember(spaceId);
-        setMemberList(memberResponse.response.members);
+        setMemberList(memberResponse.response.membersNickname);
         console.log("Initial member list:", memberList);
       } catch (error) {
         console.error("Error fetching workspace info:", error);
@@ -101,12 +101,12 @@ const WorkPlacePage = () => {
   const handleAddMember = async (event) => {
     event.preventDefault();
 
-    const usernameInput = document.getElementById("username");
-    const username = usernameInput.value;
-    console.log(username);
+    const usernameInput = document.getElementById("userId");
+    const userId = usernameInput.value;
+    console.log(userId);
 
     try {
-      const response = await setMember(username);
+      const response = await setMember(userId);
       const { newMemberName, newMemberImage } = response.response;
 
       setMemberList((prevMemberList) => [

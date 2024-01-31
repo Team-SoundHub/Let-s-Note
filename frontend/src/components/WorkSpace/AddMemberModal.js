@@ -148,7 +148,7 @@ const AddMemberModal = ({ closeAddMemberModal, handleAddMember }) => {
                     htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    User email
+                    User Id
                   </label>
                   <ModalInput
                     type="text"
