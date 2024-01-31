@@ -32,10 +32,4 @@ public record ResponseWorkspaces() {
             String ownerNickname,
             List<String> membersNickname
     ){}
-
-    @Builder
-    public record MemberNickname(
-            String nickname
-    ) {
-    }
 }

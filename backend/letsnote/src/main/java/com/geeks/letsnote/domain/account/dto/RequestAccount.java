@@ -35,7 +35,7 @@ public record RequestAccount() {
             String password,
 
             @NotNull
-            @Size(min = 2, max = 100)
+            @Size(min = 5, max = 100)
             String nickname
     ) {
     }
@@ -51,7 +51,7 @@ public record RequestAccount() {
             String password,
 
             @NotNull
-            @Size(min = 2, max = 100)
+            @Size(min = 5, max = 100)
             String nickname
     ) {
     }

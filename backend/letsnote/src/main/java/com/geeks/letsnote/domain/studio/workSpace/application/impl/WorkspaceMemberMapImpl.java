@@ -32,12 +32,4 @@ public class WorkspaceMemberMapImpl implements WorkspaceMemberMapService {
     public boolean isAccountIdInWorkSpace(String spaceId, Long accountId) {
         return workspaceMemberMapRepository.existsBySpaceIdAndAccountId(spaceId, accountId);
     }
-
-    @Override
-    public void addMemberMap(String spaceId, Long id) {
-        WorkspaceMemberMap map = WorkspaceMemberMap.builder()
-                .accountId(id)
-                .spaceId(spaceId).build();
-        workspaceMemberMapRepository.save(map);
-    }
 }

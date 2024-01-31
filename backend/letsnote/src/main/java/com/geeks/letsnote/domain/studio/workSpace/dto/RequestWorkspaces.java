@@ -17,9 +17,4 @@ public record RequestWorkspaces() {
             String spaceId,
             List<Long> memberAccountId
     ){}
-
-    @Builder
-    public record AddUserId(
-            String userId
-    ){}
 }

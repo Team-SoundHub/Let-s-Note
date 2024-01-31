@@ -9,6 +9,7 @@ const HeaderBlock = tw.div`
   w-full
   bg-white
   shadow-md
+  z-10
 `;
 
 const Wrapper = tw.div`
@@ -47,10 +48,10 @@ const Header = ({ userId, onLogout, openLoginModal }) => {
     <>
       <HeaderBlock>
         <Wrapper>
-          <Link to="/" className="logo ml-2">
+          <Link to="/" className="ml-5 text-2xl font-bold">
             Let's Note
           </Link>
-          <div className="flex items-center justify-center w-[50%]">
+          <div className="flex items-center justify-center w-[40%]">
             {SearchForm}
           </div>
           {userId ? (
@@ -59,7 +60,7 @@ const Header = ({ userId, onLogout, openLoginModal }) => {
               <Button to="/mypage">마이페이지</Button>
             </div>
           ) : (
-            <div>
+            <div className="mr-5">
               <Button onClick={openLoginModal}>로그인</Button>
             </div>
           )}
