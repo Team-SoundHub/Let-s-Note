@@ -10,7 +10,7 @@ const accountId = localStorage.getItem("accountId");
 const spaceId = localStorage.getItem("spaceId");
 
 export const stompClient = new StompJS.Client({
-  brokerURL: "ws://localhost:9807/letsnote/ws",
+  brokerURL: "ws:///letsnote-rough-wind-6773.fly.dev/ws",
   connectHeaders: {
     accessToken: accessToken,
     spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",
