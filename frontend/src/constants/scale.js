@@ -44,7 +44,8 @@ module.exports = {
     "D2",
   ],
   drumScale: {
-    36: "audio/drum/36.mp3",
-    38: "audio/drum/38.mp3",
+    D2: "D2.mp3",
+    E2: "E2.mp3",
   },
+  availableDrumNotes: ["E2", "D2"],
 };

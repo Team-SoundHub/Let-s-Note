@@ -13,7 +13,7 @@ import { getMember } from "../api/workSpaceApi";
 import BackgroundImage from "../assets/landing/backgroundImage.jpg";
 
 const CardContainer = tw.div`
-  mt-10 mx-32 grid grid-cols-4 gap-6
+  mt-10 mx-[9%] grid grid-cols-4 gap-6
 `;
 
 const LandingContainer = tw.div`
