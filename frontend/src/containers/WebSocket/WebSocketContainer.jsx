@@ -10,7 +10,7 @@ const accountId = localStorage.getItem("accountId");
 const spaceId = localStorage.getItem("spaceId");
 
 export const stompClient = new StompJS.Client({
-  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
+  brokerURL: "ws://localhost:9807/letsnote/ws",
   connectHeaders: {
     accessToken: accessToken,
     spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",
@@ -23,7 +23,7 @@ export const sendInstrumentReset = (instrument, spaceId) => {
     destination: "",
     body: JSON.stringify({
       instrument: instrument,
-      spaceId: spaceId,
+      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",
     }),
   });
 };
@@ -35,12 +35,12 @@ export const sendCoordinate = (instrument, x, y) => {
   }  
 
   stompClient.publish({
-    destination: "/app/editor/coordinate",
+    destination: `/app/workspace/2d92f8cb4ff848308a2a953e5b9b3966/editor/sendCoordinate`,
     body: JSON.stringify({
       instrument: instrument,
       x: x,
       y: y,
-      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",      
+      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966"
     }),
   });
 };
@@ -49,7 +49,7 @@ export const sendCoordinate = (instrument, x, y) => {
 export const sendMessage = (message, accountId, spaceId) => {
   console.log("웹소켓 채팅 요청:", message, accountId);
   stompClient.publish({
-    destination: "/app/chat/sendMessage",
+    destination: `/app/workspace/2d92f8cb4ff848308a2a953e5b9b3966/chat/sendMessage`,
     body: JSON.stringify({
       msgContent: message,
       accountId: accountId,      
@@ -67,14 +67,13 @@ const WebSocketContainer = ({ spaceId }) => {
 
   stompClient.onConnect = (frame) => {
     console.log("Connected: " + frame);
-
-    stompClient.subscribe("/topic/editor/coordinate", (response) => {
+    stompClient.subscribe(`/topic/workspace/2d92f8cb4ff848308a2a953e5b9b3966/editor/public`, (response) => {
       const inner_content = JSON.parse(response.body);
       console.log("노트 소켓 통신:", inner_content);
       dispatch(setInnerContent(inner_content));
     });
 
-    stompClient.subscribe(`/topic/chat/public`, (response) => {
+    stompClient.subscribe(`/topic/workspace/2d92f8cb4ff848308a2a953e5b9b3966/chat/public`, (response) => {
         const message = JSON.parse(response.body);
         console.log("채팅 소켓 응답:", message);
         dispatch(addMessage({ spaceId, message }));
