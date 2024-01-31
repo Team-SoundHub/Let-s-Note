@@ -170,7 +170,6 @@ public class WorkspaceImpl implements WorkspaceService {
     public void decreaseSnapshotCountById(Workspace snapshotWorkspace) {
         workspaceRepository.decrementSnapshotCount(snapshotWorkspace.getSpaceId());
     }
-
     @Override
     public ResponseWorkspaces.MemberNickname addMemberOfWorkspace(String userId, String spaceId) {
         Optional<Account> user = accountService.getAccountFromUserId(userId);
