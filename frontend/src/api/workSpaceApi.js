@@ -1,11 +1,8 @@
 import axiosInstance from "./axiosInstance";
 
 const getWorkspaceInfo = async (spaceId) => {
-  try {
-    // const response = await axiosInstance.get(`/workspaces/space-id?v=${spaceId}`);
-    const response = await axiosInstance.get(
-      `/workspaces/space-id?v=2d92f8cb4ff848308a2a953e5b9b3966`
-    );
+  try {    
+    const response = await axiosInstance.get(`/workspaces/space-id?v=${spaceId}`);
     return response.data;
   } catch (error) {
     console.error("getWorkspaceInfo 에러:", error);
@@ -17,10 +14,8 @@ const createSnapshot = async (spaceId, snapshotTitle, snapshotContent) => {
     const requestData = {
       snapshotTitle: snapshotTitle,
       snapshotContent: snapshotContent,
-    };
-    // const response = await axiosInstance.post(`/snapshots/space-id?v=${spaceId}`, requestData);
-    const response = await axiosInstance.post(
-      `/snapshots/space-id?v=2d92f8cb4ff848308a2a953e5b9b3966`,
+    };    
+    const response = await axiosInstance.post(`/snapshots/space-id?v=${spaceId}`,
       requestData
     );
     return response.data;
@@ -36,7 +31,7 @@ const setMember = async (spaceId, userId) => {
       userId: userId,
     };
     const response = await axiosInstance.post(
-      `/workspaces/member/space-id?v=2d92f8cb4ff848308a2a953e5b9b3966`,
+      `/workspaces/member/space-id?v=${spaceId}`,
       requestData
     );
     return response.data;
@@ -49,7 +44,7 @@ const getMember = async (spaceId) => {
   let response;
   try {
     response = await axiosInstance.get(
-      `/workspaces/nickname/space-id?v=2d92f8cb4ff848308a2a953e5b9b3966`
+      `/workspaces/nickname/space-id?v=${spaceId}`
     );
   } catch (error) {
     console.error("getMember 에러:", error);

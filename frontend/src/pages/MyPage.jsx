@@ -101,6 +101,21 @@ const MyPage = () => {
 
     }, [accessToken, accountId]);
 
+    const handleWorkspaceClick = (spaceId) => {
+        console.log("이건 출력됨?");
+        console.log("마이페이지에서 spaceId 저장", spaceId);
+        localStorage.setItem('spaceId', spaceId);
+        navigate(`/workspace/${spaceId}`);
+    };
+    
+    const handleSnapshotClick = (snapshotId) => {
+        console.log("이건 출력됨?");
+        console.log("마이페이지에서 snapshotId 저장", snapshotId);
+        localStorage.setItem('snapshotId', snapshotId);
+        navigate(`/snapshot/${snapshotId}`);
+    };
+    
+
     // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
     return (
         <div>
@@ -116,7 +131,7 @@ const MyPage = () => {
                 )}
 
                 {workspaces.map((workspace) => (
-                    <div key={workspace.spaceId} onClick={() => navigate(`/workspace/${workspace.spaceId}`)}>
+                    <div key={workspace.spaceId} onClick={() => handleWorkspaceClick(workspace.spaceId)}>
                         <WorkSpaceCard
                             spaceTitle={workspace.spaceTitle}
                             spaceContent={workspace.spaceContent}
@@ -133,7 +148,7 @@ const MyPage = () => {
             <SectionTitle> 내 스냅샷 </SectionTitle>
             <SnapshotsSection>
                 {snapshots.map((snapshot) => (
-                    <div key={snapshot.snapshotId} onClick={() => navigate(`/snapshot/${snapshot.snapshotId}`)}>
+                    <div key={snapshot.snapshotId} onClick={() => handleSnapshotClick(snapshot.snapshotId)}>
                         <WorkSpaceCard
                             spaceTitle={snapshot.snapshotTitle}
                             snapshotContent={snapshot.snapshotContent}
