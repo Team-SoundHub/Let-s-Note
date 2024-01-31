@@ -40,7 +40,7 @@ export const sendCoordinate = (instrument, x, y) => {
       instrument: instrument,
       x: x,
       y: y,
-      spaceId: spaceId,
+      spaceId: spaceId
     }),
   });
 };
