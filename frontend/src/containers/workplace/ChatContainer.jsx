@@ -88,7 +88,7 @@ const ChatContainer = ({ spaceId, memberList, nickname }) => {
     const chatMessages = useSelector(state => state.chat.spaces[spaceId]) // 해당 채팅방 메시지 가져오기
     const [isVisible, setIsVisible] = useState(false);    
 
-    const accountId = localStorage.getItem("accountId");
+    const accountId = sessionStorage.getItem("accountId");
 
     // 채팅 목록 업데이트 관련 로직
     useEffect(() => {        

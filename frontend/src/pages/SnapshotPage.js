@@ -6,7 +6,7 @@ import WorkSpaceContainer from '../containers/workplace/WorkSpaceContainer';
 import SaveSnapshotModal from '../components/WorkSpace/SaveSnapshotModal';
 import styled from 'styled-components';
 import { getSnapshotInfo } from '../api/snapshotApi';
-import { setNotesList } from '../app/slices/innerContentSlice';
+import { setSnapshotNotesList } from '../app/slices/innerContentSlice';
 
 const Container = styled.div`
   height: 100vh;
@@ -20,24 +20,43 @@ const SnapshotPage = () => {
     const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);    
 
     // 작업실 입장 시 데이터 요청
+    // useEffect(() => {
+    //   const fetchSnapshotInfo = async () => {
+    //     try {
+    //       const response = await getSnapshotInfo(snapshotId);    
+          
+    //       console.log("스냅샷 정보 response", response);
+    //       console.log("스냅샷 정보 - 뭘 넣고 있는거냐:", response.response);
+          
+    //       // notesList 전체를 Redux store에 저장
+    //       dispatch(setSnapshotNotesList(response.response));
+          
+    //       console.log("스냅샷 입장 - snapshotInfo:", response.response);
+    //     } catch (error) {
+    //       console.error('Error fetching snapshot info:', error);
+    //     }
+    //   };
+    
+    //   fetchSnapshotInfo();
+    // }, [snapshotId, dispatch]);
+
     useEffect(() => {
       const fetchSnapshotInfo = async () => {
         try {
+          console.log("스냅샷 요청한 snapshotId", snapshotId);
           const response = await getSnapshotInfo(snapshotId);    
-          
-          console.log("스냅샷 정보 response", response);
-          
-          // notesList 전체를 Redux store에 저장
-          dispatch(setNotesList(response.response.notesList));
-          
-          console.log("스냅샷 입장 - snapshotInfo:", response.response);
+          // API 응답에서 스냅샷 노트 정보를 추출하여 dispatch
+          if (response && response.response) {
+            dispatch(setSnapshotNotesList(response.response));
+          }
         } catch (error) {
           console.error('Error fetching snapshot info:', error);
         }
       };
     
       fetchSnapshotInfo();
-    }, [snapshotId, dispatch]);
+    }, [dispatch, snapshotId]);
+    
 
 
     const handleModalOpen = () => {
