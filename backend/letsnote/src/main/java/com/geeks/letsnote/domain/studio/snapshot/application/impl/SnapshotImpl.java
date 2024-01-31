@@ -92,4 +92,33 @@ public class SnapshotImpl implements SnapshotService {
 
         return allNotes;
     }
+
+    @Override
+    @Transactional
+    public void deleteSnapshotById(String snapshotId) {
+        Optional<Snapshot> snapshot = snapshotRepository.findById(snapshotId);
+        Workspace snapshotWorkspace = workspaceService.getById(snapshot.get().getSpaceId());
+        workspaceService.decreaseSnapshotCountById(snapshotWorkspace);
+        snapshotRepository.deleteById(snapshotId);
+    }
+
+    @Override
+    public List<ResponseSnapshot.SnapshotDto> getAllSnapshots() {
+        List<Snapshot> snapshotList = snapshotRepository.findAll();
+        List<ResponseSnapshot.SnapshotDto> snapshotDtoList = new ArrayList<>();
+
+        for(Snapshot snapshot : snapshotList){
+            Workspace snapshotWorkspace = workspaceService.getById(snapshot.getSpaceId());
+            ResponseSnapshot.SnapshotDto snapshotDto = ResponseSnapshot.SnapshotDto.builder()
+                    .snapshotContent(snapshot.getSnapshotContent())
+                    .snapshotId(snapshot.getSnapshotId())
+                    .snapshotTitle(snapshot.getSnapshotTitle())
+                    .memberNicknames(workspaceService.getMemberNicknamesFromWorkspace(snapshotWorkspace))
+                    .ownerNickname(workspaceService.getOwnerNicknameFromWorkspace(snapshotWorkspace))
+                    .updateAt(snapshot.getUpdateAt()).build();
+            snapshotDtoList.add(snapshotDto);
+        }
+
+        return snapshotDtoList;
+    }
 }

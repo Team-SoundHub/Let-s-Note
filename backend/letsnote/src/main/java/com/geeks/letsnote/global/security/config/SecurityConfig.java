@@ -61,7 +61,7 @@ public class SecurityConfig {
                         registry.requestMatchers(AUTH_WHITELIST).permitAll()
                 )
                 .authorizeHttpRequests(registry -> registry
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
