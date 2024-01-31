@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-
+import tmp_image_1 from "../../../public/image.jpeg";
+import tmp_image_2 from "../../../public/image_2.jpeg";
 
 const StyledContainer = styled.div`
   padding: 10px; 
@@ -113,11 +114,11 @@ const ChatMessage = ({ messageList = [] }) => {
     }
 
     if (message.msgContent === "신호등사진_1") {
-      return <img src={"/public/image.jpeg"} alt="uploaded" style={{ maxWidth: '200px'}} />;
+      return <img src={tmp_image_1} alt="uploaded" style={{ maxWidth: '200px'}} />;
     }
 
     if (message.msgContent === "신호등사진_2") {
-      return <img src={"/public/image_2.jpeg"} alt="uploaded" style={{ maxWidth: '200px'}} />;
+      return <img src={tmp_image_2} alt="uploaded" style={{ maxWidth: '200px'}} />;
     }
 
     // 텍스트 메시지인 경우
