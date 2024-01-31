@@ -112,25 +112,6 @@ public class WorkspaceController {
                 .response(members)
                 .build();
 
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    @PostMapping("/member/space-id")
-    public ResponseEntity<CommonResponse> addMember(@RequestParam("v") String spaceId,@RequestBody RequestWorkspaces.AddUserId userId){
-        ResponseWorkspaces.MemberNickname nickname = workspaceService.addMemberOfWorkspace(userId.userId(),spaceId);
-        if(nickname == null){
-            CommonResponse responseError = CommonResponse.builder()
-                    .success(false)
-                    .response("Not Found id : " + userId.userId())
-                    .build();
-
-            return new ResponseEntity<>(responseError,HttpStatus.NOT_FOUND);
-        }
-        CommonResponse response = CommonResponse.builder()
-                .success(true)
-                .response(nickname)
-                .build();
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.FOUND);
     }
 }

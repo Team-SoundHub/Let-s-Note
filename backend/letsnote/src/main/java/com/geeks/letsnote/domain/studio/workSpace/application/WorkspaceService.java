@@ -26,9 +26,4 @@ public interface WorkspaceService {
     boolean checkMaxCountSnapshot(String spaceId);
 
     void increaseSnapshotCount(String spaceId);
-
-    void decreaseSnapshotCountById(Workspace snapshotWorkspace);
-
-    ResponseWorkspaces.MemberNickname addMemberOfWorkspace(String userId, String spaceId);
-
 }
