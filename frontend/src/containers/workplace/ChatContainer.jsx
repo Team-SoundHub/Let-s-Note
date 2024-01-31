@@ -91,8 +91,7 @@ const ChatContainer = ({ spaceId, memberList, nickname }) => {
     const accountId = localStorage.getItem("accountId");
 
     // 채팅 목록 업데이트 관련 로직
-    useEffect(() => {
-        console.log("아아아아아아ㅏ아아아아아앙아ㅏ");
+    useEffect(() => {        
         dispatch(fetchChatMessages(spaceId));
     }, [dispatch, spaceId]); // 작업실이 바뀌면 메시지 목록 새로 받아오기
 
@@ -122,8 +121,7 @@ const ChatContainer = ({ spaceId, memberList, nickname }) => {
     const handleMouseDown = (e) => {        
         if (e.target === closeButtonRef.current) {
             e.stopPropagation()
-            setIsVisible(false);
-            console.log("헤더 클릭");
+            setIsVisible(false);            
             return;
         }        
 
@@ -133,8 +131,7 @@ const ChatContainer = ({ spaceId, memberList, nickname }) => {
                 x: e.clientX - translate.x,
                 y: e.clientY - translate.y,
             });
-            console.log("채팅창 x:", e.clientX - translate.x, "채팅창 y:", e.clientY - translate.y);
-            console.log("채팅창 chatMessages:", chatMessages);
+            console.log("채팅창 x:", e.clientX - translate.x, "채팅창 y:", e.clientY - translate.y);            
         }
     };
 

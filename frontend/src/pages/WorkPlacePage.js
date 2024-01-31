@@ -31,6 +31,7 @@ const WorkPlacePage = () => {
   const [snapshotCreated, setSnapshotCreated] = useState(false);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
   const [snapshotUrl, setSnapshotUrl] = useState("");
+  const [snapshotId, setSnapshotId] = useState("");
   const [memberList, setMemberList] = useState([]);
   const [myNickname, setMyNickname] = useState([]);
   const [workspaceInfo, setWorkspaceInfo] = useState({
@@ -97,10 +98,15 @@ const WorkPlacePage = () => {
   };
 
   const handleSave = async (title, description) => {
+    console.log("스냅샷 생성 시도");
     try {
       const response = await createSnapshot(spaceId, title, description);
+      console.log("snapshotId:", response.response.snapshotId);
       setSnapshotUrl(
-        `https://www.letsnote.co.kr/snapshots/${response.response.snapshotId}`
+        `https://www.letsnote.co.kr/snapshot/${response.response.snapshotId}`
+      );
+      setSnapshotId(
+        `${response.response.snapshotId}`
       );
       setSnapshotCreated(true);
       setIsReleaseModalOpen(false);
@@ -164,6 +170,7 @@ const WorkPlacePage = () => {
         <SaveCompleteModal
           onClose={handleCloseSnapshotModal}
           snapshotUrl={snapshotUrl}
+          snapshotId={snapshotId}
         />
       )}
       {isAddMemberModalOpen && (
