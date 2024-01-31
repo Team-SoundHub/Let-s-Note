@@ -38,7 +38,6 @@ class BeatColumn extends Component {
     const instrument = synth.activeInstrument;
     // 클릭한 box의 정보를 부모 컴포넌트로 전달
     onClick && onClick(id, i);
-    console.log(instrument);
     if (instrument !== "drum") {
       this.toggleActive(i)();
     } else {
@@ -55,23 +54,16 @@ class BeatColumn extends Component {
       activeBoxes[i] = !activeBoxes[i];
       activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
-      const activeNotes = scale.map((note, index) => ({
-        note,
-        isActive: activeBoxes[index],
-        instrument: activeInstrument[index], // Add instrument information
-      }));           
-
       // 연주 코드 추가
       if (synth && activeBoxes[i]) {
         synth.playNote(scale[i]);
       }
 
-      return { activeBoxes, activeInstrument, activeNotes };
+      return { activeBoxes, activeInstrument };
     });
   };
 
   toggleDrumActive = (i) => () => {
-    console.log("toggle handle drum");
     const { scale, drumScale, synth } = this.props;
     const idx = i - scale.length;
     this.setState((prev) => {
@@ -81,19 +73,13 @@ class BeatColumn extends Component {
       activeBoxes[i] = !activeBoxes[i];
       activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
-      const activeNotes = drumScale.map((note, index) => ({
-        note,
-        isActive: activeBoxes[i],
-        instrument: activeInstrument[i], // Add instrument information
-      }));
-
       // 연주 코드 추가
       if (synth && activeBoxes[i]) {
         console.log(idx);
         synth.playNote(drumScale[idx]);
       }
 
-      return { activeBoxes, activeInstrument, activeNotes };
+      return { activeBoxes, activeInstrument };
     });
   };
 
@@ -125,23 +111,6 @@ class BeatColumn extends Component {
   componentWillUnmount() {
     Subject.unsubscribe("reset", this.resetColumn);
   }
-  setActiveBoxes = (row, value) => {
-    this.setState((prev) => {
-      const newActiveBoxes = [...prev.activeBoxes];
-      newActiveBoxes[row] = value;
-      return { activeBoxes: newActiveBoxes };
-    });
-  };
-
-  setActiveInstrument = (row, instrument) => {
-    this.setState((prev) => {
-      const newActiveInstrument = [...prev.activeInstrument];
-      console.log(newActiveInstrument);
-      newActiveInstrument[row] = instrument;
-      return { activeInstrument: newActiveInstrument };
-    });
-  };
-
   setActiveBoxes = (row, value) => {
     this.setState((prev) => {
       const newActiveBoxes = [...prev.activeBoxes];

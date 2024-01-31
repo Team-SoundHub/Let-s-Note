@@ -46,14 +46,6 @@ const pickActiveColor = (instrument) => {
       return "rgb(74 222 128)";
     case "drum":
       return "rgb(250 204 21)";
-    case "D":
-      return "#DF9329";
-    case "E":
-      return "#6CBBD5";
-    case "F":
-      return "#C82F3C";
-    case "G":
-      return "#8350DF";
     default:
       return "black";
   }
@@ -76,19 +68,21 @@ const DrumBox = ({
   const instrumentList = ["piano", "guitar", "drum"];
   const notes = useSelector((state) => state.innerContent.notes);
 
-  useEffect(() => {    
+  useEffect(() => {
     // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
-    const activeNote = notes.find(n => n.x === col && n.y === row);
+    const activeNote = notes.find((n) => n.x === col && n.y === row);
     if (activeNote && !active) {
-      console.log(`activeNote: x:${activeNote.x} y:${activeNote.y} inst:${activeNote.instrument}`);
+      console.log(
+        `activeNote: x:${activeNote.x} y:${activeNote.y} inst:${activeNote.instrument}`
+      );
       // 해당하는 노트가 있으면, isActive 상태를 true로 설정
-      setActive(true);      
+      setActive(true);
       setActiveBoxes(row, true);
-      setActiveInstrument(row, activeNote.instrument); 
+      setActiveInstrument(row, activeNote.instrument);
     }
   }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (
       innerContent.instrument === "drum" &&
       innerContent.x === col &&

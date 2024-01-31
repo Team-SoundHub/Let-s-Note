@@ -1,4 +1,4 @@
-import axiosInstance from './axiosInstance';
+import axiosInstance from "./axiosInstance";
 
 const getWorkspaceInfo = async (spaceId) => {
     try {
@@ -24,4 +24,14 @@ const createSnapshot = async (spaceId, snapshotTitle, snapshotContent) => {
     }
 }
 
-export { getWorkspaceInfo, createSnapshot };
+const setMember = () => {};
+
+const getMember = async (spaceId) => {
+  const response = await axiosInstance.get(
+    "api/v1/workspaces/nickname/space-id?v=",
+    spaceId
+  );
+  return response.data;
+};
+
+export { getWorkspaceInfo, createSnapshot, setMember, getMember };
