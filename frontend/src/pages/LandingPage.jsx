@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import login from '../api/loginApi';
-import backgroundImage from '../assets/landing2.png';
+import { getAllSnapshotInfo } from '../api/feedApi';
 
 
 const LandingPage = () => {
@@ -9,6 +9,19 @@ const LandingPage = () => {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const fetchAllSnapshots = async () => {
+            try {
+                const response = await getAllSnapshotInfo();
+                console.log(response);                
+            } catch (error) {
+                console.error('스냅샷 정보 로드 실패:', error);
+            }
+        };
+
+        fetchAllSnapshots();
+    }, []);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -18,15 +31,13 @@ const LandingPage = () => {
             
             const {
                 accessToken, 
-                refreshToken,
-                // nickname,
+                refreshToken
                 accountId
             } = response.response;            
 
             if (accessToken && refreshToken) {
                 localStorage.setItem('access', accessToken);
-                localStorage.setItem('refresh', refreshToken);
-                localStorage.setItem('nickname', "테스트용입니다.");
+                localStorage.setItem('refresh', refreshToken);                
                 localStorage.setItem('accountId', accountId);
                 
                 console.log("로그인 완료");                
@@ -45,11 +56,10 @@ const LandingPage = () => {
     }
 
     return (
-        <div style={{ 
-            backgroundImage: `url(${backgroundImage})`, 
+        <div style={{             
             backgroundSize: 'cover', 
             backgroundPosition: 'center',
-            minHeight: '100vh'  // 최소 높이를 뷰포트 높이로 설정
+            minHeight: '100vh'  
         }}>            
             {isLoggedIn ? <div style={{color:'blue'}}> 로그인 되었습니다 </div> 
             : <div style={{color:'red'}}> 로그인을 해주세요 </div>}        
