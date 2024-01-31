@@ -84,6 +84,11 @@ public class EditorSocketController {
 	@MessageMapping("/workspace/{spaceId}/editor/sendCoordinate")
 	@SendTo("/topic/workspace/{spaceId}/editor/public")
 	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
+		RequestNotes.NoteDto noteDto = RequestNotes.NoteDto.builder()
+				.noteX(content.x())
+				.noteY(content.y())
+				.instrument(Instrument.fromString(content.instrument())).build();
+		noteInstrumentMapService.clickNoteMap(content.spaceId(), noteDto);
 		return new SocketResponse.Coordinate(spaceId, content.instrument(), content.x(), content.y());
 	}
 

@@ -9,6 +9,7 @@ const HeaderBlock = tw.div`
   w-full
   bg-white
   shadow-md
+  z-10
 `;
 
 const Wrapper = tw.div`
@@ -42,24 +43,24 @@ const SearchForm = (
   </form>
 );
 
-const Header = ({ userId, onLogout, openLoginModal }) => {
+const Header = ({ userId, handleLogout, openLoginModal }) => {
   return (
     <>
       <HeaderBlock>
         <Wrapper>
-          <Link to="/" className="logo ml-2">
+          <Link to="/" className="ml-5 text-2xl font-bold">
             Let's Note
           </Link>
-          <div className="flex items-center justify-center w-[50%]">
+          <div className="flex items-center justify-center w-[40%]">
             {SearchForm}
           </div>
-          {userId ? (
+          {sessionStorage.getItem("access") ? (
             <div className="flex items-center">
-              <UserInfo>{userId}</UserInfo>
               <Button to="/mypage">마이페이지</Button>
+              <Button onClick={handleLogout}>로그아웃</Button>
             </div>
           ) : (
-            <div>
+            <div className="mr-5">
               <Button onClick={openLoginModal}>로그인</Button>
             </div>
           )}

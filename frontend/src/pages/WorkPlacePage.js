@@ -12,20 +12,27 @@ import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import { setNotesList } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
+import { getMyNickname } from "../api/nicknameApi";
 
 const Container = styled.div`
   height: 100vh;
 `;
 
+const spaceId = localStorage.getItem("spaceId");
+const accountId = localStorage.getItem("accountId");
+
 const WorkPlacePage = () => {
   const dispatch = useDispatch();
 
-  const { spaceId } = useParams(); // 현재 spaceId 얻기
+  const { spaceId } = useParams(); // 현재 spaceId 얻기  
+  localStorage.setItem("spaceId", spaceId);
+
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [snapshotCreated, setSnapshotCreated] = useState(false);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
   const [snapshotUrl, setSnapshotUrl] = useState("");
   const [memberList, setMemberList] = useState([]);
+  const [myNickname, setMyNickname] = useState([]);
   const [workspaceInfo, setWorkspaceInfo] = useState({
     notesList: [],
     isSnapshotExist: false,
@@ -48,9 +55,20 @@ const WorkPlacePage = () => {
     };
 
     fetchWorkspaceInfo();
+    
   }, [spaceId, dispatch]);
 
   useEffect(() => {
+    const fetchMyNickname = async () => {
+      try {
+        const response = await getMyNickname();
+        setMyNickname(response.response.nickname);
+        console.log("내 닉네임:", response.response.nickname);
+      } catch (error) {
+        console.error("내 닉네임 요청 Error:", error);
+      }
+    };
+
     const fetchMemberList = async () => {
       try {
         const memberResponse = await getMember(spaceId);
@@ -60,8 +78,15 @@ const WorkPlacePage = () => {
         console.error("Error fetching workspace info:", error);
       }
     };
+    fetchMyNickname();
     fetchMemberList();
   }, []);
+
+  useEffect(() => {  
+    return () => {      
+      localStorage.removeItem("spaceId");      
+    };
+  }, [spaceId]);
 
   const handleModalOpen = () => {
     setIsReleaseModalOpen(true);
@@ -75,7 +100,7 @@ const WorkPlacePage = () => {
     try {
       const response = await createSnapshot(spaceId, title, description);
       setSnapshotUrl(
-        `https://우리 도메인/snapshots/${response.response.snapshotId}`
+        `https://www.letsnote.co.kr/snapshots/${response.response.snapshotId}`
       );
       setSnapshotCreated(true);
       setIsReleaseModalOpen(false);
@@ -148,7 +173,7 @@ const WorkPlacePage = () => {
         />
       )}
       <WorkSpaceContainer notesList={workspaceInfo.notesList} />
-      <ChatContainer spaceId={spaceId} />
+      <ChatContainer spaceId={spaceId} memberList={memberList} nickname={myNickname} />
     </Container>
   );
 };

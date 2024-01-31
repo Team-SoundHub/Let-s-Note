@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-
+import { useSelector } from 'react-redux';
 
 const StyledContainer = styled.div`
   padding: 10px; 
@@ -8,28 +8,28 @@ const StyledContainer = styled.div`
 
 const MessagesContainer = styled.div`
   max-height: 70vh; 
-  overflow-y: auto;  // 세로 스크롤바 활성화
+  overflow-y: auto;
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
 `;
 
-const SystemMessageContainer = styled.div`
+const MessageContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const SystemMessage = styled.p`
-  background-color: #55667758;
-  border-radius: 100px;
-  text-align: center;
-  color: white;
-  padding: 2px 15px;
-  font-size: 14px;
-`;
-
-const MyMessageContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
+  align-items: flex-start;
   margin-bottom: 5px;
+`;
+
+const MessageContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+`;
+
+const Nickname = styled.span`
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
 `;
 
 const MyMessage = styled.div`
@@ -38,21 +38,23 @@ const MyMessage = styled.div`
   padding: 8px;
   max-width: 200px;
   font-size: 12px;
-`;
-
-const OthersMessageContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  margin-bottom: 5px;
 `;
 
 const OthersMessage = styled.div`
   background-color: white;
   border-radius: 8px;
   padding: 8px;
-  max-width: 200px;
+  max-width: 95%;
   font-size: 12px;
+  margin-bottom: 5px;
 `;
+
+const Timestamp = styled.span`
+  font-size: 10px;
+  color: #a0a0a0;
+`;
+
 
 const ProfileImage = styled.div`
   width: 38px;
@@ -83,65 +85,57 @@ const ProfileImage = styled.div`
 `;
 
 
-const ChatMessage = ({ messageList = [] }) => {
-  const nickname = localStorage.getItem("nickname");
+
+const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) => {
   const [localMessageList, setLocalMessageList] = useState(messageList);
   const messagesEndRef = useRef(null);  // 스크롤 위치를 위한 ref
 
-  // useEffect(() => {
-  //   // WebSocket 구독 로직은 WebSocketContainer에서 처리되므로, 여기서는 Redux 상태를 감시
-  //   setLocalMessageList(messageList);
-  // }, [messageList]);
+  const accountId = localStorage.getItem("accountId");
 
   useEffect(() => {
     // messageList에 새 메시지가 추가된 경우에만 localMessageList 업데이트
     if (messageList.length !== localMessageList.length) {
       setLocalMessageList(messageList);
     }
+
+    console.log(memberList);
   }, [messageList, localMessageList.length]);
 
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    console.log("localMessageList: ", localMessageList);
   }, [localMessageList]);
 
   const renderMessageContent = (message) => {
     // 이미지 URL인 경우 이미지로 표시
     if (message.msgContent.startsWith('http')) {
-      return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px'}} />;
+      return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px' }} />;
     }
+
     // 텍스트 메시지인 경우
     return <span>{message.msgContent}</span>;
-  };  
+  };
 
   return (
     <MessagesContainer>
       {localMessageList.map((message) => {
-        console.log("메시지응답 닉네임", message.nickname);
-        console.log("로컬스토리지 닉네임", nickname);
+        console.log("메시지응답:", message);
+        console.log("메시지응답 accountId:", message.accountId);
+        console.log("prop 닉네임:", nickname);
         return (
           <StyledContainer key={message._id}>
-            {message.nickname === nickname ? (
-              <MyMessageContainer>
-                {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage> */}
-                <ProfileImage>{1}</ProfileImage>
-                {message.nickname}
-                {/* <MyMessage>{message.msgContent}</MyMessage> */}
-                <MyMessage>{renderMessageContent(message)}</MyMessage>
-                {message.timestamp}
-              </MyMessageContainer>
-            ) : (
-              <OthersMessageContainer>
-                {/* <ProfileImage>{message.nickname.substring(0)}</ProfileImage>                 */}
-                <ProfileImage>{2}</ProfileImage>                
-                {message.nickname}
-                {/* <OthersMessage>{message.msgContent}</OthersMessage> */}
-                <OthersMessage>{renderMessageContent(message)}</OthersMessage>
-                {message.timestamp}
-              </OthersMessageContainer>
-            )
-            }
+            <MessageContainer>
+              <ProfileImage>{1}</ProfileImage> {/* 여기에 실제 이미지 URL을 적용할 수 있습니다 */}
+              <MessageContent>
+                <Nickname>{message.nickname}</Nickname>
+                {message.accountId === accountId ? (
+                  <MyMessage>{renderMessageContent(message)}</MyMessage>
+                ) : (
+                  <OthersMessage>{renderMessageContent(message)}</OthersMessage>
+                )}
+                <Timestamp>{message.timestamp}</Timestamp>
+              </MessageContent>
+            </MessageContainer>
           </StyledContainer>
         )
       })}

@@ -148,7 +148,7 @@ const AddMemberModal = ({ closeAddMemberModal, handleAddMember }) => {
               </ModalCloseButton>
             </ModalHeader>
             <ModalBody>
-              <ModalForm action="#">
+              <ModalForm>
                 <div>
                   <label
                     htmlFor="email"
