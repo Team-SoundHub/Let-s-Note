@@ -19,7 +19,6 @@ const LandingPage = () => {
             const {
                 accessToken, 
                 refreshToken,
-                // nickname,
                 accountId
             } = response.response;            
 
