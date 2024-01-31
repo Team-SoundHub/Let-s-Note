@@ -31,15 +31,18 @@ const SvgImage = tw.img`
 `;
 
 const MemberInfo = ({ memberList, openAddMemberModal }) => {
+  console.log("memberList: ", memberList);
   const renderMemberList = () => {
     return memberList.map((member, index) => (
       <div key={index} className="flex items-center space-x-2">
-        <span className="text-gray-900 font-medium">{member.memberName}</span>
-        <img
+        {/* <img
           src={member.memberImage}
           alt={member.memberName}
           className="w-5 h-5 rounded-full"
-        />
+        /> */}
+        <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+          {member}
+        </span>
       </div>
     ));
   };
