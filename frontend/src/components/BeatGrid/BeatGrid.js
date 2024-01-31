@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";

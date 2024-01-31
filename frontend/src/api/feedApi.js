@@ -1,8 +1,8 @@
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
 
 const getAllSnapshotInfo = async () => {
   try {
-    const response = await axiosInstance.get("/feeds");
+    const response = await axios.get("/feeds");
     console.log("getAllSnapshotInfo", response);
     return response.data.response;
   } catch (error) {

@@ -17,10 +17,14 @@ const Container = styled.div`
   height: 100vh;
 `;
 
+const spaceId = localStorage.getItem("spaceId");
+
 const WorkPlacePage = () => {
   const dispatch = useDispatch();
 
-  const { spaceId } = useParams(); // 현재 spaceId 얻기
+  const { spaceId } = useParams(); // 현재 spaceId 얻기  
+  localStorage.setItem("spaceId", spaceId);
+
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [snapshotCreated, setSnapshotCreated] = useState(false);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
@@ -48,6 +52,7 @@ const WorkPlacePage = () => {
     };
 
     fetchWorkspaceInfo();
+    
   }, [spaceId, dispatch]);
 
   useEffect(() => {
@@ -63,6 +68,12 @@ const WorkPlacePage = () => {
     fetchMemberList();
   }, []);
 
+  useEffect(() => {    
+    return () => {      
+      localStorage.removeItem("spaceId");      
+    };
+  }, [spaceId]);
+
   const handleModalOpen = () => {
     setIsReleaseModalOpen(true);
   };
@@ -75,7 +86,7 @@ const WorkPlacePage = () => {
     try {
       const response = await createSnapshot(spaceId, title, description);
       setSnapshotUrl(
-        `https://우리 도메인/snapshots/${response.response.snapshotId}`
+        `https://www.letsnote.co.kr/snapshots/${response.response.snapshotId}`
       );
       setSnapshotCreated(true);
       setIsReleaseModalOpen(false);

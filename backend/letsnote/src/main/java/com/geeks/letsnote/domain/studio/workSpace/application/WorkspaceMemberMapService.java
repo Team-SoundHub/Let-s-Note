@@ -6,6 +6,4 @@ public interface WorkspaceMemberMapService {
     void createWorkspaceMemberMap(RequestWorkspaces.WorkspaceMemberMapDto workspaceMemberMapDto);
 
     boolean isAccountIdInWorkSpace(String spaceId, Long accountId);
-
-    void addMemberMap(String spaceId, Long id);
 }

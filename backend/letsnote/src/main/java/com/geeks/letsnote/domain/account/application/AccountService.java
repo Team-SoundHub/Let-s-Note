@@ -2,9 +2,6 @@ package com.geeks.letsnote.domain.account.application;
 
 import com.geeks.letsnote.domain.account.dto.RequestAccount;
 import com.geeks.letsnote.domain.account.dto.ResponseAccount;
-import com.geeks.letsnote.domain.account.entity.Account;
-
-import java.util.Optional;
 
 public interface AccountService {
     ResponseAccount.Token authenticate(String username, String password);
@@ -30,6 +27,4 @@ public interface AccountService {
     ResponseAccount.AccountId getAccountIdFromUserName(String username);
 
     boolean checkPathVariableWithTokenUser(Long accountId);
-
-    Optional<Account> getAccountFromUserId(String userId);
 }
