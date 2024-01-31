@@ -61,14 +61,23 @@ const LandingPage = () => {
         setIsLoggedIn(true);
         closeLoginModal();
 
-        localStorage.setItem("access", accessToken);
-        localStorage.setItem("refresh", refreshToken);
-        localStorage.setItem("nickname", "테스트용입니다.");
-        localStorage.setItem("accountId", accountId);
+        sessionStorage.setItem("access", accessToken);
+        sessionStorage.setItem("refresh", refreshToken);
+        sessionStorage.setItem("nickname", "테스트용입니다.");
+        sessionStorage.setItem("accountId", accountId);
       }
     } catch (error) {
       console.error("로그인 오류:", error);
     }
+  };
+
+  const handleLogout = () => {
+    // Clear session storage on logout
+    sessionStorage.removeItem("access");
+    sessionStorage.removeItem("refresh");
+    sessionStorage.removeItem("nickname");
+    sessionStorage.removeItem("accountId");
+    setIsLoggedIn(false);
   };
 
   useEffect(() => {
@@ -81,7 +90,16 @@ const LandingPage = () => {
       }
     };
 
+    const ConfirmLogin = () => {
+      if (sessionStorage.getItem("access")) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    };
+
     fetchData();
+    ConfirmLogin();
   }, []);
 
   useEffect(() => {
@@ -111,7 +129,12 @@ const LandingPage = () => {
 
   return (
     <>
-      <Header userId={userId} openLoginModal={openLoginModal} />
+      <Header
+        userId={userId}
+        isLoggedIn={isLoggedIn}
+        openLoginModal={openLoginModal}
+        handleLogout={handleLogout}
+      />
       <LandingContainer>
         <div className={TransparentImageStyle}>
           <img

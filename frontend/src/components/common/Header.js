@@ -43,7 +43,7 @@ const SearchForm = (
   </form>
 );
 
-const Header = ({ userId, onLogout, openLoginModal }) => {
+const Header = ({ userId, handleLogout, openLoginModal }) => {
   return (
     <>
       <HeaderBlock>
@@ -54,10 +54,10 @@ const Header = ({ userId, onLogout, openLoginModal }) => {
           <div className="flex items-center justify-center w-[40%]">
             {SearchForm}
           </div>
-          {userId ? (
+          {sessionStorage.getItem("access") ? (
             <div className="flex items-center">
-              <UserInfo>{userId}</UserInfo>
               <Button to="/mypage">마이페이지</Button>
+              <Button onClick={handleLogout}>로그아웃</Button>
             </div>
           ) : (
             <div className="mr-5">
