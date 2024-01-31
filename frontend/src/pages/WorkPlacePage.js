@@ -102,19 +102,23 @@ const WorkPlacePage = () => {
     event.preventDefault();
 
     const usernameInput = document.getElementById("userId");
-    const userId = usernameInput.value;
-    console.log(userId);
 
-    try {
-      const response = await setMember(userId);
-      const { newMemberName, newMemberImage } = response.response;
+    if (usernameInput) {
+      const userId = usernameInput.value;
+      console.log("userId: ", userId);
 
-      setMemberList((prevMemberList) => [
-        ...prevMemberList,
-        { name: newMemberName, image: newMemberImage },
-      ]);
-    } catch (error) {
-      console.error("Add member error: ", error);
+      try {
+        const response = await setMember(spaceId, userId);
+        console.log("addmember res: ", response);
+        const { newMemberName, newMemberImage } = response.response;
+
+        setMemberList((prevMemberList) => [
+          ...prevMemberList,
+          { name: newMemberName, image: newMemberImage },
+        ]);
+      } catch (error) {
+        console.error("Add member error: ", error);
+      }
     }
   };
 
