@@ -184,13 +184,4 @@ public class AccountServiceImpl implements AccountService {
         User userPrincipal = (User) authentication.getPrincipal();
         return userPrincipal.getUsername().equals(checkAccount.get().getUsername()) ? true : false;
     }
-
-    @Override
-    public Optional<Account> getAccountFromUserId(String userId) {
-        Optional<Account> user = accountRepository.findByUsername(userId);
-        if(user.isPresent()){
-            return user;
-        }
-        return null;
-    }
 }

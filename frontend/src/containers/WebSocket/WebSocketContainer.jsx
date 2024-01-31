@@ -62,12 +62,11 @@ export const sendMessage = (message, accountId, spaceId) => {
 const WebSocketContainer = ({ spaceId }) => {
   const dispatch = useDispatch();
   stompClient.webSocketFactory = function () {
-    return new SockJS("http://localhost:9807/letsnote/ws");
+    return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
   };
 
   stompClient.onConnect = (frame) => {
     console.log("Connected: " + frame);
-
     stompClient.subscribe(`/topic/workspace/2d92f8cb4ff848308a2a953e5b9b3966/editor/public`, (response) => {
       const inner_content = JSON.parse(response.body);
       console.log("노트 소켓 통신:", inner_content);

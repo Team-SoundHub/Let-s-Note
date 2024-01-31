@@ -5,9 +5,6 @@ import com.geeks.letsnote.domain.account.dto.ResponseAccount;
 import com.geeks.letsnote.domain.message.application.MessageService;
 import com.geeks.letsnote.domain.message.dto.MessageReqeust;
 import com.geeks.letsnote.domain.message.dto.MessageResponse;
-import com.geeks.letsnote.domain.studio.instrument.Instrument;
-import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
-import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
@@ -30,24 +27,19 @@ public class EditorSocketController {
 
 	private final MessageService messageService;
 	private final AccountService accountService;
-	private final NoteInstrumentMapService noteInstrumentMapService;
 	private final CustomWebSocketHandlerDecorator customWebSocketHandlerDecorator;
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
 	public SocketResponse.Coordinate coordinateInfo(@Valid @Payload SocketRequest.Coordinate coordinate) {
-//		String spaceId = "2d92f8cb4ff848308a2a953e5b9b3966";
-		RequestNotes.NoteDto noteDto = RequestNotes.NoteDto.builder()
-				.noteX(coordinate.x())
-				.noteY(coordinate.y())
-				.instrument(Instrument.fromString(coordinate.instrument())).build();
-		noteInstrumentMapService.clickNoteMap(coordinate.spaceId(), noteDto);
-		return new SocketResponse.Coordinate(coordinate.spaceId(), coordinate.instrument(), coordinate.x(), coordinate.y());
+		String spaceId = "23dbaeebfe9a4f0db43dfc71b7ca3bb1";
+		return new SocketResponse.Coordinate(spaceId, coordinate.instrument(), coordinate.x(), coordinate.y());
 	}
 
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
 	public SocketResponse.Chat sendMessage(@Valid @Payload SocketRequest.Chat chatMessage) {
+		String spaceId = "23dbaeebfe9a4f0db43dfc71b7ca3bb1";
 		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
 				.spaceId(chatMessage.spaceId())
 				.accountId(chatMessage.accountId())
@@ -55,17 +47,17 @@ public class EditorSocketController {
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.Chat(chatMessage.spaceId(), nickName.nickname(), result.msgContent(), result.timestamp());
+		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-	@MessageMapping("/workspace/{spaceId}/join}")
-	@SendTo("/topic/workspace/{spaceId}/join}")
-	public SocketResponse.WorkSpace joinWorkSpace(@Valid @Header("accountId")Long accountId, @DestinationVariable String spaceId, StompHeaderAccessor stompHeaderAccessor) {
-		return new SocketResponse.WorkSpace(spaceId);
+	@MessageMapping("/workspace/{workSpaceId}/join}")
+	@SendTo("/topic/workspace/{workSpaceId}/join}")
+	public SocketResponse.WorkSpace joinWorkSpace(@Valid @Header("accountId")Long accountId, @DestinationVariable String workSpaceId, StompHeaderAccessor stompHeaderAccessor) {
+		return new SocketResponse.WorkSpace(workSpaceId);
 	}
 
-	@MessageMapping("/workspace/{spaceId}/chat/sendMessage")
-	@SendTo("/topic/workspace/{spaceId}/chat/public")
+	@MessageMapping("/workspace/{workSpaceId}/chat/sendMessage")
+	@SendTo("/topic/workspace/{workSpaceId}/chat/public")
 	public SocketResponse.Chat sendWorkSpaceMessage(
 			@Valid @Payload SocketRequest.Chat chatMessage,
 			@DestinationVariable String spaceId) {
@@ -81,10 +73,10 @@ public class EditorSocketController {
 		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-	@MessageMapping("/workspace/{spaceId}/editor/sendCoordinate")
-	@SendTo("/topic/workspace/{spaceId}/editor/public")
-	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
-		return new SocketResponse.Coordinate(spaceId, content.instrument(), content.x(), content.y());
+	@MessageMapping("/workspace/{workSpaceId}/editor/sendCoordinate")
+	@SendTo("/topic/workspace/{workSpaceId}/editor/public")
+	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String workSpaceId) throws Exception {
+		return new SocketResponse.Coordinate(workSpaceId, content.instrument(), content.x(), content.y());
 	}
 
 	@MessageExceptionHandler

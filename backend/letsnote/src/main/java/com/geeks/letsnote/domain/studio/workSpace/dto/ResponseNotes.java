@@ -14,8 +14,8 @@ public record ResponseNotes() {
 
     @Builder
     public record Note (
-            Integer noteX,
-            Integer noteY
+            Long noteX,
+            Long noteY
     ) {}
 
 

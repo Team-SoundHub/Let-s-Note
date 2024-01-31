@@ -19,13 +19,13 @@ public class Note {
     private String spaceInstrument;
 
     @Column(name = "note_x", nullable = false )
-    private Integer noteX;
+    private Long noteX;
 
     @Column(name = "note_y", nullable = false )
-    private Integer noteY;
+    private Long noteY;
 
     @Builder
-    public Note(Long noteId, String spaceInstrument, Integer noteX, Integer noteY) {
+    public Note(Long noteId, String spaceInstrument, Long noteX, Long noteY) {
         this.noteId = noteId;
         this.spaceInstrument = spaceInstrument;
         this.noteX = noteX;
