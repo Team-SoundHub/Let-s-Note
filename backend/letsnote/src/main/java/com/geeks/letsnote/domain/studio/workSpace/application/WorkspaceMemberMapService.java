@@ -4,4 +4,6 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 
 public interface WorkspaceMemberMapService {
     void createWorkspaceMemberMap(RequestWorkspaces.WorkspaceMemberMapDto workspaceMemberMapDto);
+
+    boolean isAccountIdInWorkSpace(String spaceId, Long accountId);
 }

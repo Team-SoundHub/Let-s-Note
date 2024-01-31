@@ -170,6 +170,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public ResponseAccount.AccountId getAccountIdFromUserName(String username) {
+        return new ResponseAccount.AccountId(accountRepository.findAccountIdByUsername(username));
+    }
+
+    @Override
     public boolean checkPathVariableWithTokenUser(Long accountId) {
         Optional<Account> checkAccount = accountRepository.findById(accountId);
         if(checkAccount.isEmpty()){

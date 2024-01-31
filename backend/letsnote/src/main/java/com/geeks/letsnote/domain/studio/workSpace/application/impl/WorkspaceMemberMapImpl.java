@@ -11,11 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class WorkspaceMemberMapImpl implements WorkspaceMemberMapService {
     private final WorkspaceMemberMapRepository workspaceMemberMapRepository;
-    private final AccountRepository accountRepository;
 
-    public WorkspaceMemberMapImpl(WorkspaceMemberMapRepository workspaceMemberMapRepository, AccountRepository accountRepository) {
+    public WorkspaceMemberMapImpl(WorkspaceMemberMapRepository workspaceMemberMapRepository) {
         this.workspaceMemberMapRepository = workspaceMemberMapRepository;
-        this.accountRepository = accountRepository;
     }
 
 
@@ -28,5 +26,10 @@ public class WorkspaceMemberMapImpl implements WorkspaceMemberMapService {
                     .spaceId(workspaceMemberMapDto.spaceId()).build();
             workspaceMemberMapRepository.save(workspaceMemberMap);
         }
+    }
+
+    @Override
+    public boolean isAccountIdInWorkSpace(String spaceId, Long accountId) {
+        return workspaceMemberMapRepository.existsBySpaceIdAndAccountId(spaceId, accountId);
     }
 }
