@@ -33,34 +33,6 @@ const LandingPage = () => {
         fetchAllSnapshots();
     }, []);
 
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        try {            
-            const response = await login(userId, password);
-            console.log(response); 
-            
-            const {
-                accessToken, 
-                refreshToken
-                accountId
-            } = response.response;            
-
-            if (accessToken && refreshToken) {
-                localStorage.setItem('access', accessToken);
-                localStorage.setItem('refresh', refreshToken);                
-                localStorage.setItem('accountId', accountId);
-                
-                console.log("로그인 완료");                
-            
-                setIsLoggedIn(true);
-                
-                // 로그인 버전 화면으로 리렌더링하기
-            }            
-        } catch (error) {
-            console.error('로그인 오류:', error);
-        }
-    };
-
   const handleLogin = async (event) => {
     event.preventDefault();
 
