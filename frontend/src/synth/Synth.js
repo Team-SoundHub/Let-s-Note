@@ -1,4 +1,4 @@
-import { scale } from "../constants/scale";
+import { scale, drumScale } from "../constants/scale";
 import * as Tone from "tone";
 
 const getTransport = () => {
@@ -28,7 +28,11 @@ class Synth {
           samples + instrument + "/"
         );
       } else {
-        this.samplers[instrument] = new Tone.Sampler(drumSamples);
+        this.samplers[instrument] = new Tone.Sampler(
+          drumScale,
+          callback,
+          samples + instrument + "/"
+        );
       }
       this.samplers[instrument].toDestination();
     });
@@ -71,7 +75,7 @@ class Synth {
     const activeSampler = this.samplers[Instrument];
     activeSampler.triggerAttackRelease(note, timing, time);
   }
-  
+
   setBPM(bpm = 120) {
     getTransport().bpm.value = bpm;
   }
