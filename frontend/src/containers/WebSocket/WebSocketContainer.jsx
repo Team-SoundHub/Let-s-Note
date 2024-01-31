@@ -35,8 +35,7 @@ export const sendCoordinate = (instrument, x, y) => {
   }  
 
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/editor/sendCoordinate`,
-    // destination: `/app/workspace/2d92f8cb4ff848308a2a953e5b9b3966/editor/sendCoordinate`,
+    destination: `/app/workspace/${space_id}/editor/sendCoordinate`,    
     body: JSON.stringify({
       instrument: instrument,
       x: x,
@@ -50,8 +49,7 @@ export const sendCoordinate = (instrument, x, y) => {
 export const sendMessage = (message, accountId, space_id) => {
   console.log("웹소켓 채팅 요청:", message, accountId);
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/chat/sendMessage`,
-    // destination: `/app/workspace/2d92f8cb4ff848308a2a953e5b9b3966/chat/sendMessage`,
+    destination: `/app/workspace/${space_id}/chat/sendMessage`,    
     body: JSON.stringify({
       msgContent: message,
       accountId: accountId,      
@@ -70,18 +68,14 @@ const WebSocketContainer = ({ spaceId }) => {
 
   stompClient.onConnect = (frame) => {
     console.log("Connected: " + frame);
-    console.log("stompClient.onConnect - prop: ", spaceId);
-    console.log("stompClient.onConnect - local: ", space_id);
 
     stompClient.subscribe(`/topic/workspace/${spaceId}/editor/public`, (response) => {
-    // stompClient.subscribe(`/topic/workspace/2d92f8cb4ff848308a2a953e5b9b3966/editor/public`, (response) => {
       const inner_content = JSON.parse(response.body);
       console.log("노트 소켓 통신:", inner_content);
       dispatch(setInnerContent(inner_content));
     });
 
-    stompClient.subscribe(`/topic/workspace/${spaceId}/chat/public`, (response) => {
-    // stompClient.subscribe(`/topic/workspace/2d92f8cb4ff848308a2a953e5b9b3966/chat/public`, (response) => {
+    stompClient.subscribe(`/topic/workspace/${spaceId}/chat/public`, (response) => {    
         const message = JSON.parse(response.body);
         console.log("채팅 소켓 응답:", message);
         dispatch(addMessage({ spaceId, message }));
