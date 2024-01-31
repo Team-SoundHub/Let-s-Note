@@ -70,10 +70,11 @@ const MyPage = () => {
     setIsCreateModalOpen(true);
   };
 
-  const handleCreateWorkSpace = async () => {
-    console.log("작업실 생성 시도:", workSpaceTitle, workSpaceDesc);
+  const handleCreateWorkSpace = async (title, description) => {
+    console.log("작업실 생성 시도:", title, description);
     try {
-      const response = await createWorkSpace(workSpaceTitle, workSpaceDesc, []);
+      const response = await createWorkSpace(title, description, []);
+      console.log("작업실 생성", response);
       if (response) {
         navigate(`/workspace/${response.response.spaceId}`);
         console.log("작업실 생성 완료");
@@ -84,6 +85,7 @@ const MyPage = () => {
       console.error("작업실 생성 오류:", error);
     }
   };
+
 
   const accessToken = sessionStorage.getItem("access");
   const accountId = sessionStorage.getItem("accountId");
@@ -128,7 +130,7 @@ const MyPage = () => {
         {isCreateModalOpen && (
           <CreateSpaceModal
             onClose={handleModalClose}
-            onPublish={handleCreateWorkSpace}
+            onPublish={(title, description) => handleCreateWorkSpace(title, description)}
           />
         )}
         <WorkSpacesSection>
