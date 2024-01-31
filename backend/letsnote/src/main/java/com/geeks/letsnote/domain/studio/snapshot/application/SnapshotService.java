@@ -16,4 +16,6 @@ public interface SnapshotService {
     List<ResponseNotes.Notes> getAllNotesOfSnapshot(String snapshotId);
 
     void deleteSnapshotById(String snapshotId);
+
+    List<ResponseSnapshot.SnapshotDto> getAllSnapshots();
 }
