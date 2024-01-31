@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import tmp_image_1 from "../../source/image.jpeg";
-import tmp_image_2 from "../../source/image_2.jpeg";
 
 const StyledContainer = styled.div`
   padding: 10px; 
@@ -111,14 +109,6 @@ const ChatMessage = ({ messageList = [] }) => {
     // 이미지 URL인 경우 이미지로 표시
     if (message.msgContent.startsWith('http')) {
       return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px'}} />;
-    }
-
-    if (message.msgContent === "신호등사진_1") {
-      return <img src={tmp_image_1} alt="uploaded" style={{ maxWidth: '200px'}} />;
-    }
-
-    if (message.msgContent === "신호등사진_2") {
-      return <img src={tmp_image_2} alt="uploaded" style={{ maxWidth: '200px'}} />;
     }
 
     // 텍스트 메시지인 경우
