@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
+import tw from "tailwind-styled-components";
 import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
 
@@ -38,6 +38,12 @@ const Header = styled.div`
   height: 7vh;
 `;
 
+const RightSection = tw.div`
+  flex
+  items-center
+  justify-end
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -69,7 +75,12 @@ const Message = styled.div`
   animation-fill-mode: forwards; // 애니메이션 종료 후 최종 상태 유지
 `;
 
-const WorkSpaceHeader = ({ onOpenModal, isSnapshotExist }) => {
+const WorkSpaceHeader = ({
+  onOpenModal,
+  isSnapshotExist,
+  openAddMemberModal,
+  memberList,
+}) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
@@ -114,12 +125,17 @@ const WorkSpaceHeader = ({ onOpenModal, isSnapshotExist }) => {
   return (
     <Header>
       <button onClick={handleGoBack}> ⬅️ </button>
-      <ButtonContainer>
-        <MemberInfo />
-      </ButtonContainer>
-      <ButtonContainer>
-        <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
-      </ButtonContainer>
+      <RightSection>
+        <ButtonContainer>
+          <MemberInfo
+            memberList={memberList}
+            openAddMemberModal={openAddMemberModal}
+          />
+        </ButtonContainer>
+        <ButtonContainer>
+          <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
+        </ButtonContainer>
+      </RightSection>
     </Header>
   );
 };
