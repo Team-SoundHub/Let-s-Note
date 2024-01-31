@@ -75,7 +75,7 @@ class BeatColumn extends Component {
 
       // 연주 코드 추가
       if (synth && activeBoxes[i]) {
-        console.log(idx);
+        // console.log(idx);
         synth.playNote(drumScale[idx]);
       }
 
@@ -122,7 +122,7 @@ class BeatColumn extends Component {
   setActiveInstrument = (row, instrument) => {
     this.setState((prev) => {
       const newActiveInstrument = [...prev.activeInstrument];
-      console.log(newActiveInstrument);
+      // console.log(newActiveInstrument);
       newActiveInstrument[row] = instrument;
       return { activeInstrument: newActiveInstrument };
     });

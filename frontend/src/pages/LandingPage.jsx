@@ -62,8 +62,7 @@ const LandingPage = () => {
         closeLoginModal();
 
         localStorage.setItem("access", accessToken);
-        localStorage.setItem("refresh", refreshToken);
-        localStorage.setItem("nickname", "테스트용입니다.");
+        localStorage.setItem("refresh", refreshToken);        
         localStorage.setItem("accountId", accountId);
       }
     } catch (error) {

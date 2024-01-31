@@ -18,12 +18,12 @@ export const stompClient = new StompJS.Client({
   }
 });
 
-export const sendInstrumentReset = (instrument, space_id) => {
+export const sendInstrumentReset = (instrument, spaceId) => {
   stompClient.publish({
     destination: "",
     body: JSON.stringify({
       instrument: instrument,
-      spaceId: space_id,
+      spaceId: spaceId,
     }),
   });
 };

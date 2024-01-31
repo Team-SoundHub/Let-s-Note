@@ -8,7 +8,7 @@ import { sendMessage } from '../WebSocket/WebSocketContainer';
 import chatImage from '../../assets/bubble-chat2.png';
 
 const StyledChatContainer = styled.div`
-    height: 80vh;
+    height: 90vh;
     width: 30vw;
     position: fixed;
     right: 0;
@@ -83,15 +83,16 @@ const CloseButton = styled.div`
 `;
 
 
-const ChatContainer = ({ spaceId }) => {
+const ChatContainer = ({ spaceId, memberList, nickname }) => {
     const dispatch = useDispatch();
     const chatMessages = useSelector(state => state.chat.spaces[spaceId]) // 해당 채팅방 메시지 가져오기
     const [isVisible, setIsVisible] = useState(false);    
 
-    const accountId = localStorage.getItem("accountId")
+    const accountId = localStorage.getItem("accountId");
 
     // 채팅 목록 업데이트 관련 로직
     useEffect(() => {
+        console.log("아아아아아아ㅏ아아아아아앙아ㅏ");
         dispatch(fetchChatMessages(spaceId));
     }, [dispatch, spaceId]); // 작업실이 바뀌면 메시지 목록 새로 받아오기
 
@@ -133,6 +134,7 @@ const ChatContainer = ({ spaceId }) => {
                 y: e.clientY - translate.y,
             });
             console.log("채팅창 x:", e.clientX - translate.x, "채팅창 y:", e.clientY - translate.y);
+            console.log("채팅창 chatMessages:", chatMessages);
         }
     };
 
@@ -178,7 +180,7 @@ const ChatContainer = ({ spaceId }) => {
                     <div> 채팅하기 </div>
                 </ChatHeader>                                        
                     <CloseButton ref={closeButtonRef} onClick={closeChatContainer} />
-                <ChatMessage messageList={chatMessages} />
+                <ChatMessage messageList={chatMessages} memberList={memberList} spaceId={spaceId} nickname={nickname} />
                 <ChatInput handleSendMessage={handleSendMessage} />
             </StyledChatContainer>
         </>
