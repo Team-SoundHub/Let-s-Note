@@ -12,11 +12,13 @@ const Container = styled.div`
   height: 100vh;
 `;
 
+const snapshotId = localStorage.getItem("snapshotId");
+
 const SnapshotPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { snapshotId } = useParams();
+    // const { snapshotId } = useParams();
     const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);    
 
     // 작업실 입장 시 데이터 요청
@@ -53,6 +55,13 @@ const SnapshotPage = () => {
         // navigate('/mysnapshot');
         setIsReleaseModalOpen(false);
     };
+
+    
+    useEffect(() => {    
+      return () => {      
+        localStorage.removeItem("snapshotId");      
+      };
+    }, [snapshotId]);
 
 
     return (

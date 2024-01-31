@@ -7,23 +7,23 @@ import { addMessage } from "../../app/slices/chatSlice";
 
 const accessToken = localStorage.getItem("access");
 const accountId = localStorage.getItem("accountId");
-const spaceId = localStorage.getItem("spaceId");
+const space_id = localStorage.getItem("spaceId");
 
 export const stompClient = new StompJS.Client({
-  brokerURL: "ws://localhost:9807/letsnote/ws",
+  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
   connectHeaders: {
     accessToken: accessToken,
-    spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",
+    spaceId: space_id,
     accountId: accountId
   }
 });
 
-export const sendInstrumentReset = (instrument, spaceId) => {
+export const sendInstrumentReset = (instrument, space_id) => {
   stompClient.publish({
     destination: "",
     body: JSON.stringify({
       instrument: instrument,
-      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",
+      spaceId: space_id,
     }),
   });
 };
@@ -35,31 +35,32 @@ export const sendCoordinate = (instrument, x, y) => {
   }  
 
   stompClient.publish({
-    destination: `/app/workspace/2d92f8cb4ff848308a2a953e5b9b3966/editor/sendCoordinate`,
+    destination: `/app/workspace/${space_id}/editor/sendCoordinate`,    
     body: JSON.stringify({
       instrument: instrument,
       x: x,
       y: y,
-      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966"
+      spaceId: space_id
     }),
   });
 };
 
 
-export const sendMessage = (message, accountId, spaceId) => {
+export const sendMessage = (message, accountId, space_id) => {
   console.log("웹소켓 채팅 요청:", message, accountId);
   stompClient.publish({
-    destination: `/app/workspace/2d92f8cb4ff848308a2a953e5b9b3966/chat/sendMessage`,
+    destination: `/app/workspace/${space_id}/chat/sendMessage`,    
     body: JSON.stringify({
       msgContent: message,
       accountId: accountId,      
-      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",
+      spaceId: space_id,
     }),
   });
 };
 
 
 const WebSocketContainer = ({ spaceId }) => {
+  const space_id = localStorage.getItem("spaceId");
   const dispatch = useDispatch();
   stompClient.webSocketFactory = function () {
     return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
@@ -67,13 +68,14 @@ const WebSocketContainer = ({ spaceId }) => {
 
   stompClient.onConnect = (frame) => {
     console.log("Connected: " + frame);
-    stompClient.subscribe(`/topic/workspace/2d92f8cb4ff848308a2a953e5b9b3966/editor/public`, (response) => {
+
+    stompClient.subscribe(`/topic/workspace/${spaceId}/editor/public`, (response) => {
       const inner_content = JSON.parse(response.body);
       console.log("노트 소켓 통신:", inner_content);
       dispatch(setInnerContent(inner_content));
     });
 
-    stompClient.subscribe(`/topic/workspace/2d92f8cb4ff848308a2a953e5b9b3966/chat/public`, (response) => {
+    stompClient.subscribe(`/topic/workspace/${spaceId}/chat/public`, (response) => {    
         const message = JSON.parse(response.body);
         console.log("채팅 소켓 응답:", message);
         dispatch(addMessage({ spaceId, message }));

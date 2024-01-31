@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-
 const StyledContainer = styled.div`
   padding: 10px; 
 `;
@@ -111,6 +110,7 @@ const ChatMessage = ({ messageList = [] }) => {
     if (message.msgContent.startsWith('http')) {
       return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px'}} />;
     }
+
     // 텍스트 메시지인 경우
     return <span>{message.msgContent}</span>;
   };  
