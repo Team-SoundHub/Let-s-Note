@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import tmp_image_1 from "../../../public/image.jpeg";
-import tmp_image_2 from "../../../public/image_2.jpeg";
+import tmp_image_1 from "../../source/image.jpeg";
+import tmp_image_2 from "../../source/image_2.jpeg";
 
 const StyledContainer = styled.div`
   padding: 10px; 
