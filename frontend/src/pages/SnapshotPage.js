@@ -49,8 +49,7 @@ const SnapshotPage = () => {
     };
 
     const handlePublish = (title, description) => {
-        console.log("발간하기", title, description);
-        // navigate('/mysnapshot');
+        console.log("저장하기", title, description);        
         setIsReleaseModalOpen(false);
     };
 

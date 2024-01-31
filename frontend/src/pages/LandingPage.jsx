@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
 import login from "../api/loginApi";
 import Header from "../components/common/Header";
 import LoginModal from "../components/auth/LoginModal";
 import backgroundImage from "../assets/landing2.png";
-
+import { getAllSnapshotInfo } from '../api/feedApi';
 const LandingPage = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState("");
@@ -20,6 +20,46 @@ const LandingPage = () => {
   const closeLoginModal = () => {
     setLoginModalOpen(false);
   };
+    useEffect(() => {
+        const fetchAllSnapshots = async () => {
+            try {
+                const response = await getAllSnapshotInfo();
+                console.log(response);                
+            } catch (error) {
+                console.error('스냅샷 정보 로드 실패:', error);
+            }
+        };
+
+        fetchAllSnapshots();
+    }, []);
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        try {            
+            const response = await login(userId, password);
+            console.log(response); 
+            
+            const {
+                accessToken, 
+                refreshToken
+                accountId
+            } = response.response;            
+
+            if (accessToken && refreshToken) {
+                localStorage.setItem('access', accessToken);
+                localStorage.setItem('refresh', refreshToken);                
+                localStorage.setItem('accountId', accountId);
+                
+                console.log("로그인 완료");                
+            
+                setIsLoggedIn(true);
+                
+                // 로그인 버전 화면으로 리렌더링하기
+            }            
+        } catch (error) {
+            console.error('로그인 오류:', error);
+        }
+    };
 
   const handleLogin = async (event) => {
     event.preventDefault();

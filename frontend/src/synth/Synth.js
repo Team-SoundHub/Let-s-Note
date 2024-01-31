@@ -6,8 +6,8 @@ const getTransport = () => {
 };
 
 const drumSamples = {
-  36: "audio/drum/36.mp3",
-  38: "audio/drum/38.mp3",
+  36: "/audio/drum/36.mp3",
+  38: "/audio/drum/38.mp3",
 };
 
 class Synth {
@@ -20,12 +20,14 @@ class Synth {
     this.activeInstrument = this.instruments[0];
     this.samplers = {};
 
+
     this.instruments.forEach((instrument) => {
       if (instrument !== "drum") {
         this.samplers[instrument] = new Tone.Sampler(
           scale,
           callback,
-          samples + instrument + "/"
+          // samples + instrument + "/"
+          "/audio/" + instrument + "/"
         );
       } else {
         this.samplers[instrument] = new Tone.Sampler(drumSamples);
@@ -71,7 +73,7 @@ class Synth {
     const activeSampler = this.samplers[Instrument];
     activeSampler.triggerAttackRelease(note, timing, time);
   }
-  
+
   setBPM(bpm = 120) {
     getTransport().bpm.value = bpm;
   }

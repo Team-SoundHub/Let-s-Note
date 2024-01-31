@@ -19,13 +19,13 @@ public class SnapshotNote {
     private String snapshotInstrument;
 
     @Column(name = "note_x", nullable = false)
-    private Long noteX;
+    private Integer noteX;
 
     @Column(name = "note_y", nullable = false)
-    private Long noteY;
+    private Integer noteY;
 
     @Builder
-    public SnapshotNote(Long noteId, String snapshotInstrument, Long noteX, Long noteY) {
+    public SnapshotNote(Long noteId, String snapshotInstrument, Integer noteX, Integer noteY) {
         this.noteId = noteId;
         this.snapshotInstrument = snapshotInstrument;
         this.noteX = noteX;

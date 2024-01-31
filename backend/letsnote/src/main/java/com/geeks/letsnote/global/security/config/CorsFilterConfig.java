@@ -21,6 +21,7 @@ public class CorsFilterConfig {
 
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("https://www.letsnote.co.kr");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
