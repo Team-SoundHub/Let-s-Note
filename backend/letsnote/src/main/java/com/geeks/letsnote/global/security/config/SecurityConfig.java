@@ -30,7 +30,8 @@ public class SecurityConfig {
             "/test",
             "/swagger/**",
             "api/v1/feeds",
-            "api/v1/feeds/*"
+            "api/v1/feeds/*",
+            "/letsnote/ws/**"
     };
 
     public SecurityConfig(
