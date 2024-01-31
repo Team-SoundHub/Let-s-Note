@@ -10,14 +10,12 @@ const getWorkspaceInfo = async (spaceId) => {
 };
 
 const createSnapshot = async (spaceId, snapshotTitle, snapshotContent) => {
-  try {
-    const requestData = {
+  try {  
+    const response = await axiosInstance.post(`/snapshots/space-id?v=${spaceId}`, {
       snapshotTitle: snapshotTitle,
       snapshotContent: snapshotContent,
-    };    
-    const response = await axiosInstance.post(`/snapshots/space-id?v=${spaceId}`,
-      requestData
-    );
+    })
+    console.log("createSnapshot API 요청");
     return response.data;
   } catch (error) {
     console.error("createSnapshot 에러:", error);

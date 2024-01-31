@@ -91,9 +91,7 @@ const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) =
   const [localMessageList, setLocalMessageList] = useState(messageList);
   const messagesEndRef = useRef(null);  // 스크롤 위치를 위한 ref
   const messagesContainerRef = useRef(null);
-
-
-  const accountId = localStorage.getItem("accountId");
+  const accountId = sessionStorage.getItem("accountId");
 
   useEffect(() => {    
     // messageList에 새 메시지가 추가된 경우에만 localMessageList 업데이트
@@ -132,9 +130,9 @@ const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) =
   return (
     <MessagesContainer>
       {localMessageList.map((message) => {
-        console.log("메시지응답:", message);
-        console.log("메시지응답 accountId:", message.accountId);
-        console.log("prop 닉네임:", nickname);
+        // console.log("메시지응답:", message);
+        // console.log("메시지응답 accountId:", message.accountId);
+        // console.log("prop 닉네임:", nickname);
         return (
           <StyledContainer key={message._id}>
             <MessageContainer>
