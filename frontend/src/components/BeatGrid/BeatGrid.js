@@ -20,9 +20,6 @@ class BeatGrid extends Component {
   state = { count: -1 };
 
   handleBoxClick = (row, column) => {
-    console.log(
-      `Clicked: Row ${row}, Column ${column}, Instrument ${this.props.synth.activeInstrument}`
-    );
     const instrument = this.props.synth.activeInstrument;
     sendCoordinate(instrument, row, column);
   };

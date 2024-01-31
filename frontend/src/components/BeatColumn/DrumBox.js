@@ -7,7 +7,8 @@ const Container = styled.div`
   margin: 0.5px;
   background-color: ${(props) =>
     props.active &&
-    props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
+    props.active[props.instrumentEnum["drum"]] &&
+    props.visualizeInstrument[props.instrumentEnum["drum"]] === true
       ? pickActiveColor("drum")
       : props.inactiveColor};
   width: 2rem;
@@ -18,7 +19,7 @@ const Container = styled.div`
     content: ""; /* Create a pseudo-element for the circle */
     display: ${(props) =>
       props.active &&
-      props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
+      props.visualizeInstrument[props.instrumentEnum["drum"]] === true
         ? "none" // Hide the circle when the condition is satisfied
         : "block"};
     position: absolute;
@@ -46,14 +47,6 @@ const pickActiveColor = (instrument) => {
       return "rgb(74 222 128)";
     case "drum":
       return "rgb(250 204 21)";
-    case "D":
-      return "#DF9329";
-    case "E":
-      return "#6CBBD5";
-    case "F":
-      return "#C82F3C";
-    case "G":
-      return "#8350DF";
     default:
       return "black";
   }
@@ -68,47 +61,48 @@ const DrumBox = ({
   setActiveBoxes,
   setActiveInstrument,
   visualizeInstrument,
+  instrumentEnum,
   col,
   row,
 }) => {
   const [active, setActive] = useState(propActive);
   const innerContent = useSelector((state) => state.innerContent.innerContent);
-  const instrumentList = ["piano", "guitar", "drum"];
   const notes = useSelector((state) => state.innerContent.notes);
 
-  useEffect(() => {    
-    // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
-    const activeNote = notes.find(n => n.x === col && n.y === row);
-    if (activeNote && !active) {
-      console.log(`activeNote: x:${activeNote.x} y:${activeNote.y} inst:${activeNote.instrument}`);
-      // 해당하는 노트가 있으면, isActive 상태를 true로 설정
-      setActive(true);      
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, activeNote.instrument); 
-    }
-  }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
+  // useEffect(() => {
+  //   // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
+  //   const activeNote = notes.find((n) => n.x === col && n.y === row);
+  //   if (activeNote && !active) {
+  //     // 해당하는 노트가 있으면, isActive 상태를 true로 설정
+  //     setActive(true);
+  //     // setActiveBoxes(row, true);
+  //     setActiveInstrument(row, activeNote.instrument);
+  //   }
+  // }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
 
-  useEffect(() => {    
+  useEffect(() => {
+    const instrumentIndex = instrumentEnum[innerContent.instrument];
+
     if (
       innerContent.instrument === "drum" &&
       innerContent.x === col &&
-      innerContent.y === row &&
-      !active
+      innerContent.y === row
     ) {
-      setActive(true);
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, innerContent.instrument);
-    } else if (
-      innerContent.instrument === "drum" &&
-      innerContent.x === col &&
-      innerContent.y === row &&
-      active
-    ) {
-      setActive(false);
-      setActiveBoxes(row, false);
-      setActiveInstrument(row, undefined);
+      setActive((prevActive) => {
+        const newActive = [...(prevActive || [])];
+        newActive[instrumentIndex] = !newActive[instrumentIndex];
+        setActiveBoxes(row, newActive);
+        return newActive;
+      });
+
+      if (!active) {
+        setActiveInstrument(row, innerContent.instrument);
+      } else {
+        setActiveInstrument(row, undefined);
+      }
     }
   }, [innerContent]);
+
   return (
     <Container
       active={active}
@@ -116,7 +110,7 @@ const DrumBox = ({
       inactiveColor={inactiveColor}
       onClick={() => (onClick === null ? null : onClick())}
       visualizeInstrument={visualizeInstrument}
-      instrumentList={instrumentList}
+      instrumentEnum={instrumentEnum}
       row={row}
     />
   );
