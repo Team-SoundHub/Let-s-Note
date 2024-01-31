@@ -1,8 +1,9 @@
 import tw from "tailwind-styled-components";
 import { Card } from "flowbite-react";
+import crown from "../../assets/landing/crown-svgrepo-com.svg";
 
 const TitleContainer = tw.div`
-  flex items-center justify-between mb-4
+  flex-colㅣ items-center justify-between mb-4
 `;
 
 const MemberNickNameSpan = tw.span`
@@ -22,6 +23,12 @@ const MemberNickNameSpan = tw.span`
   dark:hover:bg-gray-500
 `;
 
+const EditDate = tw.p`
+  text-black-200
+  text-sm
+  right
+`;
+
 const PostCard = (props) => {
   return (
     <Card
@@ -30,9 +37,15 @@ const PostCard = (props) => {
       className="max-w-60 mx-5 my-5 border-b-8 border-[#49C5B6]"
     >
       <TitleContainer>
-        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">
+        <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
           {props.snapshotTitle}
         </h5>
+        <div className="flex items-center">
+          <img className="w-5 h-5 mt-3" src={crown} />
+          <h2 className="ml-2 mt-4 text-xm font-bold text-gray-900 dark:text-white">
+            {props.ownerNickname}
+          </h2>
+        </div>
       </TitleContainer>
       <span>{props.snapshotContent}</span>
       <ul className="my-4 space-y-3">
@@ -42,6 +55,7 @@ const PostCard = (props) => {
           </li>
         ))}
       </ul>
+      <EditDate>{new Date(props.updateAt).toLocaleString()}</EditDate>
     </Card>
   );
 };

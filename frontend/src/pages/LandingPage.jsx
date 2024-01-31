@@ -19,8 +19,7 @@ const CardContainer = tw.div`
 const LandingContainer = tw.div`
   flex-row items-center justify-center z-0
 `;
-const TransparentImageStyle =
-  "flex w-full items-center justify-center z-0 opacity-30";
+const TransparentImageStyle = "flex w-full items-center justify-center z-0";
 
 const TextBoxDivStyle =
   "absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full";
@@ -95,7 +94,9 @@ const LandingPage = () => {
               snapshotTitle={postList[i].snapshotTitle}
               memberNicknames={postList[i].memberNicknames}
               snapshotContent={postList[i].snapshotContent}
+              ownerNickname={postList[i].ownerNickname}
               snapshotId={postList[i].snapshotId}
+              updateAt={postList[i].updateAt}
             ></PostCard>
           );
         } catch (error) {
@@ -112,23 +113,29 @@ const LandingPage = () => {
     <>
       <Header userId={userId} openLoginModal={openLoginModal} />
       <LandingContainer>
-        <div className={`${TransparentImageStyle}`}>
-          <img className="w-[80%] h-80" src={BackgroundImage} alt="Banner" />
-        </div>
-        <div className={TextBoxDivStyle}>
-          <p className="font-bold text-4xl mb-10">Let's Note Symphony</p>
-          <p>
-            Unleashing Collective Creativity: A Global Platform for Connecting
-            Diverse Individuals,
-            <br />
-            Harmonizing Talents, and Crafting an Inspirational Symphony of
-            Innovation and Artistry
-          </p>
-        </div>
-        <div className={ButtonDivStyle}>
-          <Button colored onClick={setLoginModalOpen}>
-            Sign up for free
-          </Button>
+        <div className={TransparentImageStyle}>
+          <img
+            className="w-[80%] h-96 opacity-30"
+            src={BackgroundImage}
+            alt="Banner"
+          />
+
+          <div className={TextBoxDivStyle}>
+            <p className="font-bold text-4xl mb-10">Let's Note Symphony</p>
+            <p>
+              Unleashing Collective Creativity: A Global Platform for Connecting
+              Diverse Individuals,
+              <br />
+              Harmonizing Talents, and Crafting an Inspirational Symphony of
+              Innovation and Artistry
+            </p>
+          </div>
+
+          <div className={ButtonDivStyle}>
+            <Button colored onClick={setLoginModalOpen}>
+              Sign up for free
+            </Button>
+          </div>
         </div>
         <CardContainer>{postCardList}</CardContainer>
         {isLoginModalOpen && (
