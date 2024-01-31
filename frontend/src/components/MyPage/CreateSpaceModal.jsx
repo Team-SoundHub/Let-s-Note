@@ -3,17 +3,31 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import Button from "../common/Button";
 
-const ModalBackground = tw.div`
-    fixed
-    t-0
-    l-0
-    w-[100%]
-    h-[100%]
-    bg-rgba(0, 0, 0, 0.5);
-    z-50
-    items-center
-    justify-center
-    cursor-pointer
+// const ModalBackground = tw.div`
+//     fixed
+//     t-0
+//     l-0
+//     w-[100%]
+//     h-[100%]
+//     bg-rgba(0, 0, 0, 0.5);
+//     z-50
+//     items-center
+//     justify-center
+//     cursor-pointer
+// `;
+
+// 왜인지는 모르겠지만, 스타일드 컴포넌트로 해야 모달 뒤 배경을 검게 만드는 효과가 적용됨
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;  
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; // 높은 z-index 값 설정
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ModalContainer = tw.div`
@@ -117,6 +131,11 @@ const CreateSpaceModal = ({ onClose, onPublish }) => {
     event.stopPropagation();
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault(); 
+    onPublish(title, description);
+  };
+
   return (
     <ModalBackground onClick={onClose}>
       <ModalContainer
@@ -148,7 +167,7 @@ const CreateSpaceModal = ({ onClose, onPublish }) => {
               </ModalCloseButton>
             </ModalHeader>
             <ModalBody>
-              <ModalForm action="#">
+              <ModalForm onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
@@ -180,7 +199,7 @@ const CreateSpaceModal = ({ onClose, onPublish }) => {
                   />
                 </div>
                 <div className="flex justify-center">
-                  <Button type="submit" className="w-full" onClick={onPublish}>
+                  <Button type="submit" className="w-full" onClick={() => onPublish(title, description)}>
                     생성하기
                   </Button>
                 </div>
