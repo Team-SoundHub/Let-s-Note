@@ -38,7 +38,6 @@ class BeatColumn extends Component {
     const instrument = synth.activeInstrument;
     // 클릭한 box의 정보를 부모 컴포넌트로 전달
     onClick && onClick(id, i);
-    console.log(instrument);
     if (instrument !== "drum") {
       this.toggleActive(i)();
     } else {
