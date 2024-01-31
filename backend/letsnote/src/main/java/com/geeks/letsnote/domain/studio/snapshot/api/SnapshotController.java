@@ -74,4 +74,16 @@ public class SnapshotController {
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @DeleteMapping("/snapshot-id")
+    public ResponseEntity<CommonResponse> deleteSnapshot(@RequestParam("v") String snapshotId) {
+        snapshotService.deleteSnapshotById(snapshotId);
+
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response("Delete snapshot : " + snapshotId)
+                .build();
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
