@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux';
 
 const StyledContainer = styled.div`
   padding: 10px; 
+  background-color: #f0f0f0;
 `;
 
 const MessagesContainer = styled.div`
-  max-height: 70vh; 
+  height: 80vh; 
   overflow-y: auto;
   background-color: #f0f0f0;
   padding: 15px;
@@ -89,10 +90,12 @@ const ProfileImage = styled.div`
 const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) => {
   const [localMessageList, setLocalMessageList] = useState(messageList);
   const messagesEndRef = useRef(null);  // 스크롤 위치를 위한 ref
+  const messagesContainerRef = useRef(null);
+
 
   const accountId = localStorage.getItem("accountId");
 
-  useEffect(() => {
+  useEffect(() => {    
     // messageList에 새 메시지가 추가된 경우에만 localMessageList 업데이트
     if (messageList.length !== localMessageList.length) {
       setLocalMessageList(messageList);
@@ -101,10 +104,20 @@ const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) =
     console.log(memberList);
   }, [messageList, localMessageList.length]);
 
+  // useEffect(() => {
+  //   // 스크롤을 컨테이너의 최하단으로 설정
+  //   const scrollHeight = messagesContainerRef.current.scrollHeight;
+  //   messagesContainerRef.current.scrollTop = scrollHeight;
+  // }, []);
+
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [localMessageList]);
+
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  // }, [])
 
   const renderMessageContent = (message) => {
     // 이미지 URL인 경우 이미지로 표시
