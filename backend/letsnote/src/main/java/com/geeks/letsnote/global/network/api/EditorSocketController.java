@@ -5,35 +5,41 @@ import com.geeks.letsnote.domain.account.dto.ResponseAccount;
 import com.geeks.letsnote.domain.message.application.MessageService;
 import com.geeks.letsnote.domain.message.dto.MessageReqeust;
 import com.geeks.letsnote.domain.message.dto.MessageResponse;
+import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.*;
+import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+
+import java.io.IOException;
+
+
+@Slf4j
 @Controller
+@RequiredArgsConstructor
 public class EditorSocketController {
 
 	private final MessageService messageService;
-
 	private final AccountService accountService;
-
-    public EditorSocketController(MessageService messageService, AccountService accountService) {
-        this.messageService = messageService;
-        this.accountService = accountService;
-    }
-
+	private final CustomWebSocketHandlerDecorator customWebSocketHandlerDecorator;
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
-	public SocketResponse.Content coordinateInfo(SocketRequest.Content content) throws Exception {
-		return new SocketResponse.Content(content.instrument(), content.x(), content.y());
+	public SocketResponse.Coordinate coordinateInfo(@Valid @Payload SocketRequest.Coordinate coordinate) {
+		String spaceId = "23dbaeebfe9a4f0db43dfc71b7ca3bb1";
+		return new SocketResponse.Coordinate(spaceId, coordinate.instrument(), coordinate.x(), coordinate.y());
 	}
 
 	@MessageMapping("/chat/sendMessage")
 	@SendTo("/topic/chat/public")
-	public SocketResponse.Chat sendMessage(@Payload SocketRequest.Chat chatMessage) {
+	public SocketResponse.Chat sendMessage(@Valid @Payload SocketRequest.Chat chatMessage) {
+		String spaceId = "23dbaeebfe9a4f0db43dfc71b7ca3bb1";
 		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
 				.spaceId(chatMessage.spaceId())
 				.accountId(chatMessage.accountId())
@@ -41,17 +47,57 @@ public class EditorSocketController {
 				.build();
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-		return new SocketResponse.Chat(nickName.nickname(), result.msgContent(), result.timestamp());
+		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-//	@MessageMapping("/chat/addUser")
-//	@SendTo("/topic/chat/public")
-//	public SocketResponse.Chat addUser(@Payload SocketRequest.Chat chatMessage,
-//									   SimpMessageHeaderAccessor headerAccessor) {
-//
-//		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
-//		headerAccessor.getSessionAttributes().put("username", nickName.nickname());
-//		return new SocketResponse.Chat(chatMessage.msgContent(), nickName.nickname());
-//	}
+	@MessageMapping("/workspace/{workSpaceId}/join}")
+	@SendTo("/topic/workspace/{workSpaceId}/join}")
+	public SocketResponse.WorkSpace joinWorkSpace(@Valid @Header("accountId")Long accountId, @DestinationVariable String workSpaceId, StompHeaderAccessor stompHeaderAccessor) {
+		return new SocketResponse.WorkSpace(workSpaceId);
+	}
+
+	@MessageMapping("/workspace/{workSpaceId}/chat/sendMessage")
+	@SendTo("/topic/workspace/{workSpaceId}/chat/public")
+	public SocketResponse.Chat sendWorkSpaceMessage(
+			@Valid @Payload SocketRequest.Chat chatMessage,
+			@DestinationVariable String spaceId) {
+
+		MessageReqeust.information messageInfo = MessageReqeust.information.builder()
+				.spaceId(spaceId)
+				.accountId(chatMessage.accountId())
+				.msgContent(chatMessage.msgContent())
+				.build();
+		MessageResponse.information result = messageService.createMessage(messageInfo);
+		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
+
+		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
+	}
+
+	@MessageMapping("/workspace/{workSpaceId}/editor/sendCoordinate")
+	@SendTo("/topic/workspace/{workSpaceId}/editor/public")
+	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String workSpaceId) throws Exception {
+		return new SocketResponse.Coordinate(workSpaceId, content.instrument(), content.x(), content.y());
+	}
+
+	@MessageExceptionHandler
+	@SendToUser("/queue/errors")
+	public String handleException(Throwable exception, StompHeaderAccessor stompHeaderAccessor) throws IOException {
+
+		if (exception instanceof AccessDeniedException) {
+			String sessionId = stompHeaderAccessor.getSessionId();
+			log.info("session = {}, connection remove", sessionId);
+			customWebSocketHandlerDecorator.closeSession(sessionId);
+		}
+//		사소한 예외일 경우 사용
+//		else if (exception instanceof CommonException) {
+//			return "server exception: " + exception.getMessage();
+//		}
+		else {
+			String sessionId = stompHeaderAccessor.getSessionId();
+			customWebSocketHandlerDecorator.closeSession(sessionId);
+		}
+
+		return "server exception: " + exception.getMessage() + "server session clear";
+	}
 
 }

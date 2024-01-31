@@ -8,7 +8,7 @@ import lombok.Builder;
 public record SocketRequest() {
 
 	@Builder
-	public record Content(
+	public record Coordinate(
 			@NotNull
 			String spaceId,
 			@NotNull

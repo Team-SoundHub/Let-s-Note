@@ -53,4 +53,12 @@ public record ResponseAccount() {
             String nickname
     ){
     }
+
+    @Builder
+    public record AccountId(
+            @NotNull
+            Long accountId
+    ){
+    }
+
 }

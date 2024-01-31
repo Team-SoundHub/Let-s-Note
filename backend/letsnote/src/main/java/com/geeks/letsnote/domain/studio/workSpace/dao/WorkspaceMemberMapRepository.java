@@ -19,4 +19,8 @@ public interface WorkspaceMemberMapRepository extends JpaRepository<WorkspaceMem
 
     @Query("SELECT w.accountId FROM WorkspaceMemberMap w WHERE w.spaceId = :spaceId")
     List<Long> findAccountIdsBySpaceId(@Param("spaceId")String spaceId);
+
+    @Query("SELECT CASE WHEN COUNT(w) > 0 THEN true ELSE false END FROM WorkspaceMemberMap w WHERE w.spaceId = :spaceId AND w.accountId = :accountId")
+    boolean existsBySpaceIdAndAccountId(@Param("spaceId") String spaceId, @Param("accountId") Long accountId);
+
 }
