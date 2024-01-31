@@ -61,9 +61,9 @@ const LandingPage = () => {
         setIsLoggedIn(true);
         closeLoginModal();
 
-        localStorage.setItem("access", accessToken);
-        localStorage.setItem("refresh", refreshToken);        
-        localStorage.setItem("accountId", accountId);
+        sessionStorage.setItem("access", accessToken);
+        sessionStorage.setItem("refresh", refreshToken);        
+        sessionStorage.setItem("accountId", accountId);
       }
     } catch (error) {
       console.error("로그인 오류:", error);

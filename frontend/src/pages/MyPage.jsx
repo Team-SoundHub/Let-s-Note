@@ -70,10 +70,10 @@ const MyPage = () => {
     setIsCreateModalOpen(true);
   };
 
-  const handleCreateWorkSpace = async (title, description) => {
-    console.log("작업실 생성 시도:", title, description);
+  const handleCreateWorkSpace = async () => {
+    console.log("작업실 생성 시도:", workSpaceTitle, workSpaceDesc);
     try {
-      const response = await createWorkSpace(title, description, []);
+      const response = await createWorkSpace(workSpaceTitle, workSpaceDesc, []);
       if (response) {
         navigate(`/workspace/${response.response.spaceId}`);
         console.log("작업실 생성 완료");
