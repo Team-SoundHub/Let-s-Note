@@ -40,7 +40,7 @@ export const sendCoordinate = (instrument, x, y) => {
       instrument: instrument,
       x: x,
       y: y,
-      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",      
+      spaceId: spaceId,      
     }),
   });
 };
@@ -53,7 +53,7 @@ export const sendMessage = (message, accountId, spaceId) => {
     body: JSON.stringify({
       msgContent: message,
       accountId: accountId,      
-      spaceId: "2d92f8cb4ff848308a2a953e5b9b3966",
+      spaceId: spaceId,
     }),
   });
 };
