@@ -6,7 +6,7 @@ const fetchChatMessages = createAsyncThunk(
   'chat/fetchChatMessages',
   async (spaceId) => {
     const response = await getChatMessages(spaceId);
-    return response.data;
+    return { spaceId, messages: response.response };
   }
 );
 
@@ -26,12 +26,12 @@ const chatSlice = createSlice({
   },
 
   // createAsyncThunk에 의해 생성된 비동기 액션 처리.   
-  // extraReducers: (builder) => {
-  //   builder.addCase(fetchChatMessages.fulfilled, (state, action) => {
-  //     const { spaceId, messages } = action.payload;
-  //     state.spaces[spaceId] = messages;
-  //   });
-  // },
+  extraReducers: (builder) => {
+    builder.addCase(fetchChatMessages.fulfilled, (state, action) => {
+      const { spaceId, messages } = action.payload;
+      state.spaces[spaceId] = messages;
+    });
+  },
 });
 
 export const { addMessage } = chatSlice.actions;
