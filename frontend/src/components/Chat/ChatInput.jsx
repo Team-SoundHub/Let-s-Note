@@ -97,10 +97,8 @@ const ChatInput = ({ handleSendMessage }) => {
     event.preventDefault();
     if (selectedFile) {
       dispatch(uploadImage(selectedFile));
-    } else {
-      console.log("Chatinput-Send 1");
-      handleSendMessage(message);
-      console.log("Chatinput-Send 2");
+    } else {      
+      handleSendMessage(message);      
     }
     setMessage('');
     setSelectedFile(null);
