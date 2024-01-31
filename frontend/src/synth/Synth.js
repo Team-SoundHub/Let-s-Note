@@ -25,13 +25,13 @@ class Synth {
         this.samplers[instrument] = new Tone.Sampler(
           scale,
           callback,
-          samples + instrument + "/"
+          "/audio/" + instrument + "/"
         );
       } else {
         this.samplers[instrument] = new Tone.Sampler(
           drumScale,
           callback,
-          samples + instrument + "/"
+          "/audio/" + instrument + "/"
         );
       }
       this.samplers[instrument].toDestination();
