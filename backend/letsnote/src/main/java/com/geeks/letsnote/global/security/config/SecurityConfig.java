@@ -28,7 +28,9 @@ public class SecurityConfig {
             "/api/v1/accounts/token",
             "/api/v1/members/register",
             "/test",
-            "/swagger/**"
+            "/swagger/**",
+            "api/v1/feeds",
+            "api/v1/feeds/*"
     };
 
     public SecurityConfig(
@@ -58,7 +60,7 @@ public class SecurityConfig {
                         registry.requestMatchers(AUTH_WHITELIST).permitAll()
                 )
                 .authorizeHttpRequests(registry -> registry
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
