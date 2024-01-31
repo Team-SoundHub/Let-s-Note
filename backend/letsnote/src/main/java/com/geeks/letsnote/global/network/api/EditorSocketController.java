@@ -58,14 +58,14 @@ public class EditorSocketController {
 		return new SocketResponse.Chat(chatMessage.spaceId(), nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-	@MessageMapping("/workspace/{workSpaceId}/join}")
-	@SendTo("/topic/workspace/{workSpaceId}/join}")
-	public SocketResponse.WorkSpace joinWorkSpace(@Valid @Header("accountId")Long accountId, @DestinationVariable String workSpaceId, StompHeaderAccessor stompHeaderAccessor) {
-		return new SocketResponse.WorkSpace(workSpaceId);
+	@MessageMapping("/workspace/{spaceId}/join}")
+	@SendTo("/topic/workspace/{spaceId}/join}")
+	public SocketResponse.WorkSpace joinWorkSpace(@Valid @Header("accountId")Long accountId, @DestinationVariable String spaceId, StompHeaderAccessor stompHeaderAccessor) {
+		return new SocketResponse.WorkSpace(spaceId);
 	}
 
-	@MessageMapping("/workspace/{workSpaceId}/chat/sendMessage")
-	@SendTo("/topic/workspace/{workSpaceId}/chat/public")
+	@MessageMapping("/workspace/{spaceId}/chat/sendMessage")
+	@SendTo("/topic/workspace/{spaceId}/chat/public")
 	public SocketResponse.Chat sendWorkSpaceMessage(
 			@Valid @Payload SocketRequest.Chat chatMessage,
 			@DestinationVariable String spaceId) {
@@ -81,10 +81,10 @@ public class EditorSocketController {
 		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-	@MessageMapping("/workspace/{workSpaceId}/editor/sendCoordinate")
-	@SendTo("/topic/workspace/{workSpaceId}/editor/public")
-	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String workSpaceId) throws Exception {
-		return new SocketResponse.Coordinate(workSpaceId, content.instrument(), content.x(), content.y());
+	@MessageMapping("/workspace/{spaceId}/editor/sendCoordinate")
+	@SendTo("/topic/workspace/{spaceId}/editor/public")
+	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
+		return new SocketResponse.Coordinate(spaceId, content.instrument(), content.x(), content.y());
 	}
 
 	@MessageExceptionHandler

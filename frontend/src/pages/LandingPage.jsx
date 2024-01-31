@@ -31,7 +31,7 @@ const LandingPage = () => {
             
             const {
                 accessToken, 
-                refreshToken,                
+                refreshToken
                 accountId
             } = response.response;            
 
