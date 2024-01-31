@@ -92,4 +92,13 @@ public class SnapshotImpl implements SnapshotService {
 
         return allNotes;
     }
+
+    @Override
+    @Transactional
+    public void deleteSnapshotById(String snapshotId) {
+        Optional<Snapshot> snapshot = snapshotRepository.findById(snapshotId);
+        Workspace snapshotWorkspace = workspaceService.getById(snapshot.get().getSpaceId());
+        workspaceService.decreaseSnapshotCountById(snapshotWorkspace);
+        snapshotRepository.deleteById(snapshotId);
+    }
 }

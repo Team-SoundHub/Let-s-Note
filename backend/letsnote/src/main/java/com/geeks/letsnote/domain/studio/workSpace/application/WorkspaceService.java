@@ -26,4 +26,6 @@ public interface WorkspaceService {
     boolean checkMaxCountSnapshot(String spaceId);
 
     void increaseSnapshotCount(String spaceId);
+
+    void decreaseSnapshotCountById(Workspace snapshotWorkspace);
 }

@@ -160,4 +160,10 @@ public class WorkspaceImpl implements WorkspaceService {
     public void increaseSnapshotCount(String spaceId) {
         workspaceRepository.incrementSnapshotCount(spaceId);
     }
+
+    @Override
+    @Transactional
+    public void decreaseSnapshotCountById(Workspace snapshotWorkspace) {
+        workspaceRepository.decrementSnapshotCount(snapshotWorkspace.getSpaceId());
+    }
 }
