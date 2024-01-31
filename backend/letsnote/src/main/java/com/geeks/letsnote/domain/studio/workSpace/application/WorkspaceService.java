@@ -28,4 +28,6 @@ public interface WorkspaceService {
     void increaseSnapshotCount(String spaceId);
 
     void decreaseSnapshotCountById(Workspace snapshotWorkspace);
+
+    ResponseWorkspaces.MemberNickname addMemberOfWorkspace(String userId, String spaceId);
 }

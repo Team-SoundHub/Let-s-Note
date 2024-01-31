@@ -1,7 +1,9 @@
 package com.geeks.letsnote.domain.studio.workSpace.application.impl;
 
 
+import com.geeks.letsnote.domain.account.application.AccountService;
 import com.geeks.letsnote.domain.account.dao.AccountRepository;
+import com.geeks.letsnote.domain.account.entity.Account;
 import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import com.geeks.letsnote.domain.studio.snapshot.application.SnapshotService;
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
@@ -26,15 +28,17 @@ public class WorkspaceImpl implements WorkspaceService {
     private final WorkspaceMemberMapService workspaceMemberMapService;
     private final NoteInstrumentMapService noteInstrumentMapService;
     private final SnapshotService snapshotService;
+    private final AccountService accountService;
 
 
-    public WorkspaceImpl(WorkspaceRepository workspaceRepository, AccountRepository accountRepository, WorkspaceMemberMapRepository workspaceMemberMapRepository, WorkspaceMemberMapService workspaceMemberMapService, NoteInstrumentMapService noteInstrumentMapService, SnapshotService snapshotService) {
+    public WorkspaceImpl(WorkspaceRepository workspaceRepository, AccountRepository accountRepository, WorkspaceMemberMapRepository workspaceMemberMapRepository, WorkspaceMemberMapService workspaceMemberMapService, NoteInstrumentMapService noteInstrumentMapService, SnapshotService snapshotService, AccountService accountService) {
         this.workspaceRepository = workspaceRepository;
         this.accountRepository = accountRepository;
         this.workspaceMemberMapRepository = workspaceMemberMapRepository;
         this.workspaceMemberMapService = workspaceMemberMapService;
         this.noteInstrumentMapService = noteInstrumentMapService;
         this.snapshotService = snapshotService;
+        this.accountService = accountService;
     }
 
     @Override
@@ -165,5 +169,17 @@ public class WorkspaceImpl implements WorkspaceService {
     @Transactional
     public void decreaseSnapshotCountById(Workspace snapshotWorkspace) {
         workspaceRepository.decrementSnapshotCount(snapshotWorkspace.getSpaceId());
+    }
+
+    @Override
+    public ResponseWorkspaces.MemberNickname addMemberOfWorkspace(String userId, String spaceId) {
+        Optional<Account> user = accountService.getAccountFromUserId(userId);
+        if(user != null){
+            workspaceMemberMapService.addMemberMap(spaceId,user.get().getId());
+            return ResponseWorkspaces.MemberNickname.builder()
+                    .nickname(user.get().getNickname()).build();
+        }
+        return null;
+
     }
 }
