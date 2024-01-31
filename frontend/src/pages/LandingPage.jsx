@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import tw from "tailwind-styled-components";
-import { useNavigate } from "react-router-dom";
 import login from "../api/loginApi";
 import Header from "../components/common/Header";
 import LoginModal from "../components/auth/LoginModal";
-import backgroundImage from "../assets/landing2.png";
+import PostCard from "../components/feed/PostCard";
 
 const LandingPage = () => {
-  const navigate = useNavigate();
   const [userId, setUserId] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -53,21 +50,15 @@ const LandingPage = () => {
   return (
     <>
       <Header userId={userId} openLoginModal={openLoginModal} />
-      <div
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          minHeight: "100vh", // 최소 높이를 뷰포트 높이로 설정
-        }}
-      >
-        {isLoginModalOpen && (
-          <LoginModal
-            closeLoginModal={closeLoginModal}
-            handleLogin={handleLogin}
-          />
-        )}
+      <div className="mt-10">
+        <PostCard />
       </div>
+      {isLoginModalOpen && (
+        <LoginModal
+          closeLoginModal={closeLoginModal}
+          handleLogin={handleLogin}
+        />
+      )}
     </>
   );
 };
