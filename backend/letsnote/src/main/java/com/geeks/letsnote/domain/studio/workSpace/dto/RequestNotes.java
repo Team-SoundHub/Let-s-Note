@@ -7,7 +7,7 @@ public record RequestNotes() {
     @Builder
     public record NoteDto(
             Instrument instrument,
-            Long noteX,
-            Long noteY
+            Integer noteX,
+            Integer noteY
     ){}
 }
