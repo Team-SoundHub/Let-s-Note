@@ -111,6 +111,15 @@ const ChatMessage = ({ messageList = [] }) => {
     if (message.msgContent.startsWith('http')) {
       return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px'}} />;
     }
+
+    if (message.msgContent === "신호등사진_1") {
+      return <img src={"/public/image.jpeg"} alt="uploaded" style={{ maxWidth: '200px'}} />;
+    }
+
+    if (message.msgContent === "신호등사진_2") {
+      return <img src={"/public/image_2.jpeg"} alt="uploaded" style={{ maxWidth: '200px'}} />;
+    }
+
     // 텍스트 메시지인 경우
     return <span>{message.msgContent}</span>;
   };  
