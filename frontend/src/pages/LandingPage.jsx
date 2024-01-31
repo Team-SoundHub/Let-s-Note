@@ -13,7 +13,7 @@ import { getMember } from "../api/workSpaceApi";
 import BackgroundImage from "../assets/landing/backgroundImage.jpg";
 
 const CardContainer = tw.div`
-  mt-10 mx-32 grid grid-cols-4 gap-6
+  mt-10 mx-[9%] grid grid-cols-4 gap-6
 `;
 
 const LandingContainer = tw.div`
@@ -70,6 +70,15 @@ const LandingPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Clear session storage on logout
+    sessionStorage.removeItem("access");
+    sessionStorage.removeItem("refresh");
+    sessionStorage.removeItem("nickname");
+    sessionStorage.removeItem("accountId");
+    setIsLoggedIn(false);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,7 +89,16 @@ const LandingPage = () => {
       }
     };
 
+    const ConfirmLogin = () => {
+      if (sessionStorage.getItem("access")) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    };
+
     fetchData();
+    ConfirmLogin();
   }, []);
 
   useEffect(() => {
@@ -110,7 +128,12 @@ const LandingPage = () => {
 
   return (
     <>
-      <Header userId={userId} openLoginModal={openLoginModal} />
+      <Header
+        userId={userId}
+        isLoggedIn={isLoggedIn}
+        openLoginModal={openLoginModal}
+        handleLogout={handleLogout}
+      />
       <LandingContainer>
         <div className={TransparentImageStyle}>
           <img

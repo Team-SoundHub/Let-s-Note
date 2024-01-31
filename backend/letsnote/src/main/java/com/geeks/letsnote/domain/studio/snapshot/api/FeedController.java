@@ -23,7 +23,7 @@ public class FeedController {
     }
 
     @GetMapping("")
-    public ResponseEntity<CommonResponse> getFeeds() {
+    public ResponseEntity<CommonResponse> getFeeds(){
         List<ResponseSnapshot.SnapshotDto> feeds = snapshotService.getAllSnapshots();
         CommonResponse response = CommonResponse.builder()
                 .success(true)
@@ -34,7 +34,7 @@ public class FeedController {
     }
 
     @GetMapping("/snapshot-id")
-    public ResponseEntity<CommonResponse> getAllNoteOfSnapshot(@RequestParam("v") String snapshotId) {
+    public ResponseEntity<CommonResponse> getAllNoteOfSnapshot(@RequestParam("v") String snapshotId){
         List<ResponseNotes.Notes> snapshotNotes = snapshotService.getAllNotesOfSnapshot(snapshotId);
 
         CommonResponse response = CommonResponse.builder()
@@ -42,6 +42,6 @@ public class FeedController {
                 .response(snapshotNotes)
                 .build();
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

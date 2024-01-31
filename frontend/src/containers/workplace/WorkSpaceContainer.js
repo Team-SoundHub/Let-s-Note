@@ -4,7 +4,7 @@ import tw from "tailwind-styled-components";
 import BeatGrid from "../../components/BeatGrid/BeatGrid";
 import Synth from "../../synth/Synth";
 import Loading from "../../components/Loading";
-import { availableNotes } from "../../constants/scale";
+import { availableNotes, availableDrumNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
 
@@ -52,13 +52,11 @@ class WorkSpaceContainer extends Component {
   constructor(props) {
     super(props);
 
-    const drumNotes = [36, 38];
-
     this.state = {
       loading: true,
-      columns: 30,
+      columns: 100,
       availableNotes,
-      drumNotes,
+      availableDrumNotes,
       synth: null,
       visualizeInstrument: [true, true, true],
     };
@@ -98,7 +96,7 @@ class WorkSpaceContainer extends Component {
 
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
-    if (currentCols + diff < 30 || currentCols + diff > 60) return;
+    if (currentCols + diff < 50 || currentCols + diff > 150) return;
 
     this.setState({ columns: currentCols + diff });
   };
@@ -160,11 +158,11 @@ class WorkSpaceContainer extends Component {
     this.setState({ availableNotes: scale });
   };
 
-  setDrumScale = () => {
-    const drumScale = [36, 38];
+  setDrumScale = (drumScale) => {
+    drumScale = ["E2", "D2"];
 
     // Update the state to set the drum scale
-    this.setState({ drumNotes: drumScale });
+    this.setState({ availableDrumNotes: drumScale });
   };
 
   render() {
@@ -173,7 +171,7 @@ class WorkSpaceContainer extends Component {
       columns,
       synth,
       availableNotes,
-      drumNotes,
+      availableDrumNotes,
       visualizeInstrument,
     } = this.state;
 
@@ -196,7 +194,7 @@ class WorkSpaceContainer extends Component {
                 ref="BeatGrid"
                 synth={synth}
                 scale={availableNotes}
-                drumScale={drumNotes}
+                drumScale={availableDrumNotes}
                 columns={columns}
                 background="#34AEA5"
                 foreground="#ffffff"

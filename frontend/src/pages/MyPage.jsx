@@ -30,11 +30,12 @@ const SectionTitle = tw.h2`
   font-bold
 `;
 
-const WorkSpacesSection = styled.div`
-  display: flex;
-  overflow-x: auto;
-  gap: 20px;
-  padding: 10px 0;
+const WorkSpacesSection = tw.div`
+    flex
+    overflow-x-auto
+    gap-5
+    px-2.5
+    items-start
 `;
 
 const SnapshotsSection = styled.div`
@@ -48,13 +49,6 @@ const Divider = styled.hr`
   height: 1px;
   background-color: #ddd;
   margin: 20px 0;
-`;
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
 `;
 
 const MyPage = () => {
@@ -141,6 +135,7 @@ const MyPage = () => {
           {workspaces.map((workspace) => (
             <div
               key={workspace.spaceId}
+              className=" flex h-full"
               onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
             >
               <PostCard

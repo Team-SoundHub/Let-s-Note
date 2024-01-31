@@ -63,13 +63,13 @@ public class SnapshotController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/snapshot-id")
-    public ResponseEntity<CommonResponse> getAllNoteOfSnapshot(@RequestParam("v") String snapshotId){
-        List<ResponseNotes.Notes> snapshotNotes = snapshotService.getAllNotesOfSnapshot(snapshotId);
+    @DeleteMapping("/snapshot-id")
+    public ResponseEntity<CommonResponse> deleteSnapshot(@RequestParam("v") String snapshotId) {
+        snapshotService.deleteSnapshotById(snapshotId);
 
         CommonResponse response = CommonResponse.builder()
                 .success(true)
-                .response(snapshotNotes)
+                .response("Delete snapshot : " + snapshotId)
                 .build();
 
         return new ResponseEntity<>(response,HttpStatus.OK);

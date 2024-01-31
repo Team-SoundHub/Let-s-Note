@@ -162,7 +162,7 @@ const LoginModal = ({ closeLoginModal, handleLogin }) => {
               </ModalCloseButton>
             </ModalHeader>
             <ModalBody>
-              <ModalForm action="#">
+              <ModalForm>
                 <div>
                   <label
                     htmlFor="email"

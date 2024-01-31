@@ -21,4 +21,9 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, String> {
     @Transactional
     @Query("UPDATE Workspace w SET w.snapshotCount = w.snapshotCount + 1 WHERE w.spaceId = :spaceId")
     void incrementSnapshotCount(@Param("spaceId") String spaceId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Workspace w SET w.snapshotCount = w.snapshotCount - 1 WHERE w.spaceId = :spaceId")
+    void decrementSnapshotCount(@Param("spaceId") String spaceId);
 }
