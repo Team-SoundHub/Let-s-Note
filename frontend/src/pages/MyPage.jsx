@@ -38,10 +38,12 @@ const WorkSpacesSection = tw.div`
     items-start
 `;
 
-const SnapshotsSection = styled.div`
-  display: flex;
-  gap: 20px;
-  padding: 20px 0;
+const SnapshotsSection = tw.div`
+flex
+overflow-x-auto
+gap-5
+px-2.5
+items-start
 `;
 
 const Divider = styled.hr`
@@ -71,21 +73,20 @@ const MyPage = () => {
   };
 
   const handleCreateWorkSpace = async (title, description) => {
-    console.log("작업실 생성 시도:", title, description);
+    // console.log("작업실 생성 시도:", title, description);
     try {
       const response = await createWorkSpace(title, description, []);
-      console.log("작업실 생성", response);
+      // console.log("작업실 생성", response);
       if (response) {
         navigate(`/workspace/${response.response.spaceId}`);
-        console.log("작업실 생성 완료");
+        // console.log("작업실 생성 완료");
       } else {
-        console.log("작업실 생성 실패");
+        // console.log("작업실 생성 실패");
       }
     } catch (error) {
       console.error("작업실 생성 오류:", error);
     }
   };
-
 
   const accessToken = sessionStorage.getItem("access");
   const accountId = sessionStorage.getItem("accountId");
@@ -94,8 +95,8 @@ const MyPage = () => {
     const fetchMyPageInfo = async () => {
       try {
         const response = await getMyPageInfo(accountId);
-        console.log(response);
-        console.log("마이페이지 인포 받음");
+        // console.log(response);
+        // console.log("마이페이지 인포 받음");
         setWorkspaces(response.response); // API 응답으로 받은 작업실 목록을 상태에 저장
       } catch (error) {
         console.error("마이페이지 정보 로드 실패:", error);
@@ -106,8 +107,8 @@ const MyPage = () => {
     const fetchMySnapshotInfo = async () => {
       try {
         const response = await getMySnapshotInfo(accountId);
-        console.log(response);
-        console.log("스냅샷 인포 받음");
+        // console.log(response);
+        // console.log("스냅샷 인포 받음");
         setSnapshots(response.response); // API 응답으로 받은 스냅샷 목록을 상태에 저장
       } catch (error) {
         console.error("스냅샷 정보 로드 실패:", error);
@@ -130,7 +131,9 @@ const MyPage = () => {
         {isCreateModalOpen && (
           <CreateSpaceModal
             onClose={handleModalClose}
-            onPublish={(title, description) => handleCreateWorkSpace(title, description)}
+            onPublish={(title, description) =>
+              handleCreateWorkSpace(title, description)
+            }
           />
         )}
         <WorkSpacesSection>

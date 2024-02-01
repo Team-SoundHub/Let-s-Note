@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const StyledContainer = styled.div`
-  padding: 10px; 
+  padding: 10px;
   background-color: #f0f0f0;
 `;
 
 const MessagesContainer = styled.div`
-  height: 80vh; 
+  height: 80vh;
   overflow-y: auto;
   background-color: #f0f0f0;
   padding: 15px;
@@ -56,13 +56,12 @@ const Timestamp = styled.span`
   color: #a0a0a0;
 `;
 
-
 const ProfileImage = styled.div`
   width: 38px;
   height: 38px;
-  border-radius: 50%; 
+  border-radius: 50%;
   margin-right: 10px;
-  background-color: #ccc; 
+  background-color: #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,36 +69,39 @@ const ProfileImage = styled.div`
   font-weight: bold;
   color: #333;
 
-  @media screen and (max-width: 768px) {    
-      width: 15px;  
-      height: 15px; 
-      border-radius: 50%; 
-      margin-right: 10px;
-      background-color: #ccc; 
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      font-weight: bold;
-      color: #333; 
+  @media screen and (max-width: 768px) {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
   }
 `;
 
-
-
-const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) => {
+const ChatMessage = ({
+  messageList = [],
+  memberList = [],
+  spaceId,
+  nickname,
+}) => {
   const [localMessageList, setLocalMessageList] = useState(messageList);
-  const messagesEndRef = useRef(null);  // 스크롤 위치를 위한 ref
+  const messagesEndRef = useRef(null); // 스크롤 위치를 위한 ref
   const messagesContainerRef = useRef(null);
   const accountId = sessionStorage.getItem("accountId");
 
-  useEffect(() => {    
+  useEffect(() => {
     // messageList에 새 메시지가 추가된 경우에만 localMessageList 업데이트
     if (messageList.length !== localMessageList.length) {
       setLocalMessageList(messageList);
     }
 
-    console.log(memberList);
+    // console.log(memberList);
   }, [messageList, localMessageList.length]);
 
   // useEffect(() => {
@@ -110,7 +112,7 @@ const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) =
 
   useEffect(() => {
     // 새 메시지가 추가될 때 스크롤을 하단으로 이동
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [localMessageList]);
 
   // useEffect(() => {
@@ -119,8 +121,14 @@ const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) =
 
   const renderMessageContent = (message) => {
     // 이미지 URL인 경우 이미지로 표시
-    if (message.msgContent.startsWith('http')) {
-      return <img src={message.msgContent} alt="uploaded" style={{ maxWidth: '200px' }} />;
+    if (message.msgContent.startsWith("http")) {
+      return (
+        <img
+          src={message.msgContent}
+          alt="uploaded"
+          style={{ maxWidth: "200px" }}
+        />
+      );
     }
 
     // 텍스트 메시지인 경우
@@ -136,7 +144,8 @@ const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) =
         return (
           <StyledContainer key={message._id}>
             <MessageContainer>
-              <ProfileImage>{1}</ProfileImage> {/* 여기에 실제 이미지 URL을 적용할 수 있습니다 */}
+              <ProfileImage>{1}</ProfileImage>{" "}
+              {/* 여기에 실제 이미지 URL을 적용할 수 있습니다 */}
               <MessageContent>
                 <Nickname>{message.nickname}</Nickname>
                 {message.accountId === accountId ? (
@@ -148,7 +157,7 @@ const ChatMessage = ({ messageList = [], memberList = [], spaceId, nickname }) =
               </MessageContent>
             </MessageContainer>
           </StyledContainer>
-        )
+        );
       })}
       <div ref={messagesEndRef} />
     </MessagesContainer>

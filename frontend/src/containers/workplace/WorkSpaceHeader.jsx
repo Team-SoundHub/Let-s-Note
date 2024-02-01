@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
+import BeatButton from "../../components/BeatControls/BeatButton";
+import quarterNote from "../../assets/Instrument/quarter-note-8-svgrepo-com.png";
 
 // 메시지가 나타나는 애니메이션
 const fadeIn = keyframes`
@@ -80,6 +82,7 @@ const WorkSpaceHeader = ({
   isSnapshotExist,
   openAddMemberModal,
   memberList,
+  openUrlModal,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
@@ -131,6 +134,11 @@ const WorkSpaceHeader = ({
             memberList={memberList}
             openAddMemberModal={openAddMemberModal}
           />
+        </ButtonContainer>
+        <ButtonContainer>
+          <BeatButton onClick={openUrlModal} className="ml-2">
+            <img className="w-5 h-5" src={quarterNote} />
+          </BeatButton>
         </ButtonContainer>
         <ButtonContainer>
           <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>

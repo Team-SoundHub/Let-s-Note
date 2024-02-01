@@ -7,13 +7,13 @@ const Container = styled.div`
   margin: 0.5px;
   background-color: ${(props) =>
     props.active &&
-      props.visualizeInstrument[
+    props.visualizeInstrument[
       props.instrumentList.indexOf(props.instrument)
-      ] === true
+    ] === true
       ? pickActiveColor(props.instrument)
       : props.col % 8 < 4
-        ? "lightgray"
-        : props.inactiveColor};
+      ? "lightgray"
+      : props.inactiveColor};
   width: 2rem;
 
   margin-bottom: ${(props) => (props.row % 8 === 5 ? 2 : 0.5)}px;
@@ -51,17 +51,19 @@ const BeatBox = ({
 
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const notes = useSelector((state) => state.innerContent.notes);
-  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotesList);
+  const snapshotNotes = useSelector(
+    (state) => state.innerContent.snapshotNotesList
+  );
   const stateInner = useSelector((state) => state.innerContent);
 
-  // const notes = useSelector(state => 
+  // const notes = useSelector(state =>
   //   isSnapshot ? state.innerContent.snapshotNotesList : state.innerContent.notesList
   // );
 
   // useEffect(() => {
   //   // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
-  //   // console.log("instrumentData:", instrumentData.snapshotNotesList);    
-  //   console.log("BeatBox - snapshotNotes:", stateInner);  
+  //   // console.log("instrumentData:", instrumentData.snapshotNotesList);
+  //   console.log("BeatBox - snapshotNotes:", stateInner);
 
   //   if (isSnapshot){
   //     const activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
@@ -91,11 +93,11 @@ const BeatBox = ({
     if (isSnapshot) {
       // 스냅샷 노트 리스트에서 현재 위치에 해당하는 노트 찾기
       activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
-      console.log("snapshot의 activeNote:", activeNote);
+      // console.log("snapshot의 activeNote:", activeNote);
     } else {
       // 워크스페이스 모드인 경우
       activeNote = notes.find((n) => n.x === col && n.y === row);
-      console.log("workspace의 activeNote:", activeNote);
+      // console.log("workspace의 activeNote:", activeNote);
     }
 
     // 해당하는 노트가 있으면 상태 업데이트
@@ -105,10 +107,16 @@ const BeatBox = ({
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
     }
-  }, [snapshotNotes, notes, col, row, active, isSnapshot, setActiveBoxes, setActiveInstrument]);
-
-
-
+  }, [
+    snapshotNotes,
+    notes,
+    col,
+    row,
+    active,
+    isSnapshot,
+    setActiveBoxes,
+    setActiveInstrument,
+  ]);
 
   const instrumentList = ["piano", "guitar", "drum"];
 
@@ -134,10 +142,6 @@ const BeatBox = ({
       setActiveInstrument(row, undefined);
     }
   }, [innerContent]);
-
-  useEffect(() => {
-    console.log("instrument: ", instrument);
-  }, [instrument]);
 
   return (
     <Container
