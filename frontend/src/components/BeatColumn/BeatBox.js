@@ -16,7 +16,7 @@ const Container = styled.div`
       : props.inactiveColor};
   width: 2rem;
 
-  margin-bottom: ${(props) => (props.row % 8 === 5 ? 2 : 0.5)}px;
+  margin-bottom: ${(props) => (props.row % 12 === 11 ? 2 : 0.5)}px;
 `;
 
 const pickActiveColor = (instrument) => {
