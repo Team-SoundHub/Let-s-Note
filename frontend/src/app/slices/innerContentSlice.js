@@ -25,7 +25,7 @@ export const innerContentSlice = createSlice({
           state.notes.push({
             x: note.noteX,
             y: note.noteY,
-            instrument: instrumentGroup.instrument.toLowerCase()
+            instrument: instrumentGroup.instrument.toLowerCase(),
           });
         });
       });
@@ -34,24 +34,24 @@ export const innerContentSlice = createSlice({
     setSnapshotNotesList: (state, action) => {
       state.snapshotNotesList = [];
       action.payload.forEach((instrumentGroup) => {
-        console.log("리덕스:", instrumentGroup);
-        console.log("snapshotNotesList:", state.snapshotNotesList);
+        // console.log("리덕스:", instrumentGroup);
+        // console.log("snapshotNotesList:", state.snapshotNotesList);
         if (instrumentGroup.notes) {
           instrumentGroup.notes.forEach((note) => {
             state.snapshotNotesList.push({
               x: note.noteX,
               y: note.noteY,
-              instrument: instrumentGroup.instrument.toLowerCase()
+              instrument: instrumentGroup.instrument.toLowerCase(),
             });
           });
-        }        
+        }
       });
     },
-
   },
 });
 
-export const { setInnerContent, setNotesList, setSnapshotNotesList } = innerContentSlice.actions;
+export const { setInnerContent, setNotesList, setSnapshotNotesList } =
+  innerContentSlice.actions;
 
 export const selectInnerContent = (state) => state.sample.innerContent;
 export const selectNotes = (state) => state.innerContent.notes;

@@ -31,7 +31,6 @@ const SvgImage = tw.img`
 `;
 
 const MemberInfo = ({ memberList, openAddMemberModal }) => {
-  console.log("memberList: ", memberList);
   const renderMemberList = () => {
     return memberList.map((member, index) => (
       <div key={index} className="flex items-center space-x-2">

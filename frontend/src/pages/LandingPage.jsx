@@ -54,7 +54,6 @@ const LandingPage = () => {
       const userId = usernameInput.value;
       const password = passwordInput.value;
       const response = await login(userId, password);
-      console.log(response);
 
       const { accessToken, refreshToken, accountId } = response.response;
 
@@ -64,7 +63,7 @@ const LandingPage = () => {
         closeLoginModal();
 
         sessionStorage.setItem("access", accessToken);
-        sessionStorage.setItem("refresh", refreshToken);        
+        sessionStorage.setItem("refresh", refreshToken);
         sessionStorage.setItem("accountId", accountId);
       }
     } catch (error) {
@@ -109,8 +108,8 @@ const LandingPage = () => {
       for (let i = 0; i < postList.length; i++) {
         try {
           newPostCardList.push(
-            <div 
-              key={postList[i].snapshotId} 
+            <div
+              key={postList[i].snapshotId}
               onClick={() => navigate(`/snapshot/${postList[i].snapshotId}`)}
             >
               <PostCard
@@ -161,9 +160,7 @@ const LandingPage = () => {
           </div>
 
           <div className={ButtonDivStyle}>
-            <Button colored onClick={setLoginModalOpen}>
-              Sign up for free
-            </Button>
+            <Button onClick={setLoginModalOpen}>Sign up for free</Button>
           </div>
         </div>
         <CardContainer>{postCardList}</CardContainer>
