@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import add from "../../assets/control/plus-large-svgrepo-com.svg";
 const Container = tw.div`
@@ -45,6 +45,11 @@ const MemberInfo = ({ memberList, openAddMemberModal }) => {
       </div>
     ));
   };
+
+  useEffect(() => {
+    renderMemberList();
+    console.log(memberList);
+  }, [memberList]);
 
   return (
     <Container>
