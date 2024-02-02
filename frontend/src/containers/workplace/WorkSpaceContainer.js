@@ -54,7 +54,7 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: 100,
+      columns: 200,
       availableNotes,
       availableDrumNotes,
       synth: null,
@@ -96,7 +96,7 @@ class WorkSpaceContainer extends Component {
 
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
-    if (currentCols + diff < 50 || currentCols + diff > 150) return;
+    if (currentCols + diff < 100 || currentCols + diff > 300) return;
 
     this.setState({ columns: currentCols + diff });
   };
@@ -134,26 +134,40 @@ class WorkSpaceContainer extends Component {
 
   setInstrumentScale = (scale) => {
     scale = [
-      "B4",
-      "A4",
-      "G4",
-      "F4",
-      "E4",
-      "D4",
-      "C4",
-      "B3",
-      "A3",
-      "G3",
-      "F3",
-      "E3",
-      "D3",
-      "C3",
-      "B2",
-      "A2",
-      "G2",
-      "F2",
-      "E2",
       "D2",
+      "D#2",
+      "E2",
+      "F2",
+      "F#2",
+      "G2",
+      "G#2",
+      "A2",
+      "A#2",
+      "B2",
+      "C3",
+      "C#3",
+      "D3",
+      "D#3",
+      "E3",
+      "F3",
+      "F#3",
+      "G3",
+      "G#3",
+      "A3",
+      "A#3",
+      "B3",
+      "C4",
+      "C#4",
+      "D4",
+      "D#4",
+      "E4",
+      "F4",
+      "F#4",
+      "G4",
+      "G#4",
+      "A4",
+      "A#4",
+      "B4",
     ].reverse();
     this.setState({ availableNotes: scale });
   };

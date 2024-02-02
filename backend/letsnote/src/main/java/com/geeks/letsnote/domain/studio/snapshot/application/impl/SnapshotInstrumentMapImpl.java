@@ -37,12 +37,12 @@ public class SnapshotInstrumentMapImpl implements SnapshotInstrumentMapService {
         String guitarMapId = UUID.randomUUID().toString().replace("-","");
         snapshotInstrumentMapRepository.save(SnapshotInstrumentMap.builder().mapId(guitarMapId).instrument(Instrument.Guitar).snapshotId(snapshotId).build());
         ResponseNotes.Notes guitarNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId , Instrument.Guitar);
-        snapshotNoteService.storeSnapshotNotesByMap(guitarNotes,pianoMapId);
+        snapshotNoteService.storeSnapshotNotesByMap(guitarNotes,guitarMapId);
 
         String drumMapId = UUID.randomUUID().toString().replace("-","");
         snapshotInstrumentMapRepository.save(SnapshotInstrumentMap.builder().mapId(drumMapId).instrument(Instrument.Drum).snapshotId(snapshotId).build());
         ResponseNotes.Notes drumNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId , Instrument.Drum);
-        snapshotNoteService.storeSnapshotNotesByMap(drumNotes,pianoMapId);
+        snapshotNoteService.storeSnapshotNotesByMap(drumNotes,drumMapId);
     }
 
     @Override

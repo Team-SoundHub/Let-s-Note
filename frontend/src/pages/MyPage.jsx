@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import {
@@ -38,10 +39,12 @@ const WorkSpacesSection = tw.div`
     items-start
 `;
 
-const SnapshotsSection = styled.div`
-  display: flex;
-  gap: 20px;
-  padding: 20px 0;
+const SnapshotsSection = tw.div`
+flex
+overflow-x-auto
+gap-5
+px-2.5
+items-start
 `;
 
 const Divider = styled.hr`
@@ -55,12 +58,11 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   const [workspaces, setWorkspaces] = useState([]); // 작업실 목록을 저장하는 상태
-  const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태
-
-  const [workSpaceTitle, setWorkSpaceTitle] = useState("");
-  const [workSpaceDesc, setWorkSpaceDesc] = useState("");
-
+  const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태  
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
+  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);  
 
   const handleModalClose = () => {
     setIsCreateModalOpen(false);
@@ -70,13 +72,12 @@ const MyPage = () => {
     setIsCreateModalOpen(true);
   };
 
-  const handleCreateWorkSpace = async (title, description) => {
-    console.log("작업실 생성 시도:", title, description);
+  const handleCreateWorkSpace = async (title, description) => {    
     try {
-      const response = await createWorkSpace(title, description, []);
+      const response = await createWorkSpace(title, description, []);      
       if (response) {
         navigate(`/workspace/${response.response.spaceId}`);
-        console.log("작업실 생성 완료");
+        console.log("작업실 생성 완료", title, description);
       } else {
         console.log("작업실 생성 실패");
       }
@@ -85,15 +86,18 @@ const MyPage = () => {
     }
   };
 
-  const accessToken = localStorage.getItem("access");
-  const accountId = localStorage.getItem("accountId");
+  const accessToken = sessionStorage.getItem("access");
+  const accountId = sessionStorage.getItem("accountId");
 
   useEffect(() => {
+    console.log("workspace 리덕스 정보 청소 - workspaceNotes:", workspaceNotes);
+    console.log("snapshot 리덕스 정보 청소 - snapshotNotes:", snapshotNotes);
+
     const fetchMyPageInfo = async () => {
       try {
         const response = await getMyPageInfo(accountId);
         console.log(response);
-        console.log("마이페이지 인포 받음");
+        // console.log("마이페이지 인포 받음");
         setWorkspaces(response.response); // API 응답으로 받은 작업실 목록을 상태에 저장
       } catch (error) {
         console.error("마이페이지 정보 로드 실패:", error);
@@ -103,9 +107,8 @@ const MyPage = () => {
 
     const fetchMySnapshotInfo = async () => {
       try {
-        const response = await getMySnapshotInfo(accountId);
-        console.log(response);
-        console.log("스냅샷 인포 받음");
+        const response = await getMySnapshotInfo(accountId);        
+        console.log("스냅샷 인포 받음:", response);
         setSnapshots(response.response); // API 응답으로 받은 스냅샷 목록을 상태에 저장
       } catch (error) {
         console.error("스냅샷 정보 로드 실패:", error);
@@ -128,7 +131,9 @@ const MyPage = () => {
         {isCreateModalOpen && (
           <CreateSpaceModal
             onClose={handleModalClose}
-            onPublish={handleCreateWorkSpace}
+            onPublish={(title, description) =>
+              handleCreateWorkSpace(title, description)
+            }
           />
         )}
         <WorkSpacesSection>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import login from "../api/loginApi";
 import Header from "../components/common/Header";
@@ -27,6 +27,8 @@ const ButtonDivStyle =
   "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
   const [userId, setUserId] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -52,7 +54,6 @@ const LandingPage = () => {
       const userId = usernameInput.value;
       const password = passwordInput.value;
       const response = await login(userId, password);
-      console.log(response);
 
       const { accessToken, refreshToken, accountId } = response.response;
 
@@ -61,9 +62,9 @@ const LandingPage = () => {
         setIsLoggedIn(true);
         closeLoginModal();
 
-        localStorage.setItem("access", accessToken);
-        localStorage.setItem("refresh", refreshToken);        
-        localStorage.setItem("accountId", accountId);
+        sessionStorage.setItem("access", accessToken);
+        sessionStorage.setItem("refresh", refreshToken);
+        sessionStorage.setItem("accountId", accountId);
       }
     } catch (error) {
       console.error("로그인 오류:", error);
@@ -107,14 +108,19 @@ const LandingPage = () => {
       for (let i = 0; i < postList.length; i++) {
         try {
           newPostCardList.push(
-            <PostCard
-              snapshotTitle={postList[i].snapshotTitle}
-              memberNicknames={postList[i].memberNicknames}
-              snapshotContent={postList[i].snapshotContent}
-              ownerNickname={postList[i].ownerNickname}
-              snapshotId={postList[i].snapshotId}
-              updateAt={postList[i].updateAt}
-            ></PostCard>
+            <div
+              key={postList[i].snapshotId}
+              onClick={() => navigate(`/snapshot/${postList[i].snapshotId}`)}
+            >
+              <PostCard
+                snapshotTitle={postList[i].snapshotTitle}
+                memberNicknames={postList[i].memberNicknames}
+                snapshotContent={postList[i].snapshotContent}
+                ownerNickname={postList[i].ownerNickname}
+                snapshotId={postList[i].snapshotId}
+                updateAt={postList[i].updateAt}
+              ></PostCard>
+            </div>
           );
         } catch (error) {
           console.error("Get Member Error: ", error);
@@ -124,7 +130,7 @@ const LandingPage = () => {
     };
 
     renderPostCard();
-  }, [postList]);
+  }, [postList, navigate]);
 
   return (
     <>
@@ -154,9 +160,7 @@ const LandingPage = () => {
           </div>
 
           <div className={ButtonDivStyle}>
-            <Button colored onClick={setLoginModalOpen}>
-              Sign up for free
-            </Button>
+            <Button onClick={setLoginModalOpen}>Sign up for free</Button>
           </div>
         </div>
         <CardContainer>{postCardList}</CardContainer>

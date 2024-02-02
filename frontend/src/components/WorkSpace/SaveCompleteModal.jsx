@@ -41,11 +41,11 @@ const ShareButton = styled.button`
   }
 `;
 
-const SaveCompleteModal = ({ onClose, snapshotUrl }) => {
+const SaveCompleteModal = ({ onClose, snapshotUrl, snapshotId }) => {
     const navigate = useNavigate();
 
-    const handleGoSnapshot = () => {
-        navigate(snapshotUrl);
+    const handleGoSnapshot = () => {        
+        navigate(`/snapshot/${snapshotId}`);
     }
 
     return (

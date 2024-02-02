@@ -9,8 +9,9 @@ import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
+import NoteModal from "../components/WorkSpace/NoteModal";
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
-import { setNotesList } from "../app/slices/innerContentSlice";
+import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
 
@@ -18,19 +19,21 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-const spaceId = localStorage.getItem("spaceId");
-const accountId = localStorage.getItem("accountId");
+// const spaceId = localStorage.getItem("spaceId");
+const accountId = sessionStorage.getItem("accountId");
 
 const WorkPlacePage = () => {
   const dispatch = useDispatch();
 
-  const { spaceId } = useParams(); // 현재 spaceId 얻기  
+  const { spaceId } = useParams(); // 현재 spaceId 얻기
   localStorage.setItem("spaceId", spaceId);
 
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [snapshotCreated, setSnapshotCreated] = useState(false);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
+  const [isUrlModalOpen, setUrlModalOpen] = useState(false);
   const [snapshotUrl, setSnapshotUrl] = useState("");
+  const [snapshotId, setSnapshotId] = useState("");
   const [memberList, setMemberList] = useState([]);
   const [myNickname, setMyNickname] = useState([]);
   const [workspaceInfo, setWorkspaceInfo] = useState({
@@ -39,23 +42,22 @@ const WorkPlacePage = () => {
   });
 
   // 작업실 입장 시 데이터 요청
-  useEffect(() => {
+  useEffect(() => {    
     const fetchWorkspaceInfo = async () => {
-      try {
+      try {        
         const response = await getWorkspaceInfo(spaceId);
         setWorkspaceInfo(response.response);
-
-        // notesList 전체를 Redux store에 저장
-        dispatch(setNotesList(response.response.notesList));
-
-        console.log("작업실 입장 - workspaceInfo:", response.response);
+        
+        console.log("작업실 입장 데이터 요청:", response.response.notesList);
+        
+        dispatch(setWorkspaceNotes(response.response.notesList));
+      
       } catch (error) {
         console.error("Error fetching workspace info:", error);
       }
     };
 
     fetchWorkspaceInfo();
-    
   }, [spaceId, dispatch]);
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const WorkPlacePage = () => {
       try {
         const response = await getMyNickname();
         setMyNickname(response.response.nickname);
-        console.log("내 닉네임:", response.response.nickname);
+        // console.log("내 닉네임:", response.response.nickname);
       } catch (error) {
         console.error("내 닉네임 요청 Error:", error);
       }
@@ -73,7 +75,6 @@ const WorkPlacePage = () => {
       try {
         const memberResponse = await getMember(spaceId);
         setMemberList(memberResponse.response.membersNickname);
-        console.log("Initial member list:", memberList);
       } catch (error) {
         console.error("Error fetching workspace info:", error);
       }
@@ -82,11 +83,12 @@ const WorkPlacePage = () => {
     fetchMemberList();
   }, []);
 
-  useEffect(() => {  
-    return () => {      
-      localStorage.removeItem("spaceId");      
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem("spaceId");
+      dispatch(clearAllNotes()); 
     };
-  }, [spaceId]);
+  }, [spaceId, dispatch]);
 
   const handleModalOpen = () => {
     setIsReleaseModalOpen(true);
@@ -97,16 +99,29 @@ const WorkPlacePage = () => {
   };
 
   const handleSave = async (title, description) => {
+    // console.log("스냅샷 생성 시도");
     try {
       const response = await createSnapshot(spaceId, title, description);
+      // console.log("snapshotId:", response.response.snapshotId);
       setSnapshotUrl(
-        `https://www.letsnote.co.kr/snapshots/${response.response.snapshotId}`
+        `https://www.letsnote.co.kr/snapshot/${response.response.snapshotId}`
       );
+      setSnapshotId(`${response.response.snapshotId}`);
       setSnapshotCreated(true);
       setIsReleaseModalOpen(false);
     } catch (error) {
       console.error("스냅샷 저장 오류:", error);
     }
+  };
+
+  /* Url modal control */
+  const openUrlModal = () => {
+    setUrlModalOpen(true);
+    console.log("called");
+  };
+
+  const closeUrlModal = () => {
+    setUrlModalOpen(false);
   };
 
   const handleCloseSnapshotModal = () => {
@@ -116,7 +131,6 @@ const WorkPlacePage = () => {
   /* Add member control */
   const openAddMemberModal = () => {
     setIsAddMemberModalOpen(true);
-    console.log(isAddMemberModalOpen);
   };
 
   const closeAddMemberModal = () => {
@@ -130,17 +144,12 @@ const WorkPlacePage = () => {
 
     if (usernameInput) {
       const userId = usernameInput.value;
-      console.log("userId: ", userId);
 
       try {
         const response = await setMember(spaceId, userId);
-        console.log("addmember res: ", response);
-        const { newMemberName, newMemberImage } = response.response;
+        const { newMemberName } = response.response;
 
-        setMemberList((prevMemberList) => [
-          ...prevMemberList,
-          { name: newMemberName, image: newMemberImage },
-        ]);
+        setMemberList((prevMemberList) => [...prevMemberList, newMemberName]);
       } catch (error) {
         console.error("Add member error: ", error);
       }
@@ -156,6 +165,7 @@ const WorkPlacePage = () => {
         openAddMemberModal={openAddMemberModal}
         handleAddMember={handleAddMember}
         memberList={memberList}
+        openUrlModal={openUrlModal}
       />
       {isReleaseModalOpen && (
         <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
@@ -164,6 +174,7 @@ const WorkPlacePage = () => {
         <SaveCompleteModal
           onClose={handleCloseSnapshotModal}
           snapshotUrl={snapshotUrl}
+          snapshotId={snapshotId}
         />
       )}
       {isAddMemberModalOpen && (
@@ -172,8 +183,13 @@ const WorkPlacePage = () => {
           handleAddMember={handleAddMember}
         />
       )}
+      {isUrlModalOpen && <NoteModal closeUrlModal={closeUrlModal} />}
       <WorkSpaceContainer notesList={workspaceInfo.notesList} />
-      <ChatContainer spaceId={spaceId} memberList={memberList} nickname={myNickname} />
+      <ChatContainer
+        spaceId={spaceId}
+        memberList={memberList}
+        nickname={myNickname}
+      />
     </Container>
   );
 };

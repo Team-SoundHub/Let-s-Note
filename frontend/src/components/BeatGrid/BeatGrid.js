@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
@@ -21,9 +21,6 @@ class BeatGrid extends Component {
   state = { count: -1 };
 
   handleBoxClick = (row, column) => {
-    console.log(
-      `Clicked: Row ${row}, Column ${column}, Instrument ${this.props.synth.activeInstrument}`
-    );
     const instrument = this.props.synth.activeInstrument;
     sendCoordinate(instrument, row, column);
   };
