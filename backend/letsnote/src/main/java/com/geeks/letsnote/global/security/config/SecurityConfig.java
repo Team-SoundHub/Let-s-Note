@@ -29,9 +29,10 @@ public class SecurityConfig {
             "/api/v1/members/register",
             "/test",
             "/swagger/**",
-            "api/v1/feeds",
-            "api/v1/feeds/*",
-            "/letsnote/ws/**"
+            "/api/v1/feeds",
+            "/api/v1/feeds/*",
+            "/letsnote/ws/**",
+            "/api/v1/files/**",
     };
 
     public SecurityConfig(

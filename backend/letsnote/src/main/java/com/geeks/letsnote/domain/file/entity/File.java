@@ -1,12 +1,16 @@
 package com.geeks.letsnote.domain.file.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "file")
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class File {
     @Id
@@ -19,4 +23,7 @@ public class File {
 
     @Column(name = "account_id", length = 50)
     private String accountId;
+
+    @Column(name = "file_name", length = 40)
+    private String fileName;
 }

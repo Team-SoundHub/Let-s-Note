@@ -3,12 +3,13 @@ import { TextInput } from 'flowbite-react';
 import Button from '../common/Button';
 import { googleCustomSearchApi } from '../../api/googleCustomSearchApi';
 import SearchImageModal from '../WorkSpace/SearchImageModal';
-import FileStoreApi from "../../api/fileStoreApi";
+import FileStoreModal from '../WorkSpace/FileStoreModal';
 
 const GoogleCustomSearch = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [storedImage, setStoredImage] = useState(null);
 
     const handleSearchClick = async () => {
         try {
@@ -33,6 +34,10 @@ const GoogleCustomSearch = () => {
         setSelectedImage(imageUrl);
     };
 
+    const openFileStoreModal = (imageUrl) => {
+        setStoredImage(imageUrl);
+    };
+
     return (
         <div className="w-full h-full flex flex-col items-center p-4">
             <div>
@@ -48,11 +53,11 @@ const GoogleCustomSearch = () => {
                     {!loading && images.length > 0 && (
                         <ul className="flex">
                             {images.map((image, index) => (
-                                <li key={index} className="mr-4 h-fit cursor-pointer" onClick={() => openImageModal(image.imageUrl)} draggable="true">
+                                <li key={index} className="mr-4 h-fit cursor-pointer">
                                     <div>
-                                        <img src={image.imageUrl} width={250} height={200} alt={image.title}/>
+                                        <img src={image.imageUrl} width={250} height={200} alt={image.title} onClick={() => openImageModal(image.imageUrl)} draggable="true"/>
                                         <p className={'overflow-ellipsis'}>{image.title}</p>
-                                        <Button onClick={FileStoreApi(image.imageUrl)} disabled={loading}>
+                                        <Button onClick={() => openFileStoreModal(image.imageUrl)} disabled={loading}>
                                             악보에 저장
                                         </Button>
                                     </div>
@@ -62,7 +67,8 @@ const GoogleCustomSearch = () => {
                     )}
                 </div>
             </div>
-            {selectedImage && <SearchImageModal image_url={selectedImage} onClose={() => setSelectedImage(null)}/>}
+            {selectedImage && <SearchImageModal image_url={selectedImage} onClose={() => setSelectedImage(null)} />}
+            {storedImage && <FileStoreModal image_url={storedImage} onClose={() => setStoredImage(null)} />}
         </div>
     );
 };
