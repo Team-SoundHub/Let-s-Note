@@ -7,6 +7,9 @@ import Loading from "../../components/Loading";
 import { availableNotes, availableDrumNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
+import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
+import Button from "../../components/common/Button";
+import * as Tone from 'tone';
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -37,7 +40,7 @@ const LeftPanel = tw.div`
   mr-2
   items-center
   justify-center
-  
+
 `;
 
 const RightPanel = tw.div`
@@ -46,7 +49,7 @@ const RightPanel = tw.div`
   flex-shrink-0
 `;
 
-export const instrumentOptions = ["all", "piano", "guitar", "drum"];
+export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
 class WorkSpaceContainer extends Component {
   constructor(props) {
@@ -79,7 +82,13 @@ class WorkSpaceContainer extends Component {
     this.state.synth.repeat(BeatGrid.trigger, "8n");
   };
 
-  play = () => {
+  play = async () => {
+    // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
+    if (Tone.context.state !== 'running') {
+      await Tone.start();
+      console.log('Audio context is now running');
+    }
+
     this.state.synth.toggle();
   };
 
@@ -109,6 +118,11 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setInstrument(instrument);
   };
 
+  handleSearchBar = () => {
+    this.setState((prevState) => ({
+      searchBoxVisible: !prevState.searchBoxVisible,
+    }));
+  };
   changeVisualizeInstrument = (instrument) => {
     const { visualizeInstrument } = this.state;
 
@@ -143,46 +157,53 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
+      searchBoxVisible
     } = this.state;
 
     if (loading) {
       return <Loading />;
     } else {
       return (
-        <Container>
-          <GridContainer>
-            <LeftPanel>
-              {instrumentOptions.map((instrument, index) => (
-                <InstrumentVisualize
-                  instrument={instrument}
-                  changeVisualizeInstrument={this.changeVisualizeInstrument}
+          <Container>
+            <GridContainer>
+              <LeftPanel>
+                {instrumentOptions.map((instrument, index) => (
+                    <InstrumentVisualize
+                        instrument={instrument}
+                        changeVisualizeInstrument={this.changeVisualizeInstrument}
+                    />
+                ))}
+              </LeftPanel>
+              <RightPanel>
+                <BeatGrid
+                    ref="BeatGrid"
+                    synth={synth}
+                    scale={availableNotes}
+                    drumScale={availableDrumNotes}
+                    columns={columns}
+                    background="#34AEA5"
+                    foreground="#ffffff"
+                    visualizeInstrument={visualizeInstrument}
+                    isSnapshot={this.props.isSnapshot}
+                    spaceId={this.props.spaceId}
                 />
-              ))}
-            </LeftPanel>
-            <RightPanel>
-              <BeatGrid
-                ref="BeatGrid"
-                synth={synth}
-                scale={availableNotes}
-                drumScale={availableDrumNotes}
-                columns={columns}
-                background="#34AEA5"
-                foreground="#ffffff"
-                visualizeInstrument={visualizeInstrument}
-                isSnapshot={this.props.isSnapshot}
-                spaceId={this.props.spaceId}
-              />
-            </RightPanel>
-          </GridContainer>
-          <BeatControls
-            onPlay={this.play}
-            onStop={this.stop}
-            changeColumns={this.changeColumns}
-            adjustBPM={this.adjustBPM}
-            bpm={this.initialBPM}
-            changeInstrument={this.changeInstrument}
-          />
-        </Container>
+              </RightPanel>
+            </GridContainer>
+            <BeatControls
+                onPlay={this.play}
+                onStop={this.stop}
+                changeColumns={this.changeColumns}
+                adjustBPM={this.adjustBPM}
+                bpm={this.initialBPM}
+                changeInstrument={this.changeInstrument}
+            />
+            <div className={"w-full flex justify-center content-center"}>
+              <Button onClick={this.handleSearchBar}>열기/닫기</Button>
+            </div>
+            <div id="search-box" className={searchBoxVisible ? 'visible' : 'hidden'}>
+              <GoogleCustomSearch/>
+            </div>
+          </Container>
       );
     }
   }

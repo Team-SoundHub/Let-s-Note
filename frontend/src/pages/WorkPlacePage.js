@@ -187,7 +187,7 @@ const WorkPlacePage = () => {
           />
         )}
         {isUrlModalOpen && <NoteModal closeUrlModal={closeUrlModal} />}
-        <WorkSpaceContainer notesList={workspaceInfo.notesList} />
+        <WorkSpaceContainer isSnapshot={false} spaceId={spaceId}/>
       </div>
       <ChatContainer
         spaceId={spaceId}
