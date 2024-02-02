@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useState } from "react";
 import { useDispatch } from "react-redux";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
@@ -28,40 +28,63 @@ export const sendInstrumentReset = (instrument, spaceId) => {
   });
 };
 
-export const sendCoordinate = (instrument, x, y) => {
+export const sendCoordinate = (instrument, x, y, spaceId) => {
   if (!stompClient.active) {
     console.error("좌표 보내기 STOMP connection is not active");
     return;
   }
 
+  console.log(`좌표 보내기 publish 직전 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
+
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/editor/sendCoordinate`,
+    destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
     body: JSON.stringify({
       instrument: instrument,
       x: x,
       y: y,
-      spaceId: space_id,
+      spaceId: spaceId,
+    }),
+  });
+  console.log(`좌표 보내기 publish 직후 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
+};
+
+export const sendMessage = (message, accountId, spaceId) => {
+  // console.log("웹소켓 채팅 요청:", message, accountId);
+  stompClient.publish({
+    destination: `/app/workspace/${spaceId}/chat/sendMessage`,
+    body: JSON.stringify({
+      msgContent: message,
+      accountId: accountId,
+      spaceId: spaceId,
     }),
   });
 };
 
-export const sendMessage = (message, accountId, space_id) => {
-  // console.log("웹소켓 채팅 요청:", message, accountId);
+const sendMousePosition = (accountId, x, y) => {
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/chat/sendMessage`,
+    destination: `/app/workspace/${space_id}/mousePosition`,
     body: JSON.stringify({
-      msgContent: message,
-      accountId: accountId,
-      spaceId: space_id,
+      x : x,
+      y : y,
+      accountId : accountId,
     }),
   });
 };
+
+const handleMouseMove = (event: React.MouseEvent) => {
+  console.log(event);
+  const { clientX: x, clientY: y } = event;
+  sendMousePosition(accountId , x, y);
+};
+
 
 const WebSocketContainer = ({ spaceId }) => {
   const space_id = localStorage.getItem("spaceId");
   const dispatch = useDispatch();
+//   const [mousePosition, setMousePosition] = useState({});
+
   stompClient.webSocketFactory = function () {
-    return new SockJS("http:localhost:8080/letsnote/ws");
+    return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
   };
 
   stompClient.onConnect = (frame) => {
@@ -71,7 +94,7 @@ const WebSocketContainer = ({ spaceId }) => {
       `/topic/workspace/${spaceId}/editor/public`,
       (response) => {
         const inner_content = JSON.parse(response.body);
-        // console.log("노트 소켓 통신:", inner_content);
+        console.log("노트 소켓 통신:", inner_content);
         dispatch(setInnerContent(inner_content));
       }
     );
@@ -82,6 +105,18 @@ const WebSocketContainer = ({ spaceId }) => {
         const message = JSON.parse(response.body);
         // console.log("채팅 소켓 응답:", message);
         dispatch(addMessage({ spaceId, message }));
+      }
+    );
+
+    stompClient.subscribe(
+      `/topic/workspace/${spaceId}/mousePosition`,
+      (response) => {
+        const data = JSON.parse(response.body);
+        console.log(data)
+        setMousePosition((prevPosition) => ({
+          ...prevPosition,
+          [data.accountId]: { x: data.x, y: data.y },
+        }));
       }
     );
   };

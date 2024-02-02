@@ -5,15 +5,15 @@ import DrumBox from "./DrumBox";
 import Subject from "../../observer/Subject";
 
 const Container = styled.div`
-  display: flex;
   position: relative;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: ${(props) => props.background};
-  margin-left: ${(props) => (props.id === 0 || props.id % 2 === 1 ? 1 : 3)}px;
-  margin-bottom: 1px;
-  width: 2rem;
+  margin-left: ${(props) => (props.id % 2 === 1 ? 0.1 : 0.2)}rem;
+  margin-bottom: 1rem;
+  width: 1.5rem;
 `;
 
 const Overlay = styled.div`
@@ -51,7 +51,8 @@ class BeatColumn extends Component {
       const activeBoxes = [...prev.activeBoxes];
       const activeInstrument = [...prev.activeInstrument];
 
-      activeBoxes[i] = !activeBoxes[i];
+      activeBoxes[i] = !activeBoxes[i]; // 활성화 여부 toggle
+      console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`)
       activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
       // 연주 코드 추가
@@ -70,7 +71,8 @@ class BeatColumn extends Component {
       const activeBoxes = [...prev.activeBoxes];
       const activeInstrument = [...prev.activeInstrument];
 
-      activeBoxes[i] = !activeBoxes[i];
+      activeBoxes[i] = !activeBoxes[i]; 
+      console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`)
       activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
       // 연주 코드 추가

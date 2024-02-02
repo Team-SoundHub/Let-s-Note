@@ -54,6 +54,9 @@ const Divider = styled.hr`
   margin: 20px 0;
 `;
 
+const accessToken = sessionStorage.getItem("access");
+const accountId = sessionStorage.getItem("accountId");
+
 const MyPage = () => {
   const navigate = useNavigate();
 
@@ -73,7 +76,7 @@ const MyPage = () => {
   };
 
   const handleCreateWorkSpace = async (title, description) => {    
-    try {
+    try {      
       const response = await createWorkSpace(title, description, []);      
       if (response) {
         navigate(`/workspace/${response.response.spaceId}`);
@@ -86,9 +89,6 @@ const MyPage = () => {
     }
   };
 
-  const accessToken = sessionStorage.getItem("access");
-  const accountId = sessionStorage.getItem("accountId");
-
   useEffect(() => {
     console.log("workspace 리덕스 정보 청소 - workspaceNotes:", workspaceNotes);
     console.log("snapshot 리덕스 정보 청소 - snapshotNotes:", snapshotNotes);
@@ -96,19 +96,18 @@ const MyPage = () => {
     const fetchMyPageInfo = async () => {
       try {
         const response = await getMyPageInfo(accountId);
-        console.log(response);
-        // console.log("마이페이지 인포 받음");
+        console.log("[마이페이지] 작업실 인포 응답 받음:", response);
         setWorkspaces(response.response); // API 응답으로 받은 작업실 목록을 상태에 저장
       } catch (error) {
-        console.error("마이페이지 정보 로드 실패:", error);
+        console.error("작업실 정보 로드 실패:", error);
       }
     };
     fetchMyPageInfo();
 
-    const fetchMySnapshotInfo = async () => {
+    const fetchMySnapshotInfo = async () => {      
       try {
         const response = await getMySnapshotInfo(accountId);        
-        console.log("스냅샷 인포 받음:", response);
+        console.log("[마이페이지] 스냅샷 인포 응답 받음:", response);
         setSnapshots(response.response); // API 응답으로 받은 스냅샷 목록을 상태에 저장
       } catch (error) {
         console.error("스냅샷 정보 로드 실패:", error);

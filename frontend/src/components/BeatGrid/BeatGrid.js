@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
+import VerticalPiano from "../WorkSpace/Piano";
 import { sendCoordinate } from "../../containers/WebSocket/WebSocketContainer";
+import { clearAllNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -15,14 +17,34 @@ const Container = styled.div`
   border: 0.5px solid ${(props) => props.background};
   overflow-y: auto;
   overflow-x: auto;
+  position: relative;
+`;
+
+const LeftPanel = tw.div`
+  flex
+  flex-row
+  w-[10%]
+  h-full
+  sticky
+  left-0
+  z-10
+`;
+
+const RightPanel = tw.div`
+  w-[90%]
+  h-full
+  flex-shrink-0
+  flex
+  flex-row
 `;
 
 class BeatGrid extends Component {
-  state = { count: -1 };
+  state = { count: -1 };  
 
   handleBoxClick = (row, column) => {
+    console.log("clicked spaceId:", this.props.spaceId);
     const instrument = this.props.synth.activeInstrument;
-    sendCoordinate(instrument, row, column);
+    sendCoordinate(instrument, row, column, this.props.spaceId);
   };
 
   trigger = (time) => {
@@ -30,6 +52,9 @@ class BeatGrid extends Component {
       (prev) => ({ count: prev.count + 1 }),
       () => this.playBeat(time)
     );
+    if (this.props.onCountChange) {
+      this.props.onCountChange(this.count);
+    }
   };
 
   playBeat = (time) => {
@@ -74,7 +99,12 @@ class BeatGrid extends Component {
   render() {
     const { background } = this.props;
     return (
-      <Container background={background}>{this.renderBeatColumns()}</Container>
+      <Container background={background}>
+        <LeftPanel>
+          <VerticalPiano />
+        </LeftPanel>
+        <RightPanel>{this.renderBeatColumns()}</RightPanel>
+      </Container>
     );
   }
 }

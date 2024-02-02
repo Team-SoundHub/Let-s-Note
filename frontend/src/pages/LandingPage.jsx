@@ -13,18 +13,32 @@ import { getMember } from "../api/workSpaceApi";
 import BackgroundImage from "../assets/landing/backgroundImage.jpg";
 
 const CardContainer = tw.div`
-  mt-10 mx-[9%] grid grid-cols-4 gap-6
+  mt-96 mx-[9%] grid grid-cols-4 gap-6
 `;
 
 const LandingContainer = tw.div`
   flex-row items-center justify-center z-0
 `;
-const TransparentImageStyle = "flex w-full items-center justify-center z-0";
+const TransparentImageStyle = tw.div`
+flex flex-col w-full items-center justify-center z-0
+`;
 
-const TextBoxDivStyle =
-  "absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full";
-const ButtonDivStyle =
-  "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2";
+const ImageContainer = tw.div`
+  flex
+  flex-col
+  w-full
+  items-center
+  justify-center
+`;
+
+const TextBoxDivStyle = tw.div`
+  flex
+  flex-col
+  items-center
+  -my-80
+  z-10
+`;
+const ButtonDivStyle = "";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -75,7 +89,7 @@ const LandingPage = () => {
     // Clear session storage on logout
     sessionStorage.removeItem("access");
     sessionStorage.removeItem("refresh");
-    sessionStorage.removeItem("nickname");
+    // sessionStorage.removeItem("nickname");
     sessionStorage.removeItem("accountId");
     setIsLoggedIn(false);
   };
@@ -141,29 +155,36 @@ const LandingPage = () => {
         handleLogout={handleLogout}
       />
       <LandingContainer>
-        <div className={TransparentImageStyle}>
-          <img
-            className="w-[80%] h-96 opacity-30"
-            src={BackgroundImage}
-            alt="Banner"
-          />
+        <TransparentImageStyle>
+          <ImageContainer>
+            <img
+              className="w-[80%] h-96 opacity-30"
+              src={BackgroundImage}
+              alt="Banner"
+            />
+            <TextBoxDivStyle>
+              <div>
+                <p className="font-bold text-4xl mb-10">Let's Note Symphony</p>
+                <p>
+                  Unleashing Collective Creativity: A Global Platform for
+                  Connecting Diverse Individuals,
+                  <br />
+                  Harmonizing Talents, and Crafting an Inspirational Symphony of
+                  Innovation and Artistry
+                </p>
+              </div>
+              <div>
+                <Button className="mt-20" onClick={setLoginModalOpen}>
+                  Sign up for free
+                </Button>
+              </div>
+            </TextBoxDivStyle>
 
-          <div className={TextBoxDivStyle}>
-            <p className="font-bold text-4xl mb-10">Let's Note Symphony</p>
-            <p>
-              Unleashing Collective Creativity: A Global Platform for Connecting
-              Diverse Individuals,
-              <br />
-              Harmonizing Talents, and Crafting an Inspirational Symphony of
-              Innovation and Artistry
-            </p>
-          </div>
+            <div className={ButtonDivStyle}></div>
+          </ImageContainer>
+          <CardContainer>{postCardList}</CardContainer>
+        </TransparentImageStyle>
 
-          <div className={ButtonDivStyle}>
-            <Button onClick={setLoginModalOpen}>Sign up for free</Button>
-          </div>
-        </div>
-        <CardContainer>{postCardList}</CardContainer>
         {isLoginModalOpen && (
           <LoginModal
             closeLoginModal={closeLoginModal}
