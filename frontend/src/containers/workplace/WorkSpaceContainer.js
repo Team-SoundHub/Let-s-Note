@@ -178,39 +178,25 @@ class WorkSpaceContainer extends Component {
                     foreground="#ffffff"
                     visualizeInstrument={visualizeInstrument}
                     isSnapshot={this.props.isSnapshot}
+                    spaceId={this.props.spaceId}
                 />
-              ))}
-            </LeftPanel>
-            <RightPanel>
-              <BeatGrid
-                ref="BeatGrid"
-                synth={synth}
-                scale={availableNotes}
-                drumScale={availableDrumNotes}
-                columns={columns}
-                background="#34AEA5"
-                foreground="#ffffff"
-                visualizeInstrument={visualizeInstrument}
-                isSnapshot={this.props.isSnapshot}
-                spaceId={this.props.spaceId}
-              />
-            </RightPanel>
-          </GridContainer>
-          <BeatControls
-            onPlay={this.play}
-            onStop={this.stop}
-            changeColumns={this.changeColumns}
-            adjustBPM={this.adjustBPM}
-            bpm={this.initialBPM}
-            changeInstrument={this.changeInstrument}
-          />
-          <div className={"w-full flex justify-center content-center"}>
-            <Button onClick={this.handleSearchBar}>열기/닫기</Button>
-          </div>
-          <div id="search-box" className={searchBoxVisible ? 'visible' : 'hidden'}>
-            <GoogleCustomSearch/>4
-          </div>
-        </Container>
+              </RightPanel>
+            </GridContainer>
+            <BeatControls
+                onPlay={this.play}
+                onStop={this.stop}
+                changeColumns={this.changeColumns}
+                adjustBPM={this.adjustBPM}
+                bpm={this.initialBPM}
+                changeInstrument={this.changeInstrument}
+            />
+            <div className={"w-full flex justify-center content-center"}>
+              <Button onClick={this.handleSearchBar}>열기/닫기</Button>
+            </div>
+            <div id="search-box" className={searchBoxVisible ? 'visible' : 'hidden'}>
+              <GoogleCustomSearch/>4
+            </div>
+          </Container>
       );
     }
   }
