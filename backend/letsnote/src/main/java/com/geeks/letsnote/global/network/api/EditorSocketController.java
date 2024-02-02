@@ -80,7 +80,7 @@ public class EditorSocketController {
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
 
-		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
+		return new SocketResponse.Chat(chatMessage.spaceId(), nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
 	@Async
@@ -89,7 +89,7 @@ public class EditorSocketController {
 	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
 		noteInstrumentMapService.clickNoteMap(content);
 
-		return new SocketResponse.Coordinate(spaceId, content.instrument(), content.x(), content.y());
+		return new SocketResponse.Coordinate(content.spaceId(), content.instrument(), content.x(), content.y());
 	}
 
 	@MessageMapping("/workspace/{spaceId}/mousePosition")

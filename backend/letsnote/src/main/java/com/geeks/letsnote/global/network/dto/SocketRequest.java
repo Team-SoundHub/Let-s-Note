@@ -37,6 +37,7 @@ public record SocketRequest() {
 			Instrument instrument
 	){}
 
+	@Builder
 	public record MousePosition(
 			double x,
 			double y,

@@ -46,7 +46,7 @@ const RightPanel = tw.div`
   flex-shrink-0
 `;
 
-export const instrumentOptions = ["All", "piano", "guitar", "drum"];
+export const instrumentOptions = ["all", "piano", "guitar", "drum"];
 
 class WorkSpaceContainer extends Component {
   constructor(props) {
