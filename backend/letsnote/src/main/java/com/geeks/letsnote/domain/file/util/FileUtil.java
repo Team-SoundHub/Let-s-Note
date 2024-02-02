@@ -9,7 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,9 +30,9 @@ public class FileUtil {
         // Get the resource directory from the classpath
         Path resourceDirectory = Paths.get("backend", "letsnote", "src", "main", "resources");
         String absolutePath = resourceDirectory.toFile().getAbsolutePath();
-
+        String filename = decodeFileName(destinationPath);
         // Build the destination path within the resources directory
-        Path destination = Paths.get(absolutePath, "static", destinationPath);
+        Path destination = Paths.get(absolutePath, "static", filename);
 
         // Ensure that the parent directories of the destination path exist
         Files.createDirectories(destination.getParent());
@@ -47,7 +50,7 @@ public class FileUtil {
 
     public String extractFileName(String url) {
         // Define the regex pattern to match the last part of the URL
-        Pattern pattern = Pattern.compile("([^/]+)$");
+        Pattern pattern = Pattern.compile("/([^/?]+)\\?");
 
         Matcher matcher = pattern.matcher(url);
 
@@ -57,6 +60,16 @@ public class FileUtil {
 
         // Return a default value or handle the case where no match is found
         return "UnknownFileName";
+    }
+
+    public static String decodeFileName(String encodedFileName) {
+        try {
+            return URLDecoder.decode(encodedFileName, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            // Handle the exception (e.g., log the error or return a default value)
+            e.printStackTrace();
+            return "UnknownFileName";
+        }
     }
 
     public boolean storeFile(MultipartFile file) throws IOException {
