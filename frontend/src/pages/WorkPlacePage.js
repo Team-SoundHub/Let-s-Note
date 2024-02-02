@@ -158,33 +158,37 @@ const WorkPlacePage = () => {
 
   return (
     <Container>
-      <WebSocketContainer spaceId={spaceId} />
-      <WorkSpaceHeader
-        onOpenModal={handleModalOpen}
-        isSnapshotExist={workspaceInfo.isSnapshotExist}
-        openAddMemberModal={openAddMemberModal}
-        handleAddMember={handleAddMember}
-        memberList={memberList}
-        openUrlModal={openUrlModal}
-      />
-      {isReleaseModalOpen && (
-        <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
-      )}
-      {snapshotCreated && (
-        <SaveCompleteModal
-          onClose={handleCloseSnapshotModal}
-          snapshotUrl={snapshotUrl}
-          snapshotId={snapshotId}
-        />
-      )}
-      {isAddMemberModalOpen && (
-        <AddMemberModal
-          closeAddMemberModal={closeAddMemberModal}
+      <div>
+        <WebSocketContainer spaceId={spaceId} />
+      </div>
+      <div>
+        <WorkSpaceHeader
+          onOpenModal={handleModalOpen}
+          isSnapshotExist={workspaceInfo.isSnapshotExist}
+          openAddMemberModal={openAddMemberModal}
           handleAddMember={handleAddMember}
+          memberList={memberList}
+          openUrlModal={openUrlModal}
         />
-      )}
-      {isUrlModalOpen && <NoteModal closeUrlModal={closeUrlModal} />}
-      <WorkSpaceContainer isSnapshot={false} spaceId={spaceId}/>
+        {isReleaseModalOpen && (
+          <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
+        )}
+        {snapshotCreated && (
+          <SaveCompleteModal
+            onClose={handleCloseSnapshotModal}
+            snapshotUrl={snapshotUrl}
+            snapshotId={snapshotId}
+          />
+        )}
+        {isAddMemberModalOpen && (
+          <AddMemberModal
+            closeAddMemberModal={closeAddMemberModal}
+            handleAddMember={handleAddMember}
+          />
+        )}
+        {isUrlModalOpen && <NoteModal closeUrlModal={closeUrlModal} />}
+        <WorkSpaceContainer notesList={workspaceInfo.notesList} />
+      </div>
       <ChatContainer
         spaceId={spaceId}
         memberList={memberList}
