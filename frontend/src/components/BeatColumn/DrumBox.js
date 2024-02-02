@@ -67,10 +67,8 @@ const DrumBox = ({
   const [active, setActive] = useState(propActive);
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const instrumentList = ["piano", "guitar", "drum"];
-  const notes = useSelector((state) => state.innerContent.notes);
-  const snapshotNotes = useSelector(
-    (state) => state.innerContent.snapshotNotesList
-  );
+  const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
+  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);  
 
   // useEffect(() => {
   //   // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
@@ -89,13 +87,11 @@ const DrumBox = ({
   useEffect(() => {
     let activeNote;
 
-    if (isSnapshot) {
-      // 스냅샷 모드에서 스냅샷 노트 리스트를 사용
+    if (isSnapshot) {      
       activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
       // console.log("스냅샷 드럼:", activeNote);
-    } else {
-      // 기존 모드에서 일반 노트 리스트를 사용
-      activeNote = notes.find((n) => n.x === col && n.y === row);
+    } else {      
+      activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
       // console.log("작업실 드럼:", activeNote);
     }
 
@@ -107,7 +103,7 @@ const DrumBox = ({
     }
   }, [
     snapshotNotes,
-    notes,
+    workspaceNotes,
     col,
     row,
     active,
