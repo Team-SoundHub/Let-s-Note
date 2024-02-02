@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 
@@ -33,6 +34,7 @@ public class EditorSocketController {
 	private final NoteInstrumentMapService noteInstrumentMapService;
 	private final CustomWebSocketHandlerDecorator customWebSocketHandlerDecorator;
 
+
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
 	public SocketResponse.Coordinate coordinateInfo(@Valid @Payload SocketRequest.Coordinate coordinate) {
@@ -41,7 +43,7 @@ public class EditorSocketController {
 				.noteX(coordinate.x())
 				.noteY(coordinate.y())
 				.instrument(Instrument.fromString(coordinate.instrument())).build();
-		noteInstrumentMapService.clickNoteMap(coordinate.spaceId(), noteDto);
+		noteInstrumentMapService.clickNoteMap(coordinate);
 		return new SocketResponse.Coordinate(coordinate.spaceId(), coordinate.instrument(), coordinate.x(), coordinate.y());
 	}
 
@@ -81,14 +83,12 @@ public class EditorSocketController {
 		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
+	@Async
 	@MessageMapping("/workspace/{spaceId}/editor/sendCoordinate")
 	@SendTo("/topic/workspace/{spaceId}/editor/public")
 	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
-		RequestNotes.NoteDto noteDto = RequestNotes.NoteDto.builder()
-				.noteX(content.x())
-				.noteY(content.y())
-				.instrument(Instrument.fromString(content.instrument())).build();
-		noteInstrumentMapService.clickNoteMap(content.spaceId(), noteDto);
+		noteInstrumentMapService.clickNoteMap(content);
+
 		return new SocketResponse.Coordinate(spaceId, content.instrument(), content.x(), content.y());
 	}
 
