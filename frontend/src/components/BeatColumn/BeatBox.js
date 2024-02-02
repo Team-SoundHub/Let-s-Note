@@ -5,7 +5,7 @@ import { clearAllNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   flex: 1;
-  margin: 0.5px;
+  margin: 0.1rem;
   background-color: ${(props) =>
     props.active &&
     props.visualizeInstrument[
@@ -15,9 +15,10 @@ const Container = styled.div`
       : props.col % 8 < 4
       ? "lightgray"
       : props.inactiveColor};
-  width: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
 
-  margin-bottom: ${(props) => (props.row % 12 === 11 ? 2 : 0.5)}px;
+  margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
 `;
 
 const pickActiveColor = (instrument) => {
