@@ -8,37 +8,39 @@ export const innerContentSlice = createSlice({
       x: null,
       y: null,
     },
-    notes: [],
-    snapshotNotesList: [],
+    workspaceNotes: [],
+    snapshotNotes: [],
   },
   reducers: {
     setInnerContent: (state, action) => {
       state.innerContent = action.payload;
     },
-    setNotesList: (state, action) => {
-      // Clear the existing notes before adding new ones
-      state.notes = [];
+    setWorkspaceNotes: (state, action) => {
+      
+      state.workspaceNotes = [];
 
       // notesList에서 각 노트의 정보를 추출하여 상태에 저장
       action.payload.forEach((instrumentGroup) => {
         instrumentGroup.notes.forEach((note) => {
-          state.notes.push({
+          state.workspaceNotes.push({
             x: note.noteX,
             y: note.noteY,
             instrument: instrumentGroup.instrument.toLowerCase(),
           });
         });
       });
+      console.log("리덕스 - workspace에 들어간 정보:", state.workspaceNotes);
+      console.log("리덕스 - snapshot에 들어간 정보:", state.snapshotNotes);
     },
 
-    setSnapshotNotesList: (state, action) => {
-      state.snapshotNotesList = [];
+    setSnapshotNotes: (state, action) => {
+
+      state.snapshotNotes = [];
+
       action.payload.forEach((instrumentGroup) => {
-        // console.log("리덕스:", instrumentGroup);
-        // console.log("snapshotNotesList:", state.snapshotNotesList);
         if (instrumentGroup.notes) {
           instrumentGroup.notes.forEach((note) => {
-            state.snapshotNotesList.push({
+            state.snapshotNotes.push({
               x: note.noteX,
               y: note.noteY,
               instrument: instrumentGroup.instrument.toLowerCase(),
@@ -46,11 +48,17 @@ export const innerContentSlice = createSlice({
           });
         }
       });
+      console.log("리덕스 - workspace에 들어간 정보:", state.workspaceNotes);
+      console.log("리덕스 - snapshot에 들어간 정보:", state.snapshotNotes);
+    },
+    clearAllNotes: (state) => {
+      state.workspaceNotes = [];
+      state.snapshotNotes = [];
     },
   },
 });
 
-export const { setInnerContent, setNotesList, setSnapshotNotesList } =
+export const { setInnerContent, setWorkspaceNotes, setSnapshotNotes, clearAllNotes } =
   innerContentSlice.actions;
 
 export const selectInnerContent = (state) => state.sample.innerContent;
