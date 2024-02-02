@@ -194,7 +194,7 @@ class WorkSpaceContainer extends Component {
               <Button onClick={this.handleSearchBar}>열기/닫기</Button>
             </div>
             <div id="search-box" className={searchBoxVisible ? 'visible' : 'hidden'}>
-              <GoogleCustomSearch/>4
+              <GoogleCustomSearch/>
             </div>
           </Container>
       );
