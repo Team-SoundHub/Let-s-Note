@@ -92,8 +92,8 @@ public class EditorSocketController {
 		return new SocketResponse.Coordinate(content.spaceId(), content.instrument(), content.x(), content.y());
 	}
 
-	@MessageMapping("/workspace/{spaceId}/mousePosition")
-	@SendTo("/topic/workspace/{spaceId}/mousePosition")
+	@MessageMapping("/workspace/{spaceId}/mouse/sendMousePosition")
+	@SendTo("/topic/workspace/{spaceId}/mouse/public")
 	public SocketResponse.MousePosition broadcastMousePosition(SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId) {
 		return new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId());
 	}
