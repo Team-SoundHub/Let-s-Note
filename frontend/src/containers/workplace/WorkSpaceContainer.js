@@ -40,7 +40,7 @@ const LeftPanel = tw.div`
   mr-2
   items-center
   justify-center
-
+  
 `;
 
 const RightPanel = tw.div`

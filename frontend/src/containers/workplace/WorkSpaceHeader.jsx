@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import styled, { keyframes } from "styled-components";
@@ -87,6 +87,10 @@ const WorkSpaceHeader = ({
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
+  
+  useEffect(() => {
+    console.log("WorkSpaceHeader 호출");
+  }, [])
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가

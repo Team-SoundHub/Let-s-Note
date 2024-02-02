@@ -193,7 +193,8 @@ const WorkPlacePage = () => {
         spaceId={spaceId}
         memberList={memberList}
         nickname={myNickname}
-      />
+      />      
+      
     </Container>
   );
 };

@@ -54,6 +54,9 @@ const Divider = styled.hr`
   margin: 20px 0;
 `;
 
+const accessToken = sessionStorage.getItem("access");
+const accountId = sessionStorage.getItem("accountId");
+
 const MyPage = () => {
   const navigate = useNavigate();
 
@@ -73,7 +76,7 @@ const MyPage = () => {
   };
 
   const handleCreateWorkSpace = async (title, description) => {    
-    try {
+    try {      
       const response = await createWorkSpace(title, description, []);      
       if (response) {
         navigate(`/workspace/${response.response.spaceId}`);
@@ -85,9 +88,6 @@ const MyPage = () => {
       console.error("작업실 생성 오류:", error);
     }
   };
-
-  const accessToken = sessionStorage.getItem("access");
-  const accountId = sessionStorage.getItem("accountId");
 
   useEffect(() => {
     console.log("workspace 리덕스 정보 청소 - workspaceNotes:", workspaceNotes);

@@ -9,8 +9,8 @@ const accessToken = sessionStorage.getItem("access");
 const accountId = sessionStorage.getItem("accountId");
 const space_id = localStorage.getItem("spaceId");
 
-export const stompClient = new StompJS.Client({
-  brokerURL: "ws://localhost:8080/letsnote/ws",
+export const stompClient = new StompJS.Client({  
+  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
   connectHeaders: {
     accessToken: accessToken,
     spaceId: space_id,
@@ -34,6 +34,8 @@ export const sendCoordinate = (instrument, x, y, spaceId) => {
     return;
   }
 
+  console.log(`좌표 보내기 publish 직전 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
+
   stompClient.publish({
     destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
     body: JSON.stringify({
@@ -43,6 +45,7 @@ export const sendCoordinate = (instrument, x, y, spaceId) => {
       spaceId: spaceId,
     }),
   });
+  console.log(`좌표 보내기 publish 직후 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
 };
 
 export const sendMessage = (message, accountId, spaceId) => {
@@ -76,12 +79,12 @@ export const sendMessage = (message, accountId, spaceId) => {
 
 
 const WebSocketContainer = ({ spaceId }) => {
-//   const space_id = localStorage.getItem("spaceId");
+  const space_id = localStorage.getItem("spaceId");
   const dispatch = useDispatch();
 //   const [mousePosition, setMousePosition] = useState({});
 
   stompClient.webSocketFactory = function () {
-    return new SockJS("http:localhost:8080/letsnote/ws");
+    return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
   };
 
   stompClient.onConnect = (frame) => {
