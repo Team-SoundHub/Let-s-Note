@@ -7,6 +7,8 @@ import Loading from "../../components/Loading";
 import { availableNotes, availableDrumNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
+import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
+import Button from "../../components/common/Button";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -106,6 +108,11 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setInstrument(instrument);
   };
 
+  handleSearchBar = () => {
+    this.setState((prevState) => ({
+      searchBoxVisible: !prevState.searchBoxVisible,
+    }));
+  };
   changeVisualizeInstrument = (instrument) => {
     const { visualizeInstrument } = this.state;
 
@@ -187,45 +194,52 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
+      searchBoxVisible
     } = this.state;
 
     if (loading) {
       return <Loading />;
     } else {
       return (
-        <Container>
-          <GridContainer>
-            <LeftPanel>
-              {instrumentOptions.map((instrument, index) => (
-                <InstrumentVisualize
-                  instrument={instrument}
-                  changeVisualizeInstrument={this.changeVisualizeInstrument}
+          <Container>
+            <GridContainer>
+              <LeftPanel>
+                {instrumentOptions.map((instrument, index) => (
+                    <InstrumentVisualize
+                        instrument={instrument}
+                        changeVisualizeInstrument={this.changeVisualizeInstrument}
+                    />
+                ))}
+              </LeftPanel>
+              <RightPanel>
+                <BeatGrid
+                    ref="BeatGrid"
+                    synth={synth}
+                    scale={availableNotes}
+                    drumScale={availableDrumNotes}
+                    columns={columns}
+                    background="#34AEA5"
+                    foreground="#ffffff"
+                    visualizeInstrument={visualizeInstrument}
+                    isSnapshot={this.props.isSnapshot}
                 />
-              ))}
-            </LeftPanel>
-            <RightPanel>
-              <BeatGrid
-                ref="BeatGrid"
-                synth={synth}
-                scale={availableNotes}
-                drumScale={availableDrumNotes}
-                columns={columns}
-                background="#34AEA5"
-                foreground="#ffffff"
-                visualizeInstrument={visualizeInstrument}
-                isSnapshot={this.props.isSnapshot}
-              />
-            </RightPanel>
-          </GridContainer>
-          <BeatControls
-            onPlay={this.play}
-            onStop={this.stop}
-            changeColumns={this.changeColumns}
-            adjustBPM={this.adjustBPM}
-            bpm={this.initialBPM}
-            changeInstrument={this.changeInstrument}
-          />
-        </Container>
+              </RightPanel>
+            </GridContainer>
+            <BeatControls
+                onPlay={this.play}
+                onStop={this.stop}
+                changeColumns={this.changeColumns}
+                adjustBPM={this.adjustBPM}
+                bpm={this.initialBPM}
+                changeInstrument={this.changeInstrument}
+            />
+            <div className={"w-full flex justify-center content-center"}>
+              <Button onClick={this.handleSearchBar}>열기/닫기</Button>
+            </div>
+            <div id="search-box" className={searchBoxVisible ? 'visible' : 'hidden'}>
+              <GoogleCustomSearch/>4
+            </div>
+          </Container>
       );
     }
   }

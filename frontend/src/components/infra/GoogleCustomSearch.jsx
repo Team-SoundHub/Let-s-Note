@@ -1,49 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { TextInput } from 'flowbite-react';
+import Button from '../common/Button';
+import { googleCustomSearchApi } from '../../api/googleCustomSearchApi';
 
-const GoogleCustomSearch = ({ apiKey, cx, searchTerm }) => {
-    // apiKey = "";
-    // cx = "";
-    // searchTerm = "";
+const GoogleCustomSearch = () => {
     const [images, setImages] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchTerm}&searchType=image`;
+    const handleSearchClick = async () => {
+        try {
+            setLoading(true);
+            const searchTerm = document.getElementById('input-info').value;
+            document.getElementById('input-info').value = '';
+            const fetchedImages = await googleCustomSearchApi(searchTerm);
 
-        axios.get(apiUrl)
-            .then(response => {
-                const fetchedImages = response.data.items.map(item => ({
-                    imageUrl: item.link,
-                    title: item.title,
-                }));
-
+            if (fetchedImages && fetchedImages.length >= 1) {
                 setImages(fetchedImages);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('Error fetching data from the Custom Search API:', error);
-                setLoading(false);
-            });
-    }, [apiKey, cx, searchTerm]);
+            } else {
+                setImages([]); // Reset images state if no images are found
+            }
+        } catch (error) {
+            console.error('Error during search:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <div>
-            {loading && <p>Loading...</p>}
-            {!loading && images.length === 0 && <p>No results found.</p>}
-            {!loading && images.length > 0 && (
-                <div>
-                    <h2>Search Results</h2>
-                    <ul>
-                        {images.map((image, index) => (
-                            <li key={index}>
-                                <img src={image.imageUrl} alt={image.title} />
-                                <p>{image.title}</p>
-                            </li>
-                        ))}
-                    </ul>
+        <div className="w-full h-full flex flex-col items-center p-4">
+            <div>
+                <div className="w-full flex justify-center content-center mb-4">
+                    <TextInput id="input-info" placeholder="검색어 입력" required color="info" />
+                    <Button onClick={handleSearchClick} disabled={loading}>
+                        검색
+                    </Button>
                 </div>
-            )}
+                <div className="flex p-4 w-full h-fit overflow-y-auto items-center">
+                    {loading && <p>Loading...</p>}
+                    {!loading && images.length === 0 && <p>No images found.</p>}
+                    {!loading && images.length > 0 && (
+                        <ul className="flex">
+                            {images.map((image, index) => (
+                                <li key={index} className="mr-4 h-fit">
+                                    <img src={image.imageUrl} width={250} height={200} alt={image.title} />
+                                    <p className={'overflow-ellipsis'}>{image.title}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
