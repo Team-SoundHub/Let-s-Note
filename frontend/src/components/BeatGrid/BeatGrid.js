@@ -53,7 +53,6 @@ class BeatGrid extends Component {
     if (this.props.onCountChange) {
       this.props.onCountChange(this.count);
     }
-    console.log("called");
   };
 
   playBeat = (time) => {
