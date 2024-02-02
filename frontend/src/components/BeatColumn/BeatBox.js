@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { clearAllNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -46,6 +47,8 @@ const BeatBox = ({
   row,
   isSnapshot,
 }) => {
+  const dispatch = useDispatch(); 
+
   const [active, setActive] = useState(propActive);
   const [instrument, setInstrument] = useState("piano");
 
@@ -53,18 +56,14 @@ const BeatBox = ({
   const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
   const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);  
 
+  // 처음 마운트 시 전역상태의 노트정보 반영
   useEffect(() => {
     let activeNote;
-
-    // 스냅샷 모드인 경우
-    if (isSnapshot) {
-      // 스냅샷 노트 리스트에서 현재 위치에 해당하는 노트 찾기
-      activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
-      // console.log("snapshot의 activeNote:", activeNote);
-    } else {      
-      // 워크스페이스 모드인 경우
-      activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
-      // console.log("workspace의 activeNote:", activeNote);
+        
+    if (isSnapshot) {      
+      activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);      
+    } else {            
+      activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);      
     }
 
     // 해당하는 노트가 있으면 상태 업데이트
@@ -73,23 +72,26 @@ const BeatBox = ({
       setInstrument(activeNote.instrument);
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
-    }
+    }   
+
+    // console.log("<<<BeatBox 호출 - 1>>");
+    console.log("마운트 초기 세팅 이후에 호출되면 안됨:", activeNote);
+    // dispatch(clearAllNotes()); 
   }, [
     snapshotNotes,
     workspaceNotes,
     col,
     row,
-    active,
+    // active,
     isSnapshot,
-    setActiveBoxes,
-    setActiveInstrument,
+    // setActiveBoxes,
+    // setActiveInstrument,    
   ]);
 
   const instrumentList = ["piano", "guitar", "drum"];
 
   const handleClick = () => {
-    if (isSnapshot) {
-      // isSnapshot이 true일 경우 onClick 이벤트 무시
+    if (isSnapshot) { // isSnapshot이 true일 경우 onClick 이벤트 무시
       return;
     }
     onClick && onClick();
@@ -97,12 +99,12 @@ const BeatBox = ({
 
   useEffect(() => {
     // Check if x and y match col and row
-    if (innerContent.x === col && innerContent.y === row && !active) {
+    if (innerContent.x === col && innerContent.y === row && !active) {      
       setActive(true);
       setInstrument(innerContent.instrument);
       setActiveBoxes(row, true);
       setActiveInstrument(row, innerContent.instrument);
-    } else if (innerContent.x === col && innerContent.y === row && active) {
+    } else if (innerContent.x === col && innerContent.y === row && active) {      
       setActive(false);
       setInstrument(undefined);
       setActiveBoxes(row, false);

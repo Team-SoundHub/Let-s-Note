@@ -4,6 +4,7 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
 import { sendCoordinate } from "../../containers/WebSocket/WebSocketContainer";
+import { clearAllNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -18,7 +19,7 @@ const Container = styled.div`
 `;
 
 class BeatGrid extends Component {
-  state = { count: -1 };
+  state = { count: -1 };  
 
   handleBoxClick = (row, column) => {
     console.log("clicked spaceId:", this.props.spaceId);

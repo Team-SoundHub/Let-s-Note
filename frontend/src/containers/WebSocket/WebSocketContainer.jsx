@@ -34,6 +34,8 @@ export const sendCoordinate = (instrument, x, y, spaceId) => {
     return;
   }
 
+  console.log(`좌표 보내기 publish 직전 - x:${x} y:${y}, spaceId: ${spaceId}`);
+
   stompClient.publish({
     destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
     body: JSON.stringify({
@@ -43,6 +45,7 @@ export const sendCoordinate = (instrument, x, y, spaceId) => {
       spaceId: spaceId,
     }),
   });
+  console.log(`좌표 보내기 publish 직후 - x:${x} y:${y}, spaceId: ${spaceId}`);
 };
 
 export const sendMessage = (message, accountId, spaceId) => {
@@ -71,7 +74,7 @@ const WebSocketContainer = ({ spaceId }) => {
       `/topic/workspace/${spaceId}/editor/public`,
       (response) => {
         const inner_content = JSON.parse(response.body);
-        // console.log("노트 소켓 통신:", inner_content);
+        console.log("노트 소켓 통신 응답:", inner_content);
         dispatch(setInnerContent(inner_content));
       }
     );

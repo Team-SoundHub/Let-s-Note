@@ -51,7 +51,8 @@ class BeatColumn extends Component {
       const activeBoxes = [...prev.activeBoxes];
       const activeInstrument = [...prev.activeInstrument];
 
-      activeBoxes[i] = !activeBoxes[i];
+      activeBoxes[i] = !activeBoxes[i]; // 활성화 여부 toggle
+      console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`)
       activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
       // 연주 코드 추가
@@ -70,7 +71,8 @@ class BeatColumn extends Component {
       const activeBoxes = [...prev.activeBoxes];
       const activeInstrument = [...prev.activeInstrument];
 
-      activeBoxes[i] = !activeBoxes[i];
+      activeBoxes[i] = !activeBoxes[i]; 
+      console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`)
       activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
       // 연주 코드 추가
