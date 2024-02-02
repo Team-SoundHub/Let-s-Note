@@ -21,8 +21,9 @@ class BeatGrid extends Component {
   state = { count: -1 };
 
   handleBoxClick = (row, column) => {
+    console.log("clicked spaceId:", this.props.spaceId);
     const instrument = this.props.synth.activeInstrument;
-    sendCoordinate(instrument, row, column);
+    sendCoordinate(instrument, row, column, this.props.spaceId);
   };
 
   trigger = (time) => {
