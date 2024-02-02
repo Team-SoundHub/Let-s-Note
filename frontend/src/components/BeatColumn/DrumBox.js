@@ -59,10 +59,10 @@ const Container = styled.div`
 
 const pickActiveColor = (instrument) => {
   switch (instrument) {
-    case "piano":
-      return "rgb(248 113 113)";
-    case "guitar":
-      return "rgb(74 222 128)";
+    // case "piano":
+    //   return "rgb(248 113 113)";
+    // case "guitar":
+    //   return "rgb(74 222 128)";
     case "drum":
       return "rgb(250 204 21)";
     default:

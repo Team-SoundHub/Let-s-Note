@@ -28,11 +28,40 @@ const pickActiveColor = (instrument) => {
     case "guitar":
       return "rgb(74 222 128)";
     case "drum":
-      return "rgb(250 204 21)";
+      return "rgb(250 204 21)";    
     default:
       return "black";
   }
 };
+
+// const Container = styled.div`
+//   flex: 1;
+//   margin: 0.1rem;
+//   background-color: ${(props) => getBackgroundColor(props.instruments)};
+//   width: 1.5rem;
+//   height: 1.5rem;
+//   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
+// `;
+
+// const pickActiveColor = {
+//   piano: "rgb(248 113 113)",
+//   guitar: "rgb(74 222 128)",
+// };
+
+// const getBackgroundColor = (instruments) => {
+//   const activeInstruments = instruments.filter(inst => inst.active);
+  
+//   if (activeInstruments.length === 0) {
+//     return "lightgray"; 
+//   }
+
+//   if (activeInstruments.length === 1) {
+//     return pickActiveColor[activeInstruments[0].name];
+//   }
+  
+//   return `linear-gradient(to right, ${pickActiveColor.piano} 50%, ${pickActiveColor.guitar} 50%)`;
+// };
+
 
 const BeatBox = ({
   active: propActive,
@@ -59,11 +88,11 @@ const BeatBox = ({
 
   // 처음 마운트 시 전역상태의 노트정보 반영
   useEffect(() => {
-    let activeNote;
+    let activeNote;    
         
     if (isSnapshot) {      
       activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);      
-    } else {            
+    } else { 
       activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);      
     }
 
@@ -73,7 +102,7 @@ const BeatBox = ({
       setInstrument(activeNote.instrument);
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
-    }   
+    }  
     
   }, [
     // useEffect 호출 조건을 다르게 줘서 마운트 이후에는 호출되지 않도록 함.

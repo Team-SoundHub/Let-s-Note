@@ -116,6 +116,7 @@ class BeatColumn extends Component {
     this.setState((prev) => {
       const newActiveBoxes = [...prev.activeBoxes];
       newActiveBoxes[row] = value;
+      console.log(`newActiveBoxes[${row}]: ${newActiveBoxes[row]}`);
       return { activeBoxes: newActiveBoxes };
     });
   };
@@ -123,8 +124,8 @@ class BeatColumn extends Component {
   setActiveInstrument = (row, instrument) => {
     this.setState((prev) => {
       const newActiveInstrument = [...prev.activeInstrument];
-      // console.log(newActiveInstrument);
       newActiveInstrument[row] = instrument;
+      console.log(`newActiveInstrument[${row}]: ${newActiveInstrument[row]}`);
       return { activeInstrument: newActiveInstrument };
     });
   };
