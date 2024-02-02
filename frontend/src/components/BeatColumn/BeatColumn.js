@@ -5,15 +5,14 @@ import DrumBox from "./DrumBox";
 import Subject from "../../observer/Subject";
 
 const Container = styled.div`
-  display: flex;
-  position: relative;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: ${(props) => props.background};
-  margin-left: ${(props) => (props.id === 0 || props.id % 2 === 1 ? 1 : 3)}px;
-  margin-bottom: 1px;
-  width: 2rem;
+  margin-left: ${(props) => (props.id % 2 === 1 ? 0.1 : 0.2)}rem;
+  margin-bottom: 1rem;
+  width: 1.5rem;
 `;
 
 const Overlay = styled.div`

@@ -1,7 +1,9 @@
 import axiosInstance from "./axiosInstance";
 
 const getWorkspaceInfo = async (spaceId) => {
+  console.log("작업실 입장 데이터 요청 3");
   try {
+    console.log("작업실 입장 데이터 요청 4");
     const response = await axiosInstance.get(
       `/workspaces/space-id?v=${spaceId}`
     );
