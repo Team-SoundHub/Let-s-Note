@@ -10,7 +10,7 @@ const accountId = sessionStorage.getItem("accountId");
 const space_id = localStorage.getItem("spaceId");
 
 export const stompClient = new StompJS.Client({  
-  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
+  brokerURL: "ws://localhost:9807/letsnote/ws",
   connectHeaders: {
     accessToken: accessToken,
     spaceId: space_id,
@@ -64,7 +64,7 @@ const WebSocketContainer = ({ spaceId }) => {
   const space_id = localStorage.getItem("spaceId");
   const dispatch = useDispatch();
   stompClient.webSocketFactory = function () {
-    return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
+    return new SockJS("http://localhost:9807/letsnote/ws");
   };
 
   stompClient.onConnect = (frame) => {
