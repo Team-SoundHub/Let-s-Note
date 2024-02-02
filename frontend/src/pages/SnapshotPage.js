@@ -87,7 +87,7 @@ const SnapshotPage = () => {
           onPublish={handlePublish}
         />
       )}
-      <WorkSpaceContainer isSnapshot={true} />
+      <WorkSpaceContainer isSnapshot={true} spaceId={false} />
     </Container>
   );
 };

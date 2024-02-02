@@ -64,6 +64,9 @@ class WorkSpaceContainer extends Component {
   }
 
   componentDidMount() {
+    console.log("Received spaceId prop in WorkSpaceContainer:", this.props.spaceId);
+    console.log("Received isSnapshot prop in WorkSpaceContainer:", this.props.isSnapshot);
+
     // 재생 문제가 didmount로 해결됨 그러나 간혹적으로 재생되지 않는 문제가 새로 발생
     const synth = new Synth(this.samplerLoaded);
     this.setState({ synth });
@@ -214,6 +217,7 @@ class WorkSpaceContainer extends Component {
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
                 isSnapshot={this.props.isSnapshot}
+                spaceId={this.props.spaceId}
               />
             </RightPanel>
           </GridContainer>
