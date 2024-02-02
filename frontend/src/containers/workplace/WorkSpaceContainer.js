@@ -9,6 +9,7 @@ import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
 import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
 import Button from "../../components/common/Button";
+import * as Tone from 'tone';
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -81,7 +82,13 @@ class WorkSpaceContainer extends Component {
     this.state.synth.repeat(BeatGrid.trigger, "8n");
   };
 
-  play = () => {
+  play = async () => {
+    // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
+    if (Tone.context.state !== 'running') {
+      await Tone.start();
+      console.log('Audio context is now running');
+    }
+    
     this.state.synth.toggle();
   };
 

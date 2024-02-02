@@ -75,7 +75,7 @@ const LandingPage = () => {
     // Clear session storage on logout
     sessionStorage.removeItem("access");
     sessionStorage.removeItem("refresh");
-    sessionStorage.removeItem("nickname");
+    // sessionStorage.removeItem("nickname");
     sessionStorage.removeItem("accountId");
     setIsLoggedIn(false);
   };
