@@ -73,11 +73,9 @@ const BeatBox = ({
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
     }   
-
-    // console.log("<<<BeatBox 호출 - 1>>");
-    console.log("마운트 초기 세팅 이후에 호출되면 안됨:", activeNote);
-    // dispatch(clearAllNotes()); 
+    
   }, [
+    // useEffect 호출 조건을 다르게 줘서 마운트 이후에는 호출되지 않도록 함.
     snapshotNotes,
     workspaceNotes,
     col,

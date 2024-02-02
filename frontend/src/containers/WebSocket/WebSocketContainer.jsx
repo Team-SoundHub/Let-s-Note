@@ -34,7 +34,7 @@ export const sendCoordinate = (instrument, x, y, spaceId) => {
     return;
   }
 
-  console.log(`좌표 보내기 publish 직전 - x:${x} y:${y}, spaceId: ${spaceId}`);
+  console.log(`좌표 보내기 publish 직전 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
 
   stompClient.publish({
     destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
@@ -45,7 +45,7 @@ export const sendCoordinate = (instrument, x, y, spaceId) => {
       spaceId: spaceId,
     }),
   });
-  console.log(`좌표 보내기 publish 직후 - x:${x} y:${y}, spaceId: ${spaceId}`);
+  console.log(`좌표 보내기 publish 직후 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
 };
 
 export const sendMessage = (message, accountId, spaceId) => {
