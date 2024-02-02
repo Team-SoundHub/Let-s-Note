@@ -134,40 +134,41 @@ export const stompClient = new StompJS.Client({
   },
 });
 
-export const sendInstrumentReset = (instrument, space_id) => {
+export const sendInstrumentReset = (instrument, spaceId) => {
   stompClient.publish({
     destination: "",
     body: JSON.stringify({
       instrument: instrument,
-      spaceId: space_id,
+      spaceId: spaceId,
     }),
   });
 };
 
-export const sendCoordinate = (instrument, x, y) => {
+export const sendCoordinate = (instrument, x, y, spaceId) => {
   if (!stompClient.active) {
     console.error("좌표 보내기 STOMP connection is not active");
     return;
   }
 
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/editor/sendCoordinate`,
+    destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
     body: JSON.stringify({
       instrument: instrument,
       x: x,
       y: y,
-      spaceId: space_id,
+      spaceId: spaceId,
     }),
   });
 };
 
 export const sendMessage = (message, accountId, spaceId) => {
+  // console.log("웹소켓 채팅 요청:", message, accountId);
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/chat/sendMessage`,
+    destination: `/app/workspace/${spaceId}/chat/sendMessage`,
     body: JSON.stringify({
       msgContent: message,
       accountId: accountId,
-      spaceId: space_id,
+      spaceId: spaceId,
     }),
   });
 };
@@ -213,6 +214,7 @@ const WebSocketContainer = ({ spaceId }) => {
       `/topic/workspace/${spaceId}/chat/public`,
       (response) => {
         const message = JSON.parse(response.body);
+        // console.log("채팅 소켓 응답:", message);
         dispatch(addMessage({ spaceId, message }));
       }
     );
@@ -240,10 +242,13 @@ const WebSocketContainer = ({ spaceId }) => {
   };
 
   useEffect(() => {
+    // Component mount logic, including connecting WebSocket
     stompClient.activate();
 
+    // Cleanup function to disconnect WebSocket when component is unmounted
     return () => {
       stompClient.deactivate();
+      // console.log("WebSocket disconnected");
     };
   }, []);
 
@@ -266,6 +271,5 @@ const WebSocketContainer = ({ spaceId }) => {
     </div>
   );
 };
+
 export default WebSocketContainer;
-
-
