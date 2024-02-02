@@ -6,14 +6,13 @@ import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import styled from "styled-components";
 import { getSnapshotInfo } from "../api/snapshotApi";
-import { setSnapshotNotesList } from "../app/slices/innerContentSlice";
+import { setSnapshotNotes, clearAllNotes } from "../app/slices/innerContentSlice";
 
 const Container = styled.div`
   height: 100vh;
 `;
 
-const SnapshotPage = () => {
-  const navigate = useNavigate();
+const SnapshotPage = () => {  
   const dispatch = useDispatch();
 
   const { snapshotId } = useParams();
@@ -45,10 +44,12 @@ const SnapshotPage = () => {
       try {
         // console.log("스냅샷 요청한 snapshotId", snapshotId);
         const response = await getSnapshotInfo(snapshotId);
-        // API 응답에서 스냅샷 노트 정보를 추출하여 dispatch
+        console.log("스냅샷 데이터 요청:", response.response);
+        
         if (response && response.response) {
-          dispatch(setSnapshotNotesList(response.response));
-        }
+          dispatch(setSnapshotNotes(response.response));
+        }        
+
       } catch (error) {
         console.error("Error fetching snapshot info:", error);
       }
@@ -73,9 +74,9 @@ const SnapshotPage = () => {
 
   useEffect(() => {
     return () => {
-      localStorage.removeItem("snapshotId");
+      dispatch(clearAllNotes()); 
     };
-  }, [snapshotId]);
+  }, [dispatch]);
 
   return (
     <Container>
@@ -86,7 +87,7 @@ const SnapshotPage = () => {
           onPublish={handlePublish}
         />
       )}
-      <WorkSpaceContainer isSnapshot={true} />
+      <WorkSpaceContainer isSnapshot={true} spaceId={false} />
     </Container>
   );
 };

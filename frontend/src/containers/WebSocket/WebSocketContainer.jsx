@@ -9,7 +9,7 @@ const accessToken = sessionStorage.getItem("access");
 const accountId = sessionStorage.getItem("accountId");
 const space_id = localStorage.getItem("spaceId");
 
-export const stompClient = new StompJS.Client({
+export const stompClient = new StompJS.Client({  
   brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
   connectHeaders: {
     accessToken: accessToken,
@@ -28,31 +28,31 @@ export const sendInstrumentReset = (instrument, spaceId) => {
   });
 };
 
-export const sendCoordinate = (instrument, x, y) => {
+export const sendCoordinate = (instrument, x, y, spaceId) => {
   if (!stompClient.active) {
     console.error("좌표 보내기 STOMP connection is not active");
     return;
   }
 
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/editor/sendCoordinate`,
+    destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
     body: JSON.stringify({
       instrument: instrument,
       x: x,
       y: y,
-      spaceId: space_id,
+      spaceId: spaceId,
     }),
   });
 };
 
-export const sendMessage = (message, accountId, space_id) => {
+export const sendMessage = (message, accountId, spaceId) => {
   // console.log("웹소켓 채팅 요청:", message, accountId);
   stompClient.publish({
-    destination: `/app/workspace/${space_id}/chat/sendMessage`,
+    destination: `/app/workspace/${spaceId}/chat/sendMessage`,
     body: JSON.stringify({
       msgContent: message,
       accountId: accountId,
-      spaceId: space_id,
+      spaceId: spaceId,
     }),
   });
 };

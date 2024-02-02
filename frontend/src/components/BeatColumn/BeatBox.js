@@ -51,41 +51,8 @@ const BeatBox = ({
   const [instrument, setInstrument] = useState("piano");
 
   const innerContent = useSelector((state) => state.innerContent.innerContent);
-  const notes = useSelector((state) => state.innerContent.notes);
-  const snapshotNotes = useSelector(
-    (state) => state.innerContent.snapshotNotesList
-  );
-  const stateInner = useSelector((state) => state.innerContent);
-
-  // const notes = useSelector(state =>
-  //   isSnapshot ? state.innerContent.snapshotNotesList : state.innerContent.notesList
-  // );
-
-  // useEffect(() => {
-  //   // notes 배열을 검사하여 현재 BeatBox 위치에 해당하는 노트가 있는지 확인
-  //   // console.log("instrumentData:", instrumentData.snapshotNotesList);
-  //   console.log("BeatBox - snapshotNotes:", stateInner);
-
-  //   if (isSnapshot){
-  //     const activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
-  //     if (activeNote && !active) {
-  //       // 해당하는 노트가 있으면, isActive 상태를 true로 설정
-  //       setActive(true);
-  //       setInstrument(activeNote.instrument);
-  //       setActiveBoxes(row, true);
-  //       setActiveInstrument(row, activeNote.instrument);
-  //     }
-  //   } else {
-  //     const activeNote = notes.find((n) => n.x === col && n.y === row);
-  //     if (activeNote && !active) {
-  //       // 해당하는 노트가 있으면, isActive 상태를 true로 설정
-  //       setActive(true);
-  //       setInstrument(activeNote.instrument);
-  //       setActiveBoxes(row, true);
-  //       setActiveInstrument(row, activeNote.instrument);
-  //     }
-  //   }
-  // }, [notes, col, row, setActiveBoxes, setActiveInstrument]);
+  const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
+  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);  
 
   useEffect(() => {
     let activeNote;
@@ -95,9 +62,9 @@ const BeatBox = ({
       // 스냅샷 노트 리스트에서 현재 위치에 해당하는 노트 찾기
       activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
       // console.log("snapshot의 activeNote:", activeNote);
-    } else {
+    } else {      
       // 워크스페이스 모드인 경우
-      activeNote = notes.find((n) => n.x === col && n.y === row);
+      activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
       // console.log("workspace의 activeNote:", activeNote);
     }
 
@@ -110,7 +77,7 @@ const BeatBox = ({
     }
   }, [
     snapshotNotes,
-    notes,
+    workspaceNotes,
     col,
     row,
     active,
