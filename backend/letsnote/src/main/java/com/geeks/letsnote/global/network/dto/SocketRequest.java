@@ -39,9 +39,10 @@ public record SocketRequest() {
 
 	@Builder
 	public record MousePosition(
-			double x,
-			double y,
-			Long accountId
+			Integer x,
+			Integer y,
+			Long accountId,
+			String spaceId
 	) {
 	}
 }
