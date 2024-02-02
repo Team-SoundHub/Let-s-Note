@@ -26,6 +26,7 @@ const LeftPanel = tw.div`
   h-full
   sticky
   left-0
+  z-10
 `;
 
 const RightPanel = tw.div`
@@ -49,6 +50,10 @@ class BeatGrid extends Component {
       (prev) => ({ count: prev.count + 1 }),
       () => this.playBeat(time)
     );
+    if (this.props.onCountChange) {
+      this.props.onCountChange(this.count);
+    }
+    console.log("called");
   };
 
   playBeat = (time) => {

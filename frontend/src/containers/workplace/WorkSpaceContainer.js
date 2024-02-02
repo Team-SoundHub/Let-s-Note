@@ -19,6 +19,7 @@ const Container = styled.div`
 `;
 
 const GridContainer = tw.div`
+relative
   flex
   flex-row
   items-center

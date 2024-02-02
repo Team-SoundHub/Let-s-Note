@@ -50,39 +50,44 @@ const BeatControls = ({
   adjustBPM,
   changeColumns,
   changeInstrument,
-}) => (
-  <Container>
-    <LeftSection>
-      <BeatReset onClick={onReset} />
-      <BeatToggle onClick={onPlay} />
-      <BeatStop onClick={onStop} />
-      <BeatChangeContainer>
-        <BeatChange
-          style={{ marginBottom: 5 }}
-          mode="add"
-          onClick={() => changeColumns(1)}
+  progress,
+}) => {
+  return (
+    <Container>
+      <LeftSection>
+        <BeatReset onClick={onReset} />
+        <BeatToggle onClick={onPlay} />
+        <BeatStop onClick={onStop} />
+        <BeatChangeContainer>
+          <BeatChange
+            style={{ marginBottom: 5 }}
+            mode="add"
+            onClick={() => changeColumns(1)}
+          />
+          <BeatChange
+            style={{ marginTop: 5 }}
+            mode="subtract"
+            onClick={() => changeColumns(-1)}
+          />
+        </BeatChangeContainer>
+      </LeftSection>
+      <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+      <RightSection>
+        <InstrumentChange
+          instrument="piano"
+          changeInstrument={changeInstrument}
         />
-        <BeatChange
-          style={{ marginTop: 5 }}
-          mode="subtract"
-          onClick={() => changeColumns(-1)}
+        <InstrumentChange
+          instrument="guitar"
+          changeInstrument={changeInstrument}
         />
-      </BeatChangeContainer>
-    </LeftSection>
-    <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
-
-    <RightSection>
-      <InstrumentChange
-        instrument="piano"
-        changeInstrument={changeInstrument}
-      />
-      <InstrumentChange
-        instrument="guitar"
-        changeInstrument={changeInstrument}
-      />
-      <InstrumentChange instrument="drum" changeInstrument={changeInstrument} />
-    </RightSection>
-  </Container>
-);
+        <InstrumentChange
+          instrument="drum"
+          changeInstrument={changeInstrument}
+        />
+      </RightSection>
+    </Container>
+  );
+};
 
 export default BeatControls;
