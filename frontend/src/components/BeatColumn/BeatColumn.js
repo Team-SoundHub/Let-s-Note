@@ -5,6 +5,7 @@ import DrumBox from "./DrumBox";
 import Subject from "../../observer/Subject";
 
 const Container = styled.div`
+  position: relative;
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
