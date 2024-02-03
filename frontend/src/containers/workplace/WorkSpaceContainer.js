@@ -63,6 +63,7 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       synth: null,
       visualizeInstrument: [true, true, true],
+      count: -1,
     };
     this.initialBPM = 160;
   }
@@ -83,19 +84,27 @@ class WorkSpaceContainer extends Component {
     this.state.synth.repeat(BeatGrid.trigger, "8n");
   };
 
-  play = async () => {
+  addCount = () => {
+    this.setState((prevState) => ({
+      count: prevState.count + 1,
+    }));
+  };
+
+  handleCountChange = (newCount) => {
+    this.setState({ count: newCount });
+  };
+
+   play = async () => {
     // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
     if (Tone.context.state !== 'running') {
       await Tone.start();
       console.log('Audio context is now running');
     }
-
     this.state.synth.toggle();
   };
 
   stop = () => {
-    const { BeatGrid } = this.refs;
-    BeatGrid.setState({ count: -1 });
+    this.setState({ count: -1 });
     this.state.synth.stop();
   };
 
@@ -205,6 +214,7 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
+      count,
       searchBoxVisible
     } = this.state;
 
@@ -235,7 +245,23 @@ class WorkSpaceContainer extends Component {
                     isSnapshot={this.props.isSnapshot}
                     spaceId={this.props.spaceId}
                 />
-              </RightPanel>
+              ))}
+            </LeftPanel>
+            <RightPanel>
+              <BeatGrid
+                ref="BeatGrid"
+                synth={synth}
+                scale={availableNotes}
+                drumScale={availableDrumNotes}
+                columns={columns}
+                background="#34AEA5"
+                foreground="#ffffff"
+                visualizeInstrument={visualizeInstrument}
+                isSnapshot={this.props.isSnapshot}
+                count={count}
+                addCount={this.addCount}
+              />
+             </RightPanel>
             </GridContainer>
             <BeatControls
                 onPlay={this.play}
