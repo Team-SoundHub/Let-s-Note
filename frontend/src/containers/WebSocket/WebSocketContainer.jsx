@@ -1,4 +1,4 @@
-import React, { useEffect , useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
@@ -10,7 +10,7 @@ const accountId = sessionStorage.getItem("accountId");
 const space_id = localStorage.getItem("spaceId");
 
 export const stompClient = new StompJS.Client({
-  brokerURL: "ws://localhost:8080/letsnote/ws",
+  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
   connectHeaders: {
     accessToken: accessToken,
     spaceId: space_id,
@@ -60,28 +60,10 @@ export const sendMessage = (message, accountId, spaceId) => {
   });
 };
 
-const sendMousePosition = (accountId, x, y) => {
-  stompClient.publish({
-    destination: `/app/workspace/${space_id}/mousePosition`,
-    body: JSON.stringify({
-      x : x,
-      y : y,
-      accountId : accountId,
-    }),
-  });
-};
-
-const handleMouseMove = (event: React.MouseEvent) => {
-  console.log(event);
-  const { clientX: x, clientY: y } = event;
-  sendMousePosition(accountId , x, y);
-};
-
 
 const WebSocketContainer = ({ spaceId }) => {
-  const space_id = localStorage.getItem("spaceId");
+
   const dispatch = useDispatch();
-//   const [mousePosition, setMousePosition] = useState({});
 
   stompClient.webSocketFactory = function () {
     return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
@@ -105,18 +87,6 @@ const WebSocketContainer = ({ spaceId }) => {
         const message = JSON.parse(response.body);
         // console.log("채팅 소켓 응답:", message);
         dispatch(addMessage({ spaceId, message }));
-      }
-    );
-
-    stompClient.subscribe(
-      `/topic/workspace/${spaceId}/mousePosition`,
-      (response) => {
-        const data = JSON.parse(response.body);
-        console.log(data)
-        setMousePosition((prevPosition) => ({
-          ...prevPosition,
-          [data.accountId]: { x: data.x, y: data.y },
-        }));
       }
     );
   };
