@@ -43,7 +43,7 @@ public record SocketResponse() {
             Integer x,
             Integer y,
             Long accountId,
-            String spaceId
+            String nickname
     ) {
     }
 }
