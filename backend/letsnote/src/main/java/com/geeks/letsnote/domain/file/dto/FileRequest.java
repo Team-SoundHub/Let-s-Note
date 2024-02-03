@@ -13,7 +13,7 @@ public record FileRequest(){
 
             @NotNull
             @Size(max = 50)
-            String accountId,
+            String spaceId,
 
             @NotNull
             @Size(max = 30)

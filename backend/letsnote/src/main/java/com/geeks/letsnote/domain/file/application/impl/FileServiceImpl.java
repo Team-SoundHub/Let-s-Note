@@ -21,23 +21,18 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public boolean saveImageFile(FileResponse.Information fileInfo) throws IOException {
-        try {
-            String fileUrl = fileInfo.fileUrl();
-            String fileName = fileUtil.extractFileName(fileUrl);
+        String fileUrl = fileInfo.fileUrl();
+        String fileName = fileUtil.extractFileName(fileUrl);
 
-            if (fileUtil.downloadFile(fileInfo.fileUrl(), fileName)) {
-                File file = File.builder()
-                        .fileName(fileInfo.fileName())
-                        .fileUrl(fileInfo.fileUrl())
-                        .accountId(fileInfo.accountId())
-                        .build();
-                fileRepository.save(file);
-                return true;
-            }
-        } catch (IOException e) {
-            throw new IOException("Error saving image file: " + e.getMessage(), e);
-        }
-        return false;
+//            if (fileUtil.downloadFile(fileInfo.fileUrl(), fileName)) {
+        File file = File.builder()
+                .fileName(fileInfo.fileName())
+                .fileUrl(fileInfo.fileUrl())
+                .spaceId(fileInfo.spaceId())
+                .build();
+        fileRepository.save(file);
+        return true;
+//            }
     }
 
 }

@@ -21,8 +21,8 @@ public class File {
     @Column(name = "file_url", length = 300, unique = true)
     private String fileUrl;
 
-    @Column(name = "account_id", length = 50)
-    private String accountId;
+    @Column(name = "space_id", length = 50)
+    private String spaceId;
 
     @Column(name = "file_name", length = 40)
     private String fileName;

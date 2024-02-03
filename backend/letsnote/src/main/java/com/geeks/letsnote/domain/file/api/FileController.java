@@ -26,7 +26,7 @@ public class FileController {
         FileResponse.Information fileInfo = FileResponse.Information.builder()
                 .fileUrl(information.fileUrl())
                 .fileName(fileName)
-                .accountId(information.accountId())
+                .spaceId(information.spaceId())
                 .build();
         if(fileService.saveImageFile(fileInfo)){
             CommonResponse response = CommonResponse.builder()
