@@ -4,8 +4,8 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
 import VerticalPiano from "../WorkSpace/Piano";
-import { sendCoordinate } from "../../containers/WebSocket/WebSocketContainer";
 import { clearAllNotes } from "../../app/slices/innerContentSlice";
+
 
 const Container = styled.div`
   flex: 1;
@@ -44,7 +44,7 @@ class BeatGrid extends Component {
   handleBoxClick = (row, column) => {
     console.log("clicked spaceId:", this.props.spaceId);
     const instrument = this.props.synth.activeInstrument;
-    sendCoordinate(instrument, row, column, this.props.spaceId);
+    this.props.sendCoordinate(instrument, row, column, this.props.spaceId);
   };
 
   trigger = (time) => {

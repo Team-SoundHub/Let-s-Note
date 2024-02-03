@@ -1,8 +1,6 @@
 import axiosInstance from './axiosInstance';
 
-const accountId = sessionStorage.getItem('accountId');
-
-const getMyPageInfo = async () => {
+const getMyPageInfo = async (accountId) => {
   try {    
     const response = await axiosInstance.get(`/workspaces/${accountId}`);
     return response.data;
@@ -11,7 +9,7 @@ const getMyPageInfo = async () => {
   }
 };
 
-const createWorkSpace = async (spaceTitle, spaceContent, memberAccountId) => {
+const createWorkSpace = async (spaceTitle, spaceContent, memberAccountId, accountId) => {
   try {        
     const response = await axiosInstance.post(`/workspaces/${accountId}`, {
         spaceTitle: spaceTitle,
@@ -24,7 +22,7 @@ const createWorkSpace = async (spaceTitle, spaceContent, memberAccountId) => {
   }
 };
 
-const getMySnapshotInfo = async () => {
+const getMySnapshotInfo = async (accountId) => {
   try {    
     const response = await axiosInstance.get(`/snapshots/${accountId}`);
     return response.data;

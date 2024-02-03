@@ -20,11 +20,15 @@ const Container = styled.div`
   height: 100vh;
 `;
 
+const accountId = sessionStorage.getItem("accountId");
+console.log("workPlacePage에서 accountId 꺼냄 1", accountId);
+
+
 const WorkPlacePage = () => {
   const dispatch = useDispatch();
   const accountId = sessionStorage.getItem("accountId");
   console.log("workPlacePage에서 accountId 꺼냄 2", accountId);
-
+  
   const { spaceId } = useParams(); // 현재 spaceId 얻기  
 
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
@@ -41,16 +45,16 @@ const WorkPlacePage = () => {
   });
 
   // 작업실 입장 시 데이터 요청
-  useEffect(() => {
+  useEffect(() => {    
     const fetchWorkspaceInfo = async () => {
-      try {
+      try {        
         const response = await getWorkspaceInfo(spaceId);
         setWorkspaceInfo(response.response);
-
+        
         console.log("작업실 입장 데이터 요청:", response.response.notesList);
-
+        
         dispatch(setWorkspaceNotes(response.response.notesList));
-
+      
       } catch (error) {
         console.error("Error fetching workspace info:", error);
       }
@@ -85,7 +89,7 @@ const WorkPlacePage = () => {
   useEffect(() => {
     return () => {
       localStorage.removeItem("spaceId");
-      dispatch(clearAllNotes());
+      dispatch(clearAllNotes()); 
     };
   }, [spaceId, dispatch]);
 
@@ -155,56 +159,46 @@ const WorkPlacePage = () => {
     }
   };
 
-
   return (
-    <WebSocketContainer spaceId={spaceId}>
-      {({ sendCoordinate, sendMessage }) => (
-        <Container>
-          <WorkSpaceHeader
-            onOpenModal={handleModalOpen}
-            isSnapshotExist={workspaceInfo.isSnapshotExist}
-            openAddMemberModal={openAddMemberModal}
+    <Container>
+      <div>
+        <WebSocketContainer spaceId={spaceId} />
+      </div>
+      <div>
+        <WorkSpaceHeader
+          onOpenModal={handleModalOpen}
+          isSnapshotExist={workspaceInfo.isSnapshotExist}
+          openAddMemberModal={openAddMemberModal}
+          handleAddMember={handleAddMember}
+          memberList={memberList}
+          openUrlModal={openUrlModal}
+        />
+        {isReleaseModalOpen && (
+          <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
+        )}
+        {snapshotCreated && (
+          <SaveCompleteModal
+            onClose={handleCloseSnapshotModal}
+            snapshotUrl={snapshotUrl}
+            snapshotId={snapshotId}
+          />
+        )}
+        {isAddMemberModalOpen && (
+          <AddMemberModal
+            closeAddMemberModal={closeAddMemberModal}
             handleAddMember={handleAddMember}
-            memberList={memberList}
-            openUrlModal={openUrlModal}
           />
-          <WorkSpaceContainer
-            isSnapshot={false}
-            spaceId={spaceId}
-            sendCoordinate={sendCoordinate}
-          />
-          <ChatContainer
-            sendMessage={sendMessage}
-            spaceId={spaceId}
-            memberList={memberList}
-            nickname={myNickname}
-          />
-          {isReleaseModalOpen && (
-            <SaveSnapshotModal
-              onClose={handleModalClose}
-              onSave={handleSave}
-            />
-          )}
-          {snapshotCreated && (
-            <SaveCompleteModal
-              onClose={handleCloseSnapshotModal}
-              snapshotUrl={snapshotUrl}
-              snapshotId={snapshotId}
-            />
-          )}
-          {isAddMemberModalOpen && (
-            <AddMemberModal
-              closeAddMemberModal={closeAddMemberModal}
-              handleAddMember={handleAddMember}
-            />
-          )}
-          {isUrlModalOpen && (
-            <NoteModal closeUrlModal={closeUrlModal}
-            />
-          )}
-        </Container>
-      )}
-    </WebSocketContainer>
+        )}
+        {isUrlModalOpen && <NoteModal closeUrlModal={closeUrlModal} />}
+        <WorkSpaceContainer isSnapshot={false} spaceId={spaceId}/>
+      </div>
+      <ChatContainer
+        spaceId={spaceId}
+        memberList={memberList}
+        nickname={myNickname}
+      />      
+      
+    </Container>
   );
 };
 

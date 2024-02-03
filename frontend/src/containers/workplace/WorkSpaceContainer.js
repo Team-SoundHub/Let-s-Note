@@ -234,6 +234,7 @@ class WorkSpaceContainer extends Component {
                     visualizeInstrument={visualizeInstrument}
                     isSnapshot={this.props.isSnapshot}
                     spaceId={this.props.spaceId}
+                    sendCoordinate={this.props.sendCoordinate}
                 />
               </RightPanel>
             </GridContainer>

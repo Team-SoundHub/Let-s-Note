@@ -1,147 +1,83 @@
-import React, { useEffect , useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import { setInnerContent } from "../../app/slices/innerContentSlice";
 import { addMessage } from "../../app/slices/chatSlice";
 
-const accessToken = sessionStorage.getItem("access");
-const accountId = sessionStorage.getItem("accountId");
-const space_id = localStorage.getItem("spaceId");
-
-export const stompClient = new StompJS.Client({  
-  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
-  connectHeaders: {
-    accessToken: accessToken,
-    spaceId: space_id,
-    accountId: accountId,
-  },
-});
-
-export const sendInstrumentReset = (instrument, spaceId) => {
-  stompClient.publish({
-    destination: "",
-    body: JSON.stringify({
-      instrument: instrument,
-      spaceId: spaceId,
-    }),
-  });
-};
-
-export const sendCoordinate = (instrument, x, y, spaceId) => {
-  if (!stompClient.active) {
-    console.error("좌표 보내기 STOMP connection is not active");
-    return;
-  }
-
-  console.log(`좌표 보내기 publish 직전 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
-
-  stompClient.publish({
-    destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
-    body: JSON.stringify({
-      instrument: instrument,
-      x: x,
-      y: y,
-      spaceId: spaceId,
-    }),
-  });
-  console.log(`좌표 보내기 publish 직후 - instrument: ${instrument} x:${x} y:${y}, spaceId: ${spaceId}`);
-};
-
-export const sendMessage = (message, accountId, spaceId) => {
-  // console.log("웹소켓 채팅 요청:", message, accountId);
-  stompClient.publish({
-    destination: `/app/workspace/${spaceId}/chat/sendMessage`,
-    body: JSON.stringify({
-      msgContent: message,
-      accountId: accountId,
-      spaceId: spaceId,
-    }),
-  });
-};
-
-// const sendMousePosition = (accountId, x, y) => {
-//   stompClient.publish({
-//     destination: `/app/workspace/${space_id}/mousePosition`,
-//     body: JSON.stringify({
-//       x : x,
-//       y : y,
-//       accountId : accountId,
-//     }),
-//   });
-// };
-//
-// const handleMouseMove = (event: React.MouseEvent) => {
-//   console.log(event);
-//   const { clientX: x, clientY: y } = event;
-//   sendMousePosition(accountId , x, y);
-// };
-
-
-const WebSocketContainer = ({ spaceId }) => {
-  const space_id = localStorage.getItem("spaceId");
+const WebSocketContainer = ({ spaceId, children }) => {
   const dispatch = useDispatch();
-//   const [mousePosition, setMousePosition] = useState({});
-
-  stompClient.webSocketFactory = function () {
-    return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
-  };
-
-  stompClient.onConnect = (frame) => {
-    console.log("Connected: " + frame);
-
-    stompClient.subscribe(
-      `/topic/workspace/${spaceId}/editor/public`,
-      (response) => {
-        const inner_content = JSON.parse(response.body);
-        console.log("노트 소켓 통신:", inner_content);
-        dispatch(setInnerContent(inner_content));
-      }
-    );
-
-    stompClient.subscribe(
-      `/topic/workspace/${spaceId}/chat/public`,
-      (response) => {
-        const message = JSON.parse(response.body);
-        // console.log("채팅 소켓 응답:", message);
-        dispatch(addMessage({ spaceId, message }));
-      }
-    );
-
-//     stompClient.subscribe(
-//       `/topic/workspace/${spaceId}/mousePosition`,
-//       (response) => {
-//         const data = JSON.parse(response.body);
-//         console.log(data)
-//         setMousePosition((prevPosition) => ({
-//           ...prevPosition,
-//           [data.accountId]: { x: data.x, y: data.y },
-//         }));
-//       }
-//     );
-  };
-
-  stompClient.onWebSocketError = (error) => {
-    console.error("Error with websocket", error);
-  };
-
-  stompClient.onStompError = (frame) => {
-    console.error("Broker reported error: " + frame.headers["message"]);
-    console.error("Additional details: " + frame.body);
-  };
+  const [stompClient, setStompClient] = useState(null);
 
   useEffect(() => {
-    // Component mount logic, including connecting WebSocket
-    stompClient.activate();
+    const accessToken = sessionStorage.getItem("access");
+    const accountId = sessionStorage.getItem("accountId");
+    console.log("[WebSocketContainer] accessToken 꺼냄:", accessToken);
+    console.log("[WebSocketContainer] accountId 꺼냄:", accountId);
+    console.log("[WebSocketContainer] spaceId 받아옴:", spaceId);
 
-    // Cleanup function to disconnect WebSocket when component is unmounted
+    const client = new StompJS.Client({
+      brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
+      connectHeaders: {
+        accessToken: accessToken,
+        spaceId: spaceId,
+        accountId: accountId,
+      },
+      webSocketFactory: () => new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws"),
+      onConnect: () => {
+        console.log("Connected: ");
+        // 여기에 구독 로직 추가
+        subscribeToTopics(client);
+      },
+      onStompError: (frame) => {
+        console.error("Broker reported error: " + frame.headers["message"]);
+        console.error("Additional details: " + frame.body);
+      },
+    });
+
+    client.activate();
+    setStompClient(client);
+
     return () => {
-      stompClient.deactivate();
-      // console.log("WebSocket disconnected");
+      client.deactivate();
     };
-  }, []);
+  }, [spaceId, dispatch]);
 
-  return <></>;
+  const subscribeToTopics = (client) => {
+    client.subscribe(`/topic/workspace/${spaceId}/editor/public`, (response) => {
+      const inner_content = JSON.parse(response.body);
+      dispatch(setInnerContent(inner_content));
+    });
+
+    client.subscribe(`/topic/workspace/${spaceId}/chat/public`, (response) => {
+      const message = JSON.parse(response.body);
+      dispatch(addMessage({ spaceId, message }));
+    });
+  };
+
+  // 함수를 자식 컴포넌트에 전달
+  return children({
+    sendCoordinate: (instrument, x, y) => {
+      if (!stompClient || !stompClient.active) {
+        console.error("STOMP connection is not active");
+        return;
+      }
+      stompClient.publish({
+        destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
+        body: JSON.stringify({ instrument, x, y, spaceId }),
+      });
+    },
+    sendMessage: (message) => {
+      if (!stompClient || !stompClient.active) {
+        console.error("STOMP connection is not active");
+        return;
+      }
+      stompClient.publish({
+        destination: `/app/workspace/${spaceId}/chat/sendMessage`,
+        body: JSON.stringify({ msgContent: message, accountId: sessionStorage.getItem("accountId"), spaceId }),
+      });
+    },
+  });
 };
 
 export default WebSocketContainer;
