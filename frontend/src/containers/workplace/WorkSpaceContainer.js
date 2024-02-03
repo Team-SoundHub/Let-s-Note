@@ -60,6 +60,7 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       synth: null,
       visualizeInstrument: [true, true, true],
+      count: -1,
     };
     this.initialBPM = 160;
   }
@@ -77,13 +78,22 @@ class WorkSpaceContainer extends Component {
     this.state.synth.repeat(BeatGrid.trigger, "8n");
   };
 
+  addCount = () => {
+    this.setState((prevState) => ({
+      count: prevState.count + 1,
+    }));
+  };
+
+  handleCountChange = (newCount) => {
+    this.setState({ count: newCount });
+  };
+
   play = () => {
     this.state.synth.toggle();
   };
 
   stop = () => {
-    const { BeatGrid } = this.refs;
-    BeatGrid.setState({ count: -1 });
+    this.setState({ count: -1 });
     this.state.synth.stop();
   };
 
@@ -141,6 +151,7 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
+      count,
     } = this.state;
 
     if (loading) {
@@ -168,6 +179,8 @@ class WorkSpaceContainer extends Component {
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
                 isSnapshot={this.props.isSnapshot}
+                count={count}
+                addCount={this.addCount}
               />
             </RightPanel>
           </GridContainer>
@@ -178,6 +191,9 @@ class WorkSpaceContainer extends Component {
             adjustBPM={this.adjustBPM}
             bpm={this.initialBPM}
             changeInstrument={this.changeInstrument}
+            columns={columns}
+            count={count}
+            handleCountChange={this.handleCountChange}
           />
         </Container>
       );

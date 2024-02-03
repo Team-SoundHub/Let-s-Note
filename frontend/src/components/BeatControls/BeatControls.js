@@ -7,6 +7,7 @@ import BeatReset from "./BeatReset";
 import Subject from "../../observer/Subject";
 import InstrumentChange from "../InstrumentControl/InstrumentChange";
 import BeatStop from "./BeatStop";
+import BeatProgressBar from "./BeatProgressBar";
 import { sendInstrumentReset } from "../../containers/WebSocket/WebSocketContainer";
 
 const Container = tw.div`
@@ -24,6 +25,13 @@ const LeftSection = tw.div`
   flex
   items-center
   gap-4
+`;
+
+const CenterSection = tw.div`
+  flex
+  flex-col
+  w-[40%]
+  items-center
 `;
 
 const RightSection = tw.div`
@@ -50,7 +58,9 @@ const BeatControls = ({
   adjustBPM,
   changeColumns,
   changeInstrument,
-  progress,
+  columns,
+  count,
+  handleCountChange,
 }) => {
   return (
     <Container>
@@ -71,7 +81,14 @@ const BeatControls = ({
           />
         </BeatChangeContainer>
       </LeftSection>
-      <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+      <CenterSection>
+        <BeatProgressBar
+          columns={columns}
+          count={count}
+          handleCountChange={handleCountChange}
+        />
+        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+      </CenterSection>
       <RightSection>
         <InstrumentChange
           instrument="piano"

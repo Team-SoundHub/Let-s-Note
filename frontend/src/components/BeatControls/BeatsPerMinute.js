@@ -9,6 +9,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
+  margin-top: 0.5rem;
 `;
 
 const Label = styled.span`
