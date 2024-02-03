@@ -92,6 +92,13 @@ public class EditorSocketController {
 		return new SocketResponse.Coordinate(spaceId, content.instrument(), content.x(), content.y());
 	}
 
+	@MessageMapping("/workspace/{spaceId}/mouse/sendMousePosition")
+	@SendTo("/topic/workspace/{spaceId}/mouse/public")
+	public SocketResponse.MousePosition sendEditorCoordinateInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId) throws Exception {
+		ResponseAccount.NickName nickname = accountService.getNicknameFromAccountId(mousePosition.accountId());
+	return new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId(),nickname.nickname());
+	}
+
 	@MessageExceptionHandler
 	@SendToUser("/queue/errors")
 	public String handleException(Throwable exception, StompHeaderAccessor stompHeaderAccessor) throws IOException {
