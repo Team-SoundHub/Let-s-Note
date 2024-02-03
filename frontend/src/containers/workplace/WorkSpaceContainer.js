@@ -7,6 +7,9 @@ import Loading from "../../components/Loading";
 import { availableNotes, availableDrumNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
+import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
+import Button from "../../components/common/Button";
+import * as Tone from 'tone';
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -66,6 +69,9 @@ class WorkSpaceContainer extends Component {
   }
 
   componentDidMount() {
+    console.log("Received spaceId prop in WorkSpaceContainer:", this.props.spaceId);
+    console.log("Received isSnapshot prop in WorkSpaceContainer:", this.props.isSnapshot);
+
     // 재생 문제가 didmount로 해결됨 그러나 간혹적으로 재생되지 않는 문제가 새로 발생
     const synth = new Synth(this.samplerLoaded);
     this.setState({ synth });
@@ -88,7 +94,12 @@ class WorkSpaceContainer extends Component {
     this.setState({ count: newCount });
   };
 
-  play = () => {
+   play = async () => {
+    // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
+    if (Tone.context.state !== 'running') {
+      await Tone.start();
+      console.log('Audio context is now running');
+    }
     this.state.synth.toggle();
   };
 
@@ -117,6 +128,11 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setInstrument(instrument);
   };
 
+  handleSearchBar = () => {
+    this.setState((prevState) => ({
+      searchBoxVisible: !prevState.searchBoxVisible,
+    }));
+  };
   changeVisualizeInstrument = (instrument) => {
     const { visualizeInstrument } = this.state;
 
@@ -143,6 +159,53 @@ class WorkSpaceContainer extends Component {
     }
   };
 
+  setInstrumentScale = (scale) => {
+      scale = [
+        "D2",
+        "D#2",
+        "E2",
+        "F2",
+        "F#2",
+        "G2",
+        "G#2",
+        "A2",
+        "A#2",
+        "B2",
+        "C3",
+        "C#3",
+        "D3",
+        "D#3",
+        "E3",
+        "F3",
+        "F#3",
+        "G3",
+        "G#3",
+        "A3",
+        "A#3",
+        "B3",
+        "C4",
+        "C#4",
+        "D4",
+        "D#4",
+        "E4",
+        "F4",
+        "F#4",
+        "G4",
+        "G#4",
+        "A4",
+        "A#4",
+        "B4",
+      ].reverse();
+      this.setState({ availableNotes: scale });
+    };
+
+    setDrumScale = (drumScale) => {
+      drumScale = ["E2", "D2"];
+
+      // Update the state to set the drum scale
+      this.setState({ availableDrumNotes: drumScale });
+    };
+
   render() {
     const {
       loading,
@@ -152,19 +215,35 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       visualizeInstrument,
       count,
+      searchBoxVisible
     } = this.state;
 
     if (loading) {
       return <Loading />;
     } else {
       return (
-        <Container>
-          <GridContainer>
-            <LeftPanel>
-              {instrumentOptions.map((instrument, index) => (
-                <InstrumentVisualize
-                  instrument={instrument}
-                  changeVisualizeInstrument={this.changeVisualizeInstrument}
+          <Container>
+            <GridContainer>
+              <LeftPanel>
+                {instrumentOptions.map((instrument, index) => (
+                    <InstrumentVisualize
+                        instrument={instrument}
+                        changeVisualizeInstrument={this.changeVisualizeInstrument}
+                    />
+                ))}
+              </LeftPanel>
+              <RightPanel>
+                <BeatGrid
+                    ref="BeatGrid"
+                    synth={synth}
+                    scale={availableNotes}
+                    drumScale={availableDrumNotes}
+                    columns={columns}
+                    background="#34AEA5"
+                    foreground="#ffffff"
+                    visualizeInstrument={visualizeInstrument}
+                    isSnapshot={this.props.isSnapshot}
+                    spaceId={this.props.spaceId}
                 />
               ))}
             </LeftPanel>
@@ -182,20 +261,23 @@ class WorkSpaceContainer extends Component {
                 count={count}
                 addCount={this.addCount}
               />
-            </RightPanel>
-          </GridContainer>
-          <BeatControls
-            onPlay={this.play}
-            onStop={this.stop}
-            changeColumns={this.changeColumns}
-            adjustBPM={this.adjustBPM}
-            bpm={this.initialBPM}
-            changeInstrument={this.changeInstrument}
-            columns={columns}
-            count={count}
-            handleCountChange={this.handleCountChange}
-          />
-        </Container>
+             </RightPanel>
+            </GridContainer>
+            <BeatControls
+                onPlay={this.play}
+                onStop={this.stop}
+                changeColumns={this.changeColumns}
+                adjustBPM={this.adjustBPM}
+                bpm={this.initialBPM}
+                changeInstrument={this.changeInstrument}
+            />
+            <div className={"w-full flex justify-center content-center"}>
+              <Button onClick={this.handleSearchBar}>열기/닫기</Button>
+            </div>
+            <div id="search-box" className={searchBoxVisible ? 'visible' : 'hidden'}>
+              <GoogleCustomSearch/>
+            </div>
+          </Container>
       );
     }
   }

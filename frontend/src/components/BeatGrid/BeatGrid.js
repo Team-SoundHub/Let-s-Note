@@ -5,6 +5,7 @@ import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
 import VerticalPiano from "../WorkSpace/Piano";
 import { sendCoordinate } from "../../containers/WebSocket/WebSocketContainer";
+import { clearAllNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -39,8 +40,9 @@ const RightPanel = tw.div`
 
 class BeatGrid extends Component {
   handleBoxClick = (row, column) => {
+    console.log("clicked spaceId:", this.props.spaceId);
     const instrument = this.props.synth.activeInstrument;
-    sendCoordinate(instrument, row, column);
+    sendCoordinate(instrument, row, column, this.props.spaceId);
   };
 
   playBeat = (time) => {

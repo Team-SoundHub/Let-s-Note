@@ -11,7 +11,7 @@ import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import NoteModal from "../components/WorkSpace/NoteModal";
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
-import { setNotesList } from "../app/slices/innerContentSlice";
+import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
 
@@ -19,7 +19,7 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-const spaceId = localStorage.getItem("spaceId");
+// const spaceId = localStorage.getItem("spaceId");
 const accountId = sessionStorage.getItem("accountId");
 
 const WorkPlacePage = () => {
@@ -42,19 +42,16 @@ const WorkPlacePage = () => {
   });
 
   // 작업실 입장 시 데이터 요청
-  useEffect(() => {
+  useEffect(() => {    
     const fetchWorkspaceInfo = async () => {
-      try {
+      try {        
         const response = await getWorkspaceInfo(spaceId);
         setWorkspaceInfo(response.response);
-
-        // notesList 전체를 Redux store에 저장
-        dispatch(setNotesList(response.response.notesList));
-
-        // console.log(
-        //   "작업실 입장 - workspaceInfo:",
-        //   response.response.notesList
-        // );
+        
+        console.log("작업실 입장 데이터 요청:", response.response.notesList);
+        
+        dispatch(setWorkspaceNotes(response.response.notesList));
+      
       } catch (error) {
         console.error("Error fetching workspace info:", error);
       }
@@ -89,8 +86,9 @@ const WorkPlacePage = () => {
   useEffect(() => {
     return () => {
       localStorage.removeItem("spaceId");
+      dispatch(clearAllNotes()); 
     };
-  }, [spaceId]);
+  }, [spaceId, dispatch]);
 
   const handleModalOpen = () => {
     setIsReleaseModalOpen(true);
@@ -189,13 +187,14 @@ const WorkPlacePage = () => {
           />
         )}
         {isUrlModalOpen && <NoteModal closeUrlModal={closeUrlModal} />}
-        <WorkSpaceContainer notesList={workspaceInfo.notesList} />
+        <WorkSpaceContainer isSnapshot={false} spaceId={spaceId}/>
       </div>
       <ChatContainer
         spaceId={spaceId}
         memberList={memberList}
         nickname={myNickname}
-      />
+      />      
+      
     </Container>
   );
 };

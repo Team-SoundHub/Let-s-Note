@@ -84,11 +84,11 @@ public class WorkspaceController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @PostMapping("/space-id")
-    public ResponseEntity<CommonResponse> clickNote(@RequestParam("v") String spaceId, @RequestBody RequestNotes.NoteDto note){
-        noteInstrumentMapService.clickNoteMap(spaceId,note);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping("/space-id")
+//    public ResponseEntity<CommonResponse> clickNote(@RequestParam("v") String spaceId, @RequestBody RequestNotes.NoteDto note){
+//        noteInstrumentMapService.clickNoteMap(spaceId,note);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     @DeleteMapping("/test")
     public ResponseEntity<CommonResponse> deleteAllWorkspacesForDBClean(){
