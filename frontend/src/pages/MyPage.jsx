@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import tw from "tailwind-styled-components";
 import {
   getMyPageInfo,
@@ -10,7 +10,6 @@ import {
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
-import WorkSpaceCard from "../components/WorkSpace/WorkSpaceCard";
 import CreateSpaceModal from "../components/MyPage/CreateSpaceModal";
 import PostCard from "../components/feed/PostCard";
 
@@ -89,6 +88,15 @@ const MyPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Clear session storage on logout
+    sessionStorage.removeItem("access");
+    sessionStorage.removeItem("refresh");
+    // sessionStorage.removeItem("nickname");
+    sessionStorage.removeItem("accountId");
+    navigate("/");
+  };
+
   useEffect(() => {
     console.log("workspace 리덕스 정보 청소 - workspaceNotes:", workspaceNotes);
     console.log("snapshot 리덕스 정보 청소 - snapshotNotes:", snapshotNotes);
@@ -119,7 +127,7 @@ const MyPage = () => {
   // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
   return (
     <>
-      <Header />
+      <Header handleLogout={handleLogout} />
       <MypageContainer>
         <TitleContainer>
           <SectionTitle>내 작업실</SectionTitle>
