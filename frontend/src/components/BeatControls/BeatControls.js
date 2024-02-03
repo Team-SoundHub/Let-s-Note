@@ -72,12 +72,12 @@ const BeatControls = ({
           <BeatChange
             style={{ marginBottom: 5 }}
             mode="add"
-            onClick={() => changeColumns(1)}
+            onClick={() => changeColumns(8)}
           />
           <BeatChange
             style={{ marginTop: 5 }}
             mode="subtract"
-            onClick={() => changeColumns(-1)}
+            onClick={() => changeColumns(-8)}
           />
         </BeatChangeContainer>
       </LeftSection>
