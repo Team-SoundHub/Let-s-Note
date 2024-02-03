@@ -1,4 +1,4 @@
-import React, { useEffect , useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
@@ -9,8 +9,8 @@ const accessToken = sessionStorage.getItem("access");
 const accountId = sessionStorage.getItem("accountId");
 const space_id = localStorage.getItem("spaceId");
 
-export const stompClient = new StompJS.Client({
-  brokerURL: "ws://localhost:8080/letsnote/ws",
+export const stompClient = new StompJS.Client({  
+  brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
   connectHeaders: {
     accessToken: accessToken,
     spaceId: space_id,

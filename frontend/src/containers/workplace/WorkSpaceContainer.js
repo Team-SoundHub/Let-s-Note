@@ -10,6 +10,7 @@ import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVi
 import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
 import Button from "../../components/common/Button";
 import * as Tone from 'tone';
+import NoteStorage from "../../components/WorkSpace/NoteStorage";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -133,6 +134,13 @@ class WorkSpaceContainer extends Component {
       searchBoxVisible: !prevState.searchBoxVisible,
     }));
   };
+
+  noteStorageBox = () => {
+    this.setState((prevState) => ({
+      noteStorageVisible: !prevState.noteStorageVisible,
+    }));
+  };
+
   changeVisualizeInstrument = (instrument) => {
     const { visualizeInstrument } = this.state;
 
@@ -214,6 +222,7 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
+      noteStorageVisible,
       count,
       searchBoxVisible
     } = this.state;
