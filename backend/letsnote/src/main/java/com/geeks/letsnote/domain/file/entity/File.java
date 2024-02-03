@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 public class File {
     @Id
     @Column(name = "file_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
 
-    @Column(name = "file_url", length = 300, unique = true)
+    @Column(name = "file_url", length = 300)
     private String fileUrl;
 
-    @Column(name = "space_id", length = 50)
+    @Column(name = "space_id", length = 200)
     private String spaceId;
 
     @Column(name = "file_name", length = 40)

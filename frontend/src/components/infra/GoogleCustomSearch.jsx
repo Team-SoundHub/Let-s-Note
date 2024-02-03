@@ -42,9 +42,9 @@ const GoogleCustomSearch = () => {
         <div className="w-full h-full flex flex-col items-center p-4">
             <div>
                 <div className="w-full flex justify-center content-center mb-4">
-                    <TextInput id="input-info" placeholder="검색어 입력" required color="info" />
+                    <TextInput id="input-info" placeholder="노래 이름 입력" required color="info" />
                     <Button onClick={handleSearchClick} disabled={loading}>
-                        검색
+                        악보 검색
                     </Button>
                 </div>
                 <div className="flex p-4 w-full h-fit overflow-y-auto items-center">

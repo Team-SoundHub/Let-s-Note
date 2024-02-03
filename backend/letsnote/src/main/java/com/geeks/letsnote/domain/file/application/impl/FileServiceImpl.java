@@ -2,6 +2,7 @@ package com.geeks.letsnote.domain.file.application.impl;
 
 import com.geeks.letsnote.domain.file.application.FileService;
 import com.geeks.letsnote.domain.file.dao.FileRepository;
+import com.geeks.letsnote.domain.file.dto.FileRequest;
 import com.geeks.letsnote.domain.file.dto.FileResponse;
 import com.geeks.letsnote.domain.file.entity.File;
 import com.geeks.letsnote.domain.file.util.FileUtil;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +23,7 @@ public class FileServiceImpl implements FileService {
     private FileUtil fileUtil;
 
     @Override
-    public boolean saveImageFile(FileResponse.Information fileInfo) throws IOException {
+    public boolean saveImageFile(FileRequest.Information fileInfo) throws IOException {
         String fileUrl = fileInfo.fileUrl();
         String fileName = fileUtil.extractFileName(fileUrl);
 
@@ -33,6 +36,22 @@ public class FileServiceImpl implements FileService {
         fileRepository.save(file);
         return true;
 //            }
+    }
+
+    @Override
+    public List<FileResponse.Information> getAllImageInfo(String spaceId) {
+        List<File> files = fileRepository.findAllBySpaceId(spaceId);
+        List<FileResponse.Information> resultList= new ArrayList<>();
+        for(File file : files){
+            FileResponse.Information info = FileResponse.Information.builder()
+                    .fileName(file.getFileName())
+                    .fileUrl(file.getFileUrl())
+                    .build();
+
+            resultList.add(info);
+        }
+
+        return resultList;
     }
 
 }

@@ -12,10 +12,6 @@ public record FileResponse() {
             String fileUrl,
 
             @NotNull
-            @Size(max = 50)
-            String spaceId,
-
-            @NotNull
             @Size(max = 30)
             String fileName
     ){

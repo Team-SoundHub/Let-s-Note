@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Tag(name = "파일 API", description = "파일 관련 API 입니다.")
 @RestController
@@ -21,9 +22,28 @@ public class FileController {
         this.fileService = fileService;
     }
 
+    @GetMapping("/{spaceId}")
+    public ResponseEntity<CommonResponse> getImageFile(@PathVariable String spaceId){
+        List<FileResponse.Information> files = fileService.getAllImageInfo(spaceId);
+        if(!files.isEmpty()){
+            CommonResponse response = CommonResponse.builder()
+                    .success(true)
+                    .response(files)
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            CommonResponse response = CommonResponse.builder()
+                    .success(false)
+                    .response("file not founded")
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+        }
+    }
+
+
     @PostMapping("/{fileName}")
     public ResponseEntity<CommonResponse> saveImageFile(@PathVariable String fileName, @RequestBody FileRequest.Information information) throws IOException {
-        FileResponse.Information fileInfo = FileResponse.Information.builder()
+        FileRequest.Information fileInfo = FileRequest.Information.builder()
                 .fileUrl(information.fileUrl())
                 .fileName(fileName)
                 .spaceId(information.spaceId())
