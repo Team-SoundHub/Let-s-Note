@@ -245,7 +245,7 @@ class WorkSpaceContainer extends Component {
                     isSnapshot={this.props.isSnapshot}
                     spaceId={this.props.spaceId}
                 />
-              ))}
+              {/* ))}
             </LeftPanel>
             <RightPanel>
               <BeatGrid
@@ -260,7 +260,7 @@ class WorkSpaceContainer extends Component {
                 isSnapshot={this.props.isSnapshot}
                 count={count}
                 addCount={this.addCount}
-              />
+              /> */}
              </RightPanel>
             </GridContainer>
             <BeatControls

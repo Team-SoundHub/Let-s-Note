@@ -60,28 +60,9 @@ export const sendMessage = (message, accountId, spaceId) => {
   });
 };
 
-const sendMousePosition = (accountId, x, y) => {
-  stompClient.publish({
-    destination: `/app/workspace/${space_id}/mousePosition`,
-    body: JSON.stringify({
-      x : x,
-      y : y,
-      accountId : accountId,
-    }),
-  });
-};
-
-const handleMouseMove = (event: React.MouseEvent) => {
-  console.log(event);
-  const { clientX: x, clientY: y } = event;
-  sendMousePosition(accountId , x, y);
-};
-
 
 const WebSocketContainer = ({ spaceId }) => {
-  const space_id = localStorage.getItem("spaceId");
   const dispatch = useDispatch();
-//   const [mousePosition, setMousePosition] = useState({});
 
   stompClient.webSocketFactory = function () {
     return new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws");
@@ -108,17 +89,6 @@ const WebSocketContainer = ({ spaceId }) => {
       }
     );
 
-    stompClient.subscribe(
-      `/topic/workspace/${spaceId}/mousePosition`,
-      (response) => {
-        const data = JSON.parse(response.body);
-        console.log(data)
-        setMousePosition((prevPosition) => ({
-          ...prevPosition,
-          [data.accountId]: { x: data.x, y: data.y },
-        }));
-      }
-    );
   };
 
   stompClient.onWebSocketError = (error) => {
