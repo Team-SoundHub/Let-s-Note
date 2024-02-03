@@ -52,9 +52,9 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
 
     @Override
-    public void clickNoteMap(String spaceId, RequestNotes.NoteDto note) {
-        Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,note.instrument());
-        noteService.clickNote(noteInstrumentMap.get().getMapId(),note);
+    public void clickNoteMap(SocketRequest.Coordinate coordinate) {
+        Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(coordinate.spaceId(), Instrument.fromString(coordinate.instrument()));
+        noteService.clickNote(noteInstrumentMap.get().getMapId(), RequestNotes.NoteDto.builder().instrument(Instrument.fromString(coordinate.instrument())).noteY(coordinate.y()).noteX(coordinate.x()).build());
     }
 
     @Override

@@ -36,4 +36,13 @@ public record SocketRequest() {
 			@NotNull
 			Instrument instrument
 	){}
+
+	@Builder
+	public record MousePosition(
+			Integer x,
+			Integer y,
+			Long accountId,
+			String spaceId
+	) {
+	}
 }

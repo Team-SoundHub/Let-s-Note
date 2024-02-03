@@ -5,11 +5,6 @@ const getTransport = () => {
   return Tone.Transport;
 };
 
-const drumSamples = {
-  36: "audio/drum/36.mp3",
-  38: "audio/drum/38.mp3",
-};
-
 class Synth {
   constructor(
     callback,
@@ -26,18 +21,36 @@ class Synth {
           scale,
           callback,
           "/audio/" + instrument + "/"
-        );
+        ).set({
+          volume: -12,
+          oscillator: {
+            type: "triangle17",
+          },
+          attack: 0.01,
+          decay: 0.1,
+          sustain: 0.2,
+          release: 1.7,
+        });
       } else {
         this.samplers[instrument] = new Tone.Sampler(
           drumScale,
           callback,
           "/audio/" + instrument + "/"
-        );
+        ).set({
+          volume: -12,
+          oscillator: {
+            type: "triangle17",
+          },
+          attack: 0.01,
+          decay: 0.1,
+          sustain: 0.2,
+          release: 1.7,
+        });
       }
       this.samplers[instrument].toDestination();
     });
 
-    this.setVolume();
+    // this.setVolume();
   }
 
   setVolume(volume = -12) {

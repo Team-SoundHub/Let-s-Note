@@ -23,6 +23,7 @@ const Container = styled.div`
 `;
 
 const GridContainer = tw.div`
+relative
   flex
   flex-row
   items-center
@@ -63,6 +64,7 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       synth: null,
       visualizeInstrument: [true, true, true],
+      count: -1,
     };
     this.initialBPM = 160;
   }
@@ -83,19 +85,27 @@ class WorkSpaceContainer extends Component {
     this.state.synth.repeat(BeatGrid.trigger, "8n");
   };
 
-  play = async () => {
+  addCount = () => {
+    this.setState((prevState) => ({
+      count: prevState.count + 1,
+    }));
+  };
+
+  handleCountChange = (newCount) => {
+    this.setState({ count: newCount });
+  };
+
+   play = async () => {
     // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
     if (Tone.context.state !== 'running') {
       await Tone.start();
       console.log('Audio context is now running');
     }
-    
     this.state.synth.toggle();
   };
 
   stop = () => {
-    const { BeatGrid } = this.refs;
-    BeatGrid.setState({ count: -1 });
+    this.setState({ count: -1 });
     this.state.synth.stop();
   };
 
@@ -157,6 +167,53 @@ class WorkSpaceContainer extends Component {
     }
   };
 
+  setInstrumentScale = (scale) => {
+      scale = [
+        "D2",
+        "D#2",
+        "E2",
+        "F2",
+        "F#2",
+        "G2",
+        "G#2",
+        "A2",
+        "A#2",
+        "B2",
+        "C3",
+        "C#3",
+        "D3",
+        "D#3",
+        "E3",
+        "F3",
+        "F#3",
+        "G3",
+        "G#3",
+        "A3",
+        "A#3",
+        "B3",
+        "C4",
+        "C#4",
+        "D4",
+        "D#4",
+        "E4",
+        "F4",
+        "F#4",
+        "G4",
+        "G#4",
+        "A4",
+        "A#4",
+        "B4",
+      ].reverse();
+      this.setState({ availableNotes: scale });
+    };
+
+    setDrumScale = (drumScale) => {
+      drumScale = ["E2", "D2"];
+
+      // Update the state to set the drum scale
+      this.setState({ availableDrumNotes: drumScale });
+    };
+
   render() {
     const {
       loading,
@@ -165,8 +222,9 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
-      searchBoxVisible,
-      noteStorageVisible
+      noteStorageVisible,
+      count,
+      searchBoxVisible
     } = this.state;
 
     if (loading) {

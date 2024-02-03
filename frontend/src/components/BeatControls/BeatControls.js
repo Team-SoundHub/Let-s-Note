@@ -7,6 +7,7 @@ import BeatReset from "./BeatReset";
 import Subject from "../../observer/Subject";
 import InstrumentChange from "../InstrumentControl/InstrumentChange";
 import BeatStop from "./BeatStop";
+import BeatProgressBar from "./BeatProgressBar";
 import { sendInstrumentReset } from "../../containers/WebSocket/WebSocketContainer";
 
 const Container = tw.div`
@@ -24,6 +25,13 @@ const LeftSection = tw.div`
   flex
   items-center
   gap-4
+`;
+
+const CenterSection = tw.div`
+  flex
+  flex-col
+  w-[40%]
+  items-center
 `;
 
 const RightSection = tw.div`
@@ -50,39 +58,53 @@ const BeatControls = ({
   adjustBPM,
   changeColumns,
   changeInstrument,
-}) => (
-  <Container>
-    <LeftSection>
-      <BeatReset onClick={onReset} />
-      <BeatToggle onClick={onPlay} />
-      <BeatStop onClick={onStop} />
-      <BeatChangeContainer>
-        <BeatChange
-          style={{ marginBottom: 5 }}
-          mode="add"
-          onClick={() => changeColumns(1)}
+  columns,
+  count,
+  handleCountChange,
+}) => {
+  return (
+    <Container>
+      <LeftSection>
+        <BeatReset onClick={onReset} />
+        <BeatToggle onClick={onPlay} />
+        <BeatStop onClick={onStop} />
+        <BeatChangeContainer>
+          <BeatChange
+            style={{ marginBottom: 5 }}
+            mode="add"
+            onClick={() => changeColumns(8)}
+          />
+          <BeatChange
+            style={{ marginTop: 5 }}
+            mode="subtract"
+            onClick={() => changeColumns(-8)}
+          />
+        </BeatChangeContainer>
+      </LeftSection>
+      <CenterSection>
+        <BeatProgressBar
+          columns={columns}
+          count={count}
+          handleCountChange={handleCountChange}
         />
-        <BeatChange
-          style={{ marginTop: 5 }}
-          mode="subtract"
-          onClick={() => changeColumns(-1)}
+        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+      </CenterSection>
+      <RightSection>
+        <InstrumentChange
+          instrument="piano"
+          changeInstrument={changeInstrument}
         />
-      </BeatChangeContainer>
-    </LeftSection>
-    <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
-
-    <RightSection>
-      <InstrumentChange
-        instrument="piano"
-        changeInstrument={changeInstrument}
-      />
-      <InstrumentChange
-        instrument="guitar"
-        changeInstrument={changeInstrument}
-      />
-      <InstrumentChange instrument="drum" changeInstrument={changeInstrument} />
-    </RightSection>
-  </Container>
-);
+        <InstrumentChange
+          instrument="guitar"
+          changeInstrument={changeInstrument}
+        />
+        <InstrumentChange
+          instrument="drum"
+          changeInstrument={changeInstrument}
+        />
+      </RightSection>
+    </Container>
+  );
+};
 
 export default BeatControls;

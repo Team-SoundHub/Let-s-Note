@@ -8,7 +8,7 @@ import com.geeks.letsnote.global.network.dto.SocketRequest;
 public interface NoteInstrumentMapService {
     ResponseNotes.Notes getAllInstrumentNoteBySpaceId (String spaceId, Instrument instrument);
 
-    void clickNoteMap(String spaceId, RequestNotes.NoteDto note);
+    void clickNoteMap(SocketRequest.Coordinate coordinate);
     void createWorkspaceInstrumentMap(String spaceId);
 
     void deleteNoteBySpaceIdAndInstrument(SocketRequest.SpaceInstrument spaceInstrument);
