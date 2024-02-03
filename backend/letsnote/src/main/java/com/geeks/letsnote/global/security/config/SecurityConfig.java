@@ -26,13 +26,13 @@ public class SecurityConfig {
             "/favicon.ico",
             "/actuator/*",
             "/api/v1/accounts/token",
-            "/api/v1/members/register",
+            "/api/v1/members/signup",
             "/test",
-            "/swagger/**",
+            "/swagger-ui/**",
             "/api/v1/feeds",
             "/api/v1/feeds/*",
             "/letsnote/ws/**",
-            "/api/v1/files/**",
+            "/api/v1/files/**"
     };
 
     public SecurityConfig(
