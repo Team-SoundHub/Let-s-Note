@@ -163,7 +163,6 @@ const WorkPlacePage = () => {
             openAddMemberModal={openAddMemberModal}
             handleAddMember={handleAddMember}
             memberList={memberList}
-            openUrlModal={openUrlModal}
           />
           <WorkSpaceContainer
             isSnapshot={false}
