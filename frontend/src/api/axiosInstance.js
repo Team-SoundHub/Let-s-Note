@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios 인스턴스 생성
 const axiosInstance = axios.create({
-  baseURL: 'https://letsnote-rough-wind-6773.fly.dev/api/v1'
+  baseURL: process.env.REACT_APP_BACKEND_URL,
 });
 
 axiosInstance.interceptors.request.use(
