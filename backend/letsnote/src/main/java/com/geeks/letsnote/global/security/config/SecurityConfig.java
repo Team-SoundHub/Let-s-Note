@@ -28,10 +28,11 @@ public class SecurityConfig {
             "/api/v1/accounts/token",
             "/api/v1/members/signup",
             "/test",
-            "/swagger/**",
-            "api/v1/feeds",
-            "api/v1/feeds/*",
-            "/letsnote/ws/**"
+            "/swagger-ui/**",
+            "/api/v1/feeds",
+            "/api/v1/feeds/*",
+            "/letsnote/ws/**",
+            "/api/v1/files/**"
     };
 
     public SecurityConfig(

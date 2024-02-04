@@ -10,6 +10,7 @@ import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVi
 import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
 import Button from "../../components/common/Button";
 import * as Tone from 'tone';
+import NoteStorage from "../../components/WorkSpace/NoteStorage";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -63,6 +64,7 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       synth: null,
       visualizeInstrument: [true, true, true],
+      count: -1,
     };
     this.initialBPM = 160;
   }
@@ -83,19 +85,27 @@ class WorkSpaceContainer extends Component {
     this.state.synth.repeat(BeatGrid.trigger, "8n");
   };
 
-  play = async () => {
+  addCount = () => {
+    this.setState((prevState) => ({
+      count: prevState.count + 1,
+    }));
+  };
+
+  handleCountChange = (newCount) => {
+    this.setState({ count: newCount });
+  };
+
+   play = async () => {
     // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
     if (Tone.context.state !== 'running') {
       await Tone.start();
       console.log('Audio context is now running');
     }
-
     this.state.synth.toggle();
   };
 
   stop = () => {
-    const { BeatGrid } = this.refs;
-    BeatGrid.setState({ count: -1 });
+    this.setState({ count: -1 });
     this.state.synth.stop();
   };
 
@@ -124,6 +134,13 @@ class WorkSpaceContainer extends Component {
       searchBoxVisible: !prevState.searchBoxVisible,
     }));
   };
+
+  noteStorageBox = () => {
+    this.setState((prevState) => ({
+      noteStorageVisible: !prevState.noteStorageVisible,
+    }));
+  };
+
   changeVisualizeInstrument = (instrument) => {
     const { visualizeInstrument } = this.state;
 
@@ -205,6 +222,8 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
+      noteStorageVisible,
+      count,
       searchBoxVisible
     } = this.state;
 
@@ -236,6 +255,12 @@ class WorkSpaceContainer extends Component {
                     spaceId={this.props.spaceId}
                 />
               </RightPanel>
+              <div className="w-full flex justify-center content-center">
+                <Button onClick={this.noteStorageBox}>열기/닫기</Button>
+              </div>
+              <div id="note-box" className={noteStorageVisible ? "visible" : "hidden"}>
+                <NoteStorage/>
+              </div>
             </GridContainer>
             <BeatControls
                 onPlay={this.play}
