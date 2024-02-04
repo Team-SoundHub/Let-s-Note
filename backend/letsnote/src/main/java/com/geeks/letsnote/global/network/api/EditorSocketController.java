@@ -12,17 +12,24 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
+import com.geeks.letsnote.global.security.AccessTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.*;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
+import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
@@ -34,6 +41,11 @@ public class EditorSocketController {
 	private final AccountService accountService;
 	private final NoteInstrumentMapService noteInstrumentMapService;
 	private final CustomWebSocketHandlerDecorator customWebSocketHandlerDecorator;
+	private final AccessTokenProvider accessTokenProvider;
+	private final SimpMessagingTemplate simpMessagingTemplate;
+
+	private final HashMap<String, Map<String, String>> accountConnectedSessions = new HashMap<>();
+
 	private final WorkspaceService workspaceService;
 
     @MessageMapping("/editor/coordinate")
@@ -93,10 +105,14 @@ public class EditorSocketController {
 	}
 
 	@MessageMapping("/workspace/{spaceId}/mouse/sendMousePosition")
-	@SendTo("/topic/workspace/{spaceId}/mouse/public")
-	public SocketResponse.MousePosition sendMousePosition(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId) throws Exception {
-		ResponseAccount.NickName nickname = accountService.getNicknameFromAccountId(mousePosition.accountId());
-		return new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId(),nickname.nickname());
+	public void sendEditorCoordinateInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+		String senderSession = headerAccessor.getUser().getName();
+		String senderId = accountConnectedSessions.get(spaceId).get(senderSession);
+		for(Map.Entry<String, String> entry: accountConnectedSessions.get(spaceId).entrySet()) {
+			if(!entry.getKey().equals(senderSession)) {
+				simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/workspace/"+spaceId+"/mouse/public", new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId(),senderId));
+			}
+		}
 	}
 
 	@MessageMapping("/workspace/{spaceId}/loop/sendLoop")
@@ -130,4 +146,40 @@ public class EditorSocketController {
 		return "server exception: " + exception.getMessage() + "server session clear";
 	}
 
+	@EventListener
+	public void handleWebSocketSubcribe(SessionSubscribeEvent event) {
+		SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
+
+		String destination = headerAccessor.getDestination();
+		if (destination.startsWith("/user/topic/workspace/")) {
+			String senderSession = headerAccessor.getSessionId();
+			String token = headerAccessor.getFirstNativeHeader("accessToken");
+			String username = accessTokenProvider.getUsernameFromToken(token);
+
+			String[] destinationSplit = destination.split("/");
+			String spaceId = destinationSplit[destinationSplit.length - 3];
+
+			if (!accountConnectedSessions.containsKey(spaceId)) {
+				accountConnectedSessions.put(spaceId, new HashMap<>());
+			}
+			accountConnectedSessions.get(spaceId).put(senderSession, username);
+		}
+	}
+
+	@EventListener
+	public void handleWebSocketUnSubcribe(SessionUnsubscribeEvent event) {
+		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+
+		String destination = headerAccessor.getDestination();
+		if (destination.startsWith("/user/topic/workspace/")) {
+			String[] destinationSplit = destination.split("/");
+			String spaceId = destinationSplit[destinationSplit.length - 3];
+
+			String senderSession = headerAccessor.getSessionId();
+			accountConnectedSessions.get(spaceId).remove(senderSession);
+
+			if (accountConnectedSessions.get(spaceId).size() == 0)
+				accountConnectedSessions.remove(spaceId);
+		}
+	}
 }

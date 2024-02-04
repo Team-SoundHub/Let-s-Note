@@ -10,8 +10,8 @@ const Container = styled.div`
     props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
       ? pickActiveColor("drum")
       : props.inactiveColor};
-  width: 3rem;
-  height: 3rem;
+  width: 1.5rem;
+  height: 1.5rem;
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0)}rem;
   position: relative; /* Ensure the circle is positioned relative to this container */
 

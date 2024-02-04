@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
+import CseContainer from "./CseContainer";
 import BeatButton from "../../components/BeatControls/BeatButton";
 import quarterNote from "../../assets/Instrument/quarter-note-8-svgrepo-com.png";
 
@@ -30,6 +31,24 @@ const fadeOut = keyframes`
   }
 `;
 
+// const Header = styled.div`
+//   background-color: #f3f3f3;
+//   padding: 10px 20px;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   border-bottom: 1px solid #ddd;
+//   height: 7vh;
+// `;
+
+const SpaceTitle = styled.div`
+  flex: 1;
+  text-align: center;
+  color: grey; 
+  font-size: 25px; 
+  font-weight: bold;
+`;
+
 const Header = styled.div`
   background-color: #f3f3f3;
   padding: 10px 20px;
@@ -40,10 +59,21 @@ const Header = styled.div`
   height: 7vh;
 `;
 
-const RightSection = tw.div`
-  flex
-  items-center
-  justify-end
+const LeftSection = styled.div`
+  flex: 1;
+`;
+
+const CenterSection = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RightSection = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const ButtonContainer = styled.div`
@@ -82,14 +112,16 @@ const WorkSpaceHeader = ({
   isSnapshotExist,
   openAddMemberModal,
   memberList,
+  handleSearchBarOpen,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
-  
+
+  const spaceTitle = localStorage.getItem('title');
   useEffect(() => {
     console.log("WorkSpaceHeader 호출");
-  }, [])
+  }, []);
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
@@ -130,20 +162,26 @@ const WorkSpaceHeader = ({
 
   return (
     <Header>
-      <button onClick={handleGoBack}> ⬅️ </button>
+      <LeftSection>
+        <button onClick={handleGoBack}>⬅️</button>
+      </LeftSection>
+  
+      <CenterSection>
+        <SpaceTitle>{spaceTitle}</SpaceTitle>
+      </CenterSection>
+  
       <RightSection>
         <ButtonContainer>
-          <MemberInfo
-            memberList={memberList}
-            openAddMemberModal={openAddMemberModal}
-          />
+          <MemberInfo memberList={memberList} openAddMemberModal={openAddMemberModal} />
         </ButtonContainer>
         <ButtonContainer>
           <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
         </ButtonContainer>
+        <CseContainer handleSearchBarOpen={handleSearchBarOpen} />
       </RightSection>
     </Header>
   );
+  
 };
 
 export default WorkSpaceHeader;

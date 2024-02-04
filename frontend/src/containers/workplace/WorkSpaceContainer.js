@@ -263,9 +263,9 @@ class WorkSpaceContainer extends Component {
                 addCount={this.addCount}
               />
             </MiddlePanel>
-              <RightPanel>
-                  <NoteContainer/>
-              </RightPanel>
+            <RightPanel>
+              <NoteContainer />
+            </RightPanel>
           </GridContainer>
           <BeatControls
             onPlay={this.play}
@@ -278,7 +278,6 @@ class WorkSpaceContainer extends Component {
             count={count}
             handleCountChange={this.handleCountChange}
           />
-            <CseContainer/>
         </Container>
       );
     }
