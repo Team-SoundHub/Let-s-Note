@@ -22,6 +22,7 @@ const ModalContainer = tw.div`
   md:inset-0
   h-full
   max-h-full
+  z-[1000];
 `;
 
 const ModalContent = tw.div`
@@ -114,6 +115,7 @@ const AddMemberModal = ({ closeAddMemberModal, handleAddMember }) => {
     setUserId(event.target.value);
   };
 
+  
   return (
     <ModalBackground onClick={closeAddMemberModal}>
       <ModalContainer

@@ -30,6 +30,24 @@ const fadeOut = keyframes`
   }
 `;
 
+// const Header = styled.div`
+//   background-color: #f3f3f3;
+//   padding: 10px 20px;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   border-bottom: 1px solid #ddd;
+//   height: 7vh;
+// `;
+
+const SpaceTitle = styled.div`
+  flex: 1;
+  text-align: center;
+  color: grey; 
+  font-size: 25px; 
+  font-weight: bold;
+`;
+
 const Header = styled.div`
   background-color: #f3f3f3;
   padding: 10px 20px;
@@ -40,10 +58,21 @@ const Header = styled.div`
   height: 7vh;
 `;
 
-const RightSection = tw.div`
-  flex
-  items-center
-  justify-end
+const LeftSection = styled.div`
+  flex: 1;
+`;
+
+const CenterSection = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RightSection = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const ButtonContainer = styled.div`
@@ -86,7 +115,9 @@ const WorkSpaceHeader = ({
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
-  
+
+  const spaceTitle = localStorage.getItem('title');
+
   useEffect(() => {
     console.log("WorkSpaceHeader 호출");
   }, [])
@@ -130,13 +161,17 @@ const WorkSpaceHeader = ({
 
   return (
     <Header>
-      <button onClick={handleGoBack}> ⬅️ </button>
+      <LeftSection>
+        <button onClick={handleGoBack}>⬅️</button>
+      </LeftSection>
+  
+      <CenterSection>
+        <SpaceTitle>{spaceTitle}</SpaceTitle>
+      </CenterSection>
+  
       <RightSection>
         <ButtonContainer>
-          <MemberInfo
-            memberList={memberList}
-            openAddMemberModal={openAddMemberModal}
-          />
+          <MemberInfo memberList={memberList} openAddMemberModal={openAddMemberModal} />
         </ButtonContainer>
         <ButtonContainer>
           <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
@@ -144,6 +179,7 @@ const WorkSpaceHeader = ({
       </RightSection>
     </Header>
   );
+  
 };
 
 export default WorkSpaceHeader;
