@@ -7,6 +7,7 @@ import com.geeks.letsnote.domain.message.dto.MessageReqeust;
 import com.geeks.letsnote.domain.message.dto.MessageResponse;
 import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
+import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
@@ -33,7 +34,7 @@ public class EditorSocketController {
 	private final AccountService accountService;
 	private final NoteInstrumentMapService noteInstrumentMapService;
 	private final CustomWebSocketHandlerDecorator customWebSocketHandlerDecorator;
-
+	private final WorkspaceService workspaceService;
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
@@ -83,7 +84,6 @@ public class EditorSocketController {
 		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-	@Async
 	@MessageMapping("/workspace/{spaceId}/editor/sendCoordinate")
 	@SendTo("/topic/workspace/{spaceId}/editor/public")
 	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
@@ -94,9 +94,19 @@ public class EditorSocketController {
 
 	@MessageMapping("/workspace/{spaceId}/mouse/sendMousePosition")
 	@SendTo("/topic/workspace/{spaceId}/mouse/public")
-	public SocketResponse.MousePosition sendEditorCoordinateInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId) throws Exception {
+	public SocketResponse.MousePosition sendMousePosition(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId) throws Exception {
 		ResponseAccount.NickName nickname = accountService.getNicknameFromAccountId(mousePosition.accountId());
-	return new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId(),nickname.nickname());
+		return new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId(),nickname.nickname());
+	}
+
+	@MessageMapping("/workspace/{spaceId}/loop/sendLoop")
+	@SendTo("/topic/workspace/{spaceId}/loop/public")
+	public SocketResponse.LoopNotes sendLoop(@Valid @Payload SocketRequest.LoopStatus loopStatus, @DestinationVariable String spaceId) throws Exception {
+		SocketResponse.LoopNotes loopNotes = workspaceService.makeLoop(loopStatus, spaceId);
+		if(loopNotes == null){
+			return null;
+		}
+		return loopNotes;
 	}
 
 	@MessageExceptionHandler

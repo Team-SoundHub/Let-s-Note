@@ -45,4 +45,17 @@ public record SocketRequest() {
 			String spaceId
 	) {
 	}
+
+	@Builder
+	public record LoopStatus(
+			String instrument,
+			Integer spaceLength
+	) {
+	}
+
+	@Builder
+	public record Note(
+			Integer x,
+			Integer y
+	){}
 }

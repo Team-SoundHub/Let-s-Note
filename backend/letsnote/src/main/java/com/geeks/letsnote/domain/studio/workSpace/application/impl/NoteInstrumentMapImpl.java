@@ -8,6 +8,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
+import com.geeks.letsnote.global.network.dto.SocketResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,14 +59,23 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
     }
 
     @Override
-    public void deleteNoteBySpaceIdAndInstrument(SocketRequest.SpaceInstrument spaceInstrument){
-        if(spaceInstrument.instrument().equals(Instrument.All)){
-            List<String> noteInstrumentMapIds = noteInstrumentMapRepository.findAllMapIdsBySpaceId(spaceInstrument.spaceId());
-            noteService.deleteAllInstrumentNotesByMapId(noteInstrumentMapIds);
-        }
-        else{
-            Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceInstrument.spaceId(), spaceInstrument.instrument());
-            noteService.deleteInstrumentNotesByMapId(noteInstrumentMap.get().getMapId());
-        }
+    @Transactional
+    public List<SocketResponse.Note> deleteNoteBySpaceIdAndInstrument(SocketRequest.SpaceInstrument spaceInstrument){
+//        if(spaceInstrument.instrument().equals(Instrument.All)){
+//            List<String> noteInstrumentMapIds = noteInstrumentMapRepository.findAllMapIdsBySpaceId(spaceInstrument.spaceId());
+//            noteService.deleteAllInstrumentNotesByMapId(noteInstrumentMapIds);
+//        }
+//        else{
+        Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceInstrument.spaceId(), spaceInstrument.instrument());
+        List<SocketResponse.Note> deletedNote = noteService.deleteInstrumentNotesByMapId(noteInstrumentMap.get().getMapId());
+//        }
+        return deletedNote;
+    }
+
+    @Override
+    @Transactional
+    public String getInstrumentMapBySpaceIdAndInstrument(String spaceId, Instrument instrument) {
+        NoteInstrumentMap map = noteInstrumentMapRepository.findBySpaceIdAndInstrument(spaceId,instrument).orElse(null);
+        return map.getMapId();
     }
 }

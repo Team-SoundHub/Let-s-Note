@@ -3,6 +3,7 @@ package com.geeks.letsnote.global.network.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import java.sql.Timestamp;
+import java.util.List;
 
 public record SocketResponse() {
     @Builder
@@ -46,4 +47,17 @@ public record SocketResponse() {
             String nickname
     ) {
     }
+
+    @Builder
+    public record LoopNotes(
+            List<Note> Notes,
+            String instrument
+    ) {
+    }
+
+    @Builder
+    public record Note(
+            Integer x,
+            Integer y
+    ){}
 }

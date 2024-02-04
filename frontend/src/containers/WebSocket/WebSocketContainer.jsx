@@ -6,7 +6,6 @@ import { setInnerContent } from "../../app/slices/innerContentSlice";
 import { addMessage } from "../../app/slices/chatSlice";
 import { updateCursorPosition } from "../../app/slices/cursorSlice";
 
-
 const WebSocketContainer = ({ spaceId, children }) => {
   const dispatch = useDispatch();
   const [stompClient, setStompClient] = useState(null);
