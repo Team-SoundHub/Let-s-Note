@@ -2,6 +2,7 @@ package com.geeks.letsnote.domain.studio.workSpace.application;
 
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
+import com.geeks.letsnote.global.network.dto.SocketResponse;
 
 import java.util.List;
 
@@ -16,5 +17,7 @@ public interface NoteService {
 
     void deleteAllInstrumentNotesByMapId(List<String> noteInstrumentMapIds);
 
-    void deleteInstrumentNotesByMapId(String mapId);
+    List<SocketResponse.Note> deleteInstrumentNotesByMapId(String mapId);
+
+    void createNotesByMapId(String mapId, List<SocketResponse.Note> loopNotes);
 }
