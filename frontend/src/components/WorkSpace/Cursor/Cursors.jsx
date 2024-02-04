@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import cursorImage from '../../assets/workspace/cursor.png';
+import cursorImage from '../../../assets/workspace/cursor.png';
 
 const Cursors = () => {
     const cursors = useSelector((state) => state.cursor);
