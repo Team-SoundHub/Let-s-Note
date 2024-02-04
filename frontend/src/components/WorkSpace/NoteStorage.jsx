@@ -77,14 +77,9 @@ const CloseButton = styled.div`
   }
 `;
 
-const NoteStorage = () => {
+const NoteStorage = ({openImageModal}) => {
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState([]);
-
-    const openImageModal = (imageUrl) => {
-        console.log('Open image modal for:', imageUrl);
-    };
-
     const fetchImages = async () => {
         setLoading(true);
         try {
