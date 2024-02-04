@@ -88,8 +88,9 @@ const MyPage = () => {
     }
   };
 
-  const handleNavigateWorkspace = async (spaceId) => {
+  const handleNavigateWorkspace = async (spaceId, spaceTitle) => {
     localStorage.setItem('spaceId', spaceId);
+    localStorage.setItem('title', spaceTitle);
     console.log("마이페이지 저장:", spaceId);
     navigate(`/workspace/${spaceId}`); // 동기적 실행 -> 순서 보장
   };
@@ -155,7 +156,7 @@ const MyPage = () => {
             <div
               key={workspace.spaceId}
               className=" flex h-full"
-              onClick={() => handleNavigateWorkspace(workspace.spaceId)}
+              onClick={() => handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)}
             // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
             >
               <PostCard
