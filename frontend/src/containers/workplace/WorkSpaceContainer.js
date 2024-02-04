@@ -66,7 +66,7 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: 64,
+      columns: 200,
       availableNotes,
       availableDrumNotes,
       synth: null,
@@ -278,7 +278,6 @@ class WorkSpaceContainer extends Component {
             count={count}
             handleCountChange={this.handleCountChange}
           />
-          <CseContainer />
         </Container>
       );
     }

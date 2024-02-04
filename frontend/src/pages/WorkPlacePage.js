@@ -12,12 +12,15 @@ import AddMemberModal from "../components/WorkSpace/AddMemberModal"
 import NoteModal from "../components/WorkSpace/NoteModal";
 import CursorPointer from "../components/WorkSpace/Cursor/CursorPointer";
 import Cursors from "../components/WorkSpace/Cursor/Cursors";
+import GoogleCustomSearch from "../components/infra/GoogleCustomSearch";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
-import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
+import {
+  setWorkspaceNotes,
+  clearAllNotes,
+} from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
-
 
 const Container = styled.div`
   height: 100vh;
@@ -28,7 +31,7 @@ const WorkPlacePage = () => {
   const accountId = sessionStorage.getItem("accountId");
   console.log("workPlacePage에서 accountId 꺼냄 2", accountId);
 
-  const { spaceId } = useParams(); // 현재 spaceId 얻기  
+  const { spaceId } = useParams(); // 현재 spaceId 얻기
 
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [snapshotCreated, setSnapshotCreated] = useState(false);
@@ -42,6 +45,15 @@ const WorkPlacePage = () => {
     notesList: [],
     isSnapshotExist: false,
   });
+  const [searchBoxVisible, setSearchBoxVisible] = useState(false);
+
+  const handleSearchBarOpen = () => {
+    setSearchBoxVisible(true);
+  };
+
+  const handleSearchBarClose = () => {
+    setSearchBoxVisible(false);
+  };
 
   // 작업실 입장 시 데이터 요청
   useEffect(() => {
@@ -53,7 +65,6 @@ const WorkPlacePage = () => {
         console.log("작업실 입장 데이터 요청:", response.response.notesList);
 
         dispatch(setWorkspaceNotes(response.response.notesList));
-
       } catch (error) {
         console.error("Error fetching workspace info:", error);
       }
@@ -127,7 +138,6 @@ const WorkPlacePage = () => {
 
   /* Add member control */
   const openAddMemberModal = () => {
-    console.log("open add member");
     setIsAddMemberModalOpen(true);
     console.log("isAddMemberModalOpen: ", isAddMemberModalOpen);
   };
@@ -155,16 +165,12 @@ const WorkPlacePage = () => {
     }
   };
 
-
   return (
     <WebSocketContainer spaceId={spaceId}>
       {({ sendCoordinate, sendMessage, sendMousePosition, isConnected }) => (
         <Container>
           {isReleaseModalOpen && (
-            <SaveSnapshotModal
-              onClose={handleModalClose}
-              onSave={handleSave}
-            />
+            <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
           )}
           {snapshotCreated && (
             <SaveCompleteModal
@@ -179,10 +185,10 @@ const WorkPlacePage = () => {
               handleAddMember={handleAddMember}
             />
           )}
-          {isUrlModalOpen && (
-            <NoteModal closeUrlModal={closeUrlModal}
-            />
+          {searchBoxVisible && (
+            <GoogleCustomSearch handleSearchBarClose={handleSearchBarClose} />
           )}
+
           {/* <Cursors />
           <CursorPointer
             spaceId={spaceId}
@@ -196,6 +202,7 @@ const WorkPlacePage = () => {
             openAddMemberModal={openAddMemberModal}
             handleAddMember={handleAddMember}
             memberList={memberList}
+           handleSearchBarOpen={handleSearchBarOpen}
           />
           <WorkSpaceContainer
             isSnapshot={false}
@@ -208,7 +215,7 @@ const WorkPlacePage = () => {
             memberList={memberList}
             nickname={myNickname}
           />
-        </Container >
+        </Container>
       )}
     </WebSocketContainer>
   );
