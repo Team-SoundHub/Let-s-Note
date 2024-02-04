@@ -205,13 +205,13 @@ const WorkPlacePage = () => {
             <NoteModal closeUrlModal={closeUrlModal}
             />
           )}
-          {/* <Cursors />
+          <Cursors />
           <CursorPointer
             spaceId={spaceId}
             accountId={accountId}
             sendMousePosition={sendMousePosition}
             isConnected={isConnected} 
-          /> */}
+          />
         </Container >
       )}
     </WebSocketContainer>
