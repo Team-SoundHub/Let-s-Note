@@ -10,11 +10,14 @@ import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import NoteModal from "../components/WorkSpace/NoteModal";
+import CursorPointer from "../components/WorkSpace/CursorPointer";
+import Cursors from "../components/WorkSpace/Cursors";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
+
 
 const Container = styled.div`
   height: 100vh;
@@ -62,9 +65,9 @@ const WorkPlacePage = () => {
   useEffect(() => {
     const fetchMyNickname = async () => {
       try {
-        const response = await getMyNickname();
+        const response = await getMyNickname(accountId);
         setMyNickname(response.response.nickname);
-        // console.log("내 닉네임:", response.response.nickname);
+        console.log("내 닉네임:", response.response.nickname);
       } catch (error) {
         console.error("내 닉네임 요청 Error:", error);
       }
@@ -158,7 +161,7 @@ const WorkPlacePage = () => {
 
   return (
     <WebSocketContainer spaceId={spaceId}>
-      {({ sendCoordinate, sendMessage }) => (
+      {({ sendCoordinate, sendMessage, sendMousePosition, isConnected }) => (
         <Container>
           <WorkSpaceHeader
             onOpenModal={handleModalOpen}
@@ -202,7 +205,14 @@ const WorkPlacePage = () => {
             <NoteModal closeUrlModal={closeUrlModal}
             />
           )}
-        </Container>
+          {/* <Cursors />
+          <CursorPointer
+            spaceId={spaceId}
+            accountId={accountId}
+            sendMousePosition={sendMousePosition}
+            isConnected={isConnected} 
+          /> */}
+        </Container >
       )}
     </WebSocketContainer>
   );

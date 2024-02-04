@@ -4,10 +4,13 @@ import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import { setInnerContent } from "../../app/slices/innerContentSlice";
 import { addMessage } from "../../app/slices/chatSlice";
+// import { updateCursorPosition } from "../../app/slices/cursorSlice";
+
 
 const WebSocketContainer = ({ spaceId, children }) => {
   const dispatch = useDispatch();
   const [stompClient, setStompClient] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const accessToken = sessionStorage.getItem("access");
@@ -25,10 +28,13 @@ const WebSocketContainer = ({ spaceId, children }) => {
       },
       webSocketFactory: () => new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws"),
       onConnect: () => {
-        console.log("Connected: ");
-        // 여기에 구독 로직 추가
+        console.log("Connected: ", );
+        setIsConnected(true); 
         subscribeToTopics(client);
       },
+      onDisconnect: () => {        
+        setIsConnected(false);
+      },      
       onStompError: (frame) => {
         console.error("Broker reported error: " + frame.headers["message"]);
         console.error("Additional details: " + frame.body);
@@ -53,6 +59,18 @@ const WebSocketContainer = ({ spaceId, children }) => {
       const message = JSON.parse(response.body);
       dispatch(addMessage({ spaceId, message }));
     });
+
+    // console.log("[WebSocket] 마우스 커서 구독");
+    // client.subscribe(`/topic/workspace/${spaceId}/mouse/public`, (response) => {
+    //   const cursorData = JSON.parse(response.body);
+    //   let x = cursorData.x;      
+    //   let y = cursorData.y;      
+    //   let accountId = cursorData.accountId;      
+    //   let nickname = cursorData.nickname;      
+    //   console.log("[WebSocket] 마우스 커서 응답:", x, y, accountId, nickname);
+    //   dispatch(updateCursorPosition({ accountId, x, y, nickname }));
+
+    // });
   };
 
   // 함수를 자식 컴포넌트에 전달
@@ -64,7 +82,12 @@ const WebSocketContainer = ({ spaceId, children }) => {
       }
       stompClient.publish({
         destination: `/app/workspace/${spaceId}/editor/sendCoordinate`,
-        body: JSON.stringify({ instrument, x, y, spaceId }),
+        body: JSON.stringify({
+          instrument,
+          x,
+          y,
+          spaceId
+        }),
       });
     },
     sendMessage: (message) => {
@@ -74,9 +97,29 @@ const WebSocketContainer = ({ spaceId, children }) => {
       }
       stompClient.publish({
         destination: `/app/workspace/${spaceId}/chat/sendMessage`,
-        body: JSON.stringify({ msgContent: message, accountId: sessionStorage.getItem("accountId"), spaceId }),
+        body: JSON.stringify({
+          msgContent: message,
+          accountId: sessionStorage.getItem("accountId"),
+          spaceId
+        }),
       });
     },
+    sendMousePosition: (x, y, accountId) => {
+      if (!stompClient || !stompClient.active) {
+        console.error("STOMP connection is not active");
+        return;
+      }      
+      stompClient.publish({
+        destination: `/app/workspace/${spaceId}/mouse/sendMousePosition`,
+        body: JSON.stringify({
+          x,
+          y,
+          accountId
+        }),
+      });
+      console.log(`마우스 커서 소켓 요청: x:${x} y:${y} spaceId:${spaceId} accountId:${accountId}`)
+    },
+    isConnected,
   });
 };
 
