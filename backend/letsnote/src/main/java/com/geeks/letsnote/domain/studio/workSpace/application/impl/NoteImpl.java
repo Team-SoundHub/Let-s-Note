@@ -6,12 +6,11 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.entity.Note;
 import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
+import com.geeks.letsnote.global.network.dto.SocketResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class NoteImpl implements NoteService {
@@ -67,7 +66,31 @@ public class NoteImpl implements NoteService {
 
     @Override
     @Transactional
-    public void deleteInstrumentNotesByMapId(String mapId) {
+    public List<SocketResponse.Note> deleteInstrumentNotesByMapId(String mapId) {
+        List<Note> deleteNotes = noteRepository.findAllBySpaceInstrument(mapId);
+        List<SocketResponse.Note> notes = new ArrayList<>();
+        for(Note note : deleteNotes){
+            SocketResponse.Note noteDto = SocketResponse.Note.builder()
+                    .x(note.getNoteY())
+                    .y(note.getNoteX())
+                    .build();
+            notes.add(noteDto);
+        }
         noteRepository.deleteAllBySpaceInstrument(mapId);
+        return notes;
+    }
+
+    @Override
+    @Transactional
+    public void createNotesByMapId(String mapId, List<SocketResponse.Note> loopNotes) {
+        Set<Note> notes = new HashSet<>();
+        for(SocketResponse.Note eachNote : loopNotes){
+            notes.add(Note.builder()
+                    .spaceInstrument(mapId)
+                    .noteX(eachNote.x())
+                    .noteY(eachNote.y())
+                    .build());
+        }
+        noteRepository.saveAll(notes);
     }
 }
