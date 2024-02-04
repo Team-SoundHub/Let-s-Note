@@ -10,6 +10,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
+import com.geeks.letsnote.global.network.dto.SocketResponse;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,6 +46,10 @@ public class WorkspaceController {
     })
     @GetMapping("/{accountId}")
     public ResponseEntity<CommonResponse> getAllWorkspaces(@PathVariable("accountId") Long accountId){
+        boolean checkUser = accountService.checkPathVariableWithTokenUser(accountId);
+        if(!checkUser){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         List<ResponseWorkspaces.WorkspaceDto> getWorkspaces = workspaceService.getAllWorkspacesByOwnerId(accountId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
@@ -97,12 +102,12 @@ public class WorkspaceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/test-inst")
-    public ResponseEntity<CommonResponse> deleteAllInstrumentBySpaceId(@RequestBody SocketRequest.SpaceInstrument spaceInstrument){
-        noteInstrumentMapService.deleteNoteBySpaceIdAndInstrument(spaceInstrument);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @DeleteMapping("/test-inst")
+//    public ResponseEntity<CommonResponse> deleteAllInstrumentBySpaceId(@RequestBody SocketRequest.SpaceInstrument spaceInstrument){
+//        noteInstrumentMapService.deleteNoteBySpaceIdAndInstrument(spaceInstrument);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     @GetMapping("/nickname/space-id")
     public ResponseEntity<CommonResponse> getMembersNickname(@RequestParam("v") String spaceId){
@@ -131,6 +136,23 @@ public class WorkspaceController {
                 .response(nickname)
                 .build();
 
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PostMapping("/loop/{spaceId}")
+    public ResponseEntity<CommonResponse> makeLoopTest(@PathVariable("spaceId") String spaceId, @RequestBody SocketRequest.LoopStatus loopStatus){
+        SocketResponse.LoopNotes loopNotes = workspaceService.makeLoop(loopStatus,spaceId);
+        if(loopNotes == null){
+            CommonResponse commonResponse = CommonResponse.builder()
+                    .success(true)
+                    .response("nothing changed")
+                    .build();
+            return new ResponseEntity<>(commonResponse,HttpStatus.OK);
+        }
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response(loopNotes)
+                .build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
