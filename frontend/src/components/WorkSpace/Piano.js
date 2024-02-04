@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { availableNotes } from "../../constants/scale";
+import drum from "../../assets/Instrument/drum1-svgrepo-com.svg";
 
 const PianoContainer = styled.div`
   display: flex-row;
@@ -17,16 +18,16 @@ const PianoKey = styled.div`
 
 const WhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 4.7rem;
-  width: 8rem;
+  height: 2.35rem;
+  width: 5rem;
   z-index: 2;
 `;
 
 const BlackKey = styled(PianoKey)`
   background-color: black;
-  height: 3rem;
-  width: 5rem;
-  margin-top: -1.5rem;
+  height: 1.5rem;
+  width: 3rem;
+  margin-top: -0.75rem;
   color: white;
   z-index: 3;
   border: 1px solid #fff;
@@ -35,36 +36,44 @@ const BlackKey = styled(PianoKey)`
 
 const MovedWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 6.2rem;
-  width: 8rem;
-  margin-top: -1.5rem;
+  height: 3.2rem;
+  width: 5rem;
+  margin-top: -0.75rem;
   z-index: 2;
 `;
 
 const FirstWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 4.5rem;
-  width: 8rem;
-  margin-top: -1.5rem;
+  height: 2.55rem;
+  width: 5rem;
+  margin-top: -0.75rem;
   margin-bottom: 0.2rem;
   z-index: 2;
 `;
 
 const FourthWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 4.7rem;
-  width: 8rem;
-  margin-top: -1.5rem;
+  height: 2.35rem;
+  width: 5rem;
+  margin-top: -0.75rem;
   z-index: 2;
 `;
 
 const LastWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 4.5rem;
-  width: 8rem;
-  margin-top: -1.5rem;
-  margin-bottom: 0.2rem;
+  height: 2.45rem;
+  width: 5rem;
+  margin-top: -0.75rem;
   z-index: 2;
+`;
+
+const Drumdiv = styled.div`
+  display: flex;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #000;
 `;
 
 const VerticalPiano = () => {
@@ -102,7 +111,14 @@ const VerticalPiano = () => {
     return pianoKeys;
   }
 
-  return <PianoContainer>{drawPianoKeys()}</PianoContainer>;
+  return (
+    <PianoContainer>
+      {drawPianoKeys()}
+      <Drumdiv>
+        <img className="h-12" src={drum} />
+      </Drumdiv>
+    </PianoContainer>
+  );
 };
 
 export default VerticalPiano;
