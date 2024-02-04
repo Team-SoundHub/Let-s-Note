@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
+import CseContainer from "./CseContainer";
 import BeatButton from "../../components/BeatControls/BeatButton";
 import quarterNote from "../../assets/Instrument/quarter-note-8-svgrepo-com.png";
 
@@ -111,16 +112,16 @@ const WorkSpaceHeader = ({
   isSnapshotExist,
   openAddMemberModal,
   memberList,
+  handleSearchBarOpen,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
 
   const spaceTitle = localStorage.getItem('title');
-
   useEffect(() => {
     console.log("WorkSpaceHeader 호출");
-  }, [])
+  }, []);
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
@@ -176,6 +177,7 @@ const WorkSpaceHeader = ({
         <ButtonContainer>
           <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
         </ButtonContainer>
+        <CseContainer handleSearchBarOpen={handleSearchBarOpen} />
       </RightSection>
     </Header>
   );
