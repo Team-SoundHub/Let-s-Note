@@ -10,6 +10,7 @@ import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVi
 import * as Tone from "tone";
 import CseContainer from "./CseContainer";
 import NoteContainer from "./NoteContainer";
+import ImagePreviewModal from "../../components/WorkSpace/ImagePreviewModal";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -92,10 +93,35 @@ class WorkSpaceContainer extends Component {
       synth: null,
       visualizeInstrument: [true, true, true],
       count: -1,
+      selectedImageUrl: null,
+      noteStorageVisible: false,
     };
     this.initialBPM = 160;
   }
 
+  // 악보 관련
+
+  openImagePreview = (imageUrl) => {
+    this.setState({
+      selectedImageUrl: imageUrl,
+      noteStorageVisible: false,
+    });
+  };
+
+  closeImagePreview = () => {
+    this.setState({
+      selectedImageUrl: null,
+    });
+  };
+
+  toggleNoteStorageVisible = () => {
+    this.setState(prevState => ({
+      noteStorageVisible: !prevState.noteStorageVisible
+    }));
+  };
+
+
+  // 노트 관련
   componentDidMount() {
     console.log(
       "Received spaceId prop in WorkSpaceContainer:",
@@ -250,6 +276,8 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       visualizeInstrument,
       count,
+      selectedImageUrl,
+      noteStorageVisible
     } = this.state;
 
     if (loading) {
@@ -264,7 +292,7 @@ class WorkSpaceContainer extends Component {
                   instrument={instrument}
                   changeVisualizeInstrument={this.changeVisualizeInstrument}
                 />
-              ))}              
+              ))}
             </LeftPanel>
             <MiddlePanel>
               <BeatGrid
@@ -285,7 +313,18 @@ class WorkSpaceContainer extends Component {
               />
             </MiddlePanel>
             <RightPanel>
-              <NoteContainer />
+              {/* <NoteContainer /> */}
+              <NoteContainer
+                openImagePreview={this.openImagePreview}
+                noteStorageVisible={noteStorageVisible}
+                toggleNoteStorage={this.toggleNoteStorageVisible}
+              />
+              {selectedImageUrl && (
+                <ImagePreviewModal
+                  image_url={selectedImageUrl}
+                  onClose={this.closeImagePreview}
+                />
+              )}
             </RightPanel>
           </GridContainer>
           <BeatControls
