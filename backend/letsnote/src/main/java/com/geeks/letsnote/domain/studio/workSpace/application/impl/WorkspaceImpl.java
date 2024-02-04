@@ -239,4 +239,10 @@ public class WorkspaceImpl implements WorkspaceService {
 
         return maxX/4 + 1;
     }
+
+    @Override
+    @Transactional
+    public void deleteWorkspaceById(String spaceId) {
+        workspaceRepository.deleteById(spaceId);
+    }
 }

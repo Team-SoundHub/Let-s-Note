@@ -155,4 +155,16 @@ public class WorkspaceController {
                 .build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @DeleteMapping("/space-id")
+    public ResponseEntity<CommonResponse> deleteWorkspace(@RequestParam("v") String spaceId){
+        workspaceService.deleteWorkspaceById(spaceId);
+
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response("delete success")
+                .build();
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
