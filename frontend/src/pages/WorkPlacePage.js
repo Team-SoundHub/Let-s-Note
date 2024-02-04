@@ -10,8 +10,8 @@ import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import NoteModal from "../components/WorkSpace/NoteModal";
-import CursorPointer from "../components/WorkSpace/CursorPointer";
-import Cursors from "../components/WorkSpace/Cursors";
+import CursorPointer from "../components/WorkSpace/Cursor/CursorPointer";
+import Cursors from "../components/WorkSpace/Cursor/Cursors";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";

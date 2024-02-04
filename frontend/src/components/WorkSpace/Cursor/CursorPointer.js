@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import throttle from 'lodash/throttle'; // lodash의 throttle 함수를 사용
+import throttle from 'lodash/throttle'; 
 
 const CursorPointer = ({ spaceId, accountId, sendMousePosition, isConnected }) => {  
   const handleMouseMove = useCallback(throttle((e) => {
@@ -9,7 +9,7 @@ const CursorPointer = ({ spaceId, accountId, sendMousePosition, isConnected }) =
     }
     const { clientX: x, clientY: y } = e;
     sendMousePosition(x, y, accountId);
-  }, 17), [isConnected, accountId, sendMousePosition]); // 100ms 간격으로 이벤트 처리
+  }, 200), [isConnected, accountId, sendMousePosition]); // 특정 ms 간격으로 이벤트 처리
 
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);

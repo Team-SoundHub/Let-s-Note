@@ -10,8 +10,7 @@ import { updateCursorPosition } from "../../app/slices/cursorSlice";
 const WebSocketContainer = ({ spaceId, children }) => {
   const dispatch = useDispatch();
   const [stompClient, setStompClient] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [count, setCount] = useState(0);
+  const [isConnected, setIsConnected] = useState(false);  
 
   useEffect(() => {
     const accessToken = sessionStorage.getItem("access");
@@ -68,7 +67,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
       let y = cursorData.y;      
       let accountId = cursorData.accountId;      
       let nickname = cursorData.nickname;      
-      // console.log("[WebSocket] 마우스 커서 응답:", x, y, accountId, nickname);
+      // console.log("[WebSocket] 마우스 커서 수신:", x, y, accountId, nickname);
       dispatch(updateCursorPosition({ accountId, x, y, nickname }));
 
     });
@@ -107,9 +106,18 @@ const WebSocketContainer = ({ spaceId, children }) => {
     },
     sendMousePosition: (x, y, accountId) => {
       if (!stompClient || !stompClient.active) {
-        console.error("STOMP connection is not active");
+        console.error("STOMP connection is not active - Mouse");
         return;
       }      
+      const timestamp = Date.now();
+      function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        const milliseconds = date.getMilliseconds().toString().padStart(3, '0');
+        return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+      }
       stompClient.publish({
         destination: `/app/workspace/${spaceId}/mouse/sendMousePosition`,
         body: JSON.stringify({
@@ -118,7 +126,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
           accountId
         }),
       });
-      console.log(`마우스 커서 소켓 요청: x:${x} y:${y} spaceId:${spaceId} accountId:${accountId}`)      
+      console.log(`마우스 커서 소켓 요청: x:${x} y:${y} spaceId:${spaceId} accountId:${accountId} timestamp:${formatTimestamp(timestamp)}`)      
     },
     isConnected,
   });
