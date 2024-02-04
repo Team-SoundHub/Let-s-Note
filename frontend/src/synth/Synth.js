@@ -37,14 +37,14 @@ class Synth {
           callback,
           "/audio/" + instrument + "/"
         ).set({
-          volume: -12,
+          volume: -4,
           oscillator: {
             type: "triangle17",
           },
           attack: 0.01,
           decay: 0.1,
           sustain: 0.2,
-          release: 1.7,
+          release: 1.0,
         });
       }
       this.samplers[instrument].toDestination();
