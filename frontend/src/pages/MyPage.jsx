@@ -160,9 +160,7 @@ const MyPage = () => {
             </div>
           ))}
         </WorkSpacesSection>
-
         <Divider />
-
         <SectionTitle> 내 스냅샷 </SectionTitle>
         <SnapshotsSection>
           {snapshots.map((snapshot) => (

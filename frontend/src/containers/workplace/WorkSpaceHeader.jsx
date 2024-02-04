@@ -82,7 +82,6 @@ const WorkSpaceHeader = ({
   isSnapshotExist,
   openAddMemberModal,
   memberList,
-  openUrlModal,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
@@ -138,11 +137,6 @@ const WorkSpaceHeader = ({
             memberList={memberList}
             openAddMemberModal={openAddMemberModal}
           />
-        </ButtonContainer>
-        <ButtonContainer>
-          <BeatButton onClick={openUrlModal} className="ml-2">
-            <img className="w-5 h-5" src={quarterNote} />
-          </BeatButton>
         </ButtonContainer>
         <ButtonContainer>
           <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>

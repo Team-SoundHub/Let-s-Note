@@ -7,10 +7,9 @@ import Loading from "../../components/Loading";
 import { availableNotes, availableDrumNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
-import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
-import Button from "../../components/common/Button";
 import * as Tone from "tone";
-import NoteStorage from "../../components/WorkSpace/NoteStorage";
+import CseContainer from "./CseContainer";
+import NoteContainer from "./NoteContainer";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -45,10 +44,18 @@ const LeftPanel = tw.div`
   
 `;
 
-const RightPanel = tw.div`
-  w-[95%]
+const MiddlePanel = tw.div`
+  w-[90%]
   h-full
   flex-shrink-0
+`;
+
+const RightPanel = tw.div`
+  w-[5%]
+  rotate-90
+  flex-shrink-0
+  items-center
+  justify-center
 `;
 
 export const instrumentOptions = ["All", "piano", "guitar", "drum"];
@@ -141,12 +148,6 @@ class WorkSpaceContainer extends Component {
     }));
   };
 
-  noteStorageBox = () => {
-    this.setState((prevState) => ({
-      noteStorageVisible: !prevState.noteStorageVisible,
-    }));
-  };
-
   changeVisualizeInstrument = (instrument) => {
     const { visualizeInstrument } = this.state;
 
@@ -228,9 +229,7 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
-      noteStorageVisible,
       count,
-      searchBoxVisible,
     } = this.state;
 
     if (loading) {
@@ -247,7 +246,7 @@ class WorkSpaceContainer extends Component {
                 />
               ))}
             </LeftPanel>
-            <RightPanel>
+            <MiddlePanel>
               <BeatGrid
                 ref="BeatGrid"
                 synth={synth}
@@ -262,16 +261,10 @@ class WorkSpaceContainer extends Component {
                 count={count}
                 addCount={this.addCount}
               />
-            </RightPanel>
-            <div className="w-full flex justify-center content-center">
-              <Button onClick={this.noteStorageBox}>열기/닫기</Button>
-            </div>
-            <div
-              id="note-box"
-              className={noteStorageVisible ? "visible" : "hidden"}
-            >
-              <NoteStorage />
-            </div>
+            </MiddlePanel>
+              <RightPanel>
+                  <NoteContainer/>
+              </RightPanel>
           </GridContainer>
           <BeatControls
             onPlay={this.play}
@@ -284,15 +277,7 @@ class WorkSpaceContainer extends Component {
             count={count}
             handleCountChange={this.handleCountChange}
           />
-          <div className={"w-full flex justify-center content-center"}>
-            <Button onClick={this.handleSearchBar}>열기/닫기</Button>
-          </div>
-          <div
-            id="search-box"
-            className={searchBoxVisible ? "visible" : "hidden"}
-          >
-            <GoogleCustomSearch />
-          </div>
+            <CseContainer/>
         </Container>
       );
     }
