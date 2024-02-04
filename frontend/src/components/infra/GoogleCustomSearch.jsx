@@ -68,6 +68,7 @@ const ModalCloseButton = tw.button`
 const ModalBody = tw.div`
   p-4
   md:p-5
+  overflow-x-auto
 `;
 
 const GoogleCustomSearch = ({ handleSearchBarClose }) => {
@@ -148,7 +149,7 @@ const GoogleCustomSearch = ({ handleSearchBarClose }) => {
           {!loading && images.length > 0 && (
             <ul className="flex">
               {images.map((image, index) => (
-                <li key={index} className="mr-4 w-40 cursor-pointer">
+                <li key={index} className="mr-4 w-60 cursor-pointer">
                   <div>
                     <img
                       src={image.imageUrl}
