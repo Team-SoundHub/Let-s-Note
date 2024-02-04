@@ -188,7 +188,6 @@ const WorkPlacePage = () => {
           {searchBoxVisible && (
             <GoogleCustomSearch handleSearchBarClose={handleSearchBarClose} />
           )}
-
           {/* <Cursors />
           <CursorPointer
             spaceId={spaceId}
