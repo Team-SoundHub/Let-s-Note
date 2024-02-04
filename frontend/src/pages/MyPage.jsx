@@ -53,18 +53,18 @@ const Divider = styled.hr`
   margin: 20px 0;
 `;
 
-const accessToken = sessionStorage.getItem("access");
-const accountId = sessionStorage.getItem("accountId");
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const accessToken = sessionStorage.getItem("access");
+  const accountId = sessionStorage.getItem("accountId");  
 
   const [workspaces, setWorkspaces] = useState([]); // 작업실 목록을 저장하는 상태
   const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태  
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
-  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);  
+  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);
 
   const handleModalClose = () => {
     setIsCreateModalOpen(false);
@@ -74,9 +74,9 @@ const MyPage = () => {
     setIsCreateModalOpen(true);
   };
 
-  const handleCreateWorkSpace = async (title, description) => {    
-    try {      
-      const response = await createWorkSpace(title, description, []);      
+  const handleCreateWorkSpace = async (title, description) => {
+    try {
+      const response = await createWorkSpace(title, description, [], accountId);
       if (response) {
         navigate(`/workspace/${response.response.spaceId}`);
         console.log("작업실 생성 완료", title, description);
@@ -87,6 +87,13 @@ const MyPage = () => {
       console.error("작업실 생성 오류:", error);
     }
   };
+
+  const handleNavigateWorkspace = async (spaceId) => {
+    localStorage.setItem('spaceId', spaceId);
+    console.log("마이페이지 저장:", spaceId);
+    navigate(`/workspace/${spaceId}`); // 동기적 실행 -> 순서 보장
+  };
+
 
   const handleLogout = () => {
     // Clear session storage on logout
@@ -112,9 +119,9 @@ const MyPage = () => {
     };
     fetchMyPageInfo();
 
-    const fetchMySnapshotInfo = async () => {      
+    const fetchMySnapshotInfo = async () => {
       try {
-        const response = await getMySnapshotInfo(accountId);        
+        const response = await getMySnapshotInfo(accountId);
         console.log("[마이페이지] 스냅샷 인포 응답 받음:", response);
         setSnapshots(response.response); // API 응답으로 받은 스냅샷 목록을 상태에 저장
       } catch (error) {
@@ -148,7 +155,8 @@ const MyPage = () => {
             <div
               key={workspace.spaceId}
               className=" flex h-full"
-              onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
+              onClick={() => handleNavigateWorkspace(workspace.spaceId)}
+            // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
             >
               <PostCard
                 snapshotTitle={workspace.spaceTitle}
