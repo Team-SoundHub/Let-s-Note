@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const login = async (userId, password) => {
     try {        
-        const response = await axios.post('https://letsnote-rough-wind-6773.fly.dev/api/v1/accounts/token', {
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/accounts/token`, {
             username: userId,
             password: password
         });        

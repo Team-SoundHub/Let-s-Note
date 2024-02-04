@@ -13,7 +13,7 @@ const Container = styled.div`
   background-color: ${(props) => props.background};
   margin-left: ${(props) => (props.id % 2 === 1 ? 0.1 : 0.2)}rem;
   margin-bottom: 1rem;
-  width: 3rem;
+  width: 1.5rem;
 `;
 
 const Overlay = styled.div`

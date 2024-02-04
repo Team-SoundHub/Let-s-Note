@@ -19,13 +19,13 @@ const WebSocketContainer = ({ spaceId, children }) => {
     console.log("[WebSocketContainer] spaceId 받아옴:", spaceId);
 
     const client = new StompJS.Client({
-      brokerURL: "ws://letsnote-rough-wind-6773.fly.dev/letsnote/ws",
+      brokerURL: `${process.env.REACT_APP_SOCKET_URL}/letsnote/ws`,
       connectHeaders: {
         accessToken: accessToken,
         spaceId: spaceId,
         accountId: accountId,
       },
-      webSocketFactory: () => new SockJS("https://letsnote-rough-wind-6773.fly.dev/letsnote/ws"),
+      webSocketFactory: () => new SockJS(`${process.env.REACT_APP_SOCKET_HTTP}/letsnote/ws`),
       onConnect: () => {
         console.log("Connected: ", );
         setIsConnected(true); 
@@ -52,23 +52,29 @@ const WebSocketContainer = ({ spaceId, children }) => {
     client.subscribe(`/topic/workspace/${spaceId}/editor/public`, (response) => {
       const inner_content = JSON.parse(response.body);
       dispatch(setInnerContent(inner_content));
+    }, {
+      accessToken: client.connectHeaders.accessToken
     });
 
     client.subscribe(`/topic/workspace/${spaceId}/chat/public`, (response) => {
       const message = JSON.parse(response.body);
       dispatch(addMessage({ spaceId, message }));
+    }, {
+      accessToken: client.connectHeaders.accessToken
     });
 
     console.log("[WebSocket] 마우스 커서 구독");
-    client.subscribe(`/topic/workspace/${spaceId}/mouse/public`, (response) => {
+    client.subscribe(`/user/topic/workspace/${spaceId}/mouse/public`, (response) => {
       const cursorData = JSON.parse(response.body);
-      let x = cursorData.x;      
-      let y = cursorData.y;      
-      let accountId = cursorData.accountId;      
-      let nickname = cursorData.nickname;      
-      // console.log("[WebSocket] 마우스 커서 수신:", x, y, accountId, nickname);
+      let x = cursorData.x;
+      let y = cursorData.y;
+      let accountId = cursorData.accountId;
+      let nickname = cursorData.nickname;
+      console.log(response);
       dispatch(updateCursorPosition({ accountId, x, y, nickname }));
 
+    }, {
+      accessToken: client.connectHeaders.accessToken
     });
   };
 
