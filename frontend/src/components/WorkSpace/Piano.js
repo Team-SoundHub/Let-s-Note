@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { availableNotes } from "../../constants/scale";
-import drum from "../../assets/Instrument/drum1-svgrepo-com.svg";
+// import drum from "../../assets/Instrument/drum1-svgrepo-com.svg";
+import drum from "../../assets/Instrument/drum3.png";
 
 const PianoContainer = styled.div`
   display: flex-row;
@@ -67,17 +68,29 @@ const LastWhiteKey = styled(PianoKey)`
   z-index: 2;
 `;
 
-const Drumdiv = styled.div`
+const DrumButton = styled.div`
   display: flex;
-  height: 3rem;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: white;
-  border: 1px solid #000;
-  hover: bg-yellow-200;
+  cursor: pointer;
+  border: 1px solid #000;  
+  transition: background-color 0.3s ease;
+  height: 3.1rem;
+
+  &:hover {
+    background-color: #E3A008; 
+  }
+
+  img {
+      width: 45px;             
+  }
+  
 `;
 
-const VerticalPiano = () => {
+
+const VerticalPiano = ({sendLoop, spaceLength}) => {
   useEffect(() => {
     drawPianoKeys();
   }, []);
@@ -112,13 +125,17 @@ const VerticalPiano = () => {
     return pianoKeys;
   }
 
+  const handleDrumLoopClick = () => {
+    sendLoop("drum", spaceLength-1);
+    console.log("Drum loop clicked!", spaceLength);
+  };
+
   return (
     <PianoContainer>
       {drawPianoKeys()}
-      <Drumdiv>
-        <img className="h-9" src={drum} />
-        Drum Loop
-      </Drumdiv>
+      <DrumButton onClick={handleDrumLoopClick}>
+        <img src={drum} alt="Drum" />        
+      </DrumButton>
     </PianoContainer>
   );
 };
