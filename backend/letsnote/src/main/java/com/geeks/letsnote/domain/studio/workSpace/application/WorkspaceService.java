@@ -37,4 +37,6 @@ public interface WorkspaceService {
     SocketResponse.LoopNotes makeLoop(SocketRequest.LoopStatus loopStatus, String spaceId);
 
     Integer calculateMaxXLoop(ResponseNotes.Notes notes);
+
+    void deleteWorkspaceById(String spaceId);
 }
