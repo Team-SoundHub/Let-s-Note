@@ -116,12 +116,6 @@ const WorkPlacePage = () => {
     }
   };
 
-  /* Url modal control */
-  const openUrlModal = () => {
-    setUrlModalOpen(true);
-    console.log("called");
-  };
-
   const closeUrlModal = () => {
     setUrlModalOpen(false);
   };
@@ -169,7 +163,6 @@ const WorkPlacePage = () => {
             openAddMemberModal={openAddMemberModal}
             handleAddMember={handleAddMember}
             memberList={memberList}
-            openUrlModal={openUrlModal}
           />
           <WorkSpaceContainer
             isSnapshot={false}
