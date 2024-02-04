@@ -155,8 +155,8 @@ const WorkPlacePage = () => {
       const userId = usernameInput.value;
 
       try {
-        const response = await setMember(spaceId, userId);        
-        const newMemberName  = response.response.nickname;            
+        const response = await setMember(spaceId, userId);
+        const newMemberName = response.response.nickname;
 
         setMemberList((prevMemberList) => [...prevMemberList, newMemberName]);
       } catch (error) {
@@ -188,20 +188,13 @@ const WorkPlacePage = () => {
           {searchBoxVisible && (
             <GoogleCustomSearch handleSearchBarClose={handleSearchBarClose} />
           )}
-          {/* <Cursors />
-          <CursorPointer
-            spaceId={spaceId}
-            accountId={accountId}
-            sendMousePosition={sendMousePosition}
-            isConnected={isConnected} 
-          /> */}
           <WorkSpaceHeader
             onOpenModal={handleModalOpen}
             isSnapshotExist={workspaceInfo.isSnapshotExist}
             openAddMemberModal={openAddMemberModal}
             handleAddMember={handleAddMember}
             memberList={memberList}
-           handleSearchBarOpen={handleSearchBarOpen}
+            handleSearchBarOpen={handleSearchBarOpen}
           />
           <WorkSpaceContainer
             isSnapshot={false}
@@ -214,6 +207,13 @@ const WorkPlacePage = () => {
             spaceId={spaceId}
             memberList={memberList}
             nickname={myNickname}
+          />
+          <Cursors />
+          <CursorPointer
+            spaceId={spaceId}
+            accountId={accountId}
+            sendMousePosition={sendMousePosition}
+            isConnected={isConnected}
           />
         </Container>
       )}

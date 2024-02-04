@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NoteStorage from "../../components/WorkSpace/NoteStorage";
 import SearchImageModal from "../../components/WorkSpace/SearchImageModal";
+import ImagePreviewModal from '../../components/WorkSpace/ImagePreviewModal';
 
 const NoteContainer = () => {
     const [noteStorageVisible, setNoteStorageVisible] = useState(false);
@@ -9,6 +10,7 @@ const NoteContainer = () => {
 
     const openImageModal = (imageUrl) => {
         setSelectedImage(imageUrl);
+        setNoteStorageVisible(false);
     };
 
     const handleNoteStorageBox = () => {
@@ -28,7 +30,7 @@ const NoteContainer = () => {
             <div>
 
             </div>
-            {selectedImage && <SearchImageModal image_url={selectedImage} onClose={() => setSelectedImage(null)} />}
+            {selectedImage && <ImagePreviewModal image_url={selectedImage} onClose={() => setSelectedImage(null)} />}
         </>
     );
 };
