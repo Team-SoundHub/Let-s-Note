@@ -59,7 +59,7 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: 200,
+      columns: 64,
       availableNotes,
       availableDrumNotes,
       synth: null,

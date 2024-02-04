@@ -23,7 +23,7 @@ const Container = styled.div`
 const LeftPanel = tw.div`
   flex
   flex-row
-  w-[10%]
+  w-[6%]
   h-full
   sticky
   left-0
@@ -31,7 +31,7 @@ const LeftPanel = tw.div`
 `;
 
 const RightPanel = tw.div`
-  w-[90%]
+  w-[93%]
   h-full
   flex-shrink-0
   flex

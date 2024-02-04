@@ -15,8 +15,8 @@ const Container = styled.div`
       : props.col % 8 < 4
       ? "lightgray"
       : props.inactiveColor};
-  width: 3rem;
-  height: 3rem;
+  width: 1.5rem;
+  height: 1.5rem;
 
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
 `;
