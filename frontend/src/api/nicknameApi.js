@@ -1,8 +1,6 @@
 import axiosInstance from './axiosInstance';
 
-const accountId = sessionStorage.getItem('accountId');
-
-const getMyNickname = async () => {
+const getMyNickname = async (accountId) => {
     try {    
       const response = await axiosInstance.get(`/accounts/nickname/${accountId}`);
       return response.data;
