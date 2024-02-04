@@ -10,8 +10,8 @@ const Container = styled.div`
     props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
       ? pickActiveColor("drum")
       : props.inactiveColor};
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 3rem;
+  height: 3rem;
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0)}rem;
   position: relative; /* Ensure the circle is positioned relative to this container */
 
@@ -86,17 +86,20 @@ const DrumBox = ({
   const [active, setActive] = useState(propActive);
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const instrumentList = ["piano", "guitar", "drum"];
-  const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
-  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);  
-
+  const workspaceNotes = useSelector(
+    (state) => state.innerContent.workspaceNotes
+  );
+  const snapshotNotes = useSelector(
+    (state) => state.innerContent.snapshotNotes
+  );
 
   useEffect(() => {
     let activeNote;
 
-    if (isSnapshot) {      
+    if (isSnapshot) {
       activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
       // console.log("스냅샷 드럼:", activeNote);
-    } else {      
+    } else {
       activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
       // console.log("작업실 드럼:", activeNote);
     }
@@ -112,10 +115,10 @@ const DrumBox = ({
     workspaceNotes,
     col,
     row,
-    active,
+    // active,
     isSnapshot,
-    setActiveBoxes,
-    setActiveInstrument,
+    // setActiveBoxes,
+    // setActiveInstrument,
   ]);
 
   useEffect(() => {

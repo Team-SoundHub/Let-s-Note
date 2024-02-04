@@ -92,6 +92,7 @@ const LandingPage = () => {
     // sessionStorage.removeItem("nickname");
     sessionStorage.removeItem("accountId");
     setIsLoggedIn(false);
+    navigate("/");
   };
 
   useEffect(() => {
