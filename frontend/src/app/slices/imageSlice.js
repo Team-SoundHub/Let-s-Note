@@ -8,7 +8,7 @@ export const uploadImage = createAsyncThunk(
     const formData = new FormData();
     formData.append('image', imageFile);
     // 백엔드 되면 url 확인해서 바꾸기
-    const response = await axios.post('https://letsnote-rough-wind-6773.fly.dev/api/v1/upload', formData, {
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/upload`, formData, {
       headers: {
         // access 토큰 추가?
         'Content-Type': 'multipart/form-data',
