@@ -115,10 +115,10 @@ const DrumBox = ({
     workspaceNotes,
     col,
     row,
-    active,
+    // active,
     isSnapshot,
-    setActiveBoxes,
-    setActiveInstrument,
+    // setActiveBoxes,
+    // setActiveInstrument,
   ]);
 
   useEffect(() => {

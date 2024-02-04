@@ -4,7 +4,7 @@ import { fetchChatMessages } from "../../app/slices/chatSlice";
 import styled, { css } from "styled-components";
 import ChatInput from "../../components/Chat/ChatInput";
 import ChatMessage from "../../components/Chat/ChatMessage";
-import { sendMessage } from "../WebSocket/WebSocketContainer";
+// import { sendMessage } from "../WebSocket/WebSocketContainer";
 import chatImage from "../../assets/bubble-chat2.png";
 
 const StyledChatContainer = styled.div`
@@ -80,7 +80,7 @@ const CloseButton = styled.div`
   }
 `;
 
-const ChatContainer = ({ spaceId, memberList, nickname }) => {
+const ChatContainer = ({ sendMessage, spaceId, memberList, nickname }) => {
   const dispatch = useDispatch();
   const chatMessages = useSelector((state) => state.chat.spaces[spaceId]); // 해당 채팅방 메시지 가져오기
   const [isVisible, setIsVisible] = useState(false);

@@ -52,6 +52,7 @@ export const innerContentSlice = createSlice({
       console.log("리덕스 - snapshot에 들어간 정보:", state.snapshotNotes);
     },
     clearAllNotes: (state) => {
+      state.innerContent =  { instrument: "piano", x: null, y: null }
       state.workspaceNotes = [];
       state.snapshotNotes = [];
     },
