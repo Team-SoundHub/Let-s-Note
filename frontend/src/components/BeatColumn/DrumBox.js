@@ -110,11 +110,11 @@ const DrumBox = ({
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
     }
-    // else {
-    //   setActive(false);      
-    //   setActiveBoxes(row, false);
-    //   setActiveInstrument(row, undefined);
-    // }
+    else if (activeNote) {
+      setActive(false);      
+      setActiveBoxes(row, false);
+      setActiveInstrument(row, undefined);
+    }
   }, [
     snapshotNotes,
     workspaceNotes,

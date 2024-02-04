@@ -10,7 +10,7 @@ const fileGetApi = async () => {
     }
 
     const response = await axiosInstance.get(
-      `http://localhost:9807/api/v1/files/${spaceId}`,
+      `/files/${spaceId}`,
       {
         spaceId: spaceId,
       }

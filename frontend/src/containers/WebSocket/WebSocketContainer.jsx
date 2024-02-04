@@ -82,26 +82,15 @@ const WebSocketContainer = ({ spaceId, children }) => {
       const { Notes, instrument } = JSON.parse(response.body);
       console.log("드럼 루프 구독:", Notes, instrument);
 
-      // const instrumentGroup = {
-      //   notes: Notes.map(note => ({
-      //     noteX: note.x,
-      //     noteY: note.y
-      //   })),
-      //   instrument: instrument // 현재는 only drum
-      // };
+      const instrumentGroup = {
+        notes: Notes.map(note => ({
+          noteX: note.x,
+          noteY: note.y
+        })),
+        instrument: instrument // 현재는 only drum
+      };
 
-      // dispatch(setWorkspaceNotes([instrumentGroup]));
-
-      Notes.forEach(note => {
-        const innerContentData = {
-          instrument: instrument, // 'drum'
-          x: note.x,
-          y: note.y,
-        };
-
-        console.log(innerContentData);
-        dispatch(setInnerContent(innerContentData));
-      })
+      dispatch(setWorkspaceNotes([instrumentGroup]));
     }, {
       accessToken: client.connectHeaders.accessToken
     });
