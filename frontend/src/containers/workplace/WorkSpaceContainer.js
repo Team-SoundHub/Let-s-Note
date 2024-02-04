@@ -58,6 +58,26 @@ const RightPanel = tw.div`
   justify-center
 `;
 
+
+// const LoopButton = tw.button`
+//   text-black
+//   hover:bg-red-800
+//   focus:outline-none
+//   focus:ring-4
+//   focus:ring-red-300
+//   font-medium
+//   rounded-full
+//   text-sm
+//   px-2.5
+//   py-2.5
+//   text-center
+//   me-2
+//   mb-2
+//   dark:hover:bg-red-700
+//   dark:focus:ring-red-900
+// `;
+
+
 export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
 class WorkSpaceContainer extends Component {
@@ -244,7 +264,7 @@ class WorkSpaceContainer extends Component {
                   instrument={instrument}
                   changeVisualizeInstrument={this.changeVisualizeInstrument}
                 />
-              ))}
+              ))}              
             </LeftPanel>
             <MiddlePanel>
               <BeatGrid
@@ -261,6 +281,7 @@ class WorkSpaceContainer extends Component {
                 sendCoordinate={this.props.sendCoordinate}
                 count={count}
                 addCount={this.addCount}
+                sendLoop={this.props.sendLoop}
               />
             </MiddlePanel>
             <RightPanel>

@@ -53,7 +53,7 @@ class BeatGrid extends Component {
     }
   };
 
-  trigger = (time) => {
+  trigger = (time) => {     
     this.props.addCount();
 
     this.playBeat(time);
@@ -61,7 +61,7 @@ class BeatGrid extends Component {
 
   renderBeatColumns = () => {
     const {
-      scale,
+      scale, 
       drumScale,
       synth,
       columns,
@@ -97,7 +97,10 @@ class BeatGrid extends Component {
     return (
       <Container background={background}>
         <LeftPanel>
-          <VerticalPiano />
+          <VerticalPiano 
+          sendLoop={this.props.sendLoop}
+          spaceLength={this.props.columns}
+          />
         </LeftPanel>
         <RightPanel>{this.renderBeatColumns()}</RightPanel>
       </Container>

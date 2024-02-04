@@ -80,6 +80,7 @@ const BeatControls = ({
             onClick={() => changeColumns(-8)}
           />
         </BeatChangeContainer>
+        {columns} 줄
       </LeftSection>
       <CenterSection>
         <BeatProgressBar

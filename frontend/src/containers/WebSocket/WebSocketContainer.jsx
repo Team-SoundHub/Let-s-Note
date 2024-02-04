@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import * as StompJS from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-import { setInnerContent } from "../../app/slices/innerContentSlice";
+import { setInnerContent, setWorkspaceNotes } from "../../app/slices/innerContentSlice";
 import { addMessage } from "../../app/slices/chatSlice";
 import { updateCursorPosition } from "../../app/slices/cursorSlice";
 
 const WebSocketContainer = ({ spaceId, children }) => {
   const dispatch = useDispatch();
   const [stompClient, setStompClient] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);  
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const accessToken = sessionStorage.getItem("access");
@@ -27,13 +27,13 @@ const WebSocketContainer = ({ spaceId, children }) => {
       },
       webSocketFactory: () => new SockJS(`${process.env.REACT_APP_SOCKET_HTTP}/letsnote/ws`),
       onConnect: () => {
-        console.log("Connected: ", );
-        setIsConnected(true); 
+        console.log("Connected: ",);
+        setIsConnected(true);
         subscribeToTopics(client);
       },
-      onDisconnect: () => {        
+      onDisconnect: () => {
         setIsConnected(false);
-      },      
+      },
       onStompError: (frame) => {
         console.error("Broker reported error: " + frame.headers["message"]);
         console.error("Additional details: " + frame.body);
@@ -51,6 +51,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
   const subscribeToTopics = (client) => {
     client.subscribe(`/topic/workspace/${spaceId}/editor/public`, (response) => {
       const inner_content = JSON.parse(response.body);
+      console.log(inner_content);
       dispatch(setInnerContent(inner_content));
     }, {
       accessToken: client.connectHeaders.accessToken
@@ -76,10 +77,29 @@ const WebSocketContainer = ({ spaceId, children }) => {
     }, {
       accessToken: client.connectHeaders.accessToken
     });
+
+    client.subscribe(`/topic/workspace/${spaceId}/loop/public`, (response) => {
+      const { Notes, instrument } = JSON.parse(response.body);
+      console.log("드럼 루프 구독:", Notes, instrument);
+
+      const instrumentGroup = {
+        notes: Notes.map(note => ({
+          noteX: note.x,
+          noteY: note.y
+        })),
+        instrument: instrument // 현재는 only drum
+      };
+
+      dispatch(setWorkspaceNotes([instrumentGroup]));
+    }, {
+      accessToken: client.connectHeaders.accessToken
+    });
   };
 
   // 함수를 자식 컴포넌트에 전달
   return children({
+    isConnected,
+
     sendCoordinate: (instrument, x, y) => {
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active");
@@ -95,6 +115,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
         }),
       });
     },
+
     sendMessage: (message) => {
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active");
@@ -109,11 +130,12 @@ const WebSocketContainer = ({ spaceId, children }) => {
         }),
       });
     },
+
     sendMousePosition: (x, y, accountId) => {
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active - Mouse");
         return;
-      }      
+      }
       const timestamp = Date.now();
       function formatTimestamp(timestamp) {
         const date = new Date(timestamp);
@@ -131,9 +153,24 @@ const WebSocketContainer = ({ spaceId, children }) => {
           accountId
         }),
       });
-      console.log(`마우스 커서 소켓 요청: x:${x} y:${y} spaceId:${spaceId} accountId:${accountId} timestamp:${formatTimestamp(timestamp)}`)      
+      console.log(`마우스 커서 소켓 요청: x:${x} y:${y} spaceId:${spaceId} accountId:${accountId} timestamp:${formatTimestamp(timestamp)}`)
     },
-    isConnected,
+
+    sendLoop: (instrument, spaceLength) => {
+      if (!stompClient || !stompClient.active) {
+        console.error("STOMP connection is not active");
+        return;
+      }
+      stompClient.publish({
+        destination: `/app/workspace/${spaceId}/loop/sendLoop`,
+        body: JSON.stringify({
+          instrument: instrument,
+          spaceLength: spaceLength
+        }),
+      });
+      console.log("drum loop 요청 보냄:", instrument, spaceLength);
+    },
+
   });
 };
 

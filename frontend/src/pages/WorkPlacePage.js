@@ -167,7 +167,7 @@ const WorkPlacePage = () => {
 
   return (
     <WebSocketContainer spaceId={spaceId}>
-      {({ sendCoordinate, sendMessage, sendMousePosition, isConnected }) => (
+      {({ sendCoordinate, sendMessage, sendMousePosition, isConnected, sendLoop }) => (
         <Container>
           {isReleaseModalOpen && (
             <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
@@ -207,6 +207,7 @@ const WorkPlacePage = () => {
             isSnapshot={false}
             spaceId={spaceId}
             sendCoordinate={sendCoordinate}
+            sendLoop={sendLoop}
           />
           <ChatContainer
             sendMessage={sendMessage}
