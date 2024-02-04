@@ -80,7 +80,7 @@ public class EditorSocketController {
 		MessageResponse.information result = messageService.createMessage(messageInfo);
 		ResponseAccount.NickName nickName = accountService.getNicknameFromAccountId(chatMessage.accountId());
 
-		return new SocketResponse.Chat(chatMessage.spaceId(), nickName.nickname(), result.msgContent(), result.timestamp());
+		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
 	@Async
@@ -89,15 +89,15 @@ public class EditorSocketController {
 	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
 		noteInstrumentMapService.clickNoteMap(content);
 
-		return new SocketResponse.Coordinate(content.spaceId(), content.instrument(), content.x(), content.y());
+		return new SocketResponse.Coordinate(spaceId, content.instrument(), content.x(), content.y());
 	}
 
 	@MessageMapping("/workspace/{spaceId}/mouse/sendMousePosition")
 	@SendTo("/topic/workspace/{spaceId}/mouse/public")
-	public SocketResponse.MousePosition broadcastMousePosition(SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId) {
-		return new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId());
+	public SocketResponse.MousePosition sendEditorCoordinateInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId) throws Exception {
+		ResponseAccount.NickName nickname = accountService.getNicknameFromAccountId(mousePosition.accountId());
+	return new SocketResponse.MousePosition(mousePosition.x(), mousePosition.y(), mousePosition.accountId(),nickname.nickname());
 	}
-
 
 	@MessageExceptionHandler
 	@SendToUser("/queue/errors")

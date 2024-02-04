@@ -39,28 +39,24 @@ const RightPanel = tw.div`
 `;
 
 class BeatGrid extends Component {
-  state = { count: -1 };  
-
   handleBoxClick = (row, column) => {
     console.log("clicked spaceId:", this.props.spaceId);
     const instrument = this.props.synth.activeInstrument;
     this.props.sendCoordinate(instrument, row, column, this.props.spaceId);
   };
 
-  trigger = (time) => {
-    this.setState(
-      (prev) => ({ count: prev.count + 1 }),
-      () => this.playBeat(time)
-    );
-    if (this.props.onCountChange) {
-      this.props.onCountChange(this.count);
+  playBeat = (time) => {
+    const { columns, count } = this.props;
+    const activeBeat = count % columns;
+    if (this.refs[activeBeat]) {
+      this.refs[activeBeat].playBeat(time);
     }
   };
 
-  playBeat = (time) => {
-    const { columns } = this.props;
-    const activeBeat = this.state.count % columns;
-    this.refs[activeBeat].playBeat(time);
+  trigger = (time) => {
+    this.props.addCount();
+
+    this.playBeat(time);
   };
 
   renderBeatColumns = () => {
@@ -72,8 +68,8 @@ class BeatGrid extends Component {
       background,
       foreground,
       visualizeInstrument,
+      count,
     } = this.props;
-    const { count } = this.state;
     const cols = [];
     for (let i = 0; i < columns; i++) {
       cols.push(

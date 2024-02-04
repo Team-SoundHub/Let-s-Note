@@ -21,7 +21,7 @@ const ModalBackground = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;  
+  width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000; // 높은 z-index 값 설정
@@ -132,8 +132,7 @@ const CreateSpaceModal = ({ onClose, onPublish }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); 
-    onPublish(title, description);
+    e.preventDefault();
   };
 
   return (
@@ -199,7 +198,11 @@ const CreateSpaceModal = ({ onClose, onPublish }) => {
                   />
                 </div>
                 <div className="flex justify-center">
-                  <Button type="submit" className="w-full" onClick={() => onPublish(title, description)}>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    onClick={() => onPublish(title, description)}
+                  >
                     생성하기
                   </Button>
                 </div>
