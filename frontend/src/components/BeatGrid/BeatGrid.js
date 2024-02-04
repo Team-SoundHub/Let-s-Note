@@ -53,7 +53,8 @@ class BeatGrid extends Component {
     }
   };
 
-  trigger = (time) => {
+  trigger = (time) => { 
+    console.log();
     this.props.addCount();
 
     this.playBeat(time);
@@ -61,7 +62,7 @@ class BeatGrid extends Component {
 
   renderBeatColumns = () => {
     const {
-      scale,
+      scale, 
       drumScale,
       synth,
       columns,
