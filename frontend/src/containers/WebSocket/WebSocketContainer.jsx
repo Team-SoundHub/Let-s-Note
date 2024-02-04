@@ -62,7 +62,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
     }, {
       accessToken: client.connectHeaders.accessToken
     });
-
+    
     console.log("[WebSocket] 마우스 커서 구독");
     client.subscribe(`/user/topic/workspace/${spaceId}/mouse/public`, (response) => {
       const cursorData = JSON.parse(response.body);
@@ -72,7 +72,15 @@ const WebSocketContainer = ({ spaceId, children }) => {
       let nickname = cursorData.nickname;
       console.log(response);
       dispatch(updateCursorPosition({ accountId, x, y, nickname }));
+      
+    }, {
+      accessToken: client.connectHeaders.accessToken
+    });
 
+    client.subscribe(`/app/workspace/${spaceId}/loop/sendLoop`, (response) => {
+      const loopNotes = JSON.parse(response.body);
+      console.log(loopNotes);
+      // dispatch(addMessage({ spaceId, message }));
     }, {
       accessToken: client.connectHeaders.accessToken
     });
@@ -80,6 +88,8 @@ const WebSocketContainer = ({ spaceId, children }) => {
 
   // 함수를 자식 컴포넌트에 전달
   return children({
+    isConnected,
+
     sendCoordinate: (instrument, x, y) => {
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active");
@@ -95,6 +105,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
         }),
       });
     },
+
     sendMessage: (message) => {
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active");
@@ -109,6 +120,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
         }),
       });
     },
+
     sendMousePosition: (x, y, accountId) => {
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active - Mouse");
@@ -133,7 +145,21 @@ const WebSocketContainer = ({ spaceId, children }) => {
       });
       console.log(`마우스 커서 소켓 요청: x:${x} y:${y} spaceId:${spaceId} accountId:${accountId} timestamp:${formatTimestamp(timestamp)}`)      
     },
-    isConnected,
+
+    sendLoop: (instrument, spaceLength) => {
+      if (!stompClient || !stompClient.active) {
+        console.error("STOMP connection is not active");
+        return;
+      }
+      stompClient.publish({
+        destination: `/app/workspace/${spaceId}/chat/sendMessage`,
+        body: JSON.stringify({
+          instrument: instrument, 
+          spaceLength: spaceLength
+        }),
+      });
+    },
+
   });
 };
 

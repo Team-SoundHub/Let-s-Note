@@ -74,6 +74,7 @@ const Drumdiv = styled.div`
   justify-content: center;
   background-color: white;
   border: 1px solid #000;
+  hover: bg-yellow-200;
 `;
 
 const VerticalPiano = () => {
@@ -115,7 +116,8 @@ const VerticalPiano = () => {
     <PianoContainer>
       {drawPianoKeys()}
       <Drumdiv>
-        <img className="h-12" src={drum} />
+        <img className="h-9" src={drum} />
+        Drum Loop
       </Drumdiv>
     </PianoContainer>
   );
