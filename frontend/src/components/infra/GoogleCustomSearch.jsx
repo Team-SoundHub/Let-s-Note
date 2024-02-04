@@ -160,12 +160,12 @@ const GoogleCustomSearch = ({ handleSearchBarClose }) => {
                       draggable="true"
                     />
                     <p className={"overflow-ellipsis"}>{image.title}</p>
-                    <Button
+                    {/* <Button
                       onClick={() => openFileStoreModal(image.imageUrl)}
                       disabled={loading}
                     >
                       악보에 저장
-                    </Button>
+                    </Button> */}
                   </div>
                 </li>
               ))}
@@ -176,6 +176,7 @@ const GoogleCustomSearch = ({ handleSearchBarClose }) => {
           <SearchImageModal
             image_url={selectedImage}
             onClose={() => setSelectedImage(null)}
+            openFileStoreModal={openFileStoreModal}
           />
         )}
         {storedImage && (
