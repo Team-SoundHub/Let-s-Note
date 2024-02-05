@@ -7,14 +7,6 @@ const ProgressBarContainer = tw.div`
     w-full dark:bg-gray-700
 `;
 
-const Label = tw.span`
-    text-[#49c5b6]
-    text-lg
-    font-bold
-    w-[100%]
-    text-center
-`;
-
 const BeatProgressBar = ({ count, handleCountChange, columns }) => {
   const [isDragging, setIsDragging] = useState(false);
 
@@ -56,7 +48,6 @@ const BeatProgressBar = ({ count, handleCountChange, columns }) => {
 
   return (
     <ProgressBarContainer onMouseDown={handleMouseDown}>
-      <Label>{`Progress Bar`}</Label>
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
         <div
           class="bg-[#49c5b6] h-2.5 rounded-full"

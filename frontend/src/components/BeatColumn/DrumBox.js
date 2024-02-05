@@ -10,7 +10,7 @@ const Container = styled.div`
     props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
       ? pickActiveColor("drum")
       : props.inactiveColor};
-  width: 1.5rem;
+  width: 3rem;
   height: 1.5rem;
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0)}rem;
   position: relative; /* Ensure the circle is positioned relative to this container */
@@ -109,9 +109,8 @@ const DrumBox = ({
       setActive(true);
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
-    }
-    else if (activeNote) {
-      setActive(false);      
+    } else if (activeNote) {
+      setActive(false);
       setActiveBoxes(row, false);
       setActiveInstrument(row, undefined);
     }
