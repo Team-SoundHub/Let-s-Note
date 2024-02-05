@@ -18,6 +18,7 @@ const CardContainer = tw.div`
 
 const LandingContainer = tw.div`
   flex-row items-center justify-center z-0
+  bg-white
 `;
 const TransparentImageStyle = tw.div`
 flex flex-col w-full items-center justify-center z-0

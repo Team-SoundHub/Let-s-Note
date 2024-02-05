@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import {
   getMyPageInfo,
@@ -15,6 +15,7 @@ import PostCard from "../components/feed/PostCard";
 
 const MypageContainer = tw.div`
     flex-row
+    bg-white
 `;
 
 const TitleContainer = tw.div`
@@ -53,18 +54,21 @@ const Divider = styled.hr`
   margin: 20px 0;
 `;
 
-
 const MyPage = () => {
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("access");
-  const accountId = sessionStorage.getItem("accountId");  
+  const accountId = sessionStorage.getItem("accountId");
 
   const [workspaces, setWorkspaces] = useState([]); // 작업실 목록을 저장하는 상태
-  const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태  
+  const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
-  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);
+  const workspaceNotes = useSelector(
+    (state) => state.innerContent.workspaceNotes
+  );
+  const snapshotNotes = useSelector(
+    (state) => state.innerContent.snapshotNotes
+  );
 
   const handleModalClose = () => {
     setIsCreateModalOpen(false);
@@ -89,12 +93,11 @@ const MyPage = () => {
   };
 
   const handleNavigateWorkspace = async (spaceId, spaceTitle) => {
-    localStorage.setItem('spaceId', spaceId);
-    localStorage.setItem('title', spaceTitle);
+    localStorage.setItem("spaceId", spaceId);
+    localStorage.setItem("title", spaceTitle);
     console.log("마이페이지 저장:", spaceId);
     navigate(`/workspace/${spaceId}`); // 동기적 실행 -> 순서 보장
   };
-
 
   const handleLogout = () => {
     // Clear session storage on logout
@@ -156,8 +159,10 @@ const MyPage = () => {
             <div
               key={workspace.spaceId}
               className=" flex h-full"
-              onClick={() => handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)}
-            // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
+              onClick={() =>
+                handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)
+              }
+              // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
             >
               <PostCard
                 snapshotTitle={workspace.spaceTitle}

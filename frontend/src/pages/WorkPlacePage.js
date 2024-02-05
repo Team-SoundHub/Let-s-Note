@@ -8,7 +8,7 @@ import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
-import AddMemberModal from "../components/WorkSpace/AddMemberModal"
+import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import NoteModal from "../components/WorkSpace/NoteModal";
 import CursorPointer from "../components/WorkSpace/Cursor/CursorPointer";
 import Cursors from "../components/WorkSpace/Cursor/Cursors";
@@ -23,6 +23,7 @@ import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
 
 const Container = styled.div`
+  background-color: white;
   height: 100vh;
 `;
 
@@ -167,7 +168,13 @@ const WorkPlacePage = () => {
 
   return (
     <WebSocketContainer spaceId={spaceId}>
-      {({ sendCoordinate, sendMessage, sendMousePosition, isConnected, sendLoop }) => (
+      {({
+        sendCoordinate,
+        sendMessage,
+        sendMousePosition,
+        isConnected,
+        sendLoop,
+      }) => (
         <Container>
           {isReleaseModalOpen && (
             <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
