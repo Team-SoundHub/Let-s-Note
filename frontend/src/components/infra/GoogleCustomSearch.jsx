@@ -27,6 +27,7 @@ const ModalContent = tw.div`
   max-w-md
   max-h-full
   bg-white
+  rounded-lg
 `;
 
 const ModalHeader = tw.div`
@@ -66,6 +67,7 @@ const ModalCloseButton = tw.button`
 `;
 
 const ModalBody = tw.div`
+  flex
   p-4
   md:p-5
   overflow-x-auto
