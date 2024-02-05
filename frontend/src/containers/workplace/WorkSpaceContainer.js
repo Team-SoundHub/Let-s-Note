@@ -30,11 +30,11 @@ relative
   w-full
   bg-white
   p-4
-  h-[70vh]
+  h-[80vh]
 `;
 
 const LeftPanel = tw.div`
-  w-[5%]
+  w-[3%]
   h-full
   flex-shrink-0
   bg-white
@@ -45,17 +45,9 @@ const LeftPanel = tw.div`
 `;
 
 const MiddlePanel = tw.div`
-  w-[90%]
+  w-[97%]
   h-full
   flex-shrink-0
-`;
-
-const RightPanel = tw.div`
-  w-[5%]
-  rotate-90
-  flex-shrink-0
-  items-center
-  justify-center
 `;
 
 // const LoopButton = tw.button`
@@ -266,7 +258,7 @@ class WorkSpaceContainer extends Component {
                 scale={availableNotes}
                 drumScale={availableDrumNotes}
                 columns={columns}
-                background="#34AEA5"
+                background="skyblue"
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
                 isSnapshot={this.props.isSnapshot}
@@ -275,6 +267,7 @@ class WorkSpaceContainer extends Component {
                 count={count}
                 addCount={this.addCount}
                 sendLoop={this.props.sendLoop}
+                changeColumns={this.changeColumns}
               />
             </MiddlePanel>
           </GridContainer>

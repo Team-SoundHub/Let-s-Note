@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
 import VerticalPiano from "../WorkSpace/Piano";
-import { clearAllNotes } from "../../app/slices/innerContentSlice";
+import BeatChange from "../BeatControls/BeatChange";
 
 const Container = styled.div`
   flex: 1;
@@ -17,9 +16,11 @@ const Container = styled.div`
   overflow-y: auto;
   overflow-x: auto;
   position: relative;
+  border-radius: 10px;
 `;
 
 const LeftPanel = tw.div`
+  flex-1
   flex
   flex-row
   w-[6%]
@@ -30,11 +31,31 @@ const LeftPanel = tw.div`
 `;
 
 const RightPanel = tw.div`
+  flex-1
   w-[93%]
-  h-full
-  flex-shrink-0
+  h-60
   flex
   flex-row
+`;
+
+const BeatChangeContainer = tw.div`
+  sticky
+  top-0
+  flex
+  flex-col
+  items-center
+  justify-center
+  bg-white
+  ml-1
+  mt-0.5
+  h-full
+`;
+
+const ButtonContainer = tw.div`
+  flex
+  w-20
+  items-center
+  justify-center
 `;
 
 class BeatGrid extends Component {
@@ -68,6 +89,7 @@ class BeatGrid extends Component {
       foreground,
       visualizeInstrument,
       count,
+      changeColumns,
     } = this.props;
     const cols = [];
     for (let i = 0; i < columns; i++) {
@@ -88,6 +110,16 @@ class BeatGrid extends Component {
         />
       );
     }
+    cols.push(
+      <BeatChangeContainer>
+        <ButtonContainer>
+          <BeatChange mode="add" onClick={() => changeColumns(8)} />
+        </ButtonContainer>
+        <ButtonContainer>
+          <BeatChange mode="subtract" onClick={() => changeColumns(-8)} />
+        </ButtonContainer>
+      </BeatChangeContainer>
+    );
     return cols;
   };
 
