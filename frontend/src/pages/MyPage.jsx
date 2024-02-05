@@ -12,6 +12,8 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import CreateSpaceModal from "../components/MyPage/CreateSpaceModal";
 import PostCard from "../components/feed/PostCard";
+import SaveSnapshotModal from "../components/WorkSpace/ChangeAccountInfoModal";
+import ChangeAccountInfoModal from "../components/WorkSpace/ChangeAccountInfoModal";
 
 const MypageContainer = tw.div`
     flex-row
@@ -62,6 +64,7 @@ const MyPage = () => {
   const [workspaces, setWorkspaces] = useState([]); // 작업실 목록을 저장하는 상태
   const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isAccountInfoModalOpen, setUIsAccountInfoModalOpen] = useState(false);
 
   const workspaceNotes = useSelector(
     (state) => state.innerContent.workspaceNotes
@@ -78,6 +81,14 @@ const MyPage = () => {
     setIsCreateModalOpen(true);
   };
 
+  const accountInfoModalClose = () => {
+    setUIsAccountInfoModalOpen(false);
+  };
+
+  const accountInfoModalOpen = () => {
+    setUIsAccountInfoModalOpen(true);
+  };
+
   const handleCreateWorkSpace = async (title, description) => {
     try {
       const response = await createWorkSpace(title, description, [], accountId);
@@ -87,6 +98,21 @@ const MyPage = () => {
       } else {
         console.log("작업실 생성 실패");
       }
+    } catch (error) {
+      console.error("작업실 생성 오류:", error);
+    }
+  };
+
+
+  const handleChangeUserInfo = async (nickname, picture) => {
+    try {
+      // const response = await createWorkSpace(changedInfo);
+      // if (response) {
+      //   navigate(`/workspace/${response.response.spaceId}`);
+      //   console.log("작업실 생성 완료", title, description);
+      // } else {
+      //   console.log("작업실 생성 실패");
+      // }
     } catch (error) {
       console.error("작업실 생성 오류:", error);
     }
@@ -106,6 +132,10 @@ const MyPage = () => {
     // sessionStorage.removeItem("nickname");
     sessionStorage.removeItem("accountId");
     navigate("/");
+  };
+
+  const openAccountInfoModal = () => {
+    accountInfoModalOpen();
   };
 
   useEffect(() => {
@@ -135,10 +165,11 @@ const MyPage = () => {
     fetchMySnapshotInfo();
   }, [accessToken, accountId]);
 
+
   // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
   return (
     <>
-      <Header handleLogout={handleLogout} />
+      <Header handleLogout={handleLogout} openAccountInfoModal={openAccountInfoModal}/>
       <MypageContainer>
         <TitleContainer>
           <SectionTitle>내 작업실</SectionTitle>
@@ -153,6 +184,14 @@ const MyPage = () => {
               handleCreateWorkSpace(title, description)
             }
           />
+        )}
+        {isAccountInfoModalOpen && (
+            <ChangeAccountInfoModal
+                onClose={accountInfoModalClose}
+                onChanged={(nickname, picture) =>
+                    handleChangeUserInfo(nickname, picture)
+                }
+            />
         )}
         <WorkSpacesSection>
           {workspaces.map((workspace) => (
