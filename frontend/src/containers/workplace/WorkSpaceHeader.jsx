@@ -44,8 +44,8 @@ const fadeOut = keyframes`
 const SpaceTitle = styled.div`
   flex: 1;
   text-align: center;
-  color: grey; 
-  font-size: 25px; 
+  color: grey;
+  font-size: 25px;
   font-weight: bold;
 `;
 
@@ -112,13 +112,13 @@ const WorkSpaceHeader = ({
   isSnapshotExist,
   openAddMemberModal,
   memberList,
-  handleSearchBarOpen,
+  handleSearchModalOpen,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
 
-  const spaceTitle = localStorage.getItem('title');
+  const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
     console.log("WorkSpaceHeader 호출");
   }, []);
@@ -165,23 +165,25 @@ const WorkSpaceHeader = ({
       <LeftSection>
         <button onClick={handleGoBack}>⬅️</button>
       </LeftSection>
-  
+
       <CenterSection>
         <SpaceTitle>{spaceTitle}</SpaceTitle>
       </CenterSection>
-  
+
       <RightSection>
         <ButtonContainer>
-          <MemberInfo memberList={memberList} openAddMemberModal={openAddMemberModal} />
+          <MemberInfo
+            memberList={memberList}
+            openAddMemberModal={openAddMemberModal}
+          />
         </ButtonContainer>
         <ButtonContainer>
           <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
         </ButtonContainer>
-        <CseContainer handleSearchBarOpen={handleSearchBarOpen} />
+        <CseContainer handleSearchModalOpen={handleSearchModalOpen} />
       </RightSection>
     </Header>
   );
-  
 };
 
 export default WorkSpaceHeader;

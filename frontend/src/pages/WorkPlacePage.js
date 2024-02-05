@@ -9,10 +9,10 @@ import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
-import NoteModal from "../components/WorkSpace/NoteModal";
 import CursorPointer from "../components/WorkSpace/Cursor/CursorPointer";
 import Cursors from "../components/WorkSpace/Cursor/Cursors";
-import GoogleCustomSearch from "../components/infra/GoogleCustomSearch";
+import NoteSearchModal from "../containers/Note/NoteSearchModal";
+import NoteViewModal from "../containers/Note/NoteViewModal";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import {
@@ -46,14 +46,15 @@ const WorkPlacePage = () => {
     notesList: [],
     isSnapshotExist: false,
   });
-  const [searchBoxVisible, setSearchBoxVisible] = useState(false);
+  const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
 
-  const handleSearchBarOpen = () => {
-    setSearchBoxVisible(true);
+  const handleSearchModalOpen = () => {
+    setisSearchModalOpen(true);
   };
 
-  const handleSearchBarClose = () => {
-    setSearchBoxVisible(false);
+  const handleSearchModalClose = () => {
+    setisSearchModalOpen(false);
   };
 
   // 작업실 입장 시 데이터 요청
@@ -166,6 +167,15 @@ const WorkPlacePage = () => {
     }
   };
 
+  const openImagePreview = (imageUrl) => {
+    setSelectedImageUrl(imageUrl);
+    handleSearchModalClose();
+  };
+
+  const closeImagePreview = () => {
+    setSelectedImageUrl(null);
+  };
+
   return (
     <WebSocketContainer spaceId={spaceId}>
       {({
@@ -192,10 +202,17 @@ const WorkPlacePage = () => {
               handleAddMember={handleAddMember}
             />
           )}
-          {searchBoxVisible && (
-            <GoogleCustomSearch
-              searchBoxVisible={searchBoxVisible}
-              handleSearchBarClose={handleSearchBarClose}
+          {isSearchModalOpen && (
+            <NoteSearchModal
+              isSearchModalOpen={isSearchModalOpen}
+              handleSearchModalClose={handleSearchModalClose}
+              openImagePreview={openImagePreview}
+            />
+          )}
+          {selectedImageUrl && (
+            <NoteViewModal
+              image_url={selectedImageUrl}
+              onClose={closeImagePreview}
             />
           )}
           <WorkSpaceHeader
@@ -204,13 +221,14 @@ const WorkPlacePage = () => {
             openAddMemberModal={openAddMemberModal}
             handleAddMember={handleAddMember}
             memberList={memberList}
-            handleSearchBarOpen={handleSearchBarOpen}
+            handleSearchModalOpen={handleSearchModalOpen}
           />
           <WorkSpaceContainer
             isSnapshot={false}
             spaceId={spaceId}
             sendCoordinate={sendCoordinate}
             sendLoop={sendLoop}
+            openImagePreview={openImagePreview}
           />
           <ChatContainer
             sendMessage={sendMessage}

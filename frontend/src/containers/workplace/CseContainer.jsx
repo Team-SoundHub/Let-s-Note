@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Button from "../../components/common/Button";
 
-const CseContainer = ({ handleSearchBarOpen }) => {
+const CseContainer = ({ handleSearchModalOpen }) => {
   return (
     <>
       <Button
         className={"w-30 flex justify-center content-center"}
-        onClick={handleSearchBarOpen}
+        onClick={handleSearchModalOpen}
       >
         악보 찾기
       </Button>
