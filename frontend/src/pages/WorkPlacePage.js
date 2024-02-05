@@ -193,7 +193,10 @@ const WorkPlacePage = () => {
             />
           )}
           {searchBoxVisible && (
-            <GoogleCustomSearch handleSearchBarClose={handleSearchBarClose} />
+            <GoogleCustomSearch
+              searchBoxVisible={searchBoxVisible}
+              handleSearchBarClose={handleSearchBarClose}
+            />
           )}
           <WorkSpaceHeader
             onOpenModal={handleModalOpen}

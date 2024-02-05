@@ -10,7 +10,7 @@ import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVi
 import * as Tone from "tone";
 import CseContainer from "./CseContainer";
 import NoteContainer from "./NoteContainer";
-import ImagePreviewModal from "../../components/WorkSpace/ImagePreviewModal";
+import ImagePreviewModal from "../Note/NoteViewModal";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -59,7 +59,6 @@ const RightPanel = tw.div`
   justify-center
 `;
 
-
 // const LoopButton = tw.button`
 //   text-black
 //   hover:bg-red-800
@@ -77,7 +76,6 @@ const RightPanel = tw.div`
 //   dark:hover:bg-red-700
 //   dark:focus:ring-red-900
 // `;
-
 
 export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
@@ -115,11 +113,10 @@ class WorkSpaceContainer extends Component {
   };
 
   toggleNoteStorageVisible = () => {
-    this.setState(prevState => ({
-      noteStorageVisible: !prevState.noteStorageVisible
+    this.setState((prevState) => ({
+      noteStorageVisible: !prevState.noteStorageVisible,
     }));
   };
-
 
   // 노트 관련
   componentDidMount() {
@@ -277,7 +274,7 @@ class WorkSpaceContainer extends Component {
       visualizeInstrument,
       count,
       selectedImageUrl,
-      noteStorageVisible
+      noteStorageVisible,
     } = this.state;
 
     if (loading) {
@@ -319,12 +316,6 @@ class WorkSpaceContainer extends Component {
                 noteStorageVisible={noteStorageVisible}
                 toggleNoteStorage={this.toggleNoteStorageVisible}
               />
-              {selectedImageUrl && (
-                <ImagePreviewModal
-                  image_url={selectedImageUrl}
-                  onClose={this.closeImagePreview}
-                />
-              )}
             </RightPanel>
           </GridContainer>
           <BeatControls
@@ -338,6 +329,12 @@ class WorkSpaceContainer extends Component {
             count={count}
             handleCountChange={this.handleCountChange}
           />
+          {selectedImageUrl && (
+            <ImagePreviewModal
+              image_url={selectedImageUrl}
+              onClose={this.closeImagePreview}
+            />
+          )}
         </Container>
       );
     }
