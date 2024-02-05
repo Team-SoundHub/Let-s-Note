@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import GoogleCustomSearch from "../../components/infra/GoogleCustomSearch";
 import Button from "../../components/common/Button";
 
 const CseContainer = ({ handleSearchBarOpen }) => {

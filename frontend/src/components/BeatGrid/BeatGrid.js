@@ -6,7 +6,6 @@ import BeatColumn from "../BeatColumn/BeatColumn";
 import VerticalPiano from "../WorkSpace/Piano";
 import { clearAllNotes } from "../../app/slices/innerContentSlice";
 
-
 const Container = styled.div`
   flex: 1;
   width: 100%;
@@ -53,7 +52,7 @@ class BeatGrid extends Component {
     }
   };
 
-  trigger = (time) => {     
+  trigger = (time) => {
     this.props.addCount();
 
     this.playBeat(time);
@@ -61,7 +60,7 @@ class BeatGrid extends Component {
 
   renderBeatColumns = () => {
     const {
-      scale, 
+      scale,
       drumScale,
       synth,
       columns,
@@ -97,9 +96,9 @@ class BeatGrid extends Component {
     return (
       <Container background={background}>
         <LeftPanel>
-          <VerticalPiano 
-          sendLoop={this.props.sendLoop}
-          spaceLength={this.props.columns}
+          <VerticalPiano
+            sendLoop={this.props.sendLoop}
+            spaceLength={this.props.columns}
           />
         </LeftPanel>
         <RightPanel>{this.renderBeatColumns()}</RightPanel>

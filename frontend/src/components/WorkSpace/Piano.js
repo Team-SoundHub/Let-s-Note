@@ -21,7 +21,7 @@ const WhiteKey = styled(PianoKey)`
   background-color: white;
   height: 2.35rem;
   width: 5rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const BlackKey = styled(PianoKey)`
@@ -30,7 +30,7 @@ const BlackKey = styled(PianoKey)`
   width: 3rem;
   margin-top: -0.75rem;
   color: white;
-  z-index: 3;
+  z-index: 30;
   border: 1px solid #fff;
   border-radius: 0 0 5px 5px;
 `;
@@ -40,7 +40,7 @@ const MovedWhiteKey = styled(PianoKey)`
   height: 3.2rem;
   width: 5rem;
   margin-top: -0.75rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const FirstWhiteKey = styled(PianoKey)`
@@ -49,7 +49,7 @@ const FirstWhiteKey = styled(PianoKey)`
   width: 5rem;
   margin-top: -0.75rem;
   margin-bottom: 0.2rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const FourthWhiteKey = styled(PianoKey)`
@@ -57,7 +57,7 @@ const FourthWhiteKey = styled(PianoKey)`
   height: 2.35rem;
   width: 5rem;
   margin-top: -0.75rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const LastWhiteKey = styled(PianoKey)`
@@ -65,7 +65,7 @@ const LastWhiteKey = styled(PianoKey)`
   height: 2.45rem;
   width: 5rem;
   margin-top: -0.75rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const DrumButton = styled.div`
@@ -75,22 +75,20 @@ const DrumButton = styled.div`
   justify-content: center;
   background-color: white;
   cursor: pointer;
-  border: 1px solid #000;  
+  border: 1px solid #000;
   transition: background-color 0.3s ease;
   height: 3.1rem;
 
   &:hover {
-    background-color: #E3A008; 
+    background-color: #e3a008;
   }
 
   img {
-      width: 45px;             
+    width: 45px;
   }
-  
 `;
 
-
-const VerticalPiano = ({sendLoop, spaceLength}) => {
+const VerticalPiano = ({ sendLoop, spaceLength }) => {
   useEffect(() => {
     drawPianoKeys();
   }, []);
@@ -126,7 +124,7 @@ const VerticalPiano = ({sendLoop, spaceLength}) => {
   }
 
   const handleDrumLoopClick = () => {
-    sendLoop("drum", spaceLength-1);
+    sendLoop("drum", spaceLength - 1);
     console.log("Drum loop clicked!", spaceLength);
   };
 
@@ -134,7 +132,7 @@ const VerticalPiano = ({sendLoop, spaceLength}) => {
     <PianoContainer>
       {drawPianoKeys()}
       <DrumButton onClick={handleDrumLoopClick}>
-        <img src={drum} alt="Drum" />        
+        <img src={drum} alt="Drum" />
       </DrumButton>
     </PianoContainer>
   );
