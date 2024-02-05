@@ -1,9 +1,12 @@
 package com.geeks.letsnote.domain.file.util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -27,17 +30,13 @@ public class FileUtil {
     public boolean downloadFile(String url, String destinationPath) throws IOException {
         URL fileUrl = new URL(url);
 
-        // Get the resource directory from the classpath
         Path resourceDirectory = Paths.get("backend", "letsnote", "src", "main", "resources");
         String absolutePath = resourceDirectory.toFile().getAbsolutePath();
         String filename = decodeFileName(destinationPath);
-        // Build the destination path within the resources directory
         Path destination = Paths.get(absolutePath, "static", filename);
 
-        // Ensure that the parent directories of the destination path exist
         Files.createDirectories(destination.getParent());
 
-        // Copy the content from the URL to the local file
         try (InputStream inputStream = fileUrl.openStream()) {
             Files.copy(inputStream, destination, StandardCopyOption.REPLACE_EXISTING);
             return true;
@@ -49,16 +48,14 @@ public class FileUtil {
 
 
     public String extractFileName(String url) {
-        // Define the regex pattern to match the last part of the URL
         Pattern pattern = Pattern.compile("/([^/?]+)\\?");
 
         Matcher matcher = pattern.matcher(url);
 
         if (matcher.find()) {
-            return matcher.group(1); // Group 1 contains the matched file name
+            return matcher.group(1);
         }
 
-        // Return a default value or handle the case where no match is found
         return "UnknownFileName";
     }
 
@@ -66,21 +63,35 @@ public class FileUtil {
         try {
             return URLDecoder.decode(encodedFileName, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
-            // Handle the exception (e.g., log the error or return a default value)
             e.printStackTrace();
             return "UnknownFileName";
         }
     }
 
-    public boolean storeFile(MultipartFile file) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:static/");
-        File folder = resource.getFile();
+    public String storeFile(MultipartFile file) throws IOException {
+        String baseUrl = getBaseUrl();
+        File folder = new File(baseUrl + "/static/");
 
-        String fileName = file.getOriginalFilename();
-        File newFile = new File(folder.getAbsolutePath() + File.separator + fileName);
+        String originalFileName = file.getOriginalFilename();
 
-        FileCopyUtils.copy(file.getBytes(), newFile);
+        String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
 
-        return true;
+        Path filePath = folder.toPath().resolve(uniqueFileName);
+
+        Files.createDirectories(filePath.getParent());
+
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return baseUrl + "/accountImage/" + uniqueFileName;
+    }
+
+    private String getBaseUrl() {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        }
+
+        return "http://localhost:9807";
     }
 }
