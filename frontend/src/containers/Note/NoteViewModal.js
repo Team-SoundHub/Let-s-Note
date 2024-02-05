@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
-import { Modal } from "flowbite-react";
-import note from "../../assets/Instrument/note.png";
 
 const Overlay = tw.div`
   fixed
@@ -102,7 +100,7 @@ const ModalInput = tw.input`
   dark:text-white
 `;
 
-const NoteModal = ({ image_url, onClose }) => {
+const NoteViewModal = ({ image_url, onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [originalPosition, setOriginalPosition] = useState({ x: 0, y: 0 });
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
@@ -187,4 +185,4 @@ const NoteModal = ({ image_url, onClose }) => {
   );
 };
 
-export default NoteModal;
+export default NoteViewModal;

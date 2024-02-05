@@ -3,12 +3,9 @@ import tw from "tailwind-styled-components";
 import BeatToggle from "./BeatToggle";
 import BeatsPerMinute from "./BeatsPerMinute";
 import BeatChange from "./BeatChange";
-import BeatReset from "./BeatReset";
-import Subject from "../../observer/Subject";
 import InstrumentChange from "../InstrumentControl/InstrumentChange";
 import BeatStop from "./BeatStop";
 import BeatProgressBar from "./BeatProgressBar";
-import { sendInstrumentReset } from "../../containers/WebSocket/WebSocketContainer";
 
 const Container = tw.div`
   flex
@@ -47,10 +44,6 @@ const BeatChangeContainer = tw.div`
   justify-center
 `;
 
-const onReset = () => {
-  Subject.fire("reset");
-};
-
 const BeatControls = ({
   onPlay,
   onStop,
@@ -65,7 +58,6 @@ const BeatControls = ({
   return (
     <Container>
       <LeftSection>
-        <BeatReset onClick={onReset} />
         <BeatToggle onClick={onPlay} />
         <BeatStop onClick={onStop} />
         <BeatChangeContainer>
