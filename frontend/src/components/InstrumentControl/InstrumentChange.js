@@ -4,6 +4,13 @@ import piano from "../../assets/Instrument/piano-svgrepo-com.svg";
 import guitar from "../../assets/Instrument/guitar-svgrepo-com.svg";
 import drum from "../../assets/Instrument/drum-svgrepo-com.svg";
 
+const Container = tw.div`
+  flex
+  items-center
+  justify-center
+  mx-1
+`;
+
 const Button = tw.button`
   text-black
   hover:bg-red-800
@@ -16,8 +23,6 @@ const Button = tw.button`
   px-2.5
   py-2.5
   text-center
-  me-2
-  mb-2
   dark:hover:bg-red-700
   dark:focus:ring-red-900
 `;
@@ -63,12 +68,14 @@ const InstrumentChange = ({ instrument, changeInstrument }) => {
   };
 
   return (
-    <Button
-      className={getBgColor(instrument)}
-      onClick={() => changeInstrument(instrument)}
-    >
-      {renderContent(instrument)}
-    </Button>
+    <Container>
+      <Button
+        className={getBgColor(instrument)}
+        onClick={() => changeInstrument(instrument)}
+      >
+        {renderContent(instrument)}
+      </Button>
+    </Container>
   );
 };
 

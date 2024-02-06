@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,6 +50,27 @@ public class FileController {
                 .spaceId(information.spaceId())
                 .build();
         if(fileService.saveImageFile(fileInfo)){
+            CommonResponse response = CommonResponse.builder()
+                    .success(true)
+                    .response("file Saved")
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            CommonResponse response = CommonResponse.builder()
+                    .success(false)
+                    .response("")
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/account/{accountId}")
+    public ResponseEntity<CommonResponse> saveAccountImage(@PathVariable Long accountId, @RequestParam("picture") MultipartFile file) throws IOException {
+        FileRequest.AccontFile accountFile = FileRequest.AccontFile.builder()
+                .accountId(accountId)
+                .file(file)
+                .build();
+        if(fileService.saveAccountFile(accountFile)){
             CommonResponse response = CommonResponse.builder()
                     .success(true)
                     .response("file Saved")

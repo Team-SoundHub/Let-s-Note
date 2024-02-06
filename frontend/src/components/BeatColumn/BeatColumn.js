@@ -11,9 +11,9 @@ const Container = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   background-color: ${(props) => props.background};
-  margin-left: ${(props) => (props.id % 2 === 1 ? 0.1 : 0.2)}rem;
+  margin-left: 0.1rem;
   margin-bottom: 1rem;
-  width: 1.5rem;
+  width: 3rem;
 `;
 
 const Overlay = styled.div`

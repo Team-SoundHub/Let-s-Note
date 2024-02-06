@@ -4,6 +4,14 @@ import BeatButton from "./BeatButton";
 import add from "../../assets/control/plus-large-svgrepo-com.svg";
 import subtract from "../../assets/control/minus-svgrepo-com.svg";
 
+const ButtonContainer = tw.div`
+  flex
+  w-16
+  h-16
+  justify-center
+  items-center
+`;
+
 const Arrows = tw.img`
   w-3
   h-3
@@ -14,9 +22,11 @@ const BeatChange = ({ mode, onClick, style }) => {
   const icon = mode === "add" ? add : subtract;
 
   return (
-    <BeatButton size={30} onClick={onClick} style={style}>
-      <Arrows src={icon} alt={mode} />
-    </BeatButton>
+    <ButtonContainer>
+      <BeatButton onClick={onClick} style={style}>
+        <Arrows src={icon} alt={mode} />
+      </BeatButton>
+    </ButtonContainer>
   );
 };
 

@@ -6,7 +6,7 @@ import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
   flex: 1;
-  margin: 0.1rem;
+  margin: 0.05rem;
   background-color: ${(props) =>
     props.active &&
     props.visualizeInstrument[
@@ -16,7 +16,7 @@ const Container = styled.div`
       : props.col % 8 < 4
       ? "lightgray"
       : props.inactiveColor};
-  width: 1.5rem;
+  width: 3rem;
   height: 1.5rem;
 
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
