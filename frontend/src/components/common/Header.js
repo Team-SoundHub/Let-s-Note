@@ -11,7 +11,6 @@ const HeaderBlock = tw.div`
   w-full
   bg-white
   shadow-md
-  z-10
 `;
 
 const Wrapper = tw.div`

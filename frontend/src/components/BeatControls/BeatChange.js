@@ -23,9 +23,9 @@ const BeatChange = ({ mode, onClick, style }) => {
 
   return (
     <ButtonContainer>
-      <BeatButton onClick={onClick} style={style}>
-        <Arrows src={icon} alt={mode} />
-      </BeatButton>
+      {/* <BeatButton  style={style}> */}
+      <Arrows onClick={onClick} src={icon} alt={mode} />
+      {/* </BeatButton> */}
     </ButtonContainer>
   );
 };

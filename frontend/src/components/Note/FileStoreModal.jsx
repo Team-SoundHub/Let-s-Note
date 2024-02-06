@@ -1,14 +1,37 @@
 import React, { useState } from 'react';
 import {Button, Modal, TextInput} from 'flowbite-react';
 import FileStoreApi from "../../api/fileStoreApi";
+import Swal from "sweetalert2"
 
 const FileStoreModal = ({ image_url, onClose }) => {
 
     const handleFileStoreClick = async () => {
         try {
-            await FileStoreApi(document.getElementById("fileStoreName").value,image_url);
+            Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+              }).then(async (result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  await FileStoreApi(document.getElementById("fileStoreName").value,image_url);
+                  Swal.fire("악보가 저장되었습니다 !", "보관함을 확인하세요!", "success");
+                } else if (result.isDenied) {
+                  Swal.fire("저장이 취소되었습니다.", "", "info");
+                }
+              });
+              
+            // await FileStoreApi(document.getElementById("fileStoreName").value,image_url);
         } catch (error) {
-            console.error("Error storing file:", error);
+            Swal.fire({
+                icon: "error",
+                title: "에러 발생 !",
+                text: "Something went wrong!",
+              });
+              
+            // console.error("Error storing file:", error);
         }
     };
 
