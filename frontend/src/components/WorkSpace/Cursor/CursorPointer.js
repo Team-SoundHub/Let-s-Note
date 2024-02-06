@@ -1,26 +1,57 @@
-import { useCallback, useEffect } from 'react';
-import throttle from 'lodash/throttle'; 
+import { useCallback, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import throttle from 'lodash/throttle';
 
-const CursorPointer = ({ spaceId, accountId, sendMousePosition, isConnected }) => {  
+const CursorPointer = ({ spaceId, accountId, sendMousePosition, isConnected, containerRef }) => {
+  // BeatBox 좌표 가져오기 1
+  const { hover } = useSelector((state) => state.cursor);
+  const hoverRef = useRef(hover); // hover 상태를 저장하는 ref
+  
+  useEffect(() => {
+    hoverRef.current = hover; // hover 상태가 변경될 때마다 ref를 업데이트     
+  }, [hover]);
+
+
   const handleMouseMove = useCallback(throttle((e) => {
     if (!isConnected) {
       console.log("[마우스 이벤트] 아직 연결 안됨");
-        return;
+      return;
     }
-    const { clientX: x, clientY: y } = e;
-    sendMousePosition(x, y, accountId);
-  }, 200), [isConnected, accountId, sendMousePosition]); // 특정 ms 간격으로 이벤트 처리
+    
+    // BeatBox 좌표 가져오기 2
+    const { i, j } = hoverRef.current;    
+
+    // 상대 좌표 조정
+    const adjustedX = e.clientX + (i * 10); 
+    const adjustedY = e.clientY + (j * 13);
+
+    const { left, top } = containerRef.current.getBoundingClientRect();
+
+    const x = adjustedX - left;
+    const y = adjustedY - top;
+
+    console.log(`e.clientX + ${i}*15 - left = x: ${e.clientX} + ${i * 15} + ${left} = ${x}`);
+    console.log(`e.clientY + ${j}*15  - top = y: ${e.clientY} + ${j * 15} - ${top} = ${y}`);
+
+    sendMousePosition(x, y, accountId);    
+  }, 200), [isConnected, accountId, sendMousePosition, containerRef]); // 특정 ms 간격으로 이벤트 처리
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
+    const element = containerRef.current;
+    if (element) {
+      element.addEventListener('mousemove', handleMouseMove);
+    }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      handleMouseMove.cancel(); // 컴포넌트 언마운트 시 throttle 취소
+      if (element) {
+        element.removeEventListener('mousemove', handleMouseMove);
+      }
+      handleMouseMove.cancel();
     };
+
   }, [spaceId, isConnected]);
 
-  return null; 
+  return null;
 };
 
 export default CursorPointer;

@@ -71,7 +71,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
       let y = cursorData.y;
       let accountId = cursorData.accountId;
       let nickname = cursorData.nickname;
-      console.log(response);
+      console.log(`응답 받은 좌표: x: ${x} y: ${y}`);
       dispatch(updateCursorPosition({ accountId, x, y, nickname }));
 
     }, {

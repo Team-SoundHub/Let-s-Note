@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatColumn from "../BeatColumn/BeatColumn";
 import VerticalPiano from "../WorkSpace/Piano";
 import { clearAllNotes } from "../../app/slices/innerContentSlice";
+import CursorPointer from "../WorkSpace/Cursor/CursorPointer";
+import Cursors from "../WorkSpace/Cursor/Cursors";
 
 const Container = styled.div`
   flex: 1;
@@ -58,6 +60,9 @@ class BeatGrid extends Component {
     this.playBeat(time);
   };
 
+  // for 마우스 커서 공유
+  gridRef = createRef();
+
   renderBeatColumns = () => {
     const {
       scale,
@@ -84,7 +89,7 @@ class BeatGrid extends Component {
           synth={synth}
           onClick={this.handleBoxClick}
           visualizeInstrument={visualizeInstrument}
-          isSnapshot={this.props.isSnapshot}
+          isSnapshot={this.props.isSnapshot}                    
         />
       );
     }
@@ -92,9 +97,17 @@ class BeatGrid extends Component {
   };
 
   render() {
-    const { background } = this.props;
+    const { background, sendMousePosition, spaceId, accountId, isConnected } = this.props;
     return (
-      <Container background={background}>
+      <Container ref={this.gridRef} background={background}>
+        <Cursors />
+        <CursorPointer
+          sendMousePosition={sendMousePosition}
+          spaceId={spaceId}
+          accountId={accountId}
+          isConnected={isConnected}
+          containerRef={this.gridRef}          
+        />
         <LeftPanel>
           <VerticalPiano
             sendLoop={this.props.sendLoop}

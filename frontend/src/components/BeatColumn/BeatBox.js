@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { clearAllNotes } from "../../app/slices/innerContentSlice";
+import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -115,6 +116,13 @@ const BeatBox = ({
     }
   }, [innerContent]);
 
+
+  // for 마우스 커서 공유 
+  const handleMouseOver = () => {
+    dispatch(setHoverPosition({ i: col, j: row }));
+  };
+
+
   return (
     <Container
       active={active}
@@ -128,6 +136,7 @@ const BeatBox = ({
       col={col}
       row={row}
       instrumentList={instrumentList}
+      onMouseOver={handleMouseOver}
     />
   );
 };

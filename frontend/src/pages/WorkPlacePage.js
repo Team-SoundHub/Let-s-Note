@@ -226,22 +226,18 @@ const WorkPlacePage = () => {
           <WorkSpaceContainer
             isSnapshot={false}
             spaceId={spaceId}
+            accountId={accountId}
             sendCoordinate={sendCoordinate}
             sendLoop={sendLoop}
             openImagePreview={openImagePreview}
+            sendMousePosition={sendMousePosition}
+            isConnected={isConnected}            
           />
           <ChatContainer
             sendMessage={sendMessage}
             spaceId={spaceId}
             memberList={memberList}
             nickname={myNickname}
-          />
-          <Cursors />
-          <CursorPointer
-            spaceId={spaceId}
-            accountId={accountId}
-            sendMousePosition={sendMousePosition}
-            isConnected={isConnected}
           />
         </Container>
       )}
