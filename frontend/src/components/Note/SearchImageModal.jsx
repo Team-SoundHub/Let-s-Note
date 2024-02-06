@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'flowbite-react';
 
-const SearchImageModal = ({ image_url, onClose }) => {
+const SearchImageModal = ({ image_url, onClose, openFileStoreModal }) => {
     return (
         <>
             <Modal show={Boolean(image_url)} onClose={onClose}>
@@ -13,6 +13,12 @@ const SearchImageModal = ({ image_url, onClose }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onClose}>Close</Button>
+                    <Button
+                      onClick={() => openFileStoreModal(image_url)}
+                    //   disabled={loading}
+                    >
+                      악보에 저장
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </>

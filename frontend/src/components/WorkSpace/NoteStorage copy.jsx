@@ -4,6 +4,22 @@ import FileGetApi from "../../api/fileGetApi";
 import styled, {css} from "styled-components";
 import chatImage from "../../assets/bubble-chat2.png";
 
+const StyledNoteStorage = styled.div`
+  height: 600px; // 높이 조정
+  width: 600px; // 너비 조정
+  position: fixed;
+  right: 0;
+  top: 50%;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 10px;
+  transition: transform 0.4s ease-out;
+  transform: translateY(-50%) translateX(${props => props.isVisible ? "0" : "100%"});
+  &:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+`;
+
 const StyledChatContainer = styled.div`
   height: 90vh;
   width: 30vw;
@@ -80,6 +96,8 @@ const CloseButton = styled.div`
 const NoteStorage = ({openImageModal}) => {
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState([]);
+    const [isVisible, setIsVisible] = useState(false);
+
     const fetchImages = async () => {
         setLoading(true);
         try {
@@ -93,12 +111,17 @@ const NoteStorage = ({openImageModal}) => {
     };
 
 
+    // return (
+    //         <div id="note-storage" className="absolute bg-gray-100 rounded-lg w-[600px] h-[600px] right-[-200px]">
+    //             <div className={"-rotate-90"}>
+                    // <NoteImage images={images} openImageModal={openImageModal} loading={loading} fetchImages={fetchImages} />
+    //             </div>
+    //         </div>
+    // );
     return (
-            <div id="note-storage" className="absolute bg-gray-100 rounded-lg w-[600px] h-[600px] right-[-200px]">
-                <div className={"-rotate-90"}>
-                    <NoteImage images={images} openImageModal={openImageModal} loading={loading} fetchImages={fetchImages} />
-                </div>
-            </div>
+      <StyledNoteStorage isVisible={isVisible}>
+        <NoteImage images={images} openImageModal={openImageModal} loading={loading} fetchImages={fetchImages} />
+      </StyledNoteStorage>
     );
 };
 

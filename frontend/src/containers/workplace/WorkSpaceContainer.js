@@ -8,8 +8,8 @@ import { availableNotes, availableDrumNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
 import * as Tone from "tone";
-import CseContainer from "./CseContainer";
 import NoteContainer from "./NoteContainer";
+import NoteViewModal from "../Note/NoteViewModal";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -30,11 +30,11 @@ relative
   w-full
   bg-white
   p-4
-  h-[70vh]
+  h-[80vh]
 `;
 
 const LeftPanel = tw.div`
-  w-[5%]
+  w-[3%]
   h-full
   flex-shrink-0
   bg-white
@@ -45,18 +45,28 @@ const LeftPanel = tw.div`
 `;
 
 const MiddlePanel = tw.div`
-  w-[90%]
+  w-[97%]
   h-full
   flex-shrink-0
 `;
 
-const RightPanel = tw.div`
-  w-[5%]
-  rotate-90
-  flex-shrink-0
-  items-center
-  justify-center
-`;
+// const LoopButton = tw.button`
+//   text-black
+//   hover:bg-red-800
+//   focus:outline-none
+//   focus:ring-4
+//   focus:ring-red-300
+//   font-medium
+//   rounded-full
+//   text-sm
+//   px-2.5
+//   py-2.5
+//   text-center
+//   me-2
+//   mb-2
+//   dark:hover:bg-red-700
+//   dark:focus:ring-red-900
+// `;
 
 export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
@@ -76,6 +86,7 @@ class WorkSpaceContainer extends Component {
     this.initialBPM = 160;
   }
 
+  // 노트 관련
   componentDidMount() {
     console.log(
       "Received spaceId prop in WorkSpaceContainer:",
@@ -140,12 +151,6 @@ class WorkSpaceContainer extends Component {
   changeInstrument = (instrument) => {
     this.setState({ currentInstrument: instrument });
     this.state.synth.setInstrument(instrument);
-  };
-
-  handleSearchBar = () => {
-    this.setState((prevState) => ({
-      searchBoxVisible: !prevState.searchBoxVisible,
-    }));
   };
 
   changeVisualizeInstrument = (instrument) => {
@@ -253,7 +258,7 @@ class WorkSpaceContainer extends Component {
                 scale={availableNotes}
                 drumScale={availableDrumNotes}
                 columns={columns}
-                background="#34AEA5"
+                background="skyblue"
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
                 isSnapshot={this.props.isSnapshot}
@@ -261,11 +266,10 @@ class WorkSpaceContainer extends Component {
                 sendCoordinate={this.props.sendCoordinate}
                 count={count}
                 addCount={this.addCount}
+                sendLoop={this.props.sendLoop}
+                changeColumns={this.changeColumns}
               />
             </MiddlePanel>
-            <RightPanel>
-              <NoteContainer />
-            </RightPanel>
           </GridContainer>
           <BeatControls
             onPlay={this.play}

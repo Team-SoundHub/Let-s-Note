@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { availableNotes } from "../../constants/scale";
-import drum from "../../assets/Instrument/drum1-svgrepo-com.svg";
+// import drum from "../../assets/Instrument/drum1-svgrepo-com.svg";
+import drum from "../../assets/Instrument/drum3.png";
 
 const PianoContainer = styled.div`
   display: flex-row;
@@ -14,13 +15,15 @@ const PianoKey = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 `;
 
 const WhiteKey = styled(PianoKey)`
   background-color: white;
   height: 2.35rem;
   width: 5rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const BlackKey = styled(PianoKey)`
@@ -29,7 +32,7 @@ const BlackKey = styled(PianoKey)`
   width: 3rem;
   margin-top: -0.75rem;
   color: white;
-  z-index: 3;
+  z-index: 30;
   border: 1px solid #fff;
   border-radius: 0 0 5px 5px;
 `;
@@ -39,7 +42,7 @@ const MovedWhiteKey = styled(PianoKey)`
   height: 3.2rem;
   width: 5rem;
   margin-top: -0.75rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const FirstWhiteKey = styled(PianoKey)`
@@ -48,7 +51,7 @@ const FirstWhiteKey = styled(PianoKey)`
   width: 5rem;
   margin-top: -0.75rem;
   margin-bottom: 0.2rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const FourthWhiteKey = styled(PianoKey)`
@@ -56,7 +59,7 @@ const FourthWhiteKey = styled(PianoKey)`
   height: 2.35rem;
   width: 5rem;
   margin-top: -0.75rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const LastWhiteKey = styled(PianoKey)`
@@ -64,19 +67,32 @@ const LastWhiteKey = styled(PianoKey)`
   height: 2.45rem;
   width: 5rem;
   margin-top: -0.75rem;
-  z-index: 2;
+  z-index: 20;
 `;
 
-const Drumdiv = styled.div`
+const DrumButton = styled.div`
   display: flex;
-  height: 3rem;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: white;
+  cursor: pointer;
   border: 1px solid #000;
+  transition: background-color 0.3s ease;
+  height: 3.1rem;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+  &:hover {
+    background-color: #e3a008;
+  }
+
+  img {
+    width: 45px;
+  }
 `;
 
-const VerticalPiano = () => {
+const VerticalPiano = ({ sendLoop, spaceLength }) => {
   useEffect(() => {
     drawPianoKeys();
   }, []);
@@ -111,12 +127,17 @@ const VerticalPiano = () => {
     return pianoKeys;
   }
 
+  const handleDrumLoopClick = () => {
+    sendLoop("drum", spaceLength - 1);
+    console.log("Drum loop clicked!", spaceLength);
+  };
+
   return (
     <PianoContainer>
       {drawPianoKeys()}
-      <Drumdiv>
-        <img className="h-12" src={drum} />
-      </Drumdiv>
+      <DrumButton onClick={handleDrumLoopClick}>
+        <img src={drum} alt="Drum" />
+      </DrumButton>
     </PianoContainer>
   );
 };

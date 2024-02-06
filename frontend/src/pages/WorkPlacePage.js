@@ -8,11 +8,11 @@ import ChatContainer from "../containers/workplace/ChatContainer";
 import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
-import AddMemberModal from "../components/WorkSpace/AddMemberModal"
-import NoteModal from "../components/WorkSpace/NoteModal";
+import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import CursorPointer from "../components/WorkSpace/Cursor/CursorPointer";
 import Cursors from "../components/WorkSpace/Cursor/Cursors";
-import GoogleCustomSearch from "../components/infra/GoogleCustomSearch";
+import NoteSearchModal from "../containers/Note/NoteSearchModal";
+import NoteViewModal from "../containers/Note/NoteViewModal";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import {
@@ -23,6 +23,7 @@ import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
 
 const Container = styled.div`
+  background-color: white;
   height: 100vh;
 `;
 
@@ -45,14 +46,15 @@ const WorkPlacePage = () => {
     notesList: [],
     isSnapshotExist: false,
   });
-  const [searchBoxVisible, setSearchBoxVisible] = useState(false);
+  const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
 
-  const handleSearchBarOpen = () => {
-    setSearchBoxVisible(true);
+  const handleSearchModalOpen = () => {
+    setisSearchModalOpen(true);
   };
 
-  const handleSearchBarClose = () => {
-    setSearchBoxVisible(false);
+  const handleSearchModalClose = () => {
+    setisSearchModalOpen(false);
   };
 
   // 작업실 입장 시 데이터 요청
@@ -155,8 +157,8 @@ const WorkPlacePage = () => {
       const userId = usernameInput.value;
 
       try {
-        const response = await setMember(spaceId, userId);        
-        const newMemberName  = response.response.nickname;            
+        const response = await setMember(spaceId, userId);
+        const newMemberName = response.response.nickname;
 
         setMemberList((prevMemberList) => [...prevMemberList, newMemberName]);
       } catch (error) {
@@ -165,9 +167,24 @@ const WorkPlacePage = () => {
     }
   };
 
+  const openImagePreview = (imageUrl) => {
+    setSelectedImageUrl(imageUrl);
+    handleSearchModalClose();
+  };
+
+  const closeImagePreview = () => {
+    setSelectedImageUrl(null);
+  };
+
   return (
     <WebSocketContainer spaceId={spaceId}>
-      {({ sendCoordinate, sendMessage, sendMousePosition, isConnected }) => (
+      {({
+        sendCoordinate,
+        sendMessage,
+        sendMousePosition,
+        isConnected,
+        sendLoop,
+      }) => (
         <Container>
           {isReleaseModalOpen && (
             <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
@@ -185,34 +202,46 @@ const WorkPlacePage = () => {
               handleAddMember={handleAddMember}
             />
           )}
-          {searchBoxVisible && (
-            <GoogleCustomSearch handleSearchBarClose={handleSearchBarClose} />
+          {isSearchModalOpen && (
+            <NoteSearchModal
+              isSearchModalOpen={isSearchModalOpen}
+              handleSearchModalClose={handleSearchModalClose}
+              openImagePreview={openImagePreview}
+            />
           )}
-          {/* <Cursors />
-          <CursorPointer
-            spaceId={spaceId}
-            accountId={accountId}
-            sendMousePosition={sendMousePosition}
-            isConnected={isConnected} 
-          /> */}
+          {selectedImageUrl && (
+            <NoteViewModal
+              image_url={selectedImageUrl}
+              onClose={closeImagePreview}
+            />
+          )}
           <WorkSpaceHeader
             onOpenModal={handleModalOpen}
             isSnapshotExist={workspaceInfo.isSnapshotExist}
             openAddMemberModal={openAddMemberModal}
             handleAddMember={handleAddMember}
             memberList={memberList}
-           handleSearchBarOpen={handleSearchBarOpen}
+            handleSearchModalOpen={handleSearchModalOpen}
           />
           <WorkSpaceContainer
             isSnapshot={false}
             spaceId={spaceId}
             sendCoordinate={sendCoordinate}
+            sendLoop={sendLoop}
+            openImagePreview={openImagePreview}
           />
           <ChatContainer
             sendMessage={sendMessage}
             spaceId={spaceId}
             memberList={memberList}
             nickname={myNickname}
+          />
+          <Cursors />
+          <CursorPointer
+            spaceId={spaceId}
+            accountId={accountId}
+            sendMousePosition={sendMousePosition}
+            isConnected={isConnected}
           />
         </Container>
       )}

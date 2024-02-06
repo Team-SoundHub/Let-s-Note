@@ -6,13 +6,17 @@ import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import styled from "styled-components";
 import { getSnapshotInfo } from "../api/snapshotApi";
-import { setSnapshotNotes, clearAllNotes } from "../app/slices/innerContentSlice";
+import {
+  setSnapshotNotes,
+  clearAllNotes,
+} from "../app/slices/innerContentSlice";
 
 const Container = styled.div`
   height: 100vh;
+  background-color: white;
 `;
 
-const SnapshotPage = () => {  
+const SnapshotPage = () => {
   const dispatch = useDispatch();
 
   const { snapshotId } = useParams();
@@ -45,11 +49,10 @@ const SnapshotPage = () => {
         // console.log("스냅샷 요청한 snapshotId", snapshotId);
         const response = await getSnapshotInfo(snapshotId);
         console.log("스냅샷 데이터 요청:", response.response);
-        
+
         if (response && response.response) {
           dispatch(setSnapshotNotes(response.response));
-        }        
-
+        }
       } catch (error) {
         console.error("Error fetching snapshot info:", error);
       }
@@ -74,7 +77,7 @@ const SnapshotPage = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(clearAllNotes()); 
+      dispatch(clearAllNotes());
     };
   }, [dispatch]);
 

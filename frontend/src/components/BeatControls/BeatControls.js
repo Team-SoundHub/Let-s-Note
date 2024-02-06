@@ -3,12 +3,9 @@ import tw from "tailwind-styled-components";
 import BeatToggle from "./BeatToggle";
 import BeatsPerMinute from "./BeatsPerMinute";
 import BeatChange from "./BeatChange";
-import BeatReset from "./BeatReset";
-import Subject from "../../observer/Subject";
 import InstrumentChange from "../InstrumentControl/InstrumentChange";
 import BeatStop from "./BeatStop";
 import BeatProgressBar from "./BeatProgressBar";
-import { sendInstrumentReset } from "../../containers/WebSocket/WebSocketContainer";
 
 const Container = tw.div`
   flex
@@ -16,40 +13,30 @@ const Container = tw.div`
   justify-between
   w-full
   px-4
-  mb-2
-  mt-2
+  mt-1
   border-2
 `;
 
 const LeftSection = tw.div`
   flex
   items-center
+  justify-center
   gap-4
 `;
 
 const CenterSection = tw.div`
   flex
   flex-col
-  w-[40%]
+  w-[50%]
   items-center
 `;
 
 const RightSection = tw.div`
   flex
   items-center
+  justify-center
   gap-4
 `;
-
-const BeatChangeContainer = tw.div`
-  flex
-  flex-col
-  items-center
-  justify-center
-`;
-
-const onReset = () => {
-  Subject.fire("reset");
-};
 
 const BeatControls = ({
   onPlay,
@@ -65,21 +52,8 @@ const BeatControls = ({
   return (
     <Container>
       <LeftSection>
-        <BeatReset onClick={onReset} />
         <BeatToggle onClick={onPlay} />
         <BeatStop onClick={onStop} />
-        <BeatChangeContainer>
-          <BeatChange
-            style={{ marginBottom: 5 }}
-            mode="add"
-            onClick={() => changeColumns(8)}
-          />
-          <BeatChange
-            style={{ marginTop: 5 }}
-            mode="subtract"
-            onClick={() => changeColumns(-8)}
-          />
-        </BeatChangeContainer>
       </LeftSection>
       <CenterSection>
         <BeatProgressBar
@@ -87,9 +61,9 @@ const BeatControls = ({
           count={count}
           handleCountChange={handleCountChange}
         />
-        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
       </CenterSection>
       <RightSection>
+        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
         <InstrumentChange
           instrument="piano"
           changeInstrument={changeInstrument}

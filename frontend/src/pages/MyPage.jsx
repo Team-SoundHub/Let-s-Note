@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import {
   getMyPageInfo,
@@ -12,9 +12,12 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import CreateSpaceModal from "../components/MyPage/CreateSpaceModal";
 import PostCard from "../components/feed/PostCard";
+import SaveSnapshotModal from "../components/WorkSpace/ChangeAccountInfoModal";
+import ChangeAccountInfoModal from "../components/WorkSpace/ChangeAccountInfoModal";
 
 const MypageContainer = tw.div`
     flex-row
+    bg-white
 `;
 
 const TitleContainer = tw.div`
@@ -53,18 +56,22 @@ const Divider = styled.hr`
   margin: 20px 0;
 `;
 
-
 const MyPage = () => {
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("access");
-  const accountId = sessionStorage.getItem("accountId");  
+  const accountId = sessionStorage.getItem("accountId");
 
   const [workspaces, setWorkspaces] = useState([]); // 작업실 목록을 저장하는 상태
-  const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태  
+  const [snapshots, setSnapshots] = useState([]); // 스냅샷 목록을 저장하는 상태
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isAccountInfoModalOpen, setUIsAccountInfoModalOpen] = useState(false);
 
-  const workspaceNotes = useSelector((state) => state.innerContent.workspaceNotes);
-  const snapshotNotes = useSelector((state) => state.innerContent.snapshotNotes);
+  const workspaceNotes = useSelector(
+    (state) => state.innerContent.workspaceNotes
+  );
+  const snapshotNotes = useSelector(
+    (state) => state.innerContent.snapshotNotes
+  );
 
   const handleModalClose = () => {
     setIsCreateModalOpen(false);
@@ -72,6 +79,14 @@ const MyPage = () => {
 
   const handleModalOpen = () => {
     setIsCreateModalOpen(true);
+  };
+
+  const accountInfoModalClose = () => {
+    setUIsAccountInfoModalOpen(false);
+  };
+
+  const accountInfoModalOpen = () => {
+    setUIsAccountInfoModalOpen(true);
   };
 
   const handleCreateWorkSpace = async (title, description) => {
@@ -88,13 +103,27 @@ const MyPage = () => {
     }
   };
 
+
+  const handleChangeUserInfo = async (nickname, picture) => {
+    try {
+      // const response = await createWorkSpace(changedInfo);
+      // if (response) {
+      //   navigate(`/workspace/${response.response.spaceId}`);
+      //   console.log("작업실 생성 완료", title, description);
+      // } else {
+      //   console.log("작업실 생성 실패");
+      // }
+    } catch (error) {
+      console.error("작업실 생성 오류:", error);
+    }
+  };
+
   const handleNavigateWorkspace = async (spaceId, spaceTitle) => {
-    localStorage.setItem('spaceId', spaceId);
-    localStorage.setItem('title', spaceTitle);
+    localStorage.setItem("spaceId", spaceId);
+    localStorage.setItem("title", spaceTitle);
     console.log("마이페이지 저장:", spaceId);
     navigate(`/workspace/${spaceId}`); // 동기적 실행 -> 순서 보장
   };
-
 
   const handleLogout = () => {
     // Clear session storage on logout
@@ -103,6 +132,10 @@ const MyPage = () => {
     // sessionStorage.removeItem("nickname");
     sessionStorage.removeItem("accountId");
     navigate("/");
+  };
+
+  const openAccountInfoModal = () => {
+    accountInfoModalOpen();
   };
 
   useEffect(() => {
@@ -132,10 +165,11 @@ const MyPage = () => {
     fetchMySnapshotInfo();
   }, [accessToken, accountId]);
 
+
   // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
   return (
     <>
-      <Header handleLogout={handleLogout} />
+      <Header handleLogout={handleLogout} openAccountInfoModal={openAccountInfoModal}/>
       <MypageContainer>
         <TitleContainer>
           <SectionTitle>내 작업실</SectionTitle>
@@ -151,13 +185,23 @@ const MyPage = () => {
             }
           />
         )}
+        {isAccountInfoModalOpen && (
+            <ChangeAccountInfoModal
+                onClose={accountInfoModalClose}
+                onChanged={(nickname, picture) =>
+                    handleChangeUserInfo(nickname, picture)
+                }
+            />
+        )}
         <WorkSpacesSection>
           {workspaces.map((workspace) => (
             <div
               key={workspace.spaceId}
               className=" flex h-full"
-              onClick={() => handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)}
-            // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
+              onClick={() =>
+                handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)
+              }
+              // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
             >
               <PostCard
                 snapshotTitle={workspace.spaceTitle}

@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import Button from "./Button";
 import search from "../../assets/control/SearchIcon.svg";
+import { useLocation } from 'react-router-dom';
 
 const HeaderBlock = tw.div`
+  z-[9999]
   fixed
   w-full
   bg-white
@@ -43,31 +45,35 @@ const SearchForm = (
   </form>
 );
 
-const Header = ({ userId, handleLogout, openLoginModal }) => {
+const Header = ({ userId, handleLogout, openLoginModal, openAccountInfoModal }) => {
+    const location = useLocation();
   return (
-    <>
-      <HeaderBlock>
-        <Wrapper>
-          <Link to="/" className="ml-5 text-2xl font-bold">
-            Let's Note
-          </Link>
-          <div className="flex items-center justify-center w-[40%]">
-            {SearchForm}
-          </div>
-          {sessionStorage.getItem("access") ? (
-            <div className="flex items-center">
-              <Button to="/mypage">마이페이지</Button>
-              <Button onClick={handleLogout}>로그아웃</Button>
-            </div>
-          ) : (
-            <div className="mr-5">
-              <Button onClick={openLoginModal}>로그인</Button>
-            </div>
-          )}
-        </Wrapper>
-      </HeaderBlock>
-      <Spacer />
-    </>
+      <>
+          <HeaderBlock>
+              <Wrapper>
+                  <Link to="/" className="ml-5 text-2xl font-bold">
+                      Let's Note
+                  </Link>
+                  <div className="flex items-center justify-center w-[40%]">
+                      {SearchForm}
+                  </div>
+                  {sessionStorage.getItem("access") ? (
+                      <div className="flex items-center">
+                          {location.pathname === "/mypage" && (
+                              <Button onClick={openAccountInfoModal}>회원정보</Button>
+                          )}
+                          <Button to="/mypage">마이페이지</Button>
+                          <Button onClick={handleLogout}>로그아웃</Button>
+                      </div>
+                  ) : (
+                      <div className="mr-5">
+                          <Button onClick={openLoginModal}>로그인</Button>
+                      </div>
+                  )}
+              </Wrapper>
+          </HeaderBlock>
+          <Spacer />
+      </>
   );
 };
 

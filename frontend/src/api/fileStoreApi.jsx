@@ -14,7 +14,7 @@ const FileStoreApi = async (fileName, imageUrl) => {
     }
 
     const response = await axiosInstance.post(
-      `http://localhost:9807/api/v1/files/${fileName}`,
+      `/files/${fileName}`,
       {
         fileName: fileName,
         spaceId: spaceId,

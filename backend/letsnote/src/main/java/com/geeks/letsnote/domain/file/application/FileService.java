@@ -9,5 +9,7 @@ import java.util.List;
 public interface FileService {
     boolean saveImageFile(FileRequest.Information fileInfo) throws IOException;
 
+    boolean saveAccountFile(FileRequest.AccontFile accontFile) throws IOException;
+
     List<FileResponse.Information> getAllImageInfo(String spaceId);
 }

@@ -1,9 +1,11 @@
 package com.geeks.letsnote.domain.file.application.impl;
 
 import com.geeks.letsnote.domain.file.application.FileService;
+import com.geeks.letsnote.domain.file.dao.AccountFileRepository;
 import com.geeks.letsnote.domain.file.dao.FileRepository;
 import com.geeks.letsnote.domain.file.dto.FileRequest;
 import com.geeks.letsnote.domain.file.dto.FileResponse;
+import com.geeks.letsnote.domain.file.entity.AccountFile;
 import com.geeks.letsnote.domain.file.entity.File;
 import com.geeks.letsnote.domain.file.util.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 public class FileServiceImpl implements FileService {
 
     private final FileRepository fileRepository;
+    private final AccountFileRepository accountFileRepository;
     @Autowired
     private FileUtil fileUtil;
 
@@ -37,6 +40,24 @@ public class FileServiceImpl implements FileService {
         return true;
 //            }
     }
+
+    @Override
+    public boolean saveAccountFile(FileRequest.AccontFile accountFile) {
+        try {
+            String fileUrl = fileUtil.storeFile(accountFile.file());
+            AccountFile result = AccountFile.builder()
+                    .accountId(accountFile.accountId())
+                    .fileUrl(fileUrl)
+                    .build();
+
+            accountFileRepository.save(result);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     @Override
     public List<FileResponse.Information> getAllImageInfo(String spaceId) {

@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInstance";
 const getChatMessages = async (spaceId) => {
   try {
     const response = await axiosInstance.get(
-      `${process.env.REACT_APP_BACKEND_URL}/api/v1/messages/${spaceId}`
+      `/messages/${spaceId}`
     );
     // console.log("채팅 리스트: ", response);
     return response.data; // response에 메시지 리스트 포함
