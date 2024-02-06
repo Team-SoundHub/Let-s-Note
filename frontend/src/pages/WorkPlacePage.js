@@ -22,7 +22,7 @@ import {
 } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
-
+//hi
 const Container = styled.div`
   position: relative;
   background-color: white;
