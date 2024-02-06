@@ -5,20 +5,25 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 
-public record FileRequest(){
+public record AccountFileRequest() {
     @Builder
-    public record Information(
+    public record AccountFile(
             @NotNull
-            @Size(max=300)
-            String fileUrl,
+            MultipartFile file,
 
             @NotNull
             @Size(max = 50)
-            String spaceId,
-
-            @NotNull
-            @Size(max = 30)
-            String fileName
+            Long accountId
     ){
+
     }
+
+    @Builder
+    public record AccountId(
+            @NotNull
+            Long accountId
+    ){
+
+    }
+
 }

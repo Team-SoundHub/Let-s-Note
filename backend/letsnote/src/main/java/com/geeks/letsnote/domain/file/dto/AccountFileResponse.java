@@ -3,9 +3,10 @@ package com.geeks.letsnote.domain.file.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import org.springframework.web.multipart.MultipartFile;
 
-public record FileRequest(){
+import java.sql.Timestamp;
+
+public record AccountFileResponse() {
     @Builder
     public record Information(
             @NotNull
@@ -13,12 +14,9 @@ public record FileRequest(){
             String fileUrl,
 
             @NotNull
-            @Size(max = 50)
-            String spaceId,
-
+            Long accountId,
             @NotNull
-            @Size(max = 30)
-            String fileName
+            Timestamp regDate
     ){
     }
 }

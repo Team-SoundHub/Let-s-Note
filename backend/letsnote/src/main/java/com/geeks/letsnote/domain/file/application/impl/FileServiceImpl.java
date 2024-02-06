@@ -3,6 +3,8 @@ package com.geeks.letsnote.domain.file.application.impl;
 import com.geeks.letsnote.domain.file.application.FileService;
 import com.geeks.letsnote.domain.file.dao.AccountFileRepository;
 import com.geeks.letsnote.domain.file.dao.FileRepository;
+import com.geeks.letsnote.domain.file.dto.AccountFileRequest;
+import com.geeks.letsnote.domain.file.dto.AccountFileResponse;
 import com.geeks.letsnote.domain.file.dto.FileRequest;
 import com.geeks.letsnote.domain.file.dto.FileResponse;
 import com.geeks.letsnote.domain.file.entity.AccountFile;
@@ -11,6 +13,7 @@ import com.geeks.letsnote.domain.file.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FileUtil fileUtil;
 
+    @Transactional
     @Override
     public boolean saveImageFile(FileRequest.Information fileInfo) throws IOException {
         String fileUrl = fileInfo.fileUrl();
@@ -41,9 +45,13 @@ public class FileServiceImpl implements FileService {
 //            }
     }
 
+    @Transactional
     @Override
-    public boolean saveAccountFile(FileRequest.AccontFile accountFile) {
+    public boolean saveAccountFile(AccountFileRequest.AccountFile accountFile) {
         try {
+            if(accountFileRepository.findByAccountId(accountFile.accountId()) != null){
+                 accountFileRepository.delete(accountFileRepository.findByAccountId(accountFile.accountId()));
+            }
             String fileUrl = fileUtil.storeFile(accountFile.file());
             AccountFile result = AccountFile.builder()
                     .accountId(accountFile.accountId())
@@ -51,6 +59,7 @@ public class FileServiceImpl implements FileService {
                     .build();
 
             accountFileRepository.save(result);
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,6 +82,16 @@ public class FileServiceImpl implements FileService {
         }
 
         return resultList;
+    }
+
+    @Override
+    public AccountFileResponse.Information getOneAccountImage(AccountFileRequest.AccountId accountId) {
+        AccountFile accountFile = accountFileRepository.findByAccountId(accountId.accountId());
+        return AccountFileResponse.Information.builder()
+                .accountId(accountFile.getAccountId())
+                .fileUrl(accountFile.getFileUrl())
+                .regDate(accountFile.getRegDate())
+                .build();
     }
 
 }

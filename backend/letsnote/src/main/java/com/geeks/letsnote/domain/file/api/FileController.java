@@ -1,6 +1,8 @@
 package com.geeks.letsnote.domain.file.api;
 
 import com.geeks.letsnote.domain.file.application.FileService;
+import com.geeks.letsnote.domain.file.dto.AccountFileRequest;
+import com.geeks.letsnote.domain.file.dto.AccountFileResponse;
 import com.geeks.letsnote.domain.file.dto.FileRequest;
 import com.geeks.letsnote.domain.file.dto.FileResponse;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
@@ -66,7 +68,7 @@ public class FileController {
 
     @PostMapping("/account/{accountId}")
     public ResponseEntity<CommonResponse> saveAccountImage(@PathVariable Long accountId, @RequestParam("picture") MultipartFile file) throws IOException {
-        FileRequest.AccontFile accountFile = FileRequest.AccontFile.builder()
+        AccountFileRequest.AccountFile accountFile = AccountFileRequest.AccountFile.builder()
                 .accountId(accountId)
                 .file(file)
                 .build();
@@ -83,6 +85,22 @@ public class FileController {
                     .build();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<CommonResponse> getOneAccountImage(@PathVariable Long accountId){
+        AccountFileRequest.AccountId target = AccountFileRequest.AccountId.builder()
+                .accountId(accountId)
+                .build();
+
+        AccountFileResponse.Information fileInfo = fileService.getOneAccountImage(target);
+
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response(fileInfo)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
