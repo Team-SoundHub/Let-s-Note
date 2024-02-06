@@ -1,6 +1,7 @@
 package com.geeks.letsnote.domain.file.util;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,8 @@ import java.util.regex.Pattern;
 @Component
 public class FileUtil {
     private ResourceLoader resourceLoader;
+    @Value("${letsnote.baseUrl}")
+    private String baseUrl;
 
     public boolean downloadFile(String url, String destinationPath) throws IOException {
         URL fileUrl = new URL(url);
@@ -92,6 +95,6 @@ public class FileUtil {
             return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         }
 
-        return "http://localhost:9807";
+        return baseUrl;
     }
 }
