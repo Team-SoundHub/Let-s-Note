@@ -19,7 +19,7 @@ const Container = styled.div`
 class BeatColumn extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeBoxes: [], activeInstrument: [], activeNotes: [] };
+    this.state = { activeBoxes: [], activeInstrument: [] };
   }
 
   handleClick = (i) => () => {
@@ -75,8 +75,16 @@ class BeatColumn extends Component {
   };
 
   playBeat = (time) => {
-    const { synth } = this.props;
-    const { activeNotes } = this.state;
+    const { synth, scale, drumScale } = this.props;
+    const { activeBoxes, activeInstrument } = this.state;
+
+    const activeNotes = [...scale, ...drumScale]
+      .map((note, index) => ({
+        note,
+        isActive: activeBoxes[index],
+        instrument: activeInstrument[index], // Use the provided activeInstrument
+      }))
+      .filter(({ isActive }) => isActive);
 
     activeNotes.forEach(({ note, instrument }) => {
       synth && synth.playNote(note, time, "8n", instrument);
@@ -91,34 +99,9 @@ class BeatColumn extends Component {
     Subject.subscribe("reset", this.resetColumn);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { scale, drumScale } = this.props;
-    const { activeBoxes, activeInstrument } = this.state;
-
-    // Check if activeBoxes or activeInstrument has changed
-    if (
-      activeBoxes !== prevState.activeBoxes ||
-      activeInstrument !== prevState.activeInstrument
-    ) {
-      // Update activeNotes
-      const newActiveNotes = [...scale, ...drumScale]
-        .map((note, index) => ({
-          note,
-          isActive: activeBoxes[index],
-          instrument: activeInstrument[index],
-        }))
-        .filter(({ isActive }) => isActive);
-
-      this.setState({
-        activeNotes: newActiveNotes,
-      });
-    }
-  }
-
   componentWillUnmount() {
     Subject.unsubscribe("reset", this.resetColumn);
   }
-
   setActiveBoxes = (row, value) => {
     this.setState((prev) => {
       const newActiveBoxes = [...prev.activeBoxes];
@@ -137,15 +120,8 @@ class BeatColumn extends Component {
   };
 
   renderBoxes = () => {
-    const { scale, 
-      drumScale, 
-      foreground, 
-      synth, 
-      id, 
-      visualizeInstrument, 
-      onHover, 
-      isSnapshot, 
-      containerRef } = this.props;
+    const { scale, drumScale, foreground, synth, id, visualizeInstrument } =
+      this.props;
     const boxes = [];
     for (let i = 0; i < scale.length; i++) {
       boxes.push(
@@ -166,9 +142,8 @@ class BeatColumn extends Component {
           visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
-          isSnapshot={isSnapshot}   
-          containerRef={containerRef}
-          playing={this.props.playing}                 
+          isSnapshot={this.props.isSnapshot}
+          playing={this.props.playing}
         />
       );
     }
@@ -188,8 +163,7 @@ class BeatColumn extends Component {
           visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
-          isSnapshot={isSnapshot}
-          containerRef={containerRef}
+          isSnapshot={this.props.isSnapshot}
           playing={this.props.playing}
         />
       );
@@ -198,7 +172,7 @@ class BeatColumn extends Component {
   };
 
   render() {
-    const { background, id } = this.props;
+    const { playing, background, id } = this.props;
     return (
       <Container background={background} id={id}>
         {this.renderBoxes()}
