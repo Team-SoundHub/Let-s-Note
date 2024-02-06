@@ -65,13 +65,14 @@ const WebSocketContainer = ({ spaceId, children }) => {
     });
 
     console.log("[WebSocket] 마우스 커서 구독");
+    
     client.subscribe(`/user/topic/workspace/${spaceId}/mouse/public`, (response) => {
       const cursorData = JSON.parse(response.body);
       let x = cursorData.x;
       let y = cursorData.y;
       let accountId = cursorData.accountId;
       let nickname = cursorData.nickname;
-      // console.log(`응답 받은 좌표: x: ${x} y: ${y}`);
+      console.log(`응답 받은 좌표: x: ${x} y: ${y}`);
       dispatch(updateCursorPosition({ accountId, x, y, nickname }));
 
     }, {
@@ -153,7 +154,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
           accountId
         }),
       })
-      console.log(`마우스 커서 소켓 요청: timestamp:${formatTimestamp(timestamp)}`);
+      console.log(`마우스 커서 소켓 요청: x: ${x} y: ${y} timestamp:${formatTimestamp(timestamp)}`);
     },
 
     sendLoop: (instrument, spaceLength) => {
