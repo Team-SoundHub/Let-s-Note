@@ -9,7 +9,7 @@ const ModalBackground = tw.div`
   fixed
   inset-0
   bg-black/50
-  z-20
+  z-[1000]
 `;
 
 const ModalContainer = tw.div`
