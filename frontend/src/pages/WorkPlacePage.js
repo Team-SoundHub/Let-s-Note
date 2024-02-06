@@ -24,6 +24,7 @@ import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
 
 const Container = styled.div`
+  position: relative;
   background-color: white;
   height: 100vh;
 `;
@@ -122,12 +123,11 @@ const WorkPlacePage = () => {
       showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: "Save",
-      denyButtonText: `Don't save`
+      denyButtonText: `Don't save`,
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         try {
-      
           const response = await createSnapshot(spaceId, title, description);
           // console.log("snapshotId:", response.response.snapshotId);
           Swal.fire("스냅샷이 저장되었습니다 !", "", "success");
@@ -140,12 +140,10 @@ const WorkPlacePage = () => {
         } catch (error) {
           console.error("스냅샷 저장 오류:", error);
         }
-        
       } else if (result.isDenied) {
         Swal.fire("스냅샷 저장이 취소되었습니다.", "", "info");
       }
     });
-    
   };
 
   const closeUrlModal = () => {
@@ -249,7 +247,7 @@ const WorkPlacePage = () => {
             sendLoop={sendLoop}
             openImagePreview={openImagePreview}
             sendMousePosition={sendMousePosition}
-            isConnected={isConnected}            
+            isConnected={isConnected}
           />
           <ChatContainer
             sendMessage={sendMessage}

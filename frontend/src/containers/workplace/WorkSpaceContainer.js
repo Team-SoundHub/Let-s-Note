@@ -77,7 +77,7 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: 200,
+      columns: 300,
       availableNotes,
       availableDrumNotes,
       synth: null,
@@ -151,7 +151,7 @@ class WorkSpaceContainer extends Component {
 
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
-    if (currentCols + diff < 100 || currentCols + diff > 300) return;
+    if (currentCols + diff < 100 || currentCols + diff > 500) return;
 
     this.setState({ columns: currentCols + diff });
   };
@@ -234,7 +234,7 @@ class WorkSpaceContainer extends Component {
     this.setState({ availableDrumNotes: drumScale });
   };
 
-  render() {    
+  render() {
     const {
       loading,
       columns,
@@ -278,14 +278,13 @@ class WorkSpaceContainer extends Component {
                 sendLoop={this.props.sendLoop}
                 changeColumns={this.changeColumns}
                 sendMousePosition={this.props.sendMousePosition}
-                isConnected={this.props.isConnected}                             
+                isConnected={this.props.isConnected}
               />
             </MiddlePanel>
           </GridContainer>
           <BeatControls
             onPlay={this.play}
             onStop={this.stop}
-            changeColumns={this.changeColumns}
             adjustBPM={this.adjustBPM}
             bpm={this.initialBPM}
             changeInstrument={this.changeInstrument}
