@@ -201,61 +201,61 @@ const WorkPlacePage = () => {
         isConnected,
         sendLoop,
       }) => (
-        <Container>
-          {isReleaseModalOpen && (
-            <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
-          )}
-          {snapshotCreated && (
-            <SaveCompleteModal
-              onClose={handleCloseSnapshotModal}
-              snapshotUrl={snapshotUrl}
-              snapshotId={snapshotId}
+          <Container>
+            {isReleaseModalOpen && (
+                <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave}/>
+            )}
+            {snapshotCreated && (
+                <SaveCompleteModal
+                    onClose={handleCloseSnapshotModal}
+                    snapshotUrl={snapshotUrl}
+                    snapshotId={snapshotId}
+                />
+            )}
+            {isAddMemberModalOpen && (
+                <AddMemberModal
+                    closeAddMemberModal={closeAddMemberModal}
+                    handleAddMember={handleAddMember}
+                />
+            )}
+            {isSearchModalOpen && (
+                <NoteSearchModal
+                    isSearchModalOpen={isSearchModalOpen}
+                    handleSearchModalClose={handleSearchModalClose}
+                    openImagePreview={openImagePreview}
+                />
+            )}
+            {selectedImageUrl && (
+                <NoteViewModal
+                    image_url={selectedImageUrl}
+                    onClose={closeImagePreview}
+                />
+            )}
+            <WorkSpaceHeader
+                onOpenModal={handleModalOpen}
+                isSnapshotExist={workspaceInfo.isSnapshotExist}
+                openAddMemberModal={openAddMemberModal}
+                handleAddMember={handleAddMember}
+                memberList={memberList}
             />
-          )}
-          {isAddMemberModalOpen && (
-            <AddMemberModal
-              closeAddMemberModal={closeAddMemberModal}
-              handleAddMember={handleAddMember}
+            <WorkSpaceContainer
+                isSnapshot={false}
+                spaceId={spaceId}
+                accountId={accountId}
+                sendCoordinate={sendCoordinate}
+                sendLoop={sendLoop}
+                openImagePreview={openImagePreview}
+                sendMousePosition={sendMousePosition}
+                isConnected={isConnected}
+                handleSearchModalOpen={handleSearchModalOpen}
             />
-          )}
-          {isSearchModalOpen && (
-            <NoteSearchModal
-              isSearchModalOpen={isSearchModalOpen}
-              handleSearchModalClose={handleSearchModalClose}
-              openImagePreview={openImagePreview}
+            <ChatContainer
+                sendMessage={sendMessage}
+                spaceId={spaceId}
+                memberList={memberList}
+                nickname={myNickname}
             />
-          )}
-          {selectedImageUrl && (
-            <NoteViewModal
-              image_url={selectedImageUrl}
-              onClose={closeImagePreview}
-            />
-          )}
-          <WorkSpaceHeader
-            onOpenModal={handleModalOpen}
-            isSnapshotExist={workspaceInfo.isSnapshotExist}
-            openAddMemberModal={openAddMemberModal}
-            handleAddMember={handleAddMember}
-            memberList={memberList}
-            handleSearchModalOpen={handleSearchModalOpen}
-          />
-          <WorkSpaceContainer
-            isSnapshot={false}
-            spaceId={spaceId}
-            accountId={accountId}
-            sendCoordinate={sendCoordinate}
-            sendLoop={sendLoop}
-            openImagePreview={openImagePreview}
-            sendMousePosition={sendMousePosition}
-            isConnected={isConnected}
-          />
-          <ChatContainer
-            sendMessage={sendMessage}
-            spaceId={spaceId}
-            memberList={memberList}
-            nickname={myNickname}
-          />
-        </Container>
+          </Container>
       )}
     </WebSocketContainer>
   );
