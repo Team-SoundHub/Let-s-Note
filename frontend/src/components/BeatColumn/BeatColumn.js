@@ -19,7 +19,7 @@ const Container = styled.div`
 class BeatColumn extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeBoxes: [], activeInstrument: [] };
+    this.state = { activeBoxes: [], activeInstrument: [], activeNotes: [] };
   }
 
   handleClick = (i) => () => {
@@ -75,16 +75,8 @@ class BeatColumn extends Component {
   };
 
   playBeat = (time) => {
-    const { synth, scale, drumScale } = this.props;
-    const { activeBoxes, activeInstrument } = this.state;
-
-    const activeNotes = [...scale, ...drumScale]
-      .map((note, index) => ({
-        note,
-        isActive: activeBoxes[index],
-        instrument: activeInstrument[index], // Use the provided activeInstrument
-      }))
-      .filter(({ isActive }) => isActive);
+    const { synth } = this.props;
+    const { activeNotes } = this.state;
 
     activeNotes.forEach(({ note, instrument }) => {
       synth && synth.playNote(note, time, "8n", instrument);
@@ -97,6 +89,30 @@ class BeatColumn extends Component {
 
   componentDidMount() {
     Subject.subscribe("reset", this.resetColumn);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { scale, drumScale } = this.props;
+    const { activeBoxes, activeInstrument } = this.state;    
+
+    // Check if activeBoxes or activeInstrument has changed
+    if (
+      activeBoxes !== prevState.activeBoxes ||
+      activeInstrument !== prevState.activeInstrument
+    ) {
+      // Update activeNotes
+      const newActiveNotes = [...scale, ...drumScale]
+        .map((note, index) => ({
+          note,
+          isActive: activeBoxes[index],
+          instrument: activeInstrument[index],
+        }))
+        .filter(({ isActive }) => isActive);
+
+      this.setState({
+        activeNotes: newActiveNotes,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -150,7 +166,8 @@ class BeatColumn extends Component {
           col={id}
           row={i}
           isSnapshot={isSnapshot}   
-          containerRef={containerRef}                 
+          containerRef={containerRef}
+          playing={this.props.playing}                 
         />
       );
     }
@@ -172,6 +189,7 @@ class BeatColumn extends Component {
           row={i}
           isSnapshot={isSnapshot}
           containerRef={containerRef}
+          playing={this.props.playing}
         />
       );
     }
