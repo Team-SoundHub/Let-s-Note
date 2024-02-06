@@ -71,8 +71,8 @@ public class NoteImpl implements NoteService {
         List<SocketResponse.Note> notes = new ArrayList<>();
         for(Note note : deleteNotes){
             SocketResponse.Note noteDto = SocketResponse.Note.builder()
-                    .x(note.getNoteY())
-                    .y(note.getNoteX())
+                    .x(note.getNoteX())
+                    .y(note.getNoteY())
                     .build();
             notes.add(noteDto);
         }
