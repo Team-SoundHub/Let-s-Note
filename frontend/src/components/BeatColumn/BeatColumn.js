@@ -93,7 +93,7 @@ class BeatColumn extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { scale, drumScale } = this.props;
-    const { activeBoxes, activeInstrument } = this.state;    
+    const { activeBoxes, activeInstrument } = this.state;
 
     // Check if activeBoxes or activeInstrument has changed
     if (
@@ -118,6 +118,7 @@ class BeatColumn extends Component {
   componentWillUnmount() {
     Subject.unsubscribe("reset", this.resetColumn);
   }
+
   setActiveBoxes = (row, value) => {
     this.setState((prev) => {
       const newActiveBoxes = [...prev.activeBoxes];
@@ -197,7 +198,7 @@ class BeatColumn extends Component {
   };
 
   render() {
-    const { playing, background, id } = this.props;
+    const { background, id } = this.props;
     return (
       <Container background={background} id={id}>
         {this.renderBoxes()}
