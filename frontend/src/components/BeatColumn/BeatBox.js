@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { clearAllNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -16,7 +15,7 @@ const Container = styled.div`
       ? "lightgray"
       : props.inactiveColor};
   width: 3rem;
-  height: 1.5rem;
+  height: 1.2rem;
 
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};

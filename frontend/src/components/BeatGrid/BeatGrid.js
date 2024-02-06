@@ -8,7 +8,7 @@ import BeatChange from "../BeatControls/BeatChange";
 const Container = styled.div`
   flex: 1;
   width: 100%;
-  height: 100%;
+  height: inherit;
   margin: 0;
   display: flex;
   background-color: ${(props) => props.background};
@@ -24,16 +24,16 @@ const LeftPanel = tw.div`
   flex
   flex-row
   w-[4%]
-  h-full
   sticky
   left-0
   z-10
 `;
 
 const RightPanel = tw.div`
+  relative
   flex-1
   w-[94%]
-  h-60
+  h-inherit
   flex
   flex-row
 `;
@@ -41,21 +41,29 @@ const RightPanel = tw.div`
 const BeatChangeContainer = tw.div`
   sticky
   top-0
-  flex
-  flex-col
-  items-center
-  justify-center
-  bg-white
+  bottom-0
+  w-full
+  h-[30%]
+  border
+  border-gray-200
+  rounded-lg
+  shadow
+  bg-opacity-30
+  border-opacity-30
   ml-1
-  mt-0.5
-  h-full
+  translate-y-[120%]
+  flex
+  flex-row
 `;
 
 const ButtonContainer = tw.div`
   flex
-  w-20
+  w-10
   items-center
-  justify-center
+  justify-center  
+  bg-white
+  bg-opacity-30
+  hover:bg-opacity-70
 `;
 
 class BeatGrid extends Component {
@@ -112,11 +120,17 @@ class BeatGrid extends Component {
     }
     cols.push(
       <BeatChangeContainer>
-        <ButtonContainer>
-          <BeatChange mode="add" onClick={() => changeColumns(8)} />
+        <ButtonContainer
+          className="rounded-l-lg border border-r-gray-300"
+          onClick={() => changeColumns(-8)}
+        >
+          <BeatChange mode="subtract" />
         </ButtonContainer>
-        <ButtonContainer>
-          <BeatChange mode="subtract" onClick={() => changeColumns(-8)} />
+        <ButtonContainer
+          className="rounded-r-lg border border-r-gray-300"
+          onClick={() => changeColumns(8)}
+        >
+          <BeatChange mode="add" />
         </ButtonContainer>
       </BeatChangeContainer>
     );

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   flex: 1;
-  margin: 0.1rem;
+  margin: 0.05rem;
   background-color: ${(props) =>
     props.active &&
     props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
