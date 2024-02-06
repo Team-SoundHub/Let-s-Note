@@ -8,13 +8,13 @@ const Container = styled.div`
   margin: 0.05rem;
   background-color: ${(props) =>
     props.active &&
-      props.visualizeInstrument[
+    props.visualizeInstrument[
       props.instrumentList.indexOf(props.instrument)
-      ] === true
+    ] === true
       ? pickActiveColor(props.instrument)
       : props.col % 8 < 4
-        ? "lightgray"
-        : props.inactiveColor};
+      ? "lightgray"
+      : props.inactiveColor};
   width: 3rem;
   height: 1.2rem;
 
@@ -51,7 +51,7 @@ const BeatBox = ({
   row,
   isSnapshot,
   playing,
-  containerRef
+  containerRef,
 }) => {
   const dispatch = useDispatch();
 
@@ -110,8 +110,7 @@ const BeatBox = ({
     }
   }, [innerContent]);
 
-
-  // for 마우스 커서 공유 
+  // for 마우스 커서 공유
   const boxRef = useRef(null);
 
   const handleMouseOver = (e) => {
