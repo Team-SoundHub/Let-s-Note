@@ -23,6 +23,7 @@
     "sockjs-client": "^1.6.1",
     "soundfont2": "^0.4.0",
     "styled-components": "^6.1.8",
+    "sweetalert2": "^11.10.5",
     "tone": "^14.7.77",
     "web-vitals": "^2.1.4",
     "webmidi": "^3.1.8",
