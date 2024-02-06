@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
   flex: 1;
   margin: 0.05rem;
   background-color: ${(props) =>
     props.active &&
-    props.visualizeInstrument[
+      props.visualizeInstrument[
       props.instrumentList.indexOf(props.instrument)
-    ] === true
+      ] === true
       ? pickActiveColor(props.instrument)
       : props.col % 8 < 4
-      ? "lightgray"
-      : props.inactiveColor};
+        ? "lightgray"
+        : props.inactiveColor};
   width: 3rem;
   height: 1.2rem;
 
@@ -50,6 +51,7 @@ const BeatBox = ({
   row,
   isSnapshot,
   playing,
+  containerRef
 }) => {
   const dispatch = useDispatch();
 
@@ -108,8 +110,33 @@ const BeatBox = ({
     }
   }, [innerContent]);
 
+
+  // for 마우스 커서 공유 
+  const boxRef = useRef(null);
+
+  const handleMouseOver = (e) => {
+    // BeatBox와 BeatGrid의 절대 위치 추출
+    const boxRect = boxRef.current.getBoundingClientRect();
+    const gridRect = containerRef.current.getBoundingClientRect();
+
+    // BeatGrid 내의 스크롤 위치 고려
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+
+    // BeatBox 내부에서의 상대 좌표 계산
+    const mouseX = e.clientX - boxRect.left;
+    const mouseY = e.clientY - boxRect.top;
+
+    // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산    
+    const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
+    const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;    
+    
+    dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
+  };
+
   return (
     <Container
+      ref={boxRef}
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
@@ -122,6 +149,7 @@ const BeatBox = ({
       row={row}
       instrumentList={instrumentList}
       playing={playing}
+      onMouseOver={handleMouseOver}
     />
   );
 };

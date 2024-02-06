@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatGrid from "../../components/BeatGrid/BeatGrid";
@@ -19,6 +19,7 @@ const Container = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
+  position: relative; // Cursors 위치를 위한 css
 `;
 
 const GridContainer = tw.div`
@@ -233,7 +234,7 @@ class WorkSpaceContainer extends Component {
     this.setState({ availableDrumNotes: drumScale });
   };
 
-  render() {
+  render() {    
     const {
       loading,
       columns,
@@ -249,7 +250,7 @@ class WorkSpaceContainer extends Component {
       return <Loading />;
     } else {
       return (
-        <Container>
+        <Container ref={this.containerRef}>
           <GridContainer>
             <LeftPanel>
               {instrumentOptions.map((instrument, index) => (
@@ -276,6 +277,8 @@ class WorkSpaceContainer extends Component {
                 addCount={this.addCount}
                 sendLoop={this.props.sendLoop}
                 changeColumns={this.changeColumns}
+                sendMousePosition={this.props.sendMousePosition}
+                isConnected={this.props.isConnected}                             
               />
             </MiddlePanel>
           </GridContainer>
