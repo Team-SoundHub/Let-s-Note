@@ -70,7 +70,6 @@ public class FileController {
                 .accountId(accountId)
                 .file(file)
                 .build();
-        // hi
         if(fileService.saveAccountFile(accountFile)){
             CommonResponse response = CommonResponse.builder()
                     .success(true)
