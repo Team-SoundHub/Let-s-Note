@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import shareIcon from '../../assets/shareIcon2.png';
+import ShareButton from '../common/ShareButton';
+import Button from '../common/Button';
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -22,25 +24,6 @@ const ModalContent = styled.div`
   border-radius: 10px;  
 `;
 
-const ShareButton = styled.button`  
-  color: black;
-  background-color: #49C5B6;
-  background-image: url(${shareIcon}); 
-  background-size: 70%; 
-  background-position: center; // 이미지 위치 조절
-  background-repeat: no-repeat; // 이미지 반복 방지
-  width: 40px; 
-  height: 40px; 
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;  
-  font-size: large;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
 const SaveCompleteModal = ({ onClose, snapshotUrl, snapshotId }) => {
     const navigate = useNavigate();
 
@@ -51,13 +34,20 @@ const SaveCompleteModal = ({ onClose, snapshotUrl, snapshotId }) => {
     return (
         <ModalBackground onClick={onClose}>
             <ModalContent onClick={e => e.stopPropagation()}>
-                <h2>스냅샷이 저장되었습니다</h2>
-                <p>내 작품을 친구들과 공유하세요!</p>
-                <div>
-                    <input type="text" value={snapshotUrl} readOnly />
-                    <ShareButton onClick={() => navigator.clipboard.writeText(snapshotUrl)}></ShareButton>
+                <div className='text-center mb-5'>
+                  <h2 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">스냅샷이 저장되었습니다</h2>
+                  <p className="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">내 작품을 친구들과 공유하세요!</p>
                 </div>
-                <button onClick={handleGoSnapshot}> 보러가기 </button>
+                <div className = "flex justify-center items-center mb-5">
+                    <input className="w-full" type="text" value={snapshotUrl} readOnly />
+                    <div className= "ml-3 flex items-center">
+                      <ShareButton  />
+                    </div>
+                </div>
+                <div className="flex justify-center">
+                  <Button onClick={handleGoSnapshot}> 보러가기 </Button>
+                </div>
+                
             </ModalContent>
         </ModalBackground>
     );

@@ -6,6 +6,7 @@ import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
 import CseContainer from "./CseContainer";
 import BeatButton from "../../components/BeatControls/BeatButton";
 import quarterNote from "../../assets/Instrument/quarter-note-8-svgrepo-com.png";
+import Button from "../../components/common/Button";
 
 // 메시지가 나타나는 애니메이션
 const fadeIn = keyframes`
@@ -59,8 +60,11 @@ const Header = styled.div`
   height: 7vh;
 `;
 
-const LeftSection = styled.div`
-  flex: 1;
+const LeftSection = tw.div`
+flex
+items-center
+justify-center
+gap-4
 `;
 
 const CenterSection = styled.div`
@@ -79,16 +83,22 @@ const RightSection = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
-  margin-left: auto;
 `;
 
 const SnapshotButton = styled.button`
-  color: black;
-  backgorund-color: #f3f3f3;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
+  width: 70px;
+  height: 70px;
+  
+  background-color: #3498db;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
   cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  
 
   &:hover {
     transform: scale(1.1);
@@ -164,11 +174,8 @@ const WorkSpaceHeader = ({
     <Header>
       <LeftSection>
         <button onClick={handleGoBack}>⬅️</button>
-      </LeftSection>
-
-      <CenterSection>
         <SpaceTitle>{spaceTitle}</SpaceTitle>
-      </CenterSection>
+      </LeftSection>
 
       <RightSection>
         <ButtonContainer>
@@ -177,10 +184,11 @@ const WorkSpaceHeader = ({
             openAddMemberModal={openAddMemberModal}
           />
         </ButtonContainer>
-        <ButtonContainer>
-          <SnapshotButton onClick={onOpenModal}>스냅샷 저장</SnapshotButton>
-        </ButtonContainer>
         <CseContainer handleSearchModalOpen={handleSearchModalOpen} />
+        <ButtonContainer>
+          <Button className="rounded-full" onClick={onOpenModal}>저장</Button>
+        </ButtonContainer>
+        
       </RightSection>
     </Header>
   );
