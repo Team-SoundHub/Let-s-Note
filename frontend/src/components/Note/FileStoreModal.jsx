@@ -37,7 +37,7 @@ const FileStoreModal = ({ image_url, onClose }) => {
 
     return (
         <>
-            <Modal show={Boolean(image_url)} onClose={onClose} className={"z-[1100]"}>
+            <Modal show={Boolean(image_url)} onClose={onClose} className={"z-[1050]"}>
                 <Modal.Header>Image Details</Modal.Header>
                 <Modal.Body>
                     <div className="space-y-6">
