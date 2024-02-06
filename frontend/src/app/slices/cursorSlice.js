@@ -4,7 +4,7 @@ export const cursorSlice = createSlice({
   name: 'cursor',
   initialState: {
     positions: {},
-    hover: { i: 0, j: 0 }
+    hover: { i: 0, j: 0, x: 0, y: 0 }
   },
   reducers: {
     updateCursorPosition: (state, action) => {
@@ -14,6 +14,12 @@ export const cursorSlice = createSlice({
     setHoverPosition: (state, action) => {
       state.hover = action.payload; // Update hover position
     },
+    // clearCursorPosition: (state, action) => {
+    //   const { accountId } = action.payload;
+    //   if(state.positions[accountId]) {
+    //     delete state.positions[accountId];
+    //   }
+    // }
   },
 });
 

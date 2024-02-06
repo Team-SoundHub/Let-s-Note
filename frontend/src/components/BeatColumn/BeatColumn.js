@@ -131,8 +131,15 @@ class BeatColumn extends Component {
   };
 
   renderBoxes = () => {
-    const { scale, drumScale, foreground, synth, id, visualizeInstrument, onHover } =
-      this.props;
+    const { scale, 
+      drumScale, 
+      foreground, 
+      synth, 
+      id, 
+      visualizeInstrument, 
+      onHover, 
+      isSnapshot, 
+      containerRef } = this.props;
     const boxes = [];
     for (let i = 0; i < scale.length; i++) {
       boxes.push(
@@ -153,7 +160,8 @@ class BeatColumn extends Component {
           visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
-          isSnapshot={this.props.isSnapshot}                    
+          isSnapshot={isSnapshot}   
+          containerRef={containerRef}                 
         />
       );
     }
@@ -173,7 +181,8 @@ class BeatColumn extends Component {
           visualizeInstrument={visualizeInstrument}
           col={id}
           row={i}
-          isSnapshot={this.props.isSnapshot}
+          isSnapshot={isSnapshot}
+          containerRef={containerRef}
         />
       );
     }

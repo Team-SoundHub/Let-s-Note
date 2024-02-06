@@ -113,7 +113,8 @@ class BeatGrid extends Component {
           synth={synth}
           onClick={this.handleBoxClick}
           visualizeInstrument={visualizeInstrument}
-          isSnapshot={this.props.isSnapshot}                    
+          isSnapshot={this.props.isSnapshot}
+          containerRef={this.gridRef}                    
         />
       );
     }
