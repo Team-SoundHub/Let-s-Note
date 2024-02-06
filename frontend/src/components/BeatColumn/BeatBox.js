@@ -20,8 +20,6 @@ const Container = styled.div`
 
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
-
-  transition: background-color 0.05s ease-out;
 `;
 
 const pickActiveColor = (instrument) => {
@@ -83,7 +81,17 @@ const BeatBox = ({
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
     }
-  }, [snapshotNotes, workspaceNotes, col, row, isSnapshot]);
+  }, [
+    // useEffect 호출 조건을 다르게 줘서 마운트 이후에는 호출되지 않도록 함.
+    snapshotNotes,
+    workspaceNotes,
+    col,
+    row,
+    // active,
+    isSnapshot,
+    // setActiveBoxes,
+    // setActiveInstrument,
+  ]);
 
   const instrumentList = ["piano", "guitar", "drum"];
 
