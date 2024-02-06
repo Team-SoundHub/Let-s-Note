@@ -16,9 +16,10 @@ const Container = styled.div`
         ? "lightgray"
         : props.inactiveColor};
   width: 3rem;
-  height: 1.5rem;
+  height: 1.2rem;
 
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
+  opacity: ${(props) => (props.playing ? 0.7 : 1)};
 `;
 
 const pickActiveColor = (instrument) => {
@@ -47,6 +48,7 @@ const BeatBox = ({
   col,
   row,
   isSnapshot,
+  playing,
   containerRef
 }) => {
   const dispatch = useDispatch();
@@ -154,6 +156,7 @@ const BeatBox = ({
       col={col}
       row={row}
       instrumentList={instrumentList}
+      playing={playing}
       onMouseOver={handleMouseOver}
     />
   );

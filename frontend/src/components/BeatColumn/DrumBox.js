@@ -5,7 +5,7 @@ import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
   flex: 1;
-  margin: 0.1rem;
+  margin: 0.05rem;
   background-color: ${(props) =>
     props.active &&
       props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
@@ -15,6 +15,7 @@ const Container = styled.div`
   height: 1.5rem;
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0)}rem;
   position: relative; /* Ensure the circle is positioned relative to this container */
+  opacity: ${(props) => (props.playing ? 0.7 : 1)};
 
   &::after {
     content: ""; /* Create a pseudo-element for the circle */
@@ -83,6 +84,7 @@ const DrumBox = ({
   col,
   row,
   isSnapshot,
+  playing,
   containerRef
 }) => {
   const dispatch = useDispatch();
@@ -184,6 +186,7 @@ const DrumBox = ({
       visualizeInstrument={visualizeInstrument}
       instrumentList={instrumentList}
       row={row}
+      playing={playing}
       onMouseOver={handleMouseOver}
     />
   );

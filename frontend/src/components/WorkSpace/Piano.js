@@ -21,7 +21,7 @@ const PianoKey = styled.div`
 
 const WhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 2.35rem;
+  height: 2rem;
   width: 5rem;
   z-index: 20;
 `;
@@ -39,7 +39,7 @@ const BlackKey = styled(PianoKey)`
 
 const MovedWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 3.2rem;
+  height: 2.3rem;
   width: 5rem;
   margin-top: -0.75rem;
   z-index: 20;
@@ -47,7 +47,7 @@ const MovedWhiteKey = styled(PianoKey)`
 
 const FirstWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 2.55rem;
+  height: 2rem;
   width: 5rem;
   margin-top: -0.75rem;
   margin-bottom: 0.2rem;
@@ -56,7 +56,7 @@ const FirstWhiteKey = styled(PianoKey)`
 
 const FourthWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 2.35rem;
+  height: 2rem;
   width: 5rem;
   margin-top: -0.75rem;
   z-index: 20;
@@ -64,7 +64,7 @@ const FourthWhiteKey = styled(PianoKey)`
 
 const LastWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 2.45rem;
+  height: 2rem;
   width: 5rem;
   margin-top: -0.75rem;
   z-index: 20;

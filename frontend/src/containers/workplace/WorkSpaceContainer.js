@@ -83,6 +83,7 @@ class WorkSpaceContainer extends Component {
       synth: null,
       visualizeInstrument: [true, true, true],
       count: -1,
+      isPlaying: false,
     };
     this.initialBPM = 160;
   }
@@ -120,6 +121,12 @@ class WorkSpaceContainer extends Component {
     this.setState({ count: newCount });
   };
 
+  handleIsPlaying = () => {
+    this.setState((prevState) => ({
+      isPlaying: !prevState.isPlaying,
+    }));
+  };
+
   play = async () => {
     // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
     if (Tone.context.state !== "running") {
@@ -130,7 +137,7 @@ class WorkSpaceContainer extends Component {
   };
 
   stop = () => {
-    this.setState({ count: -1 });
+    this.setState({ count: -1, isPlaying: false });
     this.state.synth.stop();
   };
 
@@ -236,6 +243,7 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       visualizeInstrument,
       count,
+      isPlaying,
     } = this.state;
 
     if (loading) {
@@ -284,6 +292,8 @@ class WorkSpaceContainer extends Component {
             columns={columns}
             count={count}
             handleCountChange={this.handleCountChange}
+            handleIsPlaying={this.handleIsPlaying}
+            isPlaying={isPlaying}
           />
         </Container>
       );
