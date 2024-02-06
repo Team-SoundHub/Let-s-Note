@@ -5,14 +5,13 @@ import tw from "tailwind-styled-components";
 import {
   getMyPageInfo,
   createWorkSpace,
-  getMySnapshotInfo,
+  getMySnapshotInfo, changeAccountInfo,
 } from "../api/myPageApi";
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import CreateSpaceModal from "../components/MyPage/CreateSpaceModal";
 import PostCard from "../components/feed/PostCard";
-import SaveSnapshotModal from "../components/WorkSpace/ChangeAccountInfoModal";
 import ChangeAccountInfoModal from "../components/WorkSpace/ChangeAccountInfoModal";
 
 const MypageContainer = tw.div`
@@ -104,8 +103,9 @@ const MyPage = () => {
   };
 
 
-  const handleChangeUserInfo = async (nickname, picture) => {
+  const handleChangeUserInfo = async (accountId, nickname, picture) => {
     try {
+      const response = await changeAccountInfo(accountId, nickname, picture);
       // const response = await createWorkSpace(changedInfo);
       // if (response) {
       //   navigate(`/workspace/${response.response.spaceId}`);
@@ -189,7 +189,7 @@ const MyPage = () => {
             <ChangeAccountInfoModal
                 onClose={accountInfoModalClose}
                 onChanged={(nickname, picture) =>
-                    handleChangeUserInfo(nickname, picture)
+                    handleChangeUserInfo(accountId, nickname, picture)
                 }
             />
         )}

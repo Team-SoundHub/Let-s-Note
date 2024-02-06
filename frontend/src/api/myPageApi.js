@@ -31,4 +31,15 @@ const getMySnapshotInfo = async (accountId) => {
   }
 };
 
-export { createWorkSpace, getMyPageInfo, getMySnapshotInfo };
+const changeAccountInfo = async (accountId, nickname, picture) => {
+  try{
+    const response = await axiosInstance.post(`/files/account/${accountId}`, {
+      nickname: nickname,
+      file: picture
+    });
+  }catch (error){
+
+  }
+}
+
+export { createWorkSpace, getMyPageInfo, getMySnapshotInfo, changeAccountInfo };
