@@ -76,7 +76,7 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: 200,
+      columns: 300,
       availableNotes,
       availableDrumNotes,
       synth: null,
@@ -150,7 +150,7 @@ class WorkSpaceContainer extends Component {
 
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
-    if (currentCols + diff < 100 || currentCols + diff > 300) return;
+    if (currentCols + diff < 100 || currentCols + diff > 500) return;
 
     this.setState({ columns: currentCols + diff });
   };
@@ -233,7 +233,7 @@ class WorkSpaceContainer extends Component {
     this.setState({ availableDrumNotes: drumScale });
   };
 
-  render() {    
+  render() {
     const {
       loading,
       columns,

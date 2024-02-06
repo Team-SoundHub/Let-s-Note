@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 
 const Overlay = tw.div`
-  fixed
+  absolute
   top-0
   left-0
   flex
   items-center
   justify-center
   z-50
+  pointer-events-none
 `;
 
 const ModalContainer = tw.div`
@@ -27,6 +28,7 @@ const ModalContent = tw.div`
   w-full
   max-w-md
   max-h-full
+  pointer-events-auto
 `;
 
 const ModalMain = tw.div`
@@ -111,6 +113,7 @@ const NoteViewModal = ({ image_url, onClose }) => {
       x: e.clientX - translate.x,
       y: e.clientY - translate.y,
     });
+    e.stopPropagation();
   };
 
   const handleMouseMove = (e) => {

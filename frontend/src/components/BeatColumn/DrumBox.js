@@ -8,7 +8,7 @@ const Container = styled.div`
   margin: 0.05rem;
   background-color: ${(props) =>
     props.active &&
-      props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
+    props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
       ? pickActiveColor("drum")
       : props.inactiveColor};
   width: 3rem;
@@ -20,22 +20,22 @@ const Container = styled.div`
   &::after {
     content: ""; /* Create a pseudo-element for the circle */
     display: ${(props) =>
-    props.active &&
+      props.active &&
       props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
-      ? "none" // Hide the circle when the condition is satisfied
-      : "block"};
+        ? "none" // Hide the circle when the condition is satisfied
+        : "block"};
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: ${(props) =>
-    props.row % 2 === 0
-      ? "0.5rem"
-      : "0.8rem"}; /* Adjust the width of the circle based on the condition */
+      props.row % 2 === 0
+        ? "0.5rem"
+        : "0.8rem"}; /* Adjust the width of the circle based on the condition */
     height: ${(props) =>
-    props.row % 2 === 0
-      ? "0.5rem"
-      : "0.8rem"}; /* Adjust the height of the circle based on the condition */
+      props.row % 2 === 0
+        ? "0.5rem"
+        : "0.8rem"}; /* Adjust the height of the circle based on the condition */
     background-color: lightgray; /* Set the background color of the circle */
     border-radius: 50%; /* Make it a circle */
   }
@@ -85,7 +85,7 @@ const DrumBox = ({
   row,
   isSnapshot,
   playing,
-  containerRef
+  containerRef,
 }) => {
   const dispatch = useDispatch();
 
@@ -153,32 +153,32 @@ const DrumBox = ({
     }
   }, [innerContent]);
 
-  // for 마우스 커서 공유 
-  const boxRef = useRef(null);
+  // // for 마우스 커서 공유
+  // const boxRef = useRef(null);
 
-  const handleMouseOver = (e) => {
-    // BeatBox와 BeatGrid의 절대 위치 추출
-    const boxRect = boxRef.current.getBoundingClientRect();
-    const gridRect = containerRef.current.getBoundingClientRect();
+  // const handleMouseOver = (e) => {
+  //   // BeatBox와 BeatGrid의 절대 위치 추출
+  //   const boxRect = boxRef.current.getBoundingClientRect();
+  //   const gridRect = containerRef.current.getBoundingClientRect();
 
-    // BeatGrid 내의 스크롤 위치 고려
-    const scrollLeft = containerRef.current.scrollLeft;
-    const scrollTop = containerRef.current.scrollTop;
+  //   // BeatGrid 내의 스크롤 위치 고려
+  //   const scrollLeft = containerRef.current.scrollLeft;
+  //   const scrollTop = containerRef.current.scrollTop;
 
-    // BeatBox 내부에서의 상대 좌표 계산
-    const mouseX = e.clientX - boxRect.left;
-    const mouseY = e.clientY - boxRect.top;
+  //   // BeatBox 내부에서의 상대 좌표 계산
+  //   const mouseX = e.clientX - boxRect.left;
+  //   const mouseY = e.clientY - boxRect.top;
 
-    // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산    
-    const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
-    const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;
+  //   // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산
+  //   const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
+  //   const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;
 
-    dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
-  }
+  //   dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
+  // }
 
   return (
     <Container
-      ref={boxRef}
+      // ref={boxRef}
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
@@ -187,10 +187,9 @@ const DrumBox = ({
       instrumentList={instrumentList}
       row={row}
       playing={playing}
-      onMouseOver={handleMouseOver}
+      // onMouseOver={handleMouseOver}
     />
   );
-
 };
 
 export default DrumBox;
