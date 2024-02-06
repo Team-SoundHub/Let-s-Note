@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import shareIcon from '../../assets/shareIcon2.png'
+import Swal from "sweetalert2";
+import ShareButton from '../../components/common/ShareButton';
 
 // 메시지가 나타나는 애니메이션
 const fadeIn = keyframes`
@@ -35,7 +37,7 @@ const Header = styled.div`
   align-items: center;
   border-bottom: 1px solid #ddd;
   width: 100wv;
-  height: 5vh;
+  height: 10vh;
 `;
 
 const ButtonContainer = styled.div`
@@ -44,24 +46,6 @@ const ButtonContainer = styled.div`
   margin-left: auto; 
 `;
 
-const ShareButton = styled.button`  
-  color: black;
-  background-color: #49C5B6;
-  background-image: url(${shareIcon}); 
-  background-size: 70%; 
-  background-position: center; // 이미지 위치 조절
-  background-repeat: no-repeat; // 이미지 반복 방지
-  width: 30px; 
-  height: 30px; 
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;  
-  font-size: large;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
 
 const Message = styled.div`
   color: grey;
@@ -88,16 +72,13 @@ const SnapshotHeader = ({ onOpenModal }) => {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    setShowMessage(true);
-    setDisplayMessage(true);
-
-    setTimeout(() => { // 메시지 애니메이션 시작
-      setShowMessage(false);
-
-      setTimeout(() => { // 애니메이션이 완료된 후 display 상태 변경
-        setDisplayMessage(false);
-      }, 500); // 이 시간은 애니메이션 지속 시간과 동일하게 설정
-    }, 2000);
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "스냅샷 URL이 복사되었어요 !",
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
 
@@ -105,7 +86,7 @@ const SnapshotHeader = ({ onOpenModal }) => {
     <Header>
       <button onClick={handleGoBack}> ⬅️ </button>
       <ButtonContainer>
-        <ShareButton onClick={handleShare}></ShareButton>
+        <ShareButton />
       </ButtonContainer>
       {displayMessage && <Message show={showMessage}>클립보드에 주소가 복사되었습니다. 친구들에게 공유해보세요! </Message>}
     </Header>

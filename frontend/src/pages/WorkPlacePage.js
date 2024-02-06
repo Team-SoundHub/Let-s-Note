@@ -13,6 +13,7 @@ import CursorPointer from "../components/WorkSpace/Cursor/CursorPointer";
 import Cursors from "../components/WorkSpace/Cursor/Cursors";
 import NoteSearchModal from "../containers/Note/NoteSearchModal";
 import NoteViewModal from "../containers/Note/NoteViewModal";
+import Swal from "sweetalert2";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import {
@@ -114,20 +115,37 @@ const WorkPlacePage = () => {
     setIsReleaseModalOpen(false);
   };
 
-  const handleSave = async (title, description) => {
+  const handleSave = (title, description) => {
     // console.log("스냅샷 생성 시도");
-    try {
-      const response = await createSnapshot(spaceId, title, description);
-      // console.log("snapshotId:", response.response.snapshotId);
-      setSnapshotUrl(
-        `https://www.letsnote.co.kr/snapshot/${response.response.snapshotId}`
-      );
-      setSnapshotId(`${response.response.snapshotId}`);
-      setSnapshotCreated(true);
-      setIsReleaseModalOpen(false);
-    } catch (error) {
-      console.error("스냅샷 저장 오류:", error);
-    }
+    Swal.fire({
+      title: "스냅샷을 저장할까요?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        try {
+      
+          const response = await createSnapshot(spaceId, title, description);
+          // console.log("snapshotId:", response.response.snapshotId);
+          Swal.fire("스냅샷이 저장되었습니다 !", "", "success");
+          setSnapshotUrl(
+            `https://www.letsnote.co.kr/snapshot/${response.response.snapshotId}`
+          );
+          setSnapshotId(`${response.response.snapshotId}`);
+          setSnapshotCreated(true);
+          setIsReleaseModalOpen(false);
+        } catch (error) {
+          console.error("스냅샷 저장 오류:", error);
+        }
+        
+      } else if (result.isDenied) {
+        Swal.fire("스냅샷 저장이 취소되었습니다.", "", "info");
+      }
+    });
+    
   };
 
   const closeUrlModal = () => {
