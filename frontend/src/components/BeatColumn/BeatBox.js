@@ -19,6 +19,7 @@ const Container = styled.div`
   height: 1.5rem;
 
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
+  opacity: ${(props) => (props.playing ? 0.7 : 1)};
 `;
 
 const pickActiveColor = (instrument) => {
@@ -47,6 +48,7 @@ const BeatBox = ({
   col,
   row,
   isSnapshot,
+  playing,
 }) => {
   const dispatch = useDispatch();
 
@@ -128,6 +130,7 @@ const BeatBox = ({
       col={col}
       row={row}
       instrumentList={instrumentList}
+      playing={playing}
     />
   );
 };

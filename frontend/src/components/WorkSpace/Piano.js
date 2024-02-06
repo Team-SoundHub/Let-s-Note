@@ -39,7 +39,7 @@ const BlackKey = styled(PianoKey)`
 
 const MovedWhiteKey = styled(PianoKey)`
   background-color: white;
-  height: 3.2rem;
+  height: 3rem;
   width: 5rem;
   margin-top: -0.75rem;
   z-index: 20;

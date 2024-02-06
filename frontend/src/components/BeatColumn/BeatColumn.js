@@ -16,17 +16,6 @@ const Container = styled.div`
   width: 3rem;
 `;
 
-const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: purple;
-  pointer-events: none;
-  opacity: ${(props) => (props.playing ? 0.3 : 0)};
-`;
-
 class BeatColumn extends Component {
   constructor(props) {
     super(props);
@@ -154,6 +143,7 @@ class BeatColumn extends Component {
           col={id}
           row={i}
           isSnapshot={this.props.isSnapshot}
+          playing={this.props.playing}
         />
       );
     }
@@ -174,6 +164,7 @@ class BeatColumn extends Component {
           col={id}
           row={i}
           isSnapshot={this.props.isSnapshot}
+          playing={this.props.playing}
         />
       );
     }
@@ -185,7 +176,6 @@ class BeatColumn extends Component {
     return (
       <Container background={background} id={id}>
         {this.renderBoxes()}
-        <Overlay playing={playing} />
       </Container>
     );
   }

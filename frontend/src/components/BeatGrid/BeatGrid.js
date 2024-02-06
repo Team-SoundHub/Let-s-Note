@@ -23,7 +23,7 @@ const LeftPanel = tw.div`
   flex-1
   flex
   flex-row
-  w-[6%]
+  w-[4%]
   h-full
   sticky
   left-0
@@ -32,7 +32,7 @@ const LeftPanel = tw.div`
 
 const RightPanel = tw.div`
   flex-1
-  w-[93%]
+  w-[94%]
   h-60
   flex
   flex-row
