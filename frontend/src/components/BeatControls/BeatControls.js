@@ -43,16 +43,21 @@ const BeatControls = ({
   onStop,
   bpm,
   adjustBPM,
-  changeColumns,
   changeInstrument,
   columns,
   count,
   handleCountChange,
+  handleIsPlaying,
+  isPlaying,
 }) => {
   return (
     <Container>
       <LeftSection>
-        <BeatToggle onClick={onPlay} />
+        <BeatToggle
+          onClick={onPlay}
+          isPlaying={isPlaying}
+          handleIsPlaying={handleIsPlaying}
+        />
         <BeatStop onClick={onStop} />
       </LeftSection>
       <CenterSection>

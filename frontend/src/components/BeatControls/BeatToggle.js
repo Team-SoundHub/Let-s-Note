@@ -16,21 +16,15 @@ const Play = tw.img`
 `;
 
 class BeatToggle extends Component {
-  state = { playing: false };
-
   onClick = () => {
-    const { onClick } = this.props;
-    this.setState(
-      (prev) => ({
-        playing: !prev.playing,
-      }),
-      onClick
-    );
+    const { onClick, handleIsPlaying } = this.props;
+    onClick();
+    handleIsPlaying();
   };
 
   render() {
-    const { playing } = this.state;
-    const iconSrc = playing ? pause : play;
+    const { isPlaying } = this.props;
+    const iconSrc = isPlaying ? pause : play;
     return (
       <Container>
         <BeatButton onClick={this.onClick}>
