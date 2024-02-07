@@ -103,7 +103,6 @@ const MyPage = () => {
     }
   };
 
-
   const handleChangeUserInfo = async (nickname, picture) => {
     try {
       // const response = await createWorkSpace(changedInfo);
@@ -165,11 +164,13 @@ const MyPage = () => {
     fetchMySnapshotInfo();
   }, [accessToken, accountId]);
 
-
   // spaceId를 순회하면서 id, index를 얻을 수 있다는 가정
   return (
     <>
-      <Header handleLogout={handleLogout} openAccountInfoModal={openAccountInfoModal}/>
+      <Header
+        handleLogout={handleLogout}
+        openAccountInfoModal={openAccountInfoModal}
+      />
       <MypageContainer>
         <TitleContainer>
           <SectionTitle>내 작업실</SectionTitle>
@@ -186,12 +187,12 @@ const MyPage = () => {
           />
         )}
         {isAccountInfoModalOpen && (
-            <ChangeAccountInfoModal
-                onClose={accountInfoModalClose}
-                onChanged={(nickname, picture) =>
-                    handleChangeUserInfo(nickname, picture)
-                }
-            />
+          <ChangeAccountInfoModal
+            onClose={accountInfoModalClose}
+            onChanged={(nickname, picture) =>
+              handleChangeUserInfo(nickname, picture)
+            }
+          />
         )}
         <WorkSpacesSection>
           {workspaces.map((workspace) => (
