@@ -6,6 +6,7 @@ import WorkPlacePage from "./pages/WorkPlacePage";
 import LandingPage from "./pages/LandingPage";
 import MyPage from "./pages/MyPage";
 import SnapshotPage from "./pages/SnapshotPage";
+import VOC from "./VOC";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/workspace" element={<WorkPlacePage />} />
           <Route path="/snapshot" element={<SnapshotPage />} />
         </Routes>
+        <VOC/>
       </Provider>
     </>
   );
