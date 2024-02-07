@@ -65,7 +65,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
     });
 
     console.log("[WebSocket] 마우스 커서 구독");
-    
+
     client.subscribe(`/user/topic/workspace/${spaceId}/mouse/public`, (response) => {
       const cursorData = JSON.parse(response.body);
       let x = cursorData.x;
@@ -132,11 +132,13 @@ const WebSocketContainer = ({ spaceId, children }) => {
       });
     },
 
-    sendMousePosition: (x, y, accountId) => {
+    sendMousePosition: (x, y) => {
+      const accountId = sessionStorage.getItem("accountId");
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active - Mouse");
         return;
       }
+      console.log(accountId);
       const timestamp = Date.now();
       function formatTimestamp(timestamp) {
         const date = new Date(timestamp);
