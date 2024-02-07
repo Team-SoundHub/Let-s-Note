@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import login from "../api/loginApi";
+import { login, register } from "../api/authApi";
 import Header from "../components/common/Header";
-import LoginModal from "../components/auth/LoginModal";
+import AuthModal from "../components/auth/AuthModal";
 import PostCard from "../components/feed/PostCard";
 import Button from "../components/common/Button";
 
@@ -47,6 +47,7 @@ const LandingPage = () => {
   const [userId, setUserId] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
   const [postList, setPostList] = useState([]);
   const [postCardList, setPostCardList] = useState([]);
 
@@ -59,9 +60,54 @@ const LandingPage = () => {
     setLoginModalOpen(false);
   };
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  /* Register modal control */
+  const openRegisterModal = () => {
+    setRegisterModalOpen(true);
+  };
 
+  const closeRegisterModal = () => {
+    setRegisterModalOpen(false);
+  };
+
+  const handleRegister = async () => {
+    const usernameInput = document.getElementById("userId");
+    const nicknameInput = document.getElementById("nickname");
+    const passwordInput = document.getElementById("password");
+
+    try {
+      const userId = usernameInput.value;
+      const nickname = nicknameInput.value;
+      const password = passwordInput.value;
+
+      const response = await register(userId, nickname, password);
+
+      console.log("reigster response: ", response);
+
+      const { tokenWeight, authoritySet } = response.response;
+
+      if (tokenWeight && authoritySet) {
+        if ("Notification" in window) {
+          // 사용자에게 알림 권한 요청
+          if (Notification.permission !== "granted") {
+            await Notification.requestPermission();
+          }
+
+          // 권한이 허용된 경우 알림 생성
+          if (Notification.permission === "granted") {
+            new Notification("회원가입 완료", {
+              body: "회원가입이 성공적으로 완료되었습니다.",
+              icon: "/path/to/icon.png",
+            });
+          }
+        }
+        closeRegisterModal();
+      } else return response.response;
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+    }
+  };
+
+  const handleLogin = async () => {
     const usernameInput = document.getElementById("userId");
     const passwordInput = document.getElementById("password");
 
@@ -154,6 +200,7 @@ const LandingPage = () => {
         userId={userId}
         isLoggedIn={isLoggedIn}
         openLoginModal={openLoginModal}
+        openRegisterModal={openRegisterModal}
         handleLogout={handleLogout}
       />
       <LandingContainer>
@@ -176,7 +223,7 @@ const LandingPage = () => {
                 </p>
               </div>
               <div>
-                <Button className="mt-20" onClick={setLoginModalOpen}>
+                <Button className="mt-20" onClick={openRegisterModal}>
                   Sign up for free
                 </Button>
               </div>
@@ -188,9 +235,17 @@ const LandingPage = () => {
         </TransparentImageStyle>
 
         {isLoginModalOpen && (
-          <LoginModal
+          <AuthModal
+            type="login"
             closeLoginModal={closeLoginModal}
             handleLogin={handleLogin}
+          />
+        )}
+        {isRegisterModalOpen && (
+          <AuthModal
+            type="register"
+            closeLoginModal={closeRegisterModal}
+            handleRegister={handleRegister}
           />
         )}
       </LandingContainer>
