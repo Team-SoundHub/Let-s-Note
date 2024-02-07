@@ -1,8 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
-const FileStoreApi = async (fileName, imageUrl) => {
+const FileStoreApi = async (fileName, imageUrl, spaceId) => {
   try {
-    const spaceId = localStorage.getItem("spaceId");
 
     console.log(fileName);
     console.log(spaceId);
