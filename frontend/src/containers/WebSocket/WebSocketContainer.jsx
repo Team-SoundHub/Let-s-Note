@@ -65,13 +65,14 @@ const WebSocketContainer = ({ spaceId, children }) => {
     });
 
     console.log("[WebSocket] 마우스 커서 구독");
+
     client.subscribe(`/user/topic/workspace/${spaceId}/mouse/public`, (response) => {
       const cursorData = JSON.parse(response.body);
       let x = cursorData.x;
       let y = cursorData.y;
       let accountId = cursorData.accountId;
       let nickname = cursorData.nickname;
-      console.log(response);
+      console.log(`응답 받은 좌표: x: ${x} y: ${y}`);
       dispatch(updateCursorPosition({ accountId, x, y, nickname }));
 
     }, {
@@ -131,11 +132,13 @@ const WebSocketContainer = ({ spaceId, children }) => {
       });
     },
 
-    sendMousePosition: (x, y, accountId) => {
+    sendMousePosition: (x, y) => {
+      const accountId = sessionStorage.getItem("accountId");
       if (!stompClient || !stompClient.active) {
         console.error("STOMP connection is not active - Mouse");
         return;
       }
+      console.log(accountId);
       const timestamp = Date.now();
       function formatTimestamp(timestamp) {
         const date = new Date(timestamp);
@@ -152,8 +155,8 @@ const WebSocketContainer = ({ spaceId, children }) => {
           y,
           accountId
         }),
-      });
-      console.log(`마우스 커서 소켓 요청: x:${x} y:${y} spaceId:${spaceId} accountId:${accountId} timestamp:${formatTimestamp(timestamp)}`)
+      })
+      console.log(`마우스 커서 소켓 요청: x: ${x} y: ${y} timestamp:${formatTimestamp(timestamp)}`);
     },
 
     sendLoop: (instrument, spaceLength) => {

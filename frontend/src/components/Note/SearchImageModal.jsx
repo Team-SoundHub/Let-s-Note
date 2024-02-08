@@ -4,7 +4,7 @@ import { Button, Modal } from 'flowbite-react';
 const SearchImageModal = ({ image_url, onClose, openFileStoreModal }) => {
     return (
         <>
-            <Modal show={Boolean(image_url)} onClose={onClose}>
+            <Modal show={Boolean(image_url)} onClose={onClose} className={"z-[1000]"}>
                 <Modal.Header>Image Details</Modal.Header>
                 <Modal.Body>
                     <div className="space-y-6">

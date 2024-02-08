@@ -22,8 +22,9 @@ import {
 } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
-
+//hi
 const Container = styled.div`
+  position: relative;
   background-color: white;
   height: 100vh;
 `;
@@ -122,12 +123,11 @@ const WorkPlacePage = () => {
       showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: "Save",
-      denyButtonText: `Don't save`
+      denyButtonText: `Don't save`,
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         try {
-      
           const response = await createSnapshot(spaceId, title, description);
           // console.log("snapshotId:", response.response.snapshotId);
           Swal.fire("스냅샷이 저장되었습니다 !", "", "success");
@@ -140,12 +140,10 @@ const WorkPlacePage = () => {
         } catch (error) {
           console.error("스냅샷 저장 오류:", error);
         }
-        
       } else if (result.isDenied) {
         Swal.fire("스냅샷 저장이 취소되었습니다.", "", "info");
       }
     });
-    
   };
 
   const closeUrlModal = () => {
@@ -203,65 +201,61 @@ const WorkPlacePage = () => {
         isConnected,
         sendLoop,
       }) => (
-        <Container>
-          {isReleaseModalOpen && (
-            <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
-          )}
-          {snapshotCreated && (
-            <SaveCompleteModal
-              onClose={handleCloseSnapshotModal}
-              snapshotUrl={snapshotUrl}
-              snapshotId={snapshotId}
+          <Container>
+            {isReleaseModalOpen && (
+                <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave}/>
+            )}
+            {snapshotCreated && (
+                <SaveCompleteModal
+                    onClose={handleCloseSnapshotModal}
+                    snapshotUrl={snapshotUrl}
+                    snapshotId={snapshotId}
+                />
+            )}
+            {isAddMemberModalOpen && (
+                <AddMemberModal
+                    closeAddMemberModal={closeAddMemberModal}
+                    handleAddMember={handleAddMember}
+                />
+            )}
+            {isSearchModalOpen && (
+                <NoteSearchModal
+                    isSearchModalOpen={isSearchModalOpen}
+                    handleSearchModalClose={handleSearchModalClose}
+                    openImagePreview={openImagePreview}
+                />
+            )}
+            {selectedImageUrl && (
+                <NoteViewModal
+                    image_url={selectedImageUrl}
+                    onClose={closeImagePreview}
+                />
+            )}
+            <WorkSpaceHeader
+                onOpenModal={handleModalOpen}
+                isSnapshotExist={workspaceInfo.isSnapshotExist}
+                openAddMemberModal={openAddMemberModal}
+                handleAddMember={handleAddMember}
+                memberList={memberList}
             />
-          )}
-          {isAddMemberModalOpen && (
-            <AddMemberModal
-              closeAddMemberModal={closeAddMemberModal}
-              handleAddMember={handleAddMember}
+            <WorkSpaceContainer
+                isSnapshot={false}
+                spaceId={spaceId}
+                accountId={accountId}
+                sendCoordinate={sendCoordinate}
+                sendLoop={sendLoop}
+                openImagePreview={openImagePreview}
+                sendMousePosition={sendMousePosition}
+                isConnected={isConnected}
+                handleSearchModalOpen={handleSearchModalOpen}
             />
-          )}
-          {isSearchModalOpen && (
-            <NoteSearchModal
-              isSearchModalOpen={isSearchModalOpen}
-              handleSearchModalClose={handleSearchModalClose}
-              openImagePreview={openImagePreview}
+            <ChatContainer
+                sendMessage={sendMessage}
+                spaceId={spaceId}
+                memberList={memberList}
+                nickname={myNickname}
             />
-          )}
-          {selectedImageUrl && (
-            <NoteViewModal
-              image_url={selectedImageUrl}
-              onClose={closeImagePreview}
-            />
-          )}
-          <WorkSpaceHeader
-            onOpenModal={handleModalOpen}
-            isSnapshotExist={workspaceInfo.isSnapshotExist}
-            openAddMemberModal={openAddMemberModal}
-            handleAddMember={handleAddMember}
-            memberList={memberList}
-            handleSearchModalOpen={handleSearchModalOpen}
-          />
-          <WorkSpaceContainer
-            isSnapshot={false}
-            spaceId={spaceId}
-            sendCoordinate={sendCoordinate}
-            sendLoop={sendLoop}
-            openImagePreview={openImagePreview}
-          />
-          <ChatContainer
-            sendMessage={sendMessage}
-            spaceId={spaceId}
-            memberList={memberList}
-            nickname={myNickname}
-          />
-          <Cursors />
-          <CursorPointer
-            spaceId={spaceId}
-            accountId={accountId}
-            sendMousePosition={sendMousePosition}
-            isConnected={isConnected}
-          />
-        </Container>
+          </Container>
       )}
     </WebSocketContainer>
   );

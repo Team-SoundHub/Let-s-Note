@@ -121,8 +121,7 @@ const WorkSpaceHeader = ({
   onOpenModal,
   isSnapshotExist,
   openAddMemberModal,
-  memberList,
-  handleSearchModalOpen,
+  memberList
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
@@ -184,7 +183,6 @@ const WorkSpaceHeader = ({
             openAddMemberModal={openAddMemberModal}
           />
         </ButtonContainer>
-        <CseContainer handleSearchModalOpen={handleSearchModalOpen} />
         <ButtonContainer>
           <Button className="rounded-full" onClick={onOpenModal}>저장</Button>
         </ButtonContainer>

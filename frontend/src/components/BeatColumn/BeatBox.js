@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -19,6 +20,8 @@ const Container = styled.div`
 
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
+
+  transition: background-color 0.05s ease-out;
 `;
 
 const pickActiveColor = (instrument) => {
@@ -48,6 +51,7 @@ const BeatBox = ({
   row,
   isSnapshot,
   playing,
+  containerRef,
 }) => {
   const dispatch = useDispatch();
 
@@ -79,17 +83,7 @@ const BeatBox = ({
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
     }
-  }, [
-    // useEffect 호출 조건을 다르게 줘서 마운트 이후에는 호출되지 않도록 함.
-    snapshotNotes,
-    workspaceNotes,
-    col,
-    row,
-    // active,
-    isSnapshot,
-    // setActiveBoxes,
-    // setActiveInstrument,
-  ]);
+  }, [snapshotNotes, workspaceNotes, col, row, isSnapshot]);
 
   const instrumentList = ["piano", "guitar", "drum"];
 
@@ -116,8 +110,32 @@ const BeatBox = ({
     }
   }, [innerContent]);
 
+  // for 마우스 커서 공유
+  const boxRef = useRef(null);
+
+  const handleMouseOver = (e) => {
+    // BeatBox와 BeatGrid의 절대 위치 추출
+    const boxRect = boxRef.current.getBoundingClientRect();
+    const gridRect = containerRef.current.getBoundingClientRect();
+
+    // BeatGrid 내의 스크롤 위치 고려
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+
+    // BeatBox 내부에서의 상대 좌표 계산
+    const mouseX = e.clientX - boxRect.left;
+    const mouseY = e.clientY - boxRect.top;
+
+    // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산    
+    const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
+    const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;        
+    
+    dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
+  };
+
   return (
     <Container
+      ref={boxRef}
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
@@ -130,6 +148,7 @@ const BeatBox = ({
       row={row}
       instrumentList={instrumentList}
       playing={playing}
+      onMouseOver={handleMouseOver}
     />
   );
 };

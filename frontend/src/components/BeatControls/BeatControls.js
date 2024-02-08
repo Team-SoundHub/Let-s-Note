@@ -8,6 +8,8 @@ import BeatStop from "./BeatStop";
 import BeatProgressBar from "./BeatProgressBar";
 
 const Container = tw.div`
+  z-[500]
+  bg-white
   flex
   items-center
   justify-between
@@ -51,38 +53,38 @@ const BeatControls = ({
   isPlaying,
 }) => {
   return (
-    <Container>
-      <LeftSection>
-        <BeatToggle
-          onClick={onPlay}
-          isPlaying={isPlaying}
-          handleIsPlaying={handleIsPlaying}
-        />
-        <BeatStop onClick={onStop} />
-      </LeftSection>
-      <CenterSection>
-        <BeatProgressBar
-          columns={columns}
-          count={count}
-          handleCountChange={handleCountChange}
-        />
-      </CenterSection>
-      <RightSection>
-        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
-        <InstrumentChange
-          instrument="piano"
-          changeInstrument={changeInstrument}
-        />
-        <InstrumentChange
-          instrument="guitar"
-          changeInstrument={changeInstrument}
-        />
-        <InstrumentChange
-          instrument="drum"
-          changeInstrument={changeInstrument}
-        />
-      </RightSection>
-    </Container>
+      <Container>
+        <LeftSection>
+          <BeatToggle
+              onClick={onPlay}
+              isPlaying={isPlaying}
+              handleIsPlaying={handleIsPlaying}
+          />
+          <BeatStop onClick={onStop}/>
+        </LeftSection>
+        <CenterSection>
+          <BeatProgressBar
+              columns={columns}
+              count={count}
+              handleCountChange={handleCountChange}
+          />
+        </CenterSection>
+        <RightSection>
+          <BeatsPerMinute bpm={bpm} handleChange={adjustBPM}/>
+          <InstrumentChange
+              instrument="piano"
+              changeInstrument={changeInstrument}
+          />
+          <InstrumentChange
+              instrument="guitar"
+              changeInstrument={changeInstrument}
+          />
+          <InstrumentChange
+              instrument="drum"
+              changeInstrument={changeInstrument}
+          />
+        </RightSection>
+      </Container>
   );
 };
 

@@ -108,6 +108,13 @@ const ModalInput = tw.input`
   dark:text-white
 `;
 
+const ErrorMessage = tw.div`
+  text-red-500
+  text-center
+  text-xs
+  my-2
+`;
+
 const LoginLink = tw.a`
   text-sm
   text-blue-700
@@ -115,9 +122,19 @@ const LoginLink = tw.a`
   dark:text-blue-500
 `;
 
-const LoginModal = ({ closeLoginModal, handleLogin }) => {
+const textMap = {
+  login: "로그인",
+  register: "회원가입",
+};
+
+const AuthModal = ({ type, closeLoginModal, handleLogin, handleRegister }) => {
   const [userId, setUserId] = useState("");
+  const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [modalType, setModalType] = useState(type);
+  const text = textMap[modalType];
+  const [error, setError] = useState(null);
 
   const handleContentClick = (event) => {
     event.stopPropagation();
@@ -127,8 +144,26 @@ const LoginModal = ({ closeLoginModal, handleLogin }) => {
     setUserId(event.target.value);
   };
 
+  const handleNicknameChange = (event) => {
+    setNickname(event.target.value);
+  };
+
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+
+  const handlePasswordConfirmChange = (event) => {
+    setPasswordConfirm(event.target.value);
+  };
+
+  const validateRegister = () => {
+    if (password !== passwordConfirm) {
+      setError("비밀번호가 일치하지 않습니다");
+      return;
+    }
+
+    const response = handleRegister();
+    console.log(response);
   };
 
   return (
@@ -141,7 +176,7 @@ const LoginModal = ({ closeLoginModal, handleLogin }) => {
         <ModalContent onClick={handleContentClick}>
           <ModalMain>
             <ModalHeader>
-              <ModalTitle>Sign in to Let's Note</ModalTitle>
+              <ModalTitle>{text}</ModalTitle>
               <ModalCloseButton onClick={closeLoginModal}>
                 <svg
                   className="w-3 h-3"
@@ -164,11 +199,8 @@ const LoginModal = ({ closeLoginModal, handleLogin }) => {
             <ModalBody>
               <ModalForm>
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Your Id
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    아이디
                   </label>
                   <ModalInput
                     id="userId"
@@ -178,16 +210,26 @@ const LoginModal = ({ closeLoginModal, handleLogin }) => {
                     required
                   />
                 </div>
+                {modalType === "register" && (
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      닉네임
+                    </label>
+                    <ModalInput
+                      id="nickname"
+                      placeholder="닉네임"
+                      onChange={handleNicknameChange}
+                      value={nickname}
+                      required
+                    />
+                  </div>
+                )}
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Your password
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    비밀번호
                   </label>
                   <ModalInput
                     type="password"
-                    name="password"
                     id="password"
                     placeholder="••••••••"
                     onChange={handlePasswordChange}
@@ -195,25 +237,44 @@ const LoginModal = ({ closeLoginModal, handleLogin }) => {
                     required
                   />
                 </div>
-                <div className="flex justify-center">
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    onClick={handleLogin}
-                  >
-                    Login to your account
-                  </Button>
-                </div>
+                {modalType === "register" && (
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      비밀번호 확인
+                    </label>
+                    <ModalInput
+                      type="password"
+                      id="passwordConfirm"
+                      placeholder="••••••••"
+                      onChange={handlePasswordConfirmChange}
+                      value={passwordConfirm}
+                      required
+                    />
+                  </div>
+                )}
+              </ModalForm>
+              {error && <ErrorMessage>{error}</ErrorMessage>}
+              <div className="flex justify-center">
+                <Button
+                  className="w-full"
+                  onClick={
+                    modalType === "login" ? handleLogin : validateRegister
+                  }
+                >
+                  {text}
+                </Button>
+              </div>
+              {modalType === "login" && (
                 <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                   Not registered?{" "}
                   <LoginLink
-                    href="#"
+                    onClick={() => setModalType("register")}
                     className="text-blue-700 hover:underline dark:text-blue-500"
                   >
                     Create account
                   </LoginLink>
                 </div>
-              </ModalForm>
+              )}
             </ModalBody>
           </ModalMain>
         </ModalContent>
@@ -222,4 +283,4 @@ const LoginModal = ({ closeLoginModal, handleLogin }) => {
   );
 };
 
-export default LoginModal;
+export default AuthModal;

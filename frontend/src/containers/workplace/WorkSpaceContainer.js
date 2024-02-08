@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import BeatGrid from "../../components/BeatGrid/BeatGrid";
@@ -8,8 +8,7 @@ import { availableNotes, availableDrumNotes } from "../../constants/scale";
 import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
 import * as Tone from "tone";
-import NoteContainer from "./NoteContainer";
-import NoteViewModal from "../Note/NoteViewModal";
+import CseContainer from "./CseContainer";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -19,6 +18,7 @@ const Container = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
+  position: relative; // Cursors 위치를 위한 css
 `;
 
 const GridContainer = tw.div`
@@ -30,12 +30,12 @@ relative
   w-full
   bg-white
   p-4
-  h-[80vh]
+  h-[84vh]
 `;
 
 const LeftPanel = tw.div`
   w-[3%]
-  h-full
+  h-[98%]
   flex-shrink-0
   bg-white
   mr-2
@@ -46,7 +46,7 @@ const LeftPanel = tw.div`
 
 const MiddlePanel = tw.div`
   w-[97%]
-  h-full
+  h-[98%]
   flex-shrink-0
 `;
 
@@ -76,7 +76,7 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: 200,
+      columns: 300,
       availableNotes,
       availableDrumNotes,
       synth: null,
@@ -150,7 +150,7 @@ class WorkSpaceContainer extends Component {
 
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
-    if (currentCols + diff < 100 || currentCols + diff > 300) return;
+    if (currentCols + diff < 100 || currentCols + diff > 500) return;
 
     this.setState({ columns: currentCols + diff });
   };
@@ -242,57 +242,60 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       visualizeInstrument,
       count,
-      isPlaying,
+      isPlaying
     } = this.state;
 
     if (loading) {
       return <Loading />;
     } else {
       return (
-        <Container>
-          <GridContainer>
-            <LeftPanel>
-              {instrumentOptions.map((instrument, index) => (
-                <InstrumentVisualize
-                  instrument={instrument}
-                  changeVisualizeInstrument={this.changeVisualizeInstrument}
+          <Container ref={this.containerRef}>
+            <GridContainer>
+              <LeftPanel>
+                {instrumentOptions.map((instrument, index) => (
+                    <InstrumentVisualize
+                        instrument={instrument}
+                        changeVisualizeInstrument={this.changeVisualizeInstrument}
+                    />
+                ))}
+              </LeftPanel>
+              <MiddlePanel>
+                <BeatGrid
+                    ref="BeatGrid"
+                    synth={synth}
+                    scale={availableNotes}
+                    drumScale={availableDrumNotes}
+                    columns={columns}
+                    background="skyblue"
+                    foreground="#ffffff"
+                    visualizeInstrument={visualizeInstrument}
+                    isSnapshot={this.props.isSnapshot}
+                    spaceId={this.props.spaceId}
+                    sendCoordinate={this.props.sendCoordinate}
+                    count={count}
+                    addCount={this.addCount}
+                    sendLoop={this.props.sendLoop}
+                    changeColumns={this.changeColumns}
+                    sendMousePosition={this.props.sendMousePosition}
+                    isConnected={this.props.isConnected}
                 />
-              ))}
-            </LeftPanel>
-            <MiddlePanel>
-              <BeatGrid
-                ref="BeatGrid"
-                synth={synth}
-                scale={availableNotes}
-                drumScale={availableDrumNotes}
-                columns={columns}
-                background="skyblue"
-                foreground="#ffffff"
-                visualizeInstrument={visualizeInstrument}
-                isSnapshot={this.props.isSnapshot}
-                spaceId={this.props.spaceId}
-                sendCoordinate={this.props.sendCoordinate}
-                count={count}
-                addCount={this.addCount}
-                sendLoop={this.props.sendLoop}
+              </MiddlePanel>
+            </GridContainer>
+            <CseContainer handleSearchModalOpen={this.props.handleSearchModalOpen}/>
+            <BeatControls
+                onPlay={this.play}
+                onStop={this.stop}
                 changeColumns={this.changeColumns}
-              />
-            </MiddlePanel>
-          </GridContainer>
-          <BeatControls
-            onPlay={this.play}
-            onStop={this.stop}
-            changeColumns={this.changeColumns}
-            adjustBPM={this.adjustBPM}
-            bpm={this.initialBPM}
-            changeInstrument={this.changeInstrument}
-            columns={columns}
-            count={count}
-            handleCountChange={this.handleCountChange}
-            handleIsPlaying={this.handleIsPlaying}
-            isPlaying={isPlaying}
-          />
-        </Container>
+                adjustBPM={this.adjustBPM}
+                bpm={this.initialBPM}
+                changeInstrument={this.changeInstrument}
+                columns={columns}
+                count={count}
+                handleCountChange={this.handleCountChange}
+                handleIsPlaying={this.handleIsPlaying}
+                isPlaying={isPlaying}
+            />
+          </Container>
       );
     }
   }

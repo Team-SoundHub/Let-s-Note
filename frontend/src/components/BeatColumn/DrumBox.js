@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -84,7 +85,10 @@ const DrumBox = ({
   row,
   isSnapshot,
   playing,
+  containerRef,
 }) => {
+  const dispatch = useDispatch();
+
   const [active, setActive] = useState(propActive);
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const instrumentList = ["piano", "guitar", "drum"];
@@ -148,8 +152,33 @@ const DrumBox = ({
       setActiveInstrument(row, undefined);
     }
   }, [innerContent]);
+
+  // for 마우스 커서 공유
+  const boxRef = useRef(null);
+
+  const handleMouseOver = (e) => {
+    // BeatBox와 BeatGrid의 절대 위치 추출
+    const boxRect = boxRef.current.getBoundingClientRect();
+    const gridRect = containerRef.current.getBoundingClientRect();
+
+    // BeatGrid 내의 스크롤 위치 고려
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+
+    // BeatBox 내부에서의 상대 좌표 계산
+    const mouseX = e.clientX - boxRect.left;
+    const mouseY = e.clientY - boxRect.top;
+
+    // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산
+    const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
+    const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;
+
+    dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
+  }
+
   return (
     <Container
+      ref={boxRef}
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
@@ -158,6 +187,7 @@ const DrumBox = ({
       instrumentList={instrumentList}
       row={row}
       playing={playing}
+      onMouseOver={handleMouseOver}
     />
   );
 };
