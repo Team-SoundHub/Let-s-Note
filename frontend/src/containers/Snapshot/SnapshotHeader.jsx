@@ -61,13 +61,19 @@ const Message = styled.div`
 `;
 
 
-const SnapshotHeader = ({ onOpenModal }) => {
+const SnapshotHeader = ({ onOpenModal, fromMyPage }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
-  const [displayMessage, setDisplayMessage] = useState(false);
-
+  const [displayMessage, setDisplayMessage] = useState(false);  
+  
   const handleGoBack = () => {
-    navigate('/mypage');
+    if (fromMyPage){
+      console.log(`뒤로가기 - fromMyPage: ${fromMyPage}`);
+      navigate('/mypage');
+    } else {
+      console.log(`뒤로가기 - fromMyPage: ${fromMyPage}`);
+      navigate('/');
+    }
   }  
 
   const handleShare = () => {

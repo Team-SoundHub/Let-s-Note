@@ -96,7 +96,7 @@ const MyPage = () => {
         console.log("작업실 생성 완료 - response:", response);
         localStorage.setItem("spaceId", response.response.spaceId);
         localStorage.setItem("title", title);
-        navigate(`/workspace/${response.response.spaceId}`);        
+        navigate(`/workspace/${response.response.spaceId}`);
       } else {
         console.log("작업실 생성 실패");
       }
@@ -222,7 +222,10 @@ const MyPage = () => {
           {snapshots.map((snapshot) => (
             <div
               key={snapshot.snapshotId}
-              onClick={() => navigate(`/snapshot/${snapshot.snapshotId}`)}
+              onClick={() =>
+                navigate(`/snapshot/${snapshot.snapshotId}`,
+                  { state: { fromMyPage: true } }
+                )}
             >
               <PostCard
                 snapshotTitle={snapshot.snapshotTitle}
