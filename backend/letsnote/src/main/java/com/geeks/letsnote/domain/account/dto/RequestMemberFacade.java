@@ -16,7 +16,7 @@ public record RequestMemberFacade() {
             String password,
 
             @NotNull
-            @Size(min = 5, max = 100)
+            @Size(min = 2, max = 100)
             String nickname
     ) {
     }
