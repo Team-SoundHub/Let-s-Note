@@ -1,23 +1,20 @@
 import axiosInstance from "./axiosInstance";
 
 const fileGetApi = async () => {
+  const spaceId = localStorage.getItem("spaceId");
   try {
-    const spaceId = localStorage.getItem("spaceId");
-
     if (!spaceId) {
-      console.error("spaceId ID not found in sessionStorage.");
+      console.error("spaceId not found in localStorage.");
       return;
     }
 
-    const response = await axiosInstance.get(
-      `/files/${spaceId}`,
-      {
-        spaceId: spaceId,
-      }
-    );
+    const response = await axiosInstance.get(`/files/${spaceId}`, 
+    {
+      spaceId: spaceId
+    });
     return response.data.response;
   } catch (error) {
-    console.error("getChatMessages 에러:", error);
+    console.error("fileGetApi 에러:", error);
   }
 };
 

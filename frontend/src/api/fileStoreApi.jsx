@@ -1,19 +1,15 @@
 import axiosInstance from "./axiosInstance";
 
-const FileStoreApi = async (fileName, imageUrl, spaceId) => {
-  try {
-
-    console.log(fileName);
-    console.log(spaceId);
-    console.log(imageUrl);
-    if (!spaceId) {
-      // Handle the case where accountId is not available
-      console.error("spaceId ID not found in sessionStorage.");
+const FileStoreApi = async (fileName, imageUrl) => {
+  const spaceId = localStorage.getItem("spaceId");
+  
+  try {    
+    if (!spaceId) {      
+      console.error("spaceId not found in localStorage.");
       return;
     }
 
-    const response = await axiosInstance.post(
-      `/files/${fileName}`,
+    const response = await axiosInstance.post(`/files/${fileName}`,
       {
         fileName: fileName,
         spaceId: spaceId,
@@ -22,7 +18,7 @@ const FileStoreApi = async (fileName, imageUrl, spaceId) => {
     );
     return response.data;
   } catch (error) {
-    console.error("getChatMessages 에러:", error);
+    console.error("FileStoreApi 에러:", error);
   }
 };
 
