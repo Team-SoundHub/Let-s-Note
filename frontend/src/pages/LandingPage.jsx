@@ -6,6 +6,7 @@ import Header from "../components/common/Header";
 import AuthModal from "../components/auth/AuthModal";
 import PostCard from "../components/feed/PostCard";
 import Button from "../components/common/Button";
+import Swal from "sweetalert2";
 
 import { getAllSnapshotInfo } from "../api/feedApi";
 import { getMember } from "../api/workSpaceApi";
@@ -98,6 +99,14 @@ const LandingPage = () => {
               body: "회원가입이 성공적으로 완료되었습니다.",
               icon: "/path/to/icon.png",
             });
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "회원가입이 완료되었습니다 !",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            
           }
         }
         closeRegisterModal();

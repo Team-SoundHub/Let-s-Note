@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const login = async (userId, password) => {
   try {
@@ -28,6 +29,11 @@ export const register = async (userId, nickname, password) => {
     );
     return response.data;
   } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "아이디 혹은 닉네임이 이미 존재해요.",
+    });
     console.error("회원가입 요청 오류:", error);
   }
 };
