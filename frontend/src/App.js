@@ -17,8 +17,6 @@ const App = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/workspace/:spaceId" element={<WorkPlacePage />} />
           <Route path="/snapshot/:snapshotId" element={<SnapshotPage />} /> 
-          <Route path="/workspace" element={<WorkPlacePage />} />
-          <Route path="/snapshot" element={<SnapshotPage />} />
         </Routes>
         <VOC/>
       </Provider>
