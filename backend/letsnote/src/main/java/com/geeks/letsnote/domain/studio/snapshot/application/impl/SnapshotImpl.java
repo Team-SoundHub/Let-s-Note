@@ -105,7 +105,7 @@ public class SnapshotImpl implements SnapshotService {
                 .maxX(maxNoteX)
                 .build();
 
-        snapshotRepository.incrementSnapshotViewCount(snapshotId);
+
 
 
 
@@ -139,5 +139,10 @@ public class SnapshotImpl implements SnapshotService {
         }
 
         return snapshotDtoList;
+    }
+
+    @Override
+    public void incrementViewsOfSnapshot(String snapshotId) {
+        snapshotRepository.incrementSnapshotViewCount(snapshotId);
     }
 }

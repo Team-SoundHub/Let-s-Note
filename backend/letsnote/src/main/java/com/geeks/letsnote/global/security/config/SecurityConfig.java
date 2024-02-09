@@ -30,7 +30,7 @@ public class SecurityConfig {
             "/test",
             "/swagger-ui/**",
             "/api/v1/feeds",
-            "/api/v1/feeds/*",
+            "/api/v1/feeds/**",
             "/letsnote/ws/**",
             "/api/v1/files/**",
             "/.well-known/acme-challenge/**",

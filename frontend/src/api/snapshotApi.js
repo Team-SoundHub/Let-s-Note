@@ -5,6 +5,9 @@ const getSnapshotInfo = async (snapshotId) => {
     const response = await axiosInstance.get(
       `/feeds/snapshot-id?v=${snapshotId}`
     );
+    axiosInstance.put(
+      `/feeds/views/snapshot-id?v=${snapshotId}`
+    );
     // console.log("getSnapshotInfo -", snapshotId, ":", response.data);
     return response.data;
   } catch (error) {

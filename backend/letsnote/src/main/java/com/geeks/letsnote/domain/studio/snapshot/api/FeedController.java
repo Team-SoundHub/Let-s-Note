@@ -6,10 +6,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,5 +40,12 @@ public class FeedController {
                 .build();
 
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PutMapping("/views/snapshot-id")
+    public ResponseEntity<CommonResponse> incrementViewsOfSnapshot(@RequestParam("v") String snapshotId){
+        snapshotService.incrementViewsOfSnapshot(snapshotId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
