@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface WorkspaceRepository extends JpaRepository<Workspace, String> {
 
-    @Query("SELECT w FROM Workspace w WHERE w.spaceId IN :spaceIds ORDER BY w.updateAt")
+    @Query("SELECT w FROM Workspace w WHERE w.spaceId IN :spaceIds ORDER BY w.updateAt DESC")
     List<Workspace> findWorkSpacesBySpaceIdsOrderByUpdateAt(@Param("spaceIds")List<String> spaceIds);
 
     @Modifying

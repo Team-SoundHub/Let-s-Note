@@ -13,7 +13,7 @@ public interface SnapshotService {
 
     List<ResponseSnapshot.SnapshotDto> getAllSnapshotsByAccountId(Long accountId);
 
-    List<ResponseNotes.Notes> getAllNotesOfSnapshot(String snapshotId);
+    ResponseNotes.NotesDto getAllNotesOfSnapshot(String snapshotId);
 
     void deleteSnapshotById(String snapshotId);
 
