@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import SnapshotHeader from "../containers/Snapshot/SnapshotHeader";
 import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
@@ -18,32 +18,22 @@ const Container = styled.div`
 
 const SnapshotPage = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const { snapshotId } = useParams();
-  const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
-
-  // 작업실 입장 시 데이터 요청
-  // useEffect(() => {
-  //   const fetchSnapshotInfo = async () => {
-  //     try {
-  //       const response = await getSnapshotInfo(snapshotId);
-
-  //       console.log("스냅샷 정보 response", response);
-  //       console.log("스냅샷 정보 - 뭘 넣고 있는거냐:", response.response);
-
-  //       // notesList 전체를 Redux store에 저장
-  //       dispatch(setSnapshotNotesList(response.response));
-
-  //       console.log("스냅샷 입장 - snapshotInfo:", response.response);
-  //     } catch (error) {
-  //       console.error('Error fetching snapshot info:', error);
-  //     }
-  //   };
-
-  //   fetchSnapshotInfo();
-  // }, [snapshotId, dispatch]);
-
+  const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);  
+  const [isFromMyPage, setIsFromMyPage] = useState(false);
+  
   useEffect(() => {
+    const fromMyPage = location.state?.fromMyPage;  
+    setIsFromMyPage(fromMyPage);
+    
+    if (fromMyPage){
+      console.log(`마이페이지로부터 입장 - fromMyPage: ${fromMyPage}`)
+    } else {
+      console.log(`피드 입장 | 새로고침 | 스냅샷 생성 후 보러가기 - fromMyPage: ${fromMyPage}`)      
+    }
+
     const fetchSnapshotInfo = async () => {
       try {
         // console.log("스냅샷 요청한 snapshotId", snapshotId);
@@ -83,7 +73,7 @@ const SnapshotPage = () => {
 
   return (
     <Container>
-      <SnapshotHeader onOpenModal={handleModalOpen} />
+      <SnapshotHeader onOpenModal={handleModalOpen} fromMyPage={isFromMyPage} />
       {isReleaseModalOpen && (
         <SaveSnapshotModal
           onClose={handleModalClose}

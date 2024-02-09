@@ -1,4 +1,4 @@
-import { scale, drumScale } from "../constants/scale";
+import { scale, pianoScale, drumScale } from "../constants/scale";
 import * as Tone from "tone";
 
 const getTransport = () => {
@@ -14,21 +14,36 @@ class Synth {
     this.instruments = instruments;
     this.activeInstrument = this.instruments[0];
     this.samplers = {};
+    const reverb = new Tone.Reverb({
+      decay: 5, // 리버브의 감쇠 시간
+      wet: 0.5, // 리버브의 믹스 레벨
+    }).toDestination();
 
     this.instruments.forEach((instrument) => {
-      if (instrument !== "drum") {
+      if (instrument === "guitar") {
         this.samplers[instrument] = new Tone.Sampler(
           scale,
           callback,
           "/audio/" + instrument + "/"
         ).set({
           volume: -12,
-          oscillator: {
-            type: "triangle17",
-          },
-          attack: 0.01,
-          decay: 0.1,
-          sustain: 0.2,
+          type: "square", // 사각파
+          attack: 0,
+          decay: 0.8,
+          sustain: 0,
+          release: 1.7,
+        });
+      } else if (instrument === "piano") {
+        this.samplers[instrument] = new Tone.Sampler(
+          pianoScale,
+          callback,
+          "/audio/" + instrument + "/"
+        ).set({
+          volume: -12,
+          type: "square", // 사각파
+          attack: 0,
+          decay: 0.8,
+          sustain: 0,
           release: 1.7,
         });
       } else {
@@ -47,6 +62,7 @@ class Synth {
           release: 1.0,
         });
       }
+      this.samplers[instrument].connect(reverb);
       this.samplers[instrument].toDestination();
     });
 

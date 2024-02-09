@@ -104,9 +104,8 @@ const LandingPage = () => {
               icon: "success",
               title: "회원가입이 완료되었습니다 !",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
-            
           }
         }
         closeRegisterModal();
@@ -142,10 +141,8 @@ const LandingPage = () => {
   };
 
   const handleLogout = () => {
-    // Clear session storage on logout
     sessionStorage.removeItem("access");
     sessionStorage.removeItem("refresh");
-    // sessionStorage.removeItem("nickname");
     sessionStorage.removeItem("accountId");
     setIsLoggedIn(false);
     navigate("/");
@@ -181,7 +178,10 @@ const LandingPage = () => {
           newPostCardList.push(
             <div
               key={postList[i].snapshotId}
-              onClick={() => navigate(`/snapshot/${postList[i].snapshotId}`)}
+              onClick={() =>
+                navigate(`/snapshot/${postList[i].snapshotId}`,
+                  { state: { fromMyPage: false } }
+                )}
             >
               <PostCard
                 snapshotTitle={postList[i].snapshotTitle}

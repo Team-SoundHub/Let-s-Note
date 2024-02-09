@@ -14,10 +14,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class SnapshotImpl implements SnapshotService {
@@ -81,16 +78,38 @@ public class SnapshotImpl implements SnapshotService {
     }
 
     @Override
-    public List<ResponseNotes.Notes> getAllNotesOfSnapshot(String snapshotId) {
+    @Transactional
+    public ResponseNotes.NotesDto getAllNotesOfSnapshot(String snapshotId) {
         List<ResponseNotes.Notes> allNotes = new ArrayList<>();
         ResponseNotes.Notes pianoNotes = snapshotInstrumentMapService.getAllInstrumentNoteBySpaceId(snapshotId, Instrument.Piano);
         allNotes.add(pianoNotes);
         ResponseNotes.Notes guitarNotes = snapshotInstrumentMapService.getAllInstrumentNoteBySpaceId(snapshotId, Instrument.Guitar);
         allNotes.add(guitarNotes);
+        Integer maxNoteX = 0;
+        for (ResponseNotes.Notes notes : allNotes){
+            Integer maxX = notes.notes().stream()
+                    .map(ResponseNotes.Note::noteX)
+                    .max(Integer::compare).orElse(0);
+
+            if(maxNoteX < maxX) {
+                maxNoteX = maxX;
+            }
+        }
         ResponseNotes.Notes drumNotes = snapshotInstrumentMapService.getAllInstrumentNoteBySpaceId(snapshotId, Instrument.Drum);
         allNotes.add(drumNotes);
 
-        return allNotes;
+
+
+        ResponseNotes.NotesDto notesDto = ResponseNotes.NotesDto.builder()
+                .notes(allNotes)
+                .maxX(maxNoteX)
+                .build();
+
+        snapshotRepository.incrementSnapshotViewCount(snapshotId);
+
+
+
+        return notesDto;
     }
 
     @Override
@@ -104,7 +123,7 @@ public class SnapshotImpl implements SnapshotService {
 
     @Override
     public List<ResponseSnapshot.SnapshotDto> getAllSnapshots() {
-        List<Snapshot> snapshotList = snapshotRepository.findAll();
+        List<Snapshot> snapshotList = snapshotRepository.findAllByOrderByViewsDesc();
         List<ResponseSnapshot.SnapshotDto> snapshotDtoList = new ArrayList<>();
 
         for(Snapshot snapshot : snapshotList){

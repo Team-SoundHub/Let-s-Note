@@ -73,11 +73,11 @@ const MyPage = () => {
     (state) => state.innerContent.snapshotNotes
   );
 
-  const handleModalClose = () => {
+  const createModalClose = () => {
     setIsCreateModalOpen(false);
   };
 
-  const handleModalOpen = () => {
+  const createModalOpen = () => {
     setIsCreateModalOpen(true);
   };
 
@@ -93,8 +93,10 @@ const MyPage = () => {
     try {
       const response = await createWorkSpace(title, description, [], accountId);
       if (response) {
+        console.log("작업실 생성 완료 - response:", response);
+        localStorage.setItem("spaceId", response.response.spaceId);
+        localStorage.setItem("title", title);
         navigate(`/workspace/${response.response.spaceId}`);
-        console.log("작업실 생성 완료", title, description);
       } else {
         console.log("작업실 생성 실패");
       }
@@ -120,7 +122,7 @@ const MyPage = () => {
   const handleNavigateWorkspace = async (spaceId, spaceTitle) => {
     localStorage.setItem("spaceId", spaceId);
     localStorage.setItem("title", spaceTitle);
-    console.log("마이페이지 저장:", spaceId);
+    console.log(`[작업실 입장] ${spaceTitle} - spaceId: ${spaceId}`);
     navigate(`/workspace/${spaceId}`); // 동기적 실행 -> 순서 보장
   };
 
@@ -174,13 +176,13 @@ const MyPage = () => {
       <MypageContainer>
         <TitleContainer>
           <SectionTitle>내 작업실</SectionTitle>
-          <Button className="mr-4 mt-4" onClick={handleModalOpen}>
+          <Button className="mr-4 mt-4" onClick={createModalOpen}>
             새 작업실 만들기
           </Button>
         </TitleContainer>
         {isCreateModalOpen && (
           <CreateSpaceModal
-            onClose={handleModalClose}
+            onClose={createModalClose}
             onPublish={(title, description) =>
               handleCreateWorkSpace(title, description)
             }
@@ -202,7 +204,7 @@ const MyPage = () => {
               onClick={() =>
                 handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)
               }
-              // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
+            // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
             >
               <PostCard
                 snapshotTitle={workspace.spaceTitle}
@@ -220,7 +222,10 @@ const MyPage = () => {
           {snapshots.map((snapshot) => (
             <div
               key={snapshot.snapshotId}
-              onClick={() => navigate(`/snapshot/${snapshot.snapshotId}`)}
+              onClick={() =>
+                navigate(`/snapshot/${snapshot.snapshotId}`,
+                  { state: { fromMyPage: true } }
+                )}
             >
               <PostCard
                 snapshotTitle={snapshot.snapshotTitle}
