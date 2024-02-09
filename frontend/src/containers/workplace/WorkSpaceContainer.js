@@ -76,7 +76,7 @@ class WorkSpaceContainer extends Component {
 
     this.state = {
       loading: true,
-      columns: 300,
+      columns: 100,
       availableNotes,
       availableDrumNotes,
       synth: null,
@@ -150,7 +150,7 @@ class WorkSpaceContainer extends Component {
 
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
-    if (currentCols + diff < 100 || currentCols + diff > 500) return;
+    if (currentCols + diff <= 8 || currentCols + diff > 500) return;
 
     this.setState({ columns: currentCols + diff });
   };
@@ -242,60 +242,62 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       visualizeInstrument,
       count,
-      isPlaying
+      isPlaying,
     } = this.state;
 
     if (loading) {
       return <Loading />;
     } else {
       return (
-          <Container ref={this.containerRef}>
-            <GridContainer>
-              <LeftPanel>
-                {instrumentOptions.map((instrument, index) => (
-                    <InstrumentVisualize
-                        instrument={instrument}
-                        changeVisualizeInstrument={this.changeVisualizeInstrument}
-                    />
-                ))}
-              </LeftPanel>
-              <MiddlePanel>
-                <BeatGrid
-                    ref="BeatGrid"
-                    synth={synth}
-                    scale={availableNotes}
-                    drumScale={availableDrumNotes}
-                    columns={columns}
-                    background="skyblue"
-                    foreground="#ffffff"
-                    visualizeInstrument={visualizeInstrument}
-                    isSnapshot={this.props.isSnapshot}
-                    spaceId={this.props.spaceId}
-                    sendCoordinate={this.props.sendCoordinate}
-                    count={count}
-                    addCount={this.addCount}
-                    sendLoop={this.props.sendLoop}
-                    changeColumns={this.changeColumns}
-                    sendMousePosition={this.props.sendMousePosition}
-                    isConnected={this.props.isConnected}
+        <Container ref={this.containerRef}>
+          <GridContainer>
+            <LeftPanel>
+              {instrumentOptions.map((instrument, index) => (
+                <InstrumentVisualize
+                  instrument={instrument}
+                  changeVisualizeInstrument={this.changeVisualizeInstrument}
                 />
-              </MiddlePanel>
-            </GridContainer>
-            <CseContainer handleSearchModalOpen={this.props.handleSearchModalOpen}/>
-            <BeatControls
-                onPlay={this.play}
-                onStop={this.stop}
-                changeColumns={this.changeColumns}
-                adjustBPM={this.adjustBPM}
-                bpm={this.initialBPM}
-                changeInstrument={this.changeInstrument}
+              ))}
+            </LeftPanel>
+            <MiddlePanel>
+              <BeatGrid
+                ref="BeatGrid"
+                synth={synth}
+                scale={availableNotes}
+                drumScale={availableDrumNotes}
                 columns={columns}
+                background="skyblue"
+                foreground="#ffffff"
+                visualizeInstrument={visualizeInstrument}
+                isSnapshot={this.props.isSnapshot}
+                spaceId={this.props.spaceId}
+                sendCoordinate={this.props.sendCoordinate}
                 count={count}
-                handleCountChange={this.handleCountChange}
-                handleIsPlaying={this.handleIsPlaying}
-                isPlaying={isPlaying}
-            />
-          </Container>
+                addCount={this.addCount}
+                sendLoop={this.props.sendLoop}
+                changeColumns={this.changeColumns}
+                sendMousePosition={this.props.sendMousePosition}
+                isConnected={this.props.isConnected}
+              />
+            </MiddlePanel>
+          </GridContainer>
+          <CseContainer
+            handleSearchModalOpen={this.props.handleSearchModalOpen}
+          />
+          <BeatControls
+            onPlay={this.play}
+            onStop={this.stop}
+            changeColumns={this.changeColumns}
+            adjustBPM={this.adjustBPM}
+            bpm={this.initialBPM}
+            changeInstrument={this.changeInstrument}
+            columns={columns}
+            count={count}
+            handleCountChange={this.handleCountChange}
+            handleIsPlaying={this.handleIsPlaying}
+            isPlaying={isPlaying}
+          />
+        </Container>
       );
     }
   }
