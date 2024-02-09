@@ -104,9 +104,8 @@ const LandingPage = () => {
               icon: "success",
               title: "회원가입이 완료되었습니다 !",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
-            
           }
         }
         closeRegisterModal();
