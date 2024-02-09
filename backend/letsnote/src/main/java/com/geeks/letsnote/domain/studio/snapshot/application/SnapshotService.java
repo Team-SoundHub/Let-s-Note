@@ -18,4 +18,6 @@ public interface SnapshotService {
     void deleteSnapshotById(String snapshotId);
 
     List<ResponseSnapshot.SnapshotDto> getAllSnapshots();
+
+    void incrementViewsOfSnapshot(String snapshotId);
 }
