@@ -35,7 +35,7 @@ public class FeedController {
 
     @GetMapping("/snapshot-id")
     public ResponseEntity<CommonResponse> getAllNoteOfSnapshot(@RequestParam("v") String snapshotId){
-        List<ResponseNotes.Notes> snapshotNotes = snapshotService.getAllNotesOfSnapshot(snapshotId);
+        ResponseNotes.NotesDto snapshotNotes = snapshotService.getAllNotesOfSnapshot(snapshotId);
 
         CommonResponse response = CommonResponse.builder()
                 .success(true)

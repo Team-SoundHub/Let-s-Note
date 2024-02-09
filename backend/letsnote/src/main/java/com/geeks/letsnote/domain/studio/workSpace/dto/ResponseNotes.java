@@ -7,6 +7,12 @@ import java.util.List;
 
 public record ResponseNotes() {
     @Builder
+    public record NotesDto(
+            List<Notes> notes,
+            Integer maxX
+    ){}
+
+    @Builder
     public record Notes(
             Instrument instrument,
             List<Note> notes
