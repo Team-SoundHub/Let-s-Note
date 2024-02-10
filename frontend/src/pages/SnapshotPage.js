@@ -41,7 +41,7 @@ const SnapshotPage = () => {
         console.log("스냅샷 데이터 요청:", response.response);
 
         if (response && response.response) {
-          dispatch(setSnapshotNotes(response.response));
+          dispatch(setSnapshotNotes(response.response.notes));
         }
       } catch (error) {
         console.error("Error fetching snapshot info:", error);
