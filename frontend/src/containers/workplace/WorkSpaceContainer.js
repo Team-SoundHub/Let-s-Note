@@ -9,6 +9,7 @@ import BeatControls from "../../components/BeatControls/BeatControls";
 import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVisualize";
 import * as Tone from "tone";
 import CseContainer from "./CseContainer";
+import { resetCount } from "../../components/BeatGrid/BeatGrid";
 
 const Container = styled.div`
   margin-top: 1rem;
@@ -73,7 +74,6 @@ export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 class WorkSpaceContainer extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       loading: true,
       columns: 100,
@@ -81,7 +81,6 @@ class WorkSpaceContainer extends Component {
       availableDrumNotes,
       synth: null,
       visualizeInstrument: [true, true, true],
-      count: -1,
       isPlaying: false,
     };
     this.initialBPM = 160;
@@ -101,6 +100,7 @@ class WorkSpaceContainer extends Component {
     // 재생 문제가 didmount로 해결됨 그러나 간혹적으로 재생되지 않는 문제가 새로 발생
     const synth = new Synth(this.samplerLoaded);
     this.setState({ synth });
+    resetCount();
   }
 
   samplerLoaded = () => {
@@ -108,12 +108,6 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setBPM(this.initialBPM);
     const { BeatGrid } = this.refs;
     this.state.synth.repeat(BeatGrid.trigger, "8n");
-  };
-
-  addCount = () => {
-    this.setState((prevState) => ({
-      count: prevState.count + 1,
-    }));
   };
 
   handleCountChange = (newCount) => {
@@ -136,7 +130,8 @@ class WorkSpaceContainer extends Component {
   };
 
   stop = () => {
-    this.setState({ count: -1, isPlaying: false });
+    this.setState({ isPlaying: false });
+    resetCount()
     this.state.synth.stop();
   };
 
@@ -233,6 +228,10 @@ class WorkSpaceContainer extends Component {
     this.setState({ availableDrumNotes: drumScale });
   };
 
+  componentWillUnmount() {
+    this.stop();
+  }
+
   render() {
     const {
       loading,
@@ -273,7 +272,6 @@ class WorkSpaceContainer extends Component {
                 spaceId={this.props.spaceId}
                 sendCoordinate={this.props.sendCoordinate}
                 count={count}
-                addCount={this.addCount}
                 sendLoop={this.props.sendLoop}
                 changeColumns={this.changeColumns}
                 sendMousePosition={this.props.sendMousePosition}
