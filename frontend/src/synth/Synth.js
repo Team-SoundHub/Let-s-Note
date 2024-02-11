@@ -33,6 +33,7 @@ class Synth {
           sustain: 0,
           release: 1.7,
         });
+        this.samplers[instrument].connect(reverb);
       } else if (instrument === "piano") {
         this.samplers[instrument] = new Tone.Sampler(
           pianoScale,
@@ -46,6 +47,7 @@ class Synth {
           sustain: 0,
           release: 1.7,
         });
+        this.samplers[instrument].connect(reverb);
       } else {
         this.samplers[instrument] = new Tone.Sampler(
           drumScale,
@@ -62,7 +64,6 @@ class Synth {
           release: 1.0,
         });
       }
-      this.samplers[instrument].connect(reverb);
       this.samplers[instrument].toDestination();
     });
 
