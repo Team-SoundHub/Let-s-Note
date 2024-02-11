@@ -244,8 +244,11 @@ class WorkSpaceContainer extends Component {
       count,
       isPlaying,
     } = this.state;
+    const { isConnected, isSnapshot } = this.props;
 
-    if (loading) {
+    if (isSnapshot && loading) {
+      return <Loading />;
+    } else if ((!isSnapshot && !isConnected) || loading) {
       return <Loading />;
     } else {
       return (
