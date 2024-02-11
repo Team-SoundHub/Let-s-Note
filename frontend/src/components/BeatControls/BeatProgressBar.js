@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
+import { handleCountChange } from "../BeatGrid/BeatGrid";
 
 const ProgressBarContainer = tw.div`
     flex
@@ -7,7 +8,7 @@ const ProgressBarContainer = tw.div`
     w-full dark:bg-gray-700
 `;
 
-const BeatProgressBar = ({ count, handleCountChange, columns }) => {
+const BeatProgressBar = ({ count, columns }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseDown = () => {

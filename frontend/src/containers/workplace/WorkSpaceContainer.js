@@ -1,7 +1,7 @@
 import React, { Component, createRef } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import BeatGrid from "../../components/BeatGrid/BeatGrid";
+import BeatGrid, { getCount } from "../../components/BeatGrid/BeatGrid";
 import Synth from "../../synth/Synth";
 import Loading from "../../components/Loading";
 import { availableNotes, availableDrumNotes } from "../../constants/scale";
@@ -79,6 +79,7 @@ class WorkSpaceContainer extends Component {
       columns: 100,
       availableNotes,
       availableDrumNotes,
+      count : -1,
       synth: null,
       visualizeInstrument: [true, true, true],
       isPlaying: false,
@@ -110,14 +111,16 @@ class WorkSpaceContainer extends Component {
     this.state.synth.repeat(BeatGrid.trigger, "8n");
   };
 
-  handleCountChange = (newCount) => {
-    this.setState({ count: newCount });
-  };
-
   handleIsPlaying = () => {
     this.setState((prevState) => ({
       isPlaying: !prevState.isPlaying,
     }));
+  };
+
+  setCount = (newCount) => {
+    this.setState({
+      count: newCount,
+    });
   };
 
   play = async () => {
@@ -232,6 +235,7 @@ class WorkSpaceContainer extends Component {
     this.stop();
   }
 
+
   render() {
     const {
       loading,
@@ -240,8 +244,8 @@ class WorkSpaceContainer extends Component {
       availableNotes,
       availableDrumNotes,
       visualizeInstrument,
-      count,
       isPlaying,
+      count,
     } = this.state;
     const { isConnected, isSnapshot } = this.props;
 
@@ -274,7 +278,7 @@ class WorkSpaceContainer extends Component {
                 isSnapshot={this.props.isSnapshot}
                 spaceId={this.props.spaceId}
                 sendCoordinate={this.props.sendCoordinate}
-                count={count}
+                setCount={this.setCount}
                 sendLoop={this.props.sendLoop}
                 changeColumns={this.changeColumns}
                 sendMousePosition={this.props.sendMousePosition}
@@ -294,7 +298,6 @@ class WorkSpaceContainer extends Component {
             changeInstrument={this.changeInstrument}
             columns={columns}
             count={count}
-            handleCountChange={this.handleCountChange}
             handleIsPlaying={this.handleIsPlaying}
             isPlaying={isPlaying}
           />
