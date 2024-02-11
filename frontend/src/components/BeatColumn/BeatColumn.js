@@ -63,7 +63,8 @@ class BeatColumn extends Component {
         activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
         // 연주 코드 추가
-        if (synth && activeBoxes[i]) {
+        // if (synth && activeBoxes[i]) {
+        if (activeBoxes[i]) {
           synth.playNote(scale[i]);
         }
 
@@ -91,8 +92,9 @@ class BeatColumn extends Component {
         activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
         // 연주 코드 추가
-        if (synth && activeBoxes[i]) {
-          // console.log(idx);
+        // if (synth && activeBoxes[i]) {
+        if (activeBoxes[i]) {
+          console.log(idx);
           synth.playNote(drumScale[idx]);
         }
 
@@ -109,7 +111,8 @@ class BeatColumn extends Component {
     const { activeNotes } = this.state;
 
     activeNotes.forEach(({ note, instrument }) => {
-      synth && synth.playNote(note, time, "8n", instrument);
+      // synth && synth.playNote(note, time, "8n", instrument);
+      synth.playNote(note, time, "8n", instrument);
     });
   };
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import tw from "tailwind-styled-components";
 import BeatButton from "./BeatButton";
 import stop from "../../assets/control/stop-svgrepo-com.svg";
+import { resetCount } from "../BeatGrid/BeatGrid";
 
 const Stop = tw.img`
   w-5
@@ -19,6 +20,7 @@ class BeatStop extends Component {
       }),
       onClick
     );
+    resetCount();
   };
 
   render() {

@@ -70,7 +70,23 @@ const ButtonContainer = tw.div`
   hover:bg-opacity-70
 `;
 
-class BeatGrid extends Component {
+let count = -1;
+
+export const resetCount = () => {
+  count = -1;
+};
+
+class BeatGrid extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    console.log("rerender");
+    this.cols = [];
+    // this.state = {
+    //   count: -1,
+    // }
+  }
+
+
   handleBoxClick = (row, column) => {
     console.log("clicked spaceId:", this.props.spaceId);
     const instrument = this.props.synth.activeInstrument;
@@ -78,16 +94,19 @@ class BeatGrid extends Component {
   };
 
   playBeat = (time) => {
-    const { columns, count } = this.props;
+    const { columns } = this.props;
     const activeBeat = count % columns;
-    if (this.refs[activeBeat]) {
-      this.refs[activeBeat].playBeat(time);
+    console.log(count);
+    console.log("activeBeat : ",activeBeat);
+    
+    if (this.cols[activeBeat]) {
+      this.cols[activeBeat].playBeat(time);
     }
   };
 
   trigger = (time) => {
-    this.props.addCount();
-
+    // this.addCount();
+    count += 1;
     this.playBeat(time);
   };
 
@@ -108,11 +127,13 @@ class BeatGrid extends Component {
     } = this.props;
     const cols = [];
     for (let i = 0; i < columns; i++) {
+      console.log("i = ",i);
       cols.push(
         <BeatColumn
+          ref={(BeatColumn) => (this.cols[i] = BeatColumn)}
           background={background}
           foreground={foreground}
-          ref={i.toString(10)}
+          // ref={i.toString(10)}
           key={i.toString(10)}
           id={i}
           scale={scale}
@@ -146,7 +167,7 @@ class BeatGrid extends Component {
   };
 
   render() {
-    const { background, sendMousePosition, spaceId, accountId, isConnected } = this.props;
+    const { background, sendMousePosition, spaceId, accountId, isConnected, count } = this.props;
     return (
       <Container ref={this.gridRef} background={background}>
         <Cursors />
