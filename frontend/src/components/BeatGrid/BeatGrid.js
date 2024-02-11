@@ -102,6 +102,7 @@ class BeatGrid extends React.PureComponent {
   playBeat = (time) => {
     const { columns } = this.props;
     const activeBeat = count % columns;
+    this.props.setCount(activeBeat);
     console.log(count);
     console.log("activeBeat : ",activeBeat);
     
@@ -112,7 +113,6 @@ class BeatGrid extends React.PureComponent {
 
   trigger = (time) => {
     count += 1;
-    this.props.setCount(count);
     this.playBeat(time);
   };
 
