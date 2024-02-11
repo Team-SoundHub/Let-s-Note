@@ -76,14 +76,20 @@ export const resetCount = () => {
   count = -1;
 };
 
+export const getCount = () => {
+  return count;
+}
+
+export const handleCountChange = (newCount) => {
+  count = newCount;
+}
+
+
 class BeatGrid extends React.PureComponent {
   constructor(props) {
     super(props);
     console.log("rerender");
     this.cols = [];
-    // this.state = {
-    //   count: -1,
-    // }
   }
 
 
@@ -105,8 +111,8 @@ class BeatGrid extends React.PureComponent {
   };
 
   trigger = (time) => {
-    // this.addCount();
     count += 1;
+    this.props.setCount(count);
     this.playBeat(time);
   };
 
