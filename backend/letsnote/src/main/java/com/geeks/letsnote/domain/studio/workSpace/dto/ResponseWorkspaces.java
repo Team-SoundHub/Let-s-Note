@@ -24,7 +24,8 @@ public record ResponseWorkspaces() {
     @Builder
     public record WorkspaceIn(
             List<ResponseNotes.Notes> notesList,
-            boolean isSnapshotExist
+            boolean isSnapshotExist,
+            Integer maxX
     ){}
 
     @Builder

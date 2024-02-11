@@ -109,6 +109,16 @@ public class WorkspaceImpl implements WorkspaceService {
         allNotes.add(pianoNotes);
         ResponseNotes.Notes guitarNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId, Instrument.Guitar);
         allNotes.add(guitarNotes);
+        Integer maxNoteX = 0;
+        for (ResponseNotes.Notes notes : allNotes){
+            Integer maxX = notes.notes().stream()
+                    .map(ResponseNotes.Note::noteX)
+                    .max(Integer::compare).orElse(0);
+
+            if(maxNoteX < maxX){
+                maxNoteX = maxX;
+            }
+        }
         ResponseNotes.Notes drumNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId,Instrument.Drum);
         allNotes.add(drumNotes);
 
@@ -117,7 +127,8 @@ public class WorkspaceImpl implements WorkspaceService {
 
         return ResponseWorkspaces.WorkspaceIn.builder()
                 .notesList(allNotes)
-                .isSnapshotExist(isSnapshotExist).build();
+                .isSnapshotExist(isSnapshotExist)
+                .maxX(maxNoteX).build();
     }
 
     //for db delete
