@@ -76,8 +76,8 @@ let prevCount = -1;
 let beatGridRef = null;
 
 export const resetCount = () => {
-  if(beatGridRef){
-    if(prevCount > -1){
+  if (beatGridRef) {
+    if (prevCount > -1) {
       beatGridRef.disablePlaying(count);
     }
     beatGridRef.props.setCount(-1);
@@ -91,7 +91,7 @@ export const getCount = () => {
 
 export const handleCountChange = (newCount) => {
   prevCount = count;
-  if(beatGridRef){
+  if (beatGridRef) {
     beatGridRef.disablePlaying(prevCount);
     beatGridRef.props.setCount(newCount);
   }
@@ -105,13 +105,22 @@ class BeatGrid extends React.PureComponent {
     console.log("rerender");
     this.cols = [];
     beatGridRef = this;
+
+    this.state = {
+      clickedRow: null,
+    };
   }
 
+  handleBoxClick = (column, row) => {    
+    const instrument = this.props.synth.activeInstrument;    
 
-  handleBoxClick = (row, column) => {
-    console.log("clicked spaceId:", this.props.spaceId);
-    const instrument = this.props.synth.activeInstrument;
-    this.props.sendCoordinate(instrument, row, column, this.props.spaceId);
+    // 임시적으로 clickedRow 상태를 null로 설정 -> 비동기적으로 row값 업데이트 
+    // (같은 row 연속 클릭해도 매번 prop을 내려주도록 함)
+    this.setState({ clickedRow: null }, () => {      
+      this.setState({ clickedRow: row });
+    });
+
+    this.props.sendCoordinate(instrument, column, row, this.props.spaceId);
   };
 
   playBeat = (time) => {
@@ -120,10 +129,10 @@ class BeatGrid extends React.PureComponent {
     const prevBeat = prevCount % columns;
     this.props.setCount(activeBeat);
     console.log(count);
-    console.log("activeBeat : ",activeBeat);
-    
+    console.log("activeBeat : ", activeBeat);
+
     if (this.cols[activeBeat]) {
-      if(prevBeat > -1){
+      if (prevBeat > -1) {
         this.cols[prevBeat].disablePlaying();
       }
       this.cols[activeBeat].enablePlaying();
@@ -134,7 +143,7 @@ class BeatGrid extends React.PureComponent {
   disablePlaying = (prevCount) => {
     const { columns } = this.props;
     const prevBeat = prevCount % columns;
-    if(prevBeat > -1){
+    if (prevBeat > -1) {
       this.cols[prevBeat].disablePlaying();
     }
   }
@@ -161,7 +170,7 @@ class BeatGrid extends React.PureComponent {
     } = this.props;
     const cols = [];
     for (let i = 0; i < columns; i++) {
-      console.log("i = ",i);
+      // console.log("i = ",i);
       cols.push(
         <BeatColumn
           ref={(BeatColumn) => (this.cols[i] = BeatColumn)}
@@ -177,7 +186,7 @@ class BeatGrid extends React.PureComponent {
           onClick={this.handleBoxClick}
           visualizeInstrument={visualizeInstrument}
           isSnapshot={this.props.isSnapshot}
-          containerRef={this.gridRef}                    
+          containerRef={this.gridRef}
         />
       );
     }
@@ -210,12 +219,13 @@ class BeatGrid extends React.PureComponent {
           spaceId={spaceId}
           accountId={accountId}
           isConnected={isConnected}
-          containerRef={this.gridRef}          
+          containerRef={this.gridRef}
         />
         <LeftPanel>
           <VerticalPiano
             sendLoop={this.props.sendLoop}
             spaceLength={this.props.columns}
+            clickedRow={this.state.clickedRow}
           />
         </LeftPanel>
         <RightPanel>{this.renderBeatColumns()}</RightPanel>
