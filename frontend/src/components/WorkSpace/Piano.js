@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { availableNotes } from "../../constants/scale";
 // import drum from "../../assets/Instrument/drum1-svgrepo-com.svg";
@@ -15,6 +15,7 @@ const PianoKey = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  transition: background-color 0.2s ease; 
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 `;
@@ -92,7 +93,15 @@ const DrumButton = styled.div`
   }
 `;
 
-const VerticalPiano = ({ sendLoop, spaceLength }) => {
+const VerticalPiano = ({ sendLoop, spaceLength, clickedRow }) => {
+  const [highlightedKey, setHighlightedKey] = useState(null);
+
+  useEffect(() => {
+    setHighlightedKey(clickedRow);    
+    const timer = setTimeout(() => setHighlightedKey(null), 1000);
+    return () => clearTimeout(timer);
+  }, [clickedRow]);
+  
   useEffect(() => {
     drawPianoKeys();
   }, []);
@@ -104,22 +113,22 @@ const VerticalPiano = ({ sendLoop, spaceLength }) => {
       const note = availableNotes[i];
       const isWhiteKey = !note.includes("#");
 
+      // 하이라이트 이펙트 관련 로직
+      const isHighlighted = i === highlightedKey; 
+      const highlitedStyle = isHighlighted ? { backgroundColor: '#49C5B6' } : {};
+
       if (!isWhiteKey) {
-        pianoKeys.push(<BlackKey key={note}>{note}</BlackKey>);
+        pianoKeys.push(<BlackKey key={note} style={highlitedStyle}>{note}</BlackKey>);                
       } else if (i === availableNotes.length - 1) {
-        pianoKeys.push(<LastWhiteKey key={note}>{note}</LastWhiteKey>);
+        pianoKeys.push(<LastWhiteKey key={note} style={highlitedStyle}>{note}</LastWhiteKey>);        
       } else if (["A", "G", "D"].includes(note.charAt(0))) {
-        pianoKeys.push(<MovedWhiteKey key={note}>{note}</MovedWhiteKey>);
+        pianoKeys.push(<MovedWhiteKey key={note} style={highlitedStyle}>{note}</MovedWhiteKey>);        
       } else if (["F"].includes(note.charAt(0))) {
-        pianoKeys.push(<FourthWhiteKey key={note}>{note}</FourthWhiteKey>);
+        pianoKeys.push(<FourthWhiteKey key={note} style={highlitedStyle}>{note}</FourthWhiteKey>);        
       } else if (["C"].includes(note.charAt(0))) {
-        pianoKeys.push(
-          <FirstWhiteKey className="margin-bottom: 0.2rem" key={note}>
-            {note}
-          </FirstWhiteKey>
-        );
+        pianoKeys.push(<FirstWhiteKey className="margin-bottom: 0.2rem" key={note} style={highlitedStyle}>{note}</FirstWhiteKey>);        
       } else {
-        pianoKeys.push(<WhiteKey key={note}>{note}</WhiteKey>);
+        pianoKeys.push(<WhiteKey key={note} style={highlitedStyle}>{note}</WhiteKey>);        
       }
     }
 

@@ -13,8 +13,7 @@ export const innerContentSlice = createSlice({
   },
   reducers: {
     setInnerContent: (state, action) => {
-      state.innerContent = action.payload;
-      console.log(action.payload);
+      state.innerContent = action.payload;      
     },
     setWorkspaceNotes: (state, action) => {
       
