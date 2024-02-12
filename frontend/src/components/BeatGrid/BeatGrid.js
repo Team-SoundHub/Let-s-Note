@@ -8,6 +8,7 @@ import BeatChange from "../BeatControls/BeatChange";
 import { clearAllNotes } from "../../app/slices/innerContentSlice";
 import CursorPointer from "../WorkSpace/Cursor/CursorPointer";
 import Cursors from "../WorkSpace/Cursor/Cursors";
+import { getWorkspaceContainerInstance } from "../../containers/workplace/WorkSpaceContainer";
 
 const Container = styled.div`
   flex: 1;
@@ -71,8 +72,16 @@ const ButtonContainer = tw.div`
 `;
 
 let count = -1;
+let prevCount = -1;
+let beatGridRef = null;
 
 export const resetCount = () => {
+  if(beatGridRef){
+    if(prevCount > -1){
+      beatGridRef.disablePlaying(count);
+    }
+    beatGridRef.props.setCount(-1);
+  }
   count = -1;
 };
 
@@ -81,6 +90,11 @@ export const getCount = () => {
 }
 
 export const handleCountChange = (newCount) => {
+  prevCount = count;
+  if(beatGridRef){
+    beatGridRef.disablePlaying(prevCount);
+    beatGridRef.props.setCount(newCount);
+  }
   count = newCount;
 }
 
@@ -90,6 +104,7 @@ class BeatGrid extends React.PureComponent {
     super(props);
     console.log("rerender");
     this.cols = [];
+    beatGridRef = this;
   }
 
 
@@ -102,17 +117,30 @@ class BeatGrid extends React.PureComponent {
   playBeat = (time) => {
     const { columns } = this.props;
     const activeBeat = count % columns;
+    const prevBeat = prevCount % columns;
     this.props.setCount(activeBeat);
     console.log(count);
     console.log("activeBeat : ",activeBeat);
     
     if (this.cols[activeBeat]) {
+      if(prevBeat > -1){
+        this.cols[prevBeat].disablePlaying();
+      }
+      this.cols[activeBeat].enablePlaying();
       this.cols[activeBeat].playBeat(time);
     }
   };
 
+  disablePlaying = (prevCount) => {
+    const { columns } = this.props;
+    const prevBeat = prevCount % columns;
+    if(prevBeat > -1){
+      this.cols[prevBeat].disablePlaying();
+    }
+  }
+
   trigger = (time) => {
-    count += 1;
+    handleCountChange(count + 1);
     this.playBeat(time);
   };
 

@@ -8,15 +8,25 @@ const ProgressBarContainer = tw.div`
     w-full dark:bg-gray-700
 `;
 
-const BeatProgressBar = ({ count, columns }) => {
+const BeatProgressBar = ({ count, columns, onPlay, handleIsPlaying }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const handleMouseDown = (event) => {
+    onPlay();
+    handleIsPlaying();
+    const progressBar = event.target.parentNode;
+    const rect = progressBar.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const progressPercentage = (mouseX / progressBar.clientWidth) * 100;
+    const newCount = Math.round((progressPercentage / 100) * columns);
 
-  const handleMouseDown = () => {
+    handleCountChange(newCount);
     setIsDragging(true);
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    onPlay();
+    handleIsPlaying();
   };
 
   const handleMouseMove = (event) => {

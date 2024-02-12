@@ -65,6 +65,8 @@ const BeatControls = ({
           <BeatProgressBar
               columns={columns}
               count={count}
+              onPlay={onPlay}
+              handleIsPlaying = {handleIsPlaying}
           />
         </CenterSection>
         <RightSection>
