@@ -19,7 +19,7 @@ const Container = styled.div`
 class BeatColumn extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeBoxes: [], activeInstrument: [], activeNotes: [] };
+    this.state = { activeBoxes: [], activeInstrument: [], activeNotes: [] , playing : false};
   }
 
   updateActiveNotes() {
@@ -36,6 +36,22 @@ class BeatColumn extends Component {
     this.setState({
       activeNotes: newActiveNotes,
     });
+  }
+
+  disablePlaying() {
+    if(this.state.playing){
+      this.setState({
+        playing : !this.state.playing,
+      });
+    }
+  }
+
+  enablePlaying() {
+    if(!this.state.playing){
+      this.setState({
+        playing : !this.state.playing,
+      });
+    }
   }
 
   handleClick = (i) => () => {
@@ -63,8 +79,7 @@ class BeatColumn extends Component {
         activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
         // 연주 코드 추가
-        // if (synth && activeBoxes[i]) {
-        if (activeBoxes[i]) {
+        if (synth && activeBoxes[i]) {
           synth.playNote(scale[i]);
         }
 
@@ -92,8 +107,7 @@ class BeatColumn extends Component {
         activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
         // 연주 코드 추가
-        // if (synth && activeBoxes[i]) {
-        if (activeBoxes[i]) {
+        if (synth && activeBoxes[i]) {
           console.log(idx);
           synth.playNote(drumScale[idx]);
         }
@@ -111,8 +125,7 @@ class BeatColumn extends Component {
     const { activeNotes } = this.state;
 
     activeNotes.forEach(({ note, instrument }) => {
-      // synth && synth.playNote(note, time, "8n", instrument);
-      synth.playNote(note, time, "8n", instrument);
+      synth && synth.playNote(note, time, "8n", instrument);
     });
   };
 
@@ -186,6 +199,7 @@ class BeatColumn extends Component {
       isSnapshot,
       containerRef,
     } = this.props;
+    const playing = this.state.playing;
     const boxes = [];
     for (let i = 0; i < scale.length; i++) {
       boxes.push(
@@ -208,7 +222,7 @@ class BeatColumn extends Component {
           row={i}
           isSnapshot={isSnapshot}
           containerRef={containerRef}
-          playing={this.props.playing}
+          playing={playing}
         />
       );
     }
