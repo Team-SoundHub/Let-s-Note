@@ -52,39 +52,35 @@ const BeatControls = ({
   isPlaying,
 }) => {
   return (
-      <Container>
-        <LeftSection>
-          <BeatToggle
-              onClick={onPlay}
-              isPlaying={isPlaying}
-              handleIsPlaying={handleIsPlaying}
-          />
-          <BeatStop onClick={onStop}/>
-        </LeftSection>
-        <CenterSection>
-          <BeatProgressBar
-              columns={columns}
-              count={count}
-              onPlay={onPlay}
-              handleIsPlaying = {handleIsPlaying}
-          />
-        </CenterSection>
-        <RightSection>
-          <BeatsPerMinute bpm={bpm} handleChange={adjustBPM}/>
-          <InstrumentChange
-              instrument="piano"
-              changeInstrument={changeInstrument}
-          />
-          <InstrumentChange
-              instrument="guitar"
-              changeInstrument={changeInstrument}
-          />
-          <InstrumentChange
-              instrument="drum"
-              changeInstrument={changeInstrument}
-          />
-        </RightSection>
-      </Container>
+    <Container>
+      <LeftSection>
+        <BeatToggle
+          onClick={onPlay}
+          isPlaying={isPlaying}
+          handleIsPlaying={handleIsPlaying}
+        />
+        <BeatStop onClick={onStop} />
+      </LeftSection>
+      <CenterSection>
+        <BeatProgressBar
+          columns={columns}
+          count={count}
+          onPlay={onPlay}
+          handleIsPlaying={handleIsPlaying}
+        />
+      </CenterSection>
+      <RightSection>
+        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+        <InstrumentChange
+          instrument="piano"
+          changeInstrument={changeInstrument}
+        />
+        <InstrumentChange
+          instrument="guitar"
+          changeInstrument={changeInstrument}
+        />
+      </RightSection>
+    </Container>
   );
 };
 
