@@ -19,7 +19,12 @@ const Container = styled.div`
 class BeatColumn extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeBoxes: [], activeInstrument: [], activeNotes: [] , playing : false};
+    this.state = {
+      activeBoxes: [],
+      activeInstrument: [],
+      activeNotes: [],
+      playing: false,
+    };
   }
 
   updateActiveNotes() {
@@ -39,17 +44,17 @@ class BeatColumn extends Component {
   }
 
   disablePlaying() {
-    if(this.state.playing){
+    if (this.state.playing) {
       this.setState({
-        playing : !this.state.playing,
+        playing: !this.state.playing,
       });
     }
   }
 
   enablePlaying() {
-    if(!this.state.playing){
+    if (!this.state.playing) {
       this.setState({
-        playing : !this.state.playing,
+        playing: !this.state.playing,
       });
     }
   }
@@ -57,6 +62,7 @@ class BeatColumn extends Component {
   handleClick = (i) => () => {
     const { onClick, id, synth } = this.props;
     const instrument = synth.activeInstrument;
+    console.log("toggle activate, intrument: ", instrument);
     // 클릭한 box의 정보를 부모 컴포넌트로 전달
     onClick && onClick(id, i);
     if (instrument !== "drum") {
@@ -177,7 +183,6 @@ class BeatColumn extends Component {
     this.setState(
       (prev) => {
         const newActiveInstrument = [...prev.activeInstrument];
-        // console.log(newActiveInstrument);
         newActiveInstrument[row] = instrument;
         return { activeInstrument: newActiveInstrument };
       },
@@ -195,7 +200,6 @@ class BeatColumn extends Component {
       synth,
       id,
       visualizeInstrument,
-      onHover,
       isSnapshot,
       containerRef,
     } = this.props;
@@ -211,10 +215,7 @@ class BeatColumn extends Component {
           setActiveBoxes={this.setActiveBoxes}
           setActiveInstrument={this.setActiveInstrument}
           onClick={
-            synth.activeInstrument === "All" ||
-            synth.activeInstrument === "drum"
-              ? null
-              : this.handleClick(i)
+            synth.activeInstrument === "drum" ? null : this.handleClick(i)
           }
           activeInstrument={synth.activeInstrument}
           visualizeInstrument={visualizeInstrument}
@@ -226,7 +227,7 @@ class BeatColumn extends Component {
         />
       );
     }
-    for (let i = scale.length; i < scale.length + 2; i++) {
+    for (let i = scale.length; i < scale.length + drumScale.length; i++) {
       boxes.push(
         <DrumBox
           inactiveColor={foreground}

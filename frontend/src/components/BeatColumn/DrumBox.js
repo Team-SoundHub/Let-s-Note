@@ -104,10 +104,8 @@ const DrumBox = ({
 
     if (isSnapshot) {
       activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
-      // console.log("스냅샷 드럼:", activeNote);
     } else {
       activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
-      // console.log("작업실 드럼:", activeNote);
     }
 
     if (activeNote && !active) {
@@ -120,33 +118,14 @@ const DrumBox = ({
       setActiveBoxes(row, false);
       setActiveInstrument(row, undefined);
     }
-  }, [
-    snapshotNotes,
-    workspaceNotes,
-    col,
-    row,
-    // active,
-    isSnapshot,
-    // setActiveBoxes,
-    // setActiveInstrument,
-  ]);
+  }, [snapshotNotes, workspaceNotes, col, row, isSnapshot]);
 
   useEffect(() => {
-    if (
-      innerContent.instrument === "drum" &&
-      innerContent.x === col &&
-      innerContent.y === row &&
-      !active
-    ) {
+    if (innerContent.x === col && innerContent.y === row && !active) {
       setActive(true);
       setActiveBoxes(row, true);
       setActiveInstrument(row, innerContent.instrument);
-    } else if (
-      innerContent.instrument === "drum" &&
-      innerContent.x === col &&
-      innerContent.y === row &&
-      active
-    ) {
+    } else if (innerContent.x === col && innerContent.y === row && active) {
       setActive(false);
       setActiveBoxes(row, false);
       setActiveInstrument(row, undefined);
@@ -170,11 +149,11 @@ const DrumBox = ({
     const mouseY = e.clientY - boxRect.top;
 
     // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산
-    const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
-    const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;
+    const relativeX = boxRect.left + scrollLeft + mouseX - gridRect.left;
+    const relativeY = boxRect.top + scrollTop + mouseY - gridRect.top;
 
     dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
-  }
+  };
 
   return (
     <Container

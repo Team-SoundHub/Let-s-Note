@@ -1,4 +1,4 @@
-import { scale, pianoScale, drumScale } from "../constants/scale";
+import { scale, drumScale } from "../constants/scale";
 import * as Tone from "tone";
 
 const getTransport = () => {
@@ -36,7 +36,7 @@ class Synth {
         this.samplers[instrument].connect(reverb);
       } else if (instrument === "piano") {
         this.samplers[instrument] = new Tone.Sampler(
-          pianoScale,
+          scale,
           callback,
           "/audio/" + instrument + "/"
         ).set({
