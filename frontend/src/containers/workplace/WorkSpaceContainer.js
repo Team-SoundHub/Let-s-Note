@@ -128,12 +128,12 @@ class WorkSpaceContainer extends Component {
     });
   };
 
-  play = () => {
+  play = async () => {
     // Tone.js의 AudioContext가 suspended 상태일 경우 활성화 시키기
-    // if (Tone.context.state !== "running") {
-    //   await Tone.start();
-    //   console.log("Audio context is now running");
-    // }
+    if (Tone.context.state !== "running") {
+      await Tone.start();
+      console.log("Audio context is now running");
+    }
     this.state.synth.toggle();
   };
 
