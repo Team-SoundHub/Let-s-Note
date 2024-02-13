@@ -1,4 +1,4 @@
-import { scale, pianoScale, drumScale } from "../constants/scale";
+import { scale, drumScale } from "../constants/scale";
 import * as Tone from "tone";
 
 const getTransport = () => {

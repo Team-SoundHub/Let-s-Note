@@ -121,21 +121,11 @@ const DrumBox = ({
   }, [snapshotNotes, workspaceNotes, col, row, isSnapshot]);
 
   useEffect(() => {
-    if (
-      innerContent.instrument === "drum" &&
-      innerContent.x === col &&
-      innerContent.y === row &&
-      !active
-    ) {
+    if (innerContent.x === col && innerContent.y === row && !active) {
       setActive(true);
       setActiveBoxes(row, true);
       setActiveInstrument(row, innerContent.instrument);
-    } else if (
-      innerContent.instrument === "drum" &&
-      innerContent.x === col &&
-      innerContent.y === row &&
-      active
-    ) {
+    } else if (innerContent.x === col && innerContent.y === row && active) {
       setActive(false);
       setActiveBoxes(row, false);
       setActiveInstrument(row, undefined);

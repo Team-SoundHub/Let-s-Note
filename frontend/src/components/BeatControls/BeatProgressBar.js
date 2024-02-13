@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { handleCountChange } from "../BeatGrid/BeatGrid";
+import { getCount } from "../BeatGrid/BeatGrid";
 
 const ProgressBarContainer = tw.div`
     flex
