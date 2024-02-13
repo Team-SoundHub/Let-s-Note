@@ -44,7 +44,7 @@ public class EditorSocketController {
 	private final AccessTokenProvider accessTokenProvider;
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
-	private final HashMap<String, Map<String, String>> accountConnectedSessions = new HashMap<>();
+	public static HashMap<String, Map<String, String>> accountConnectedSessions = new HashMap<>();
 
 	private final WorkspaceService workspaceService;
 
