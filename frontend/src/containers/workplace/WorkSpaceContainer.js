@@ -46,7 +46,7 @@ const LeftPanel = tw.div`
 const MiddlePanel = tw.div`
   pr-2
   pt-2
-  w-[97%]
+  w-[94%]
   h-[98%]
   flex-shrink-0
 `;
