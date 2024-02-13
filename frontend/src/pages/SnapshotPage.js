@@ -25,16 +25,15 @@ const SnapshotPage = () => {
   const [maxColumn, setMaxColumn] = useState(0);
 
   const calculateColumns = (maxColumn) => {
-    console.log(`SnapshotPage ----------------`);
-    console.log(`[calculateColumns] maxColumn 받았음: ${maxColumn}`);
-
     const multiple = parseInt(maxColumn / 8);
-    const remainder = maxColumn % 8;
+    // const remainder = maxColumn % 8;
 
     let newColumns;
+    newColumns = 8 * (multiple + 1);    
 
-    newColumns = remainder === 0 ? 8 * multiple + 4 : 8 * (multiple + 1) + 4;
-    console.log(`[calculateColumns] newColumns: ${newColumns}`);
+    if (newColumns < 32) {
+      newColumns = 32;
+    }
 
     return newColumns;
   };

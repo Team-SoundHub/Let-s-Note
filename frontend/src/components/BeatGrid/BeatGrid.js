@@ -185,20 +185,22 @@ class BeatGrid extends React.PureComponent {
       );
     }
     cols.push(
-      <BeatChangeContainer>
-        <ButtonContainer
-          className="rounded-l-lg border border-r-gray-300"
-          onClick={() => changeColumns(-8)}
-        >
-          <BeatChange mode="subtract" />
-        </ButtonContainer>
-        <ButtonContainer
-          className="rounded-r-lg border border-r-gray-300"
-          onClick={() => changeColumns(8)}
-        >
-          <BeatChange mode="add" />
-        </ButtonContainer>
-      </BeatChangeContainer>
+      !this.props.isSnapshot && (
+        <BeatChangeContainer>
+          <ButtonContainer
+            className="rounded-l-lg border border-r-gray-300"
+            onClick={() => changeColumns(-8)}
+          >
+            <BeatChange mode="subtract" />
+          </ButtonContainer>
+          <ButtonContainer
+            className="rounded-r-lg border border-r-gray-300"
+            onClick={() => changeColumns(8)}
+          >
+            <BeatChange mode="add" />
+          </ButtonContainer>
+        </BeatChangeContainer>
+      )
     );
     return cols;
   };

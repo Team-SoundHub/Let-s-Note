@@ -76,7 +76,7 @@ class WorkSpaceContainer extends Component {
     super(props);
     this.state = {
       loading: true,
-      columns: 100,
+      columns: 96,
       columnsInitialized: false,
       availableNotes,
       availableDrumNotes,

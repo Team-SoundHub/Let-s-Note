@@ -58,17 +58,15 @@ const WorkPlacePage = () => {
   const calculateColumns = (maxColumn) => {
     console.log(`[calculateColumns] maxColumn 받았음: ${maxColumn}`);
     const multiple = parseInt(maxColumn / 8);
-    const remainder = maxColumn % 8;
+    // const remainder = maxColumn % 8;
     let newColumns;
 
-    if (maxColumn < 100) {
-      newColumns = 100;
-      console.log(`[calculateColumns] maxColumn < 100: ${maxColumn}`);
+    if (maxColumn < 96) {
+      newColumns = 96;
+      console.log(`[calculateColumns] maxColumn < 96: ${newColumns}`);
     } else {
-      newColumns = remainder === 0 ?
-        8 * multiple + 4
-        : 8 * (multiple + 1) + 4;
-      console.log(`[calculateColumns] maxColumn > 100 -> newColumns: ${newColumns}`);
+      newColumns = 8 * (multiple + 1);
+      console.log(`[calculateColumns] maxColumn > 96 -> newColumns: ${newColumns}`);
     }
 
     return newColumns;
