@@ -60,12 +60,12 @@ class BeatColumn extends Component {
   }
 
   handleClick = (i) => () => {
-    const { onClick, id, synth } = this.props;
-    const instrument = synth.activeInstrument;
-    console.log("toggle activate, intrument: ", instrument);
+    const { onClick, id, synth, scale } = this.props;
+    console.log(scale.length);
+    console.log(i);
     // 클릭한 box의 정보를 부모 컴포넌트로 전달
     onClick && onClick(id, i);
-    if (instrument !== "drum") {
+    if (i < scale.length) {
       this.toggleActive(i)();
     } else {
       this.toggleDrumActive(i)();
@@ -110,12 +110,12 @@ class BeatColumn extends Component {
 
         activeBoxes[i] = !activeBoxes[i];
         console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`);
-        activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
+        activeInstrument[i] = synth ? "drum" : null; // Ensure synth is defined
 
         // 연주 코드 추가
         if (synth && activeBoxes[i]) {
           console.log(idx);
-          synth.playNote(drumScale[idx]);
+          synth.playNote(drumScale[idx], synth.time, "8n", "drum");
         }
 
         return { activeBoxes, activeInstrument };
@@ -236,9 +236,7 @@ class BeatColumn extends Component {
           active={this.state.activeBoxes[i]}
           setActiveBoxes={this.setActiveBoxes}
           setActiveInstrument={this.setActiveInstrument}
-          onClick={
-            synth.activeInstrument === "drum" ? this.handleClick(i) : null
-          }
+          onClick={this.handleClick(i)}
           activeInstrument={synth.activeInstrument}
           visualizeInstrument={visualizeInstrument}
           col={id}
