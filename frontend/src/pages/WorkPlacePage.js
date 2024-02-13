@@ -11,6 +11,7 @@ import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import NoteSearchModal from "../containers/Note/NoteSearchModal";
 import NoteViewModal from "../containers/Note/NoteViewModal";
+import { RiRobot2Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
@@ -208,6 +209,10 @@ const WorkPlacePage = () => {
     setSelectedImageUrl(null);
   };
 
+  const handleAI = () => {
+
+  };
+
   return (
     <WebSocketContainer spaceId={spaceId}>
       {({
@@ -274,6 +279,11 @@ const WorkPlacePage = () => {
             memberList={memberList}
             nickname={myNickname}
           />
+          <div className={"flex justify-center absolute bottom-[200px] left-0 w-[80px] h-[60px]"}>
+            <button className={"flex justify-center items-center w-[60px] h-[60px] rounded-full focus:ring-4 focus:outline-none focus:ring-lime-200 bg-[#49C5B6] hover:bg-[#367e76]"} onClick={handleAI}>
+              <RiRobot2Line className={"w-8 h-8 fill-white"}/>
+            </button>
+          </div>
         </Container>
       )}
     </WebSocketContainer>
