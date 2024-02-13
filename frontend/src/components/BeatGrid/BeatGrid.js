@@ -165,12 +165,11 @@ class BeatGrid extends React.PureComponent {
       background,
       foreground,
       visualizeInstrument,
-      count,
       changeColumns,
     } = this.props;
     const cols = [];
     for (let i = 0; i < columns; i++) {
-      // console.log("i = ",i);
+      console.log("i = ",i);
       cols.push(
         <BeatColumn
           ref={(BeatColumn) => (this.cols[i] = BeatColumn)}
@@ -181,7 +180,6 @@ class BeatGrid extends React.PureComponent {
           id={i}
           scale={scale}
           drumScale={drumScale}
-          playing={count % columns === i}
           synth={synth}
           onClick={this.handleBoxClick}
           visualizeInstrument={visualizeInstrument}
