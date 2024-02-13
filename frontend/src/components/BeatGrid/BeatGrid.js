@@ -104,21 +104,10 @@ class BeatGrid extends React.PureComponent {
     console.log("rerender");
     this.cols = [];
     beatGridRef = this;
-
-    this.state = {
-      clickedRow: null,
-    };
   }
 
   handleBoxClick = (column, row) => {
     const instrument = this.props.synth.activeInstrument;
-
-    // 임시적으로 clickedRow 상태를 null로 설정 -> 비동기적으로 row값 업데이트
-    // (같은 row 연속 클릭해도 매번 prop을 내려주도록 함)
-    this.setState({ clickedRow: null }, () => {
-      this.setState({ clickedRow: row });
-    });
-
     this.props.sendCoordinate(instrument, column, row, this.props.spaceId);
   };
 
@@ -232,7 +221,6 @@ class BeatGrid extends React.PureComponent {
           <VerticalPiano
             sendLoop={this.props.sendLoop}
             spaceLength={this.props.columns}
-            clickedRow={this.state.clickedRow}
           />
         </LeftPanel>
         <RightPanel>{this.renderBeatColumns()}</RightPanel>

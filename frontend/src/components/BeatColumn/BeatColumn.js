@@ -171,6 +171,24 @@ class BeatColumn extends Component {
     Subject.unsubscribe("reset", this.resetColumn);
   }
 
+  // componentDidUpdate(prevProps, prevState) {
+  //   // playing이 true일 때 해당 컬럼의 DOM 엘리먼트를 화면 중앙으로 스크롤
+  //   if (this.props.playing && !prevProps.playing) {
+  //     this.scrollIntoView();
+  //   }
+  // }
+
+  // scrollIntoView() {
+  //   // 컬럼의 DOM 엘리먼트를 화면 중앙으로 스크롤
+  //   if (this.columnRef.current) {
+  //     this.columnRef.current.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "center",
+  //       inline: "center",
+  //     });
+  //   }
+  // }
+
   setActiveBoxes = (row, value) => {
     this.setState((prev) => {
       const newActiveBoxes = [...prev.activeBoxes];

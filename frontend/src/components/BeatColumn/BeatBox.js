@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
+import { setClickedNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -92,6 +93,9 @@ const BeatBox = ({
       // isSnapshot이 true일 경우 onClick 이벤트 무시
       return;
     }
+
+    dispatch(setClickedNotes(row));
+
     onClick && onClick();
   };
 
