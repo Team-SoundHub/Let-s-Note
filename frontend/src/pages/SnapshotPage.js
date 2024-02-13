@@ -21,24 +21,36 @@ const SnapshotPage = () => {
   const location = useLocation();
 
   const { snapshotId } = useParams();
-  const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);  
+  const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [isFromMyPage, setIsFromMyPage] = useState(false);
-  
+  const [maxColumn, setMaxColumn] = useState(0);
+
+  const calculateColumns = (maxColumn) => {
+    console.log(`SnapshotPage ----------------`);
+    console.log(`[calculateColumns] maxColumn 받았음: ${maxColumn}`);
+
+    const multiple = parseInt(maxColumn / 8);
+    const remainder = maxColumn % 8;
+
+    let newColumns;
+
+    newColumns = remainder === 0 ?
+      8 * multiple + 4
+      : 8 * (multiple + 1) + 4;
+    console.log(`[calculateColumns] newColumns: ${newColumns}`);
+
+    return newColumns;
+  };
+
   useEffect(() => {
-    const fromMyPage = location.state?.fromMyPage;  
+    const fromMyPage = location.state?.fromMyPage;
     setIsFromMyPage(fromMyPage);
-    
-    if (fromMyPage){
-      console.log(`마이페이지로부터 입장 - fromMyPage: ${fromMyPage}`)
-    } else {
-      console.log(`피드 입장 | 새로고침 | 스냅샷 생성 후 보러가기 - fromMyPage: ${fromMyPage}`)      
-    }
 
     const fetchSnapshotInfo = async () => {
       try {
-        // console.log("스냅샷 요청한 snapshotId", snapshotId);
         const response = await getSnapshotInfo(snapshotId);
         console.log("스냅샷 데이터 요청:", response.response);
+        setMaxColumn(calculateColumns(response.response.maxX));
 
         if (response && response.response) {
           dispatch(setSnapshotNotes(response.response.notes));
@@ -73,14 +85,23 @@ const SnapshotPage = () => {
 
   return (
     <Container>
-      <SnapshotHeader onOpenModal={handleModalOpen} fromMyPage={isFromMyPage} />
+      <SnapshotHeader
+        onOpenModal={handleModalOpen}
+        fromMyPage={isFromMyPage}
+      />
       {isReleaseModalOpen && (
         <SaveSnapshotModal
           onClose={handleModalClose}
           onPublish={handlePublish}
         />
       )}
-      <WorkSpaceContainer isSnapshot={true} spaceId={false} />
+      {maxColumn > 0 && (
+        <WorkSpaceContainer
+          isSnapshot={true}
+          spaceId={false}
+          maxColumn={maxColumn}
+        />
+      )}
     </Container>
   );
 };

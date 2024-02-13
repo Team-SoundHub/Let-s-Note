@@ -77,9 +77,10 @@ class WorkSpaceContainer extends Component {
     this.state = {
       loading: true,
       columns: 100,
+      columnsInitialized: false,
       availableNotes,
       availableDrumNotes,
-      count : -1,
+      count: -1,
       synth: null,
       visualizeInstrument: [true, true, true],
       isPlaying: false,
@@ -97,6 +98,9 @@ class WorkSpaceContainer extends Component {
       "Received isSnapshot prop in WorkSpaceContainer:",
       this.props.isSnapshot
     );
+    
+    this.setState({ columns: this.props.maxColumn });  
+    console.log(`[WorkSpaceContainer] column 설정: ${this.props.maxColumn}`);
 
     // 재생 문제가 didmount로 해결됨 그러나 간혹적으로 재생되지 않는 문제가 새로 발생
     const synth = new Synth(this.samplerLoaded);
