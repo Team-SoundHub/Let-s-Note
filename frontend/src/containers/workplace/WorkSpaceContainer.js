@@ -1,7 +1,7 @@
 import React, { Component, createRef } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import BeatGrid, { getCount } from "../../components/BeatGrid/BeatGrid";
+import BeatGrid from "../../components/BeatGrid/BeatGrid";
 import Synth from "../../synth/Synth";
 import Loading from "../../components/Loading";
 import { availableNotes, availableDrumNotes } from "../../constants/scale";
@@ -84,7 +84,6 @@ class WorkSpaceContainer extends Component {
       synth: null,
       visualizeInstrument: [true, true, true],
       isPlaying: false,
-      currentInstrument: "piano",
     };
     this.initialBPM = 160;
   }
@@ -159,7 +158,6 @@ class WorkSpaceContainer extends Component {
   };
 
   changeInstrument = (instrument) => {
-    this.setState({ currentInstrument: instrument });
     this.state.synth.setInstrument(instrument);
   };
 
@@ -252,9 +250,15 @@ class WorkSpaceContainer extends Component {
       visualizeInstrument,
       isPlaying,
       count,
-      currentInstrument,
     } = this.state;
-    const { isConnected, isSnapshot } = this.props;
+    const {
+      isConnected,
+      isSnapshot,
+      spaceId,
+      sendCoordinate,
+      sendLoop,
+      sendMousePosition,
+    } = this.props;
 
     if (isSnapshot && loading) {
       return <Loading />;
@@ -282,15 +286,14 @@ class WorkSpaceContainer extends Component {
                 background="skyblue"
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
-                isSnapshot={this.props.isSnapshot}
-                spaceId={this.props.spaceId}
-                sendCoordinate={this.props.sendCoordinate}
+                isSnapshot={isSnapshot}
+                spaceId={spaceId}
+                sendCoordinate={sendCoordinate}
                 setCount={this.setCount}
-                sendLoop={this.props.sendLoop}
+                sendLoop={sendLoop}
                 changeColumns={this.changeColumns}
-                sendMousePosition={this.props.sendMousePosition}
-                isConnected={this.props.isConnected}
-                currentInstrument={currentInstrument}
+                sendMousePosition={sendMousePosition}
+                isConnected={isConnected}
               />
             </MiddlePanel>
           </GridContainer>

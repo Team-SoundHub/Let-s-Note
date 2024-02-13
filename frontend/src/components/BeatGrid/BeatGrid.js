@@ -107,7 +107,10 @@ class BeatGrid extends React.PureComponent {
   }
 
   handleBoxClick = (column, row) => {
-    const instrument = this.props.synth.activeInstrument;
+    let instrument = this.props.synth.activeInstrument;
+    const { scale } = this.props;
+    if (row >= scale.length) instrument = "drum";
+    console.log("instrument", instrument);
     this.props.sendCoordinate(instrument, column, row, this.props.spaceId);
   };
 
