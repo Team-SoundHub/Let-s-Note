@@ -119,6 +119,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
   // 함수를 자식 컴포넌트에 전달
   return children({
     isConnected,
+    stompClient,
 
     sendCoordinate: (instrument, x, y) => {
       if (!stompClient || !stompClient.active) {
