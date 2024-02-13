@@ -9,20 +9,15 @@ import WorkSpaceHeader from "../containers/workplace/WorkSpaceHeader";
 import SaveSnapshotModal from "../components/WorkSpace/SaveSnapshotModal";
 import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
-import CursorPointer from "../components/WorkSpace/Cursor/CursorPointer";
-import Cursors from "../components/WorkSpace/Cursor/Cursors";
 import NoteSearchModal from "../containers/Note/NoteSearchModal";
 import NoteViewModal from "../containers/Note/NoteViewModal";
 import Swal from "sweetalert2";
 
 import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
-import {
-  setWorkspaceNotes,
-  clearAllNotes,
-} from "../app/slices/innerContentSlice";
+import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
-//hi
+
 const Container = styled.div`
   position: relative;
   background-color: white;
@@ -50,6 +45,7 @@ const WorkPlacePage = () => {
   });
   const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [maxColumn, setMaxColumn] = useState(0);
 
   const handleSearchModalOpen = () => {
     setisSearchModalOpen(true);
@@ -59,14 +55,36 @@ const WorkPlacePage = () => {
     setisSearchModalOpen(false);
   };
 
+  const calculateColumns = (maxColumn) => {
+    console.log(`[calculateColumns] maxColumn 받았음: ${maxColumn}`);
+    const multiple = parseInt(maxColumn / 8);
+    const remainder = maxColumn % 8;
+    let newColumns;
+
+    if (maxColumn < 100) {
+      newColumns = 100;
+      console.log(`[calculateColumns] maxColumn < 100: ${maxColumn}`);
+    } else {
+      newColumns = remainder === 0 ?
+        8 * multiple + 4
+        : 8 * (multiple + 1) + 4;
+      console.log(`[calculateColumns] maxColumn > 100 -> newColumns: ${newColumns}`);
+    }
+
+    return newColumns;
+  };
+
   // 작업실 입장 시 데이터 요청
   useEffect(() => {
     const fetchWorkspaceInfo = async () => {
       try {
         const response = await getWorkspaceInfo(spaceId);
         setWorkspaceInfo(response.response);
-
-        console.log("작업실 입장 데이터 요청:", response.response.notesList);
+        
+        // console.log("작업실 입장 데이터 요청:", response.response.notesList);
+        // console.log("작업실 입장 데이터 요청 maxX:", response.response.maxX);
+        
+        setMaxColumn(calculateColumns(response.response.maxX));        
 
         dispatch(setWorkspaceNotes(response.response.notesList));
       } catch (error) {
@@ -201,61 +219,64 @@ const WorkPlacePage = () => {
         isConnected,
         sendLoop,
       }) => (
-          <Container>
-            {isReleaseModalOpen && (
-                <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave}/>
-            )}
-            {snapshotCreated && (
-                <SaveCompleteModal
-                    onClose={handleCloseSnapshotModal}
-                    snapshotUrl={snapshotUrl}
-                    snapshotId={snapshotId}
-                />
-            )}
-            {isAddMemberModalOpen && (
-                <AddMemberModal
-                    closeAddMemberModal={closeAddMemberModal}
-                    handleAddMember={handleAddMember}
-                />
-            )}
-            {isSearchModalOpen && (
-                <NoteSearchModal
-                    isSearchModalOpen={isSearchModalOpen}
-                    handleSearchModalClose={handleSearchModalClose}
-                    openImagePreview={openImagePreview}
-                />
-            )}
-            {selectedImageUrl && (
-                <NoteViewModal
-                    image_url={selectedImageUrl}
-                    onClose={closeImagePreview}
-                />
-            )}
-            <WorkSpaceHeader
-                onOpenModal={handleModalOpen}
-                isSnapshotExist={workspaceInfo.isSnapshotExist}
-                openAddMemberModal={openAddMemberModal}
-                handleAddMember={handleAddMember}
-                memberList={memberList}
+        <Container>
+          {isReleaseModalOpen && (
+            <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
+          )}
+          {snapshotCreated && (
+            <SaveCompleteModal
+              onClose={handleCloseSnapshotModal}
+              snapshotUrl={snapshotUrl}
+              snapshotId={snapshotId}
             />
+          )}
+          {isAddMemberModalOpen && (
+            <AddMemberModal
+              closeAddMemberModal={closeAddMemberModal}
+              handleAddMember={handleAddMember}
+            />
+          )}
+          {isSearchModalOpen && (
+            <NoteSearchModal
+              isSearchModalOpen={isSearchModalOpen}
+              handleSearchModalClose={handleSearchModalClose}
+              openImagePreview={openImagePreview}
+            />
+          )}
+          {selectedImageUrl && (
+            <NoteViewModal
+              image_url={selectedImageUrl}
+              onClose={closeImagePreview}
+            />
+          )}
+          <WorkSpaceHeader
+            onOpenModal={handleModalOpen}
+            isSnapshotExist={workspaceInfo.isSnapshotExist}
+            openAddMemberModal={openAddMemberModal}
+            handleAddMember={handleAddMember}
+            memberList={memberList}
+          />
+          {maxColumn > 0 && (
             <WorkSpaceContainer
-                isSnapshot={false}
-                spaceId={spaceId}
-                accountId={accountId}
-                sendCoordinate={sendCoordinate}
-                sendLoop={sendLoop}
-                openImagePreview={openImagePreview}
-                sendMousePosition={sendMousePosition}
-                isConnected={isConnected}
-                handleSearchModalOpen={handleSearchModalOpen}
+              isSnapshot={false}
+              spaceId={spaceId}
+              accountId={accountId}
+              sendCoordinate={sendCoordinate}
+              sendLoop={sendLoop}
+              openImagePreview={openImagePreview}
+              sendMousePosition={sendMousePosition}
+              isConnected={isConnected}
+              handleSearchModalOpen={handleSearchModalOpen}
+              maxColumn={maxColumn}
             />
-            <ChatContainer
-                sendMessage={sendMessage}
-                spaceId={spaceId}
-                memberList={memberList}
-                nickname={myNickname}
-            />
-          </Container>
+          )}
+          <ChatContainer
+            sendMessage={sendMessage}
+            spaceId={spaceId}
+            memberList={memberList}
+            nickname={myNickname}
+          />
+        </Container>
       )}
     </WebSocketContainer>
   );
