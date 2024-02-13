@@ -87,7 +87,7 @@ export const resetCount = () => {
 
 export const getCount = () => {
   return count;
-}
+};
 
 export const handleCountChange = (newCount) => {
   prevCount = count;
@@ -96,8 +96,7 @@ export const handleCountChange = (newCount) => {
     beatGridRef.props.setCount(newCount);
   }
   count = newCount;
-}
-
+};
 
 class BeatGrid extends React.PureComponent {
   constructor(props) {
@@ -111,12 +110,12 @@ class BeatGrid extends React.PureComponent {
     };
   }
 
-  handleBoxClick = (column, row) => {    
-    const instrument = this.props.synth.activeInstrument;    
+  handleBoxClick = (column, row) => {
+    const instrument = this.props.synth.activeInstrument;
 
-    // 임시적으로 clickedRow 상태를 null로 설정 -> 비동기적으로 row값 업데이트 
+    // 임시적으로 clickedRow 상태를 null로 설정 -> 비동기적으로 row값 업데이트
     // (같은 row 연속 클릭해도 매번 prop을 내려주도록 함)
-    this.setState({ clickedRow: null }, () => {      
+    this.setState({ clickedRow: null }, () => {
       this.setState({ clickedRow: row });
     });
 
@@ -146,7 +145,7 @@ class BeatGrid extends React.PureComponent {
     if (prevBeat > -1) {
       this.cols[prevBeat].disablePlaying();
     }
-  }
+  };
 
   trigger = (time) => {
     handleCountChange(count + 1);
@@ -170,7 +169,7 @@ class BeatGrid extends React.PureComponent {
     } = this.props;
     const cols = [];
     for (let i = 0; i < columns; i++) {
-      // console.log("i = ",i);
+      // console.log("i = ", i);
       cols.push(
         <BeatColumn
           ref={(BeatColumn) => (this.cols[i] = BeatColumn)}
@@ -209,18 +208,33 @@ class BeatGrid extends React.PureComponent {
     return cols;
   };
 
+  renderCursorPointer() {
+    const { isSnapshot, sendMousePosition, spaceId, accountId, isConnected } =
+      this.props;
+    if (!isSnapshot) {
+      <CursorPointer
+        sendMousePosition={sendMousePosition}
+        spaceId={spaceId}
+        accountId={accountId}
+        isConnected={isConnected}
+        containerRef={this.gridRef}
+      />;
+    }
+  }
+
   render() {
-    const { background, sendMousePosition, spaceId, accountId, isConnected, count } = this.props;
+    const {
+      background,
+      sendMousePosition,
+      spaceId,
+      accountId,
+      isConnected,
+      count,
+    } = this.props;
     return (
       <Container ref={this.gridRef} background={background}>
         <Cursors />
-        <CursorPointer
-          sendMousePosition={sendMousePosition}
-          spaceId={spaceId}
-          accountId={accountId}
-          isConnected={isConnected}
-          containerRef={this.gridRef}
-        />
+        {this.renderCursorPointer()}
         <LeftPanel>
           <VerticalPiano
             sendLoop={this.props.sendLoop}

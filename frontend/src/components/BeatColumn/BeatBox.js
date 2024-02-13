@@ -126,10 +126,10 @@ const BeatBox = ({
     const mouseX = e.clientX - boxRect.left;
     const mouseY = e.clientY - boxRect.top;
 
-    // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산    
-    const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
-    const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;        
-    
+    // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산
+    const relativeX = boxRect.left + scrollLeft + mouseX - gridRect.left;
+    const relativeY = boxRect.top + scrollTop + mouseY - gridRect.top;
+
     dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
   };
 

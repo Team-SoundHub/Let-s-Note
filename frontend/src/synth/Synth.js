@@ -36,7 +36,7 @@ class Synth {
         this.samplers[instrument].connect(reverb);
       } else if (instrument === "piano") {
         this.samplers[instrument] = new Tone.Sampler(
-          pianoScale,
+          scale,
           callback,
           "/audio/" + instrument + "/"
         ).set({

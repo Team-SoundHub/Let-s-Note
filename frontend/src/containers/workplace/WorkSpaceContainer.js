@@ -84,6 +84,7 @@ class WorkSpaceContainer extends Component {
       synth: null,
       visualizeInstrument: [true, true, true],
       isPlaying: false,
+      currentInstrument: "piano",
     };
     this.initialBPM = 160;
   }
@@ -98,8 +99,8 @@ class WorkSpaceContainer extends Component {
       "Received isSnapshot prop in WorkSpaceContainer:",
       this.props.isSnapshot
     );
-    
-    this.setState({ columns: this.props.maxColumn });  
+
+    this.setState({ columns: this.props.maxColumn });
     console.log(`[WorkSpaceContainer] column 설정: ${this.props.maxColumn}`);
 
     // 재생 문제가 didmount로 해결됨 그러나 간혹적으로 재생되지 않는 문제가 새로 발생
@@ -138,7 +139,7 @@ class WorkSpaceContainer extends Component {
 
   stop = () => {
     this.setState({ isPlaying: false });
-    resetCount()
+    resetCount();
     this.state.synth.stop();
   };
 
@@ -190,6 +191,8 @@ class WorkSpaceContainer extends Component {
 
   setInstrumentScale = (scale) => {
     scale = [
+      "C2",
+      "C#2",
       "D2",
       "D#2",
       "E2",
@@ -239,7 +242,6 @@ class WorkSpaceContainer extends Component {
     this.stop();
   }
 
-
   render() {
     const {
       loading,
@@ -250,6 +252,7 @@ class WorkSpaceContainer extends Component {
       visualizeInstrument,
       isPlaying,
       count,
+      currentInstrument,
     } = this.state;
     const { isConnected, isSnapshot } = this.props;
 
@@ -287,6 +290,7 @@ class WorkSpaceContainer extends Component {
                 changeColumns={this.changeColumns}
                 sendMousePosition={this.props.sendMousePosition}
                 isConnected={this.props.isConnected}
+                currentInstrument={currentInstrument}
               />
             </MiddlePanel>
           </GridContainer>
