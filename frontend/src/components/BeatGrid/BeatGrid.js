@@ -210,13 +210,16 @@ class BeatGrid extends React.PureComponent {
     const { isSnapshot, sendMousePosition, spaceId, accountId, isConnected } =
       this.props;
     if (!isSnapshot) {
-      <CursorPointer
-        sendMousePosition={sendMousePosition}
-        spaceId={spaceId}
-        accountId={accountId}
-        isConnected={isConnected}
-        containerRef={this.gridRef}
-      />;
+      <>
+        <Cursors />
+        <CursorPointer
+          sendMousePosition={sendMousePosition}
+          spaceId={spaceId}
+          accountId={accountId}
+          isConnected={isConnected}
+          containerRef={this.gridRef}
+        />
+      </>;
     }
   }
 
@@ -224,7 +227,6 @@ class BeatGrid extends React.PureComponent {
     const { background } = this.props;
     return (
       <Container ref={this.gridRef} background={background}>
-        <Cursors />
         {this.renderCursorPointer()}
         <LeftPanel>
           <VerticalPiano

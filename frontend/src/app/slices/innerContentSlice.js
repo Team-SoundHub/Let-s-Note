@@ -13,10 +13,9 @@ export const innerContentSlice = createSlice({
   },
   reducers: {
     setInnerContent: (state, action) => {
-      state.innerContent = action.payload;      
+      state.innerContent = action.payload;
     },
     setWorkspaceNotes: (state, action) => {
-      
       state.workspaceNotes = [];
 
       // notesList에서 각 노트의 정보를 추출하여 상태에 저장
@@ -34,7 +33,6 @@ export const innerContentSlice = createSlice({
     },
 
     setSnapshotNotes: (state, action) => {
-
       state.snapshotNotes = [];
 
       action.payload.forEach((instrumentGroup) => {
@@ -52,15 +50,19 @@ export const innerContentSlice = createSlice({
       console.log("리덕스 - snapshot에 들어간 정보:", state.snapshotNotes);
     },
     clearAllNotes: (state) => {
-      state.innerContent =  { instrument: "piano", x: null, y: null }
+      state.innerContent = { instrument: "piano", x: null, y: null };
       state.workspaceNotes = [];
       state.snapshotNotes = [];
     },
   },
 });
 
-export const { setInnerContent, setWorkspaceNotes, setSnapshotNotes, clearAllNotes } =
-  innerContentSlice.actions;
+export const {
+  setInnerContent,
+  setWorkspaceNotes,
+  setSnapshotNotes,
+  clearAllNotes,
+} = innerContentSlice.actions;
 
 export const selectInnerContent = (state) => state.sample.innerContent;
 export const selectNotes = (state) => state.innerContent.notes;

@@ -87,7 +87,7 @@ const BeatBox = ({
 
   const instrumentList = ["piano", "guitar", "drum"];
 
-  const handleClick = () => {
+  const handleClick = (row) => {
     if (isSnapshot) {
       // isSnapshot이 true일 경우 onClick 이벤트 무시
       return;
@@ -139,7 +139,7 @@ const BeatBox = ({
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
-      onClick={handleClick}
+      onClick={handleClick(row)}
       instrument={instrument}
       activeInstrument={activeInstrument}
       visualizeInstrument={visualizeInstrument}
