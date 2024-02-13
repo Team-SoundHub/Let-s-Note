@@ -27,13 +27,11 @@ const SnapshotPage = () => {
 
   const calculateColumns = (maxColumn) => {
     const multiple = parseInt(maxColumn / 8);
-    const remainder = maxColumn % 8;
+    // const remainder = maxColumn % 8;
 
     let newColumns;
 
-    newColumns = remainder === 0 ?
-      8 * multiple + 4
-      : 8 * (multiple + 1) + 4;    
+    newColumns = 8 * (multiple + 1);    
 
     if (newColumns < 32) {
       newColumns = 32;
