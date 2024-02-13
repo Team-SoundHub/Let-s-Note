@@ -23,7 +23,7 @@ public class LetsnoteApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) {
-		performModelCall();
+//		performModelCall();
 	}
 
 	public static void main(String[] args) {
