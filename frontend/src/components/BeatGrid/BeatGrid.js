@@ -111,12 +111,12 @@ class BeatGrid extends React.PureComponent {
     };
   }
 
-  handleBoxClick = (column, row) => {    
-    const instrument = this.props.synth.activeInstrument;    
+  handleBoxClick = (column, row) => {
+    const instrument = this.props.synth.activeInstrument;
 
     // 임시적으로 clickedRow 상태를 null로 설정 -> 비동기적으로 row값 업데이트 
     // (같은 row 연속 클릭해도 매번 prop을 내려주도록 함)
-    this.setState({ clickedRow: null }, () => {      
+    this.setState({ clickedRow: null }, () => {
       this.setState({ clickedRow: row });
     });
 
@@ -191,20 +191,22 @@ class BeatGrid extends React.PureComponent {
       );
     }
     cols.push(
-      <BeatChangeContainer>
-        <ButtonContainer
-          className="rounded-l-lg border border-r-gray-300"
-          onClick={() => changeColumns(-8)}
-        >
-          <BeatChange mode="subtract" />
-        </ButtonContainer>
-        <ButtonContainer
-          className="rounded-r-lg border border-r-gray-300"
-          onClick={() => changeColumns(8)}
-        >
-          <BeatChange mode="add" />
-        </ButtonContainer>
-      </BeatChangeContainer>
+      !this.props.isSnapshot && (
+        <BeatChangeContainer>
+          <ButtonContainer
+            className="rounded-l-lg border border-r-gray-300"
+            onClick={() => changeColumns(-8)}
+          >
+            <BeatChange mode="subtract" />
+          </ButtonContainer>
+          <ButtonContainer
+            className="rounded-r-lg border border-r-gray-300"
+            onClick={() => changeColumns(8)}
+          >
+            <BeatChange mode="add" />
+          </ButtonContainer>
+        </BeatChangeContainer>
+      )
     );
     return cols;
   };
