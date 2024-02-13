@@ -1,8 +1,10 @@
-package com.geeks.letsnote.global.infrastructure;
+package com.geeks.letsnote.global.infrastructure.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.geeks.letsnote.global.infrastructure.dto.AIModelRequest;
+import com.geeks.letsnote.global.infrastructure.dto.AIModelResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

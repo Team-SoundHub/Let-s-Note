@@ -1,4 +1,4 @@
-package com.geeks.letsnote.global.infrastructure;
+package com.geeks.letsnote.global.infrastructure.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
