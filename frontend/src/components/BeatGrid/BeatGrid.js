@@ -115,6 +115,12 @@ class BeatGrid extends React.PureComponent {
     const { columns } = this.props;
     const activeBeat = count % columns;
     const prevBeat = prevCount % columns;
+    const playColumn = document.getElementById(activeBeat);
+    playColumn.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
     this.props.setCount(activeBeat);
     console.log(count);
     console.log("activeBeat : ", activeBeat);
@@ -199,16 +205,18 @@ class BeatGrid extends React.PureComponent {
     const { isSnapshot, sendMousePosition, spaceId, accountId, isConnected } =
       this.props;
     if (!isSnapshot) {
-      <>
-        <Cursors />
-        <CursorPointer
-          sendMousePosition={sendMousePosition}
-          spaceId={spaceId}
-          accountId={accountId}
-          isConnected={isConnected}
-          containerRef={this.gridRef}
-        />
-      </>;
+      return (
+        <>
+          <Cursors />
+          <CursorPointer
+            sendMousePosition={sendMousePosition}
+            spaceId={spaceId}
+            accountId={accountId}
+            isConnected={isConnected}
+            containerRef={this.gridRef}
+          />
+        </>
+      );
     }
   }
 
@@ -223,7 +231,7 @@ class BeatGrid extends React.PureComponent {
             spaceLength={this.props.columns}
           />
         </LeftPanel>
-        <RightPanel>{this.renderBeatColumns()}</RightPanel>
+        <RightPanel ref={this.scrollRef}>{this.renderBeatColumns()}</RightPanel>
       </Container>
     );
   }

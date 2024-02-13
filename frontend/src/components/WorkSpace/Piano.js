@@ -97,6 +97,20 @@ const DrumButton = styled.div`
 const VerticalPiano = ({ sendLoop, spaceLength }) => {
   const [highlightedKey, setHighlightedKey] = useState(null);
   const clickedNotes = useSelector((state) => state.innerContent.clickedNotes);
+  const notes = [
+    "도",
+    "도#",
+    "레",
+    "레#",
+    "미",
+    "파",
+    "파#",
+    "솔",
+    "솔#",
+    "라",
+    "라#",
+    "시",
+  ].reverse();
 
   useEffect(() => {
     setHighlightedKey(clickedNotes);
@@ -113,6 +127,7 @@ const VerticalPiano = ({ sendLoop, spaceLength }) => {
 
     for (let i = 0; i < availableNotes.length; i++) {
       const note = availableNotes[i];
+      const text = notes[i % 12] + Math.floor(5 - (i + 1) / 12);
       const isWhiteKey = !note.includes("#");
 
       // 하이라이트 이펙트 관련 로직
@@ -124,25 +139,25 @@ const VerticalPiano = ({ sendLoop, spaceLength }) => {
       if (!isWhiteKey) {
         pianoKeys.push(
           <BlackKey key={note} style={highlitedStyle}>
-            {note}
+            {text}
           </BlackKey>
         );
       } else if (i === availableNotes.length - 1) {
         pianoKeys.push(
           <LastWhiteKey key={note} style={highlitedStyle}>
-            {note}
+            {text}
           </LastWhiteKey>
         );
       } else if (["A", "G", "D"].includes(note.charAt(0))) {
         pianoKeys.push(
           <MovedWhiteKey key={note} style={highlitedStyle}>
-            {note}
+            {text}
           </MovedWhiteKey>
         );
       } else if (["F"].includes(note.charAt(0))) {
         pianoKeys.push(
           <FourthWhiteKey key={note} style={highlitedStyle}>
-            {note}
+            {text}
           </FourthWhiteKey>
         );
       } else if (["C"].includes(note.charAt(0))) {
@@ -152,13 +167,13 @@ const VerticalPiano = ({ sendLoop, spaceLength }) => {
             key={note}
             style={highlitedStyle}
           >
-            {note}
+            {text}
           </FirstWhiteKey>
         );
       } else {
         pianoKeys.push(
           <WhiteKey key={note} style={highlitedStyle}>
-            {note}
+            {text}
           </WhiteKey>
         );
       }
