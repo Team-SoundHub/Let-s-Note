@@ -21,7 +21,7 @@ const BeatChange = ({ mode, onClick, style }) => {
   // Determine which icon to use based on the mode
   const icon = mode === "add" ? add : subtract;
 
-  return (
+  return (    
     <ButtonContainer>
       {/* <BeatButton  style={style}> */}
       <Arrows onClick={onClick} src={icon} alt={mode} />
