@@ -84,7 +84,7 @@ const BeatBox = ({
       setActiveBoxes(row, true);
       setActiveInstrument(row, activeNote.instrument);
     }
-  }, [snapshotNotes, workspaceNotes, col, row, isSnapshot]);
+  }, []);
 
   const instrumentList = ["piano", "guitar", "drum"];
 
