@@ -1,7 +1,5 @@
 package com.geeks.letsnote.global.network.api;
 
-import com.geeks.letsnote.global.network.dto.SocketRequest;
-import com.geeks.letsnote.global.network.dto.SocketResponse;
 import com.geeks.letsnote.global.network.dto.WebRTCRequest;
 import com.geeks.letsnote.global.network.dto.WebRTCResponse;
 import jakarta.validation.Valid;
@@ -10,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
