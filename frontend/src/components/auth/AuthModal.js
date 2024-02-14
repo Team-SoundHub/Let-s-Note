@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 import Button from "../common/Button";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const ModalBackground = tw.div`
     fixed
@@ -265,15 +266,20 @@ const AuthModal = ({ type, closeLoginModal, handleLogin, handleRegister }) => {
                 </Button>
               </div>
               {modalType === "login" && (
-                <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                  Not registered?{" "}
-                  <LoginLink
-                    onClick={() => setModalType("register")}
-                    className="text-blue-700 hover:underline dark:text-blue-500"
-                  >
-                    Create account
-                  </LoginLink>
-                </div>
+                <>
+                  <div>
+                    <GoogleLoginButton />
+                  </div>
+                  <div className="text-sm mt-0.5 font-medium text-gray-500 dark:text-gray-300">
+                    Not registered?{" "}
+                    <LoginLink
+                      onClick={() => setModalType("register")}
+                      className="text-blue-700 hover:underline dark:text-blue-500"
+                    >
+                      Create account
+                    </LoginLink>
+                  </div>
+                </>
               )}
             </ModalBody>
           </ModalMain>
