@@ -295,6 +295,7 @@ class WorkSpaceContainer extends Component {
             count={count}
             handleIsPlaying={this.handleIsPlaying}
             isPlaying={isPlaying}
+            isSnapshot={isSnapshot}
           />
         </Container>
       );

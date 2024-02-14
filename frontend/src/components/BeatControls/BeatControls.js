@@ -50,6 +50,7 @@ const BeatControls = ({
   count,
   handleIsPlaying,
   isPlaying,
+  isSnapshot,
 }) => {
   return (
     <Container>
@@ -71,14 +72,18 @@ const BeatControls = ({
       </CenterSection>
       <RightSection>
         <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
-        <InstrumentChange
-          instrument="piano"
-          changeInstrument={changeInstrument}
-        />
-        <InstrumentChange
-          instrument="guitar"
-          changeInstrument={changeInstrument}
-        />
+        {!isSnapshot && (
+          <>
+            <InstrumentChange
+              instrument="piano"
+              changeInstrument={changeInstrument}
+            />
+            <InstrumentChange
+              instrument="guitar"
+              changeInstrument={changeInstrument}
+            />
+          </>
+        )}
       </RightSection>
     </Container>
   );
