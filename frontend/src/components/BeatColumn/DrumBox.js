@@ -7,7 +7,7 @@ const Container = styled.div`
   flex: 1;
   margin: 0.05rem;
   background-color: ${(props) =>
-    props.active &&
+    props.active[props.instrumentList.indexOf("drum")] &&
     props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
       ? pickActiveColor("drum")
       : props.inactiveColor};
@@ -20,7 +20,7 @@ const Container = styled.div`
   &::after {
     content: ""; /* Create a pseudo-element for the circle */
     display: ${(props) =>
-      props.active &&
+      props.active[props.instrumentList.indexOf("drum")] &&
       props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
         ? "none" // Hide the circle when the condition is satisfied
         : "block"};
@@ -62,9 +62,9 @@ const Container = styled.div`
 const pickActiveColor = (instrument) => {
   switch (instrument) {
     case "piano":
-      return "rgb(248 113 113)";
+      return "#FFA1A1 50%";
     case "guitar":
-      return "rgb(74 222 128)";
+      return "#4886FF 50%";
     case "drum":
       return "rgb(250 204 21)";
     default:
@@ -79,7 +79,6 @@ const DrumBox = ({
   inactiveColor,
   activeColor,
   setActiveBoxes,
-  setActiveInstrument,
   visualizeInstrument,
   col,
   row,
@@ -89,7 +88,7 @@ const DrumBox = ({
 }) => {
   const dispatch = useDispatch();
 
-  const [active, setActive] = useState(propActive);
+  const [active, setActive] = useState([false, false, false]);
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const instrumentList = ["piano", "guitar", "drum"];
   const workspaceNotes = useSelector(
@@ -99,36 +98,49 @@ const DrumBox = ({
     (state) => state.innerContent.snapshotNotes
   );
 
+  // 처음 마운트 시 전역상태의 노트정보 반영
   useEffect(() => {
-    let activeNote;
+    let activeNotes;
 
     if (isSnapshot) {
-      activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
+      activeNotes = snapshotNotes.filter((n) => n.x === col && n.y === row);
     } else {
-      activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
+      activeNotes = workspaceNotes.filter((n) => n.x === col && n.y === row);
     }
 
-    if (activeNote && !active) {
-      // 해당하는 노트가 있으면 상태 업데이트
-      setActive(true);
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, activeNote.instrument);
-    } else if (activeNote) {
-      setActive(false);
-      setActiveBoxes(row, false);
-      setActiveInstrument(row, undefined);
-    }
-  }, [workspaceNotes]);
+    // 해당하는 노트가 있으면 상태 업데이트
+    activeNotes.forEach((activeNote) => {
+      setActive((prevActive) => {
+        const instrumentIndex = instrumentList.indexOf(activeNote.instrument);
+        const newActive = [...prevActive];
+        newActive[instrumentIndex] = true;
+        return newActive;
+      });
+      setActiveBoxes(row, activeNote.instrument, true);
+    });
+  }, []);
 
   useEffect(() => {
-    if (innerContent.x === col && innerContent.y === row && !active) {
-      setActive(true);
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, innerContent.instrument);
-    } else if (innerContent.x === col && innerContent.y === row && active) {
-      setActive(false);
-      setActiveBoxes(row, false);
-      setActiveInstrument(row, undefined);
+    const instrumentIndex = instrumentList.indexOf(innerContent.instrument);
+    // Check if x and y match col and row
+    if (
+      innerContent.x === col &&
+      innerContent.y === row &&
+      !active[instrumentIndex]
+    ) {
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, true);
+    } else if (
+      innerContent.x === col &&
+      innerContent.y === row &&
+      active[instrumentIndex]
+    ) {
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, false);
     }
   }, [innerContent]);
 
