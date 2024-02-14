@@ -20,27 +20,50 @@ class BeatColumn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeBoxes: [],
+      activeBoxes: [[]],
       activeInstrument: [],
       activeNotes: [],
       playing: false,
+      instrumentEnum: {
+        piano: 0,
+        guitar: 1,
+        drum: 2,
+      },
     };
   }
 
   updateActiveNotes() {
     const { scale, drumScale } = this.props;
-    const { activeBoxes, activeInstrument } = this.state;
-    const newActiveNotes = [...scale, ...drumScale]
-      .map((note, index) => ({
-        note,
-        isActive: activeBoxes[index],
-        instrument: activeInstrument[index],
-      }))
-      .filter(({ isActive }) => isActive);
+    const { activeBoxes, instrumentEnum } = this.state;
+    const newActiveNotes = [];
+    console.log("activeBoxes: ", activeBoxes);
+    for (let rowIndex = 0; rowIndex < activeBoxes.length; rowIndex++) {
+      const row = activeBoxes[rowIndex];
+      if (row) {
+        for (let columnIndex = 0; columnIndex < row.length; columnIndex++) {
+          const isActive = row[columnIndex];
+          console.log("row: ", row);
+          const note =
+            rowIndex < scale.length
+              ? scale[rowIndex]
+              : drumScale[rowIndex - scale.length];
+          const instrument = Object.keys(instrumentEnum).find(
+            (key) => instrumentEnum[key] === columnIndex
+          );
 
+          if (isActive) {
+            newActiveNotes.push({
+              note,
+              instrument,
+            });
+          }
+        }
+      }
+    }
     this.setState({
       activeNotes: newActiveNotes,
     });
+    console.log("activeNotes: ", this.state.activeNotes);
   }
 
   disablePlaying() {
@@ -75,23 +98,28 @@ class BeatColumn extends Component {
   toggleActive = (i) => () => {
     console.log("toggleActive");
     const { scale, synth } = this.props;
+    const { instrumentEnum } = this.state;
     this.setState(
       (prev) => {
         const activeBoxes = [...prev.activeBoxes];
-        const activeInstrument = [...prev.activeInstrument];
+        const instrumentIndex = instrumentEnum[synth.activeInstrument];
 
-        activeBoxes[i] = !activeBoxes[i]; // 활성화 여부 toggle
+        if (!activeBoxes[i]) {
+          // Initialize activeBoxes[i] as an array of false values with the length of instrumentEnum
+          activeBoxes[i] = [];
+        }
+
+        activeBoxes[i][instrumentIndex] = !activeBoxes[i][instrumentIndex]; // 활성화 여부 toggle
         console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`);
-        activeInstrument[i] = synth ? synth.activeInstrument : null; // Ensure synth is defined
 
         // 연주 코드 추가
-        if (synth && activeBoxes[i]) {
+        if (synth && activeBoxes[i][instrumentIndex]) {
           synth.playNote(scale[i]);
         }
 
         this.updateActiveNotes();
 
-        return { activeBoxes, activeInstrument };
+        return { activeBoxes };
       },
       () => {
         this.updateActiveNotes();
@@ -102,18 +130,24 @@ class BeatColumn extends Component {
   toggleDrumActive = (i) => () => {
     console.log("toggleDrumActive");
     const { scale, drumScale, synth } = this.props;
+    const { instrumentEnum } = this.state;
     const idx = i - scale.length;
     this.setState(
       (prev) => {
         const activeBoxes = [...prev.activeBoxes];
         const activeInstrument = [...prev.activeInstrument];
+        const instrumentIndex = instrumentEnum[synth.activeInstrument];
 
-        activeBoxes[i] = !activeBoxes[i];
+        if (!activeBoxes[i]) {
+          // Initialize activeBoxes[i] as an array of false values with the length of instrumentEnum
+          activeBoxes[i] = [];
+        }
+
+        activeBoxes[i][instrumentIndex] = !activeBoxes[i][instrumentIndex]; // 활성화 여부 toggle
         console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`);
-        activeInstrument[i] = synth ? "drum" : null; // Ensure synth is defined
 
         // 연주 코드 추가
-        if (synth && activeBoxes[i]) {
+        if (synth && activeBoxes[i][instrumentIndex]) {
           console.log(idx);
           synth.playNote(drumScale[idx], synth.time, "8n", "drum");
         }
@@ -129,6 +163,7 @@ class BeatColumn extends Component {
   playBeat = (time) => {
     const { synth } = this.props;
     const { activeNotes } = this.state;
+    console.log("activeNotes: ", activeNotes);
 
     activeNotes.forEach(({ note, instrument }) => {
       synth && synth.playNote(note, time, "8n", instrument);
@@ -136,7 +171,7 @@ class BeatColumn extends Component {
   };
 
   resetColumn = () => {
-    this.setState({ activeBoxes: [], activeNotes: [], activeInstrument: [] });
+    this.setState({ activeBoxes: [[]], activeNotes: [], activeInstrument: [] });
   };
 
   componentDidMount() {
