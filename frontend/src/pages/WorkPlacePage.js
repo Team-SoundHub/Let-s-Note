@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -18,6 +18,8 @@ import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlic
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
 import WebRTCContainer from "../containers/webRTC/WebRTCContainer";
+import { start } from "tone";
+import WebRTC from "../components/WebRTC/WebRTC";
 
 const Container = styled.div`
   position: relative;
@@ -47,6 +49,8 @@ const WorkPlacePage = () => {
   const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
+  const audioRef = useRef(null);
+  const videoRef = useRef(null);
 
   const handleSearchModalOpen = () => {
     setisSearchModalOpen(true);
@@ -223,7 +227,13 @@ const WorkPlacePage = () => {
           client = {stompClient}
           isConnected = {isConnected}
           spaceId = {spaceId}
-        >
+          audioRef={audioRef}
+          videoRef={videoRef}
+        >{({
+          peers,
+          endVoiceChat,
+          startVoiceChat,
+        }) => (
           <Container>
             {isReleaseModalOpen && (
               <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
@@ -281,7 +291,16 @@ const WorkPlacePage = () => {
               memberList={memberList}
               nickname={myNickname}
             />
+            <WebRTC
+              peers = {peers}
+              endVoiceChat = {endVoiceChat}
+              startVoiceChat = {startVoiceChat}
+              audioRef={audioRef}
+              videoRef={videoRef}
+            />
           </Container>
+          
+        )}
         </WebRTCContainer>
       )}
     </WebSocketContainer>
