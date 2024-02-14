@@ -56,11 +56,13 @@ const getMember = async (spaceId) => {
   return response.data;
 };
 
-const callAI = async (userId, textContent) => {
+const callAI = async (userId, textContent, value) => {
   try {
     const requestData = {
       text: textContent,
       userId: userId,
+      value: value,
+      previous: [1, 3, 5, 6, 8, null, 1, 3, 5, 6, 8, null, 5, null, 8, null, 8, null, 5, null, null, null, 1, null]
     };
     const response = await axiosInstance.post(
         `/ai/${userId}`,
