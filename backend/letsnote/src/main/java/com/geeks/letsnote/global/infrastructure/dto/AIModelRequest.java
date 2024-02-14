@@ -13,7 +13,7 @@ public record AIModelRequest() {
             String text,
             @NotNull
             Integer value,
-            List<Integer> previous
+            List<List<String>> previous
     ){
     }
 }

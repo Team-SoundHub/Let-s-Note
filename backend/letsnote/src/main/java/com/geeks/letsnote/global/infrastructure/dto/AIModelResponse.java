@@ -9,7 +9,7 @@ public record AIModelResponse() {
     @Builder
     public record Note(
             @NotNull
-            List<String> noteList
+            List<List<String>> noteList
     ){
     }
 }

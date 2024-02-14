@@ -35,7 +35,7 @@ public class AIModelService {
 
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 
-        List<String> noteList = objectMapper.readValue(response.getBody(), new TypeReference<List<String>>() {});
+        List<List<String>> noteList = objectMapper.readValue(response.getBody(), new TypeReference<List<List<String>>>() {});
 
         return new AIModelResponse.Note(noteList);
     }
