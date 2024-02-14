@@ -6,6 +6,7 @@ public record WebRTCRequest() {
 
     @Builder
     public record Offer (
-            String offer
+            String type,
+            String sdp
     ) {}
 }

@@ -9,6 +9,8 @@ import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
+import com.geeks.letsnote.global.network.dto.WebRTCRequest;
+import com.geeks.letsnote.global.network.dto.WebRTCResponse;
 import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
@@ -77,6 +79,16 @@ public class EditorSocketController {
 	@SendTo("/topic/workspace/{spaceId}/join}")
 	public SocketResponse.WorkSpace joinWorkSpace(@Valid @Header("accountId")Long accountId, @DestinationVariable String spaceId, StompHeaderAccessor stompHeaderAccessor) {
 		return new SocketResponse.WorkSpace(spaceId);
+	}
+
+	@MessageMapping("/offer/{spaceId}")
+	@SendTo("/topic/offer/{spaceId}")
+	public WebRTCResponse.Offer sendSimpleOffer(@Valid @Payload WebRTCRequest.Offer offer, @DestinationVariable String spaceId) throws Exception {
+		WebRTCResponse.Offer responseOffer = WebRTCResponse.Offer.builder()
+				.type(offer.type())
+				.sdp(offer.sdp())
+				.build();
+		return responseOffer;
 	}
 
 	@MessageMapping("/workspace/{spaceId}/chat/sendMessage")

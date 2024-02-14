@@ -5,7 +5,7 @@ import lombok.Builder;
 public record WebRTCResponse() {
     @Builder
     public record Offer(
-            String senderId,
-            String offer
+            String type,
+            String sdp
     ){}
 }
