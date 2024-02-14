@@ -20,7 +20,7 @@ public class AIModelController {
         this.aiModelService = aiModelService;
     }
 
-    @GetMapping("/{username}")
+    @PostMapping("/{username}")
     public ResponseEntity<CommonResponse> callAI(@PathVariable String username, @RequestBody AIModelRequest.BasicRequest basicRequest) throws JsonProcessingException {
         AIModelResponse.Note result = aiModelService.sendRequestToAPI(basicRequest);
         CommonResponse response = CommonResponse.builder()

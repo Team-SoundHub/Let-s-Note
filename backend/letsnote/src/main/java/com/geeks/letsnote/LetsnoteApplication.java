@@ -30,12 +30,12 @@ public class LetsnoteApplication implements ApplicationRunner {
 	}
 
 	public void performModelCall() {
-		try {
-			AIModelResponse.Note response = aiModelService.sendRequestToAPI(new AIModelRequest.BasicRequest("minkyu", "make still dre note"));
-			System.out.println(response);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			AIModelResponse.Note response = aiModelService.sendRequestToAPI(new AIModelRequest.BasicRequest("minkyu", "make still dre note"));
+//			System.out.println(response);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }
