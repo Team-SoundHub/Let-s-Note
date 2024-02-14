@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 import { availableNotes } from "../../constants/scale";
 // import drum from "../../assets/Instrument/drum1-svgrepo-com.svg";
 import drum from "../../assets/Instrument/drum3.png";
+import { clearClickedNotes } from "../../app/slices/innerContentSlice";
 
 const PianoContainer = styled.div`
   display: flex-row;
@@ -95,6 +96,7 @@ const DrumButton = styled.div`
 `;
 
 const VerticalPiano = ({ sendLoop, spaceLength }) => {
+  const dispatch = useDispatch();
   const [highlightedKey, setHighlightedKey] = useState(null);
   const clickedNotes = useSelector((state) => state.innerContent.clickedNotes);
   const notes = [
@@ -113,9 +115,17 @@ const VerticalPiano = ({ sendLoop, spaceLength }) => {
   ].reverse();
 
   useEffect(() => {
-    setHighlightedKey(clickedNotes);
-    const timer = setTimeout(() => setHighlightedKey(null), 1000);
-    return () => clearTimeout(timer);
+    if (clickedNotes !== null) {
+      setHighlightedKey(clickedNotes);
+      const timer = setTimeout(() => {
+        dispatch(clearClickedNotes()); // Redux 스토어의 clickedNotes를 초기화하는 액션 디스패치
+        setHighlightedKey(null);
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
   }, [clickedNotes]);
 
   useEffect(() => {

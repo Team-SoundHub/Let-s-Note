@@ -54,7 +54,7 @@ class Synth {
           callback,
           "/audio/" + instrument + "/"
         ).set({
-          volume: -4,
+          volume: 5,
           oscillator: {
             type: "triangle17",
           },

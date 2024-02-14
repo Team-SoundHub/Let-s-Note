@@ -55,6 +55,10 @@ export const innerContentSlice = createSlice({
       state.clickedNotes = action.payload;
     },
 
+    clearClickedNotes: (state) => {
+      state.clickedNotes = null;
+    },
+
     clearAllNotes: (state) => {
       state.innerContent = { instrument: "piano", x: null, y: null };
       state.workspaceNotes = [];
@@ -69,6 +73,7 @@ export const {
   setWorkspaceNotes,
   setSnapshotNotes,
   setClickedNotes,
+  clearClickedNotes,
   clearAllNotes,
 } = innerContentSlice.actions;
 
