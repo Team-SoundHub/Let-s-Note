@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
@@ -15,7 +15,7 @@ import { RiRobot2Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 
 import {getWorkspaceInfo, createSnapshot, callAI} from "../api/workSpaceApi";
-import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
+import {setWorkspaceNotes, clearAllNotes, selectNotes, setClickedNotes} from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
 import AIModal from "../components/WorkSpace/AIModal";
@@ -220,8 +220,23 @@ const WorkPlacePage = () => {
   };
 
   const handleAI = async (accountId, text, value) => {
-    const response = await callAI(accountId, text, value);
-    console.log(response);
+    const noteInfo = await getWorkspaceInfo(spaceId);
+    var piano_data = noteInfo.response.notesList[0].notes;
+
+    const piano_list = Array.from({ length: noteInfo.response.maxX + 1 }, () => []);
+
+    for(let i = 0; i < piano_data.length; i++){
+      console.log(piano_data[i]["noteX"]);
+      console.log(piano_data[i]["noteY"]);
+      piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
+    }
+    const result = await callAI(piano_list, accountId, text, value);
+    result.response.noteList.forEach(function(current_y, idx){
+      if(current_y != "None"){
+        var current_x = noteInfo.response.maxX + 1 + idx;
+        document.querySelector(`div[id='${current_x}'] div:nth-child(${current_y})`).click();
+      }
+    });
   };
 
   return (
