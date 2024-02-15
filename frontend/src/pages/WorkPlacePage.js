@@ -231,12 +231,21 @@ const WorkPlacePage = () => {
       piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
     }
     const result = await callAI(piano_list, accountId, text, value);
-    result.response.noteList.forEach(function(current_y, idx){
-      if(current_y != "None"){
+
+    const formed_list = [{instrument: "piano", notes: []}, {instrument: "guitar", notes: []}, {instrument: "drum", notes: []}]
+
+    result.response.noteList.forEach(function(current_y, idx) {
+      if (current_y.length > 0) {
         var current_x = noteInfo.response.maxX + 1 + idx;
-        document.querySelector(`div[id='${current_x}'] div:nth-child(${current_y})`).click();
+        current_y.forEach(function (inner_y){
+          formed_list[0].notes.push({noteX: current_x, noteY: parseInt(inner_y)})
+        });
       }
     });
+
+    dispatch(setWorkspaceNotes(formed_list));
+
+
   };
 
   return (
