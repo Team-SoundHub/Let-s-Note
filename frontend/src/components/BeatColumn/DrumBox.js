@@ -110,15 +110,15 @@ const DrumBox = ({
 
     // 해당하는 노트가 있으면 상태 업데이트
     activeNotes.forEach((activeNote) => {
+      const instrumentIndex = instrumentList.indexOf(activeNote.instrument);
       setActive((prevActive) => {
-        const instrumentIndex = instrumentList.indexOf(activeNote.instrument);
         const newActive = [...prevActive];
-        newActive[instrumentIndex] = true;
+        newActive[instrumentIndex] = !newActive[instrumentIndex];
         return newActive;
       });
-      setActiveBoxes(row, activeNote.instrument, true);
+      setActiveBoxes(row, activeNote.instrument, !active[instrumentIndex]);
     });
-  }, []);
+  }, [workspaceNotes]);
 
   useEffect(() => {
     const instrumentIndex = instrumentList.indexOf(innerContent.instrument);
