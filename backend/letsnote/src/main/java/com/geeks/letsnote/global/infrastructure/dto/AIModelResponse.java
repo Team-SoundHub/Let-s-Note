@@ -1,4 +1,4 @@
-package com.geeks.letsnote.global.infrastructure;
+package com.geeks.letsnote.global.infrastructure.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -9,7 +9,7 @@ public record AIModelResponse() {
     @Builder
     public record Note(
             @NotNull
-            List<String> noteList
+            List<List<String>> noteList
     ){
     }
 }

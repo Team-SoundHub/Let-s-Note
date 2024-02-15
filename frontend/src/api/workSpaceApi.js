@@ -56,4 +56,23 @@ const getMember = async (spaceId) => {
   return response.data;
 };
 
-export { getWorkspaceInfo, createSnapshot, setMember, getMember };
+const callAI = async (previous, userId, textContent, value) => {
+  try {
+    const requestData = {
+      text: textContent,
+      userId: userId,
+      value: value,
+      previous: previous
+    };
+    const response = await axiosInstance.post(
+        `/ai/${userId}`,
+        requestData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("setMember 에러:", error);
+  }
+}
+
+
+export { getWorkspaceInfo, createSnapshot, setMember, getMember, callAI };

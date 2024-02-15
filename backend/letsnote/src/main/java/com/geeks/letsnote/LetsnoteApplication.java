@@ -1,15 +1,14 @@
 package com.geeks.letsnote;
 
-import com.geeks.letsnote.global.infrastructure.AIModelRequest;
-import com.geeks.letsnote.global.infrastructure.AIModelResponse;
-import com.geeks.letsnote.global.infrastructure.AIModelService;
+import com.geeks.letsnote.global.infrastructure.dto.AIModelRequest;
+import com.geeks.letsnote.global.infrastructure.dto.AIModelResponse;
+import com.geeks.letsnote.global.infrastructure.application.AIModelService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.util.List;
 
 
 @SpringBootApplication
@@ -31,12 +30,12 @@ public class LetsnoteApplication implements ApplicationRunner {
 	}
 
 	public void performModelCall() {
-		try {
-			AIModelResponse.Note response = aiModelService.sendRequestToAPI(new AIModelRequest.BasicRequest("minkyu", "make still dre note"));
-			System.out.println(response);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			AIModelResponse.Note response = aiModelService.sendRequestToAPI(new AIModelRequest.BasicRequest("minkyu", "make still dre note"));
+//			System.out.println(response);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }
