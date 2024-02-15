@@ -64,7 +64,6 @@ class BeatColumn extends Component {
     this.setState({
       activeNotes: newActiveNotes,
     });
-    console.log("activeNotes: ", this.state.activeNotes);
   }
 
   disablePlaying() {
@@ -111,8 +110,6 @@ class BeatColumn extends Component {
           synth.playNote(scale[i]);
         }
 
-        this.updateActiveNotes();
-
         return { activeBoxes };
       },
       () => {
@@ -130,7 +127,7 @@ class BeatColumn extends Component {
       (prev) => {
         const activeBoxes = [...prev.activeBoxes];
         const activeInstrument = [...prev.activeInstrument];
-        const instrumentIndex = instrumentEnum[synth.activeInstrument];
+        const instrumentIndex = instrumentEnum["drum"];
 
         activeBoxes[i][instrumentIndex] = !activeBoxes[i][instrumentIndex]; // 활성화 여부 toggle
         console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`);
@@ -151,7 +148,8 @@ class BeatColumn extends Component {
   playBeat = (time) => {
     const { synth } = this.props;
     const { activeNotes } = this.state;
-    console.log("activeNotes: ", activeNotes);
+
+    console.log(activeNotes);
 
     activeNotes.forEach(({ note, instrument }) => {
       synth && synth.playNote(note, time, "8n", instrument);
@@ -171,7 +169,6 @@ class BeatColumn extends Component {
   }
 
   setActiveBoxes = (row, instrument, value) => {
-    console.log("row: ", row, "instrument: ", instrument);
     const { instrumentEnum } = this.state;
     const instrumentIndex = instrumentEnum[instrument];
     this.setState(

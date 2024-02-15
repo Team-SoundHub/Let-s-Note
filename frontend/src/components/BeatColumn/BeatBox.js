@@ -1,8 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
 import { setClickedNotes } from "../../app/slices/innerContentSlice";
+
+const fillAnimation = keyframes`
+  100% {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+  }
+`;
 
 const Container = styled.div`
   flex: 1;
@@ -34,12 +42,17 @@ const Container = styled.div`
   }};
   width: 3rem;
   height: 1.2rem;
-
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
-
-  transition: background-color 0.05s ease-out;
+  transition: background-color 0.05s ease-out, opacity 0.05s ease-out;
 `;
+
+/* 애니메이션 추가
+  ${(props) =>
+    props.playing &&
+    `
+    animation: ${fillAnimation} 1s ease-in-out infinite alternate;
+  `} */
 
 const pickActiveColor = (instrument) => {
   switch (instrument) {
