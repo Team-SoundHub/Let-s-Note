@@ -27,11 +27,11 @@ class Synth {
           "/audio/" + instrument + "/"
         ).set({
           volume: -12,
-          type: "square", // 사각파
+          type: "triangle",
           attack: 0,
-          decay: 0.8,
+          decay: 0.5,
           sustain: 0,
-          release: 1.7,
+          release: 2,
         });
         this.samplers[instrument].connect(reverb);
       } else if (instrument === "piano") {
@@ -54,13 +54,13 @@ class Synth {
           callback,
           "/audio/" + instrument + "/"
         ).set({
-          volume: -4,
+          volume: 5,
           oscillator: {
             type: "triangle17",
           },
           attack: 0.01,
           decay: 0.1,
-          sustain: 0.2,
+          sustain: 0,
           release: 1.0,
         });
       }

@@ -107,7 +107,10 @@ class BeatGrid extends React.PureComponent {
   }
 
   handleBoxClick = (column, row) => {
-    const instrument = this.props.synth.activeInstrument;
+    let instrument = this.props.synth.activeInstrument;
+    const { scale } = this.props;
+    if (row >= scale.length) instrument = "drum";
+    console.log("instrument", instrument);
     this.props.sendCoordinate(instrument, column, row, this.props.spaceId);
   };
 
@@ -116,11 +119,21 @@ class BeatGrid extends React.PureComponent {
     const activeBeat = count % columns;
     const prevBeat = prevCount % columns;
     const playColumn = document.getElementById(activeBeat);
-    playColumn.scrollIntoView({
+    const playColumnRect = playColumn.getBoundingClientRect();
+    const container = this.gridRef.current;
+
+    const containerRect = container.getBoundingClientRect();
+    const containerCenterX = containerRect.width / 2;
+
+    const playColumnCenterX = playColumnRect.left + playColumnRect.width / 2;
+    const scrollValue = playColumnCenterX - containerCenterX;
+
+    container.scrollBy({
+      top: 0,
+      left: scrollValue,
       behavior: "smooth",
-      block: "center",
-      inline: "center",
     });
+
     this.props.setCount(activeBeat);
     console.log(count);
     console.log("activeBeat : ", activeBeat);

@@ -12,7 +12,6 @@ import {
 } from "../app/slices/innerContentSlice";
 
 const Container = styled.div`
-  height: 100vh;
   background-color: white;
 `;
 
@@ -30,7 +29,6 @@ const SnapshotPage = () => {
     // const remainder = maxColumn % 8;
 
     let newColumns;
-
     newColumns = 8 * (multiple + 1);    
 
     if (newColumns < 32) {
@@ -83,10 +81,7 @@ const SnapshotPage = () => {
 
   return (
     <Container>
-      <SnapshotHeader
-        onOpenModal={handleModalOpen}
-        fromMyPage={isFromMyPage}
-      />
+      <SnapshotHeader onOpenModal={handleModalOpen} fromMyPage={isFromMyPage} />
       {isReleaseModalOpen && (
         <SaveSnapshotModal
           onClose={handleModalClose}

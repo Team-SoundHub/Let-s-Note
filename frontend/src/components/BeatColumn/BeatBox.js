@@ -1,36 +1,65 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
 import { setClickedNotes } from "../../app/slices/innerContentSlice";
+
+const fillAnimation = keyframes`
+  100% {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+  }
+`;
 
 const Container = styled.div`
   flex: 1;
   margin: 0.05rem;
-  background-color: ${(props) =>
-    props.active &&
-    props.visualizeInstrument[
-      props.instrumentList.indexOf(props.instrument)
-    ] === true
-      ? pickActiveColor(props.instrument)
-      : props.col % 8 < 4
-      ? "lightgray"
-      : props.inactiveColor};
+  background: ${(props) => {
+    const activeInstrumentCount = props.active.filter(
+      (isActive) => isActive
+    ).length;
+    if (
+      activeInstrumentCount > 0 &&
+      props.visualizeInstrument[
+        props.instrumentList.indexOf(props.instrument)
+      ] === true
+    ) {
+      if (activeInstrumentCount > 1) {
+        const activeColors = props.active.map((isActive, index) =>
+          isActive ? pickActiveColor(props.instrumentList[index]) : null
+        );
+        const filteredColors = activeColors.filter((color) => color !== null);
+        return `linear-gradient(30deg, ${filteredColors.join(", ")})`;
+      } else {
+        return pickActiveColor(
+          props.instrumentList[props.active.indexOf(true)]
+        );
+      }
+    } else {
+      return props.col % 8 < 4 ? "lightgray" : props.inactiveColor;
+    }
+  }};
   width: 3rem;
   height: 1.2rem;
-
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
-
-  transition: background-color 0.05s ease-out;
+  transition: background-color 0.05s ease-out, opacity 0.05s ease-out;
 `;
+
+/* 애니메이션 추가
+  ${(props) =>
+    props.playing &&
+    `
+    animation: ${fillAnimation} 1s ease-in-out infinite alternate;
+  `} */
 
 const pickActiveColor = (instrument) => {
   switch (instrument) {
     case "piano":
-      return "rgb(248 113 113)";
+      return "#FFA1A1 50%";
     case "guitar":
-      return "rgb(74 222 128)";
+      return "#4886FF 50%";
     case "drum":
       return "rgb(250 204 21)";
     default:
@@ -39,14 +68,12 @@ const pickActiveColor = (instrument) => {
 };
 
 const BeatBox = ({
-  active: propActive,
   note,
   onClick,
   inactiveColor,
   activeColor,
   activeInstrument,
   setActiveBoxes,
-  setActiveInstrument,
   visualizeInstrument,
   col,
   row,
@@ -56,8 +83,9 @@ const BeatBox = ({
 }) => {
   const dispatch = useDispatch();
 
-  const [active, setActive] = useState(propActive);
+  const [active, setActive] = useState([false, false, false]);
   const [instrument, setInstrument] = useState("piano");
+  const instrumentList = ["piano", "guitar", "drum"];
 
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const workspaceNotes = useSelector(
@@ -69,24 +97,25 @@ const BeatBox = ({
 
   // 처음 마운트 시 전역상태의 노트정보 반영
   useEffect(() => {
-    let activeNote;
+    let activeNotes;
 
     if (isSnapshot) {
-      activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
+      activeNotes = snapshotNotes.filter((n) => n.x === col && n.y === row);
     } else {
-      activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
+      activeNotes = workspaceNotes.filter((n) => n.x === col && n.y === row);
     }
 
     // 해당하는 노트가 있으면 상태 업데이트
-    if (activeNote && !active) {
-      setActive(true);
-      setInstrument(activeNote.instrument);
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, activeNote.instrument);
-    }
-  }, [snapshotNotes, workspaceNotes, col, row, isSnapshot]);
-
-  const instrumentList = ["piano", "guitar", "drum"];
+    activeNotes.forEach((activeNote) => {
+      setActive((prevActive) => {
+        const instrumentIndex = instrumentList.indexOf(activeNote.instrument);
+        const newActive = [...prevActive];
+        newActive[instrumentIndex] = true;
+        return newActive;
+      });
+      setActiveBoxes(row, activeNote.instrument, true);
+    });
+  }, []);
 
   const handleClick = () => {
     if (isSnapshot) {
@@ -100,17 +129,26 @@ const BeatBox = ({
   };
 
   useEffect(() => {
+    const instrumentIndex = instrumentList.indexOf(innerContent.instrument);
     // Check if x and y match col and row
-    if (innerContent.x === col && innerContent.y === row && !active) {
-      setActive(true);
-      setInstrument(innerContent.instrument);
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, innerContent.instrument);
-    } else if (innerContent.x === col && innerContent.y === row && active) {
-      setActive(false);
-      setInstrument(undefined);
-      setActiveBoxes(row, false);
-      setActiveInstrument(row, undefined);
+    if (
+      innerContent.x === col &&
+      innerContent.y === row &&
+      !active[instrumentIndex]
+    ) {
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, true);
+    } else if (
+      innerContent.x === col &&
+      innerContent.y === row &&
+      active[instrumentIndex]
+    ) {
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, false);
     }
   }, [innerContent]);
 
@@ -155,12 +193,6 @@ const BeatBox = ({
       onMouseOver={handleMouseOver}
     />
   );
-};
-
-BeatBox.defaultProps = {
-  active: false,
-  activeColor: "red",
-  onClick: () => null,
 };
 
 export default BeatBox;
