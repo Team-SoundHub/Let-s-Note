@@ -20,9 +20,19 @@ public class AIModelController {
         this.aiModelService = aiModelService;
     }
 
-    @PostMapping("/{username}")
-    public ResponseEntity<CommonResponse> callAI(@PathVariable String username, @RequestBody AIModelRequest.BasicRequest basicRequest) throws JsonProcessingException {
-        AIModelResponse.Note result = aiModelService.sendRequestToAPI(basicRequest);
+    @PostMapping("/genre/{username}")
+    public ResponseEntity<CommonResponse> callGenreAI(@PathVariable String username, @RequestBody AIModelRequest.BasicRequest basicRequest) throws JsonProcessingException {
+        AIModelResponse.Note result = aiModelService.requestToGenreAPI(basicRequest);
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response(result)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/chord/{username}")
+    public ResponseEntity<CommonResponse> callChordAI(@PathVariable String username, @RequestBody AIModelRequest.BasicRequest basicRequest) throws JsonProcessingException {
+        AIModelResponse.Note result = aiModelService.requestToChordAPI(basicRequest);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
                 .response(result)
