@@ -4,15 +4,13 @@ import styled, { keyframes } from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
 import { setClickedNotes } from "../../app/slices/innerContentSlice";
 
-const fillAnimation = keyframes`
-  100% {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-  }
-`;
-
 const Container = styled.div`
+  @keyframes fillAnimation {
+    100% {
+      background-color: white;
+    }
+  }
+
   flex: 1;
   margin: 0.05rem;
   background: ${(props) => {
@@ -45,14 +43,13 @@ const Container = styled.div`
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
   transition: background-color 0.05s ease-out, opacity 0.05s ease-out;
-`;
-
-/* 애니메이션 추가
   ${(props) =>
     props.playing &&
+    props.active.filter((isActive) => isActive).length > 0 &&
     `
-    animation: ${fillAnimation} 1s ease-in-out infinite alternate;
-  `} */
+    animation: fillAnimation 0.1s ease-in-out alternate;
+  `}
+`;
 
 const pickActiveColor = (instrument) => {
   switch (instrument) {
