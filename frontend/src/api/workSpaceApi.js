@@ -56,7 +56,7 @@ const getMember = async (spaceId) => {
   return response.data;
 };
 
-const callAI = async (previous, userId, textContent, value) => {
+const callGenreAI = async (previous, userId, textContent, value) => {
   try {
     const requestData = {
       text: textContent,
@@ -65,14 +65,30 @@ const callAI = async (previous, userId, textContent, value) => {
       previous: previous
     };
     const response = await axiosInstance.post(
-        `/ai/${userId}`,
+        `/ai/genre/${userId}`,
         requestData
     );
     return response.data;
   } catch (error) {
-    console.error("setMember 에러:", error);
+  }
+}
+
+const callChordAI = async (previous, userId, textContent, value) => {
+  try {
+    const requestData = {
+      text: textContent,
+      userId: userId,
+      value: value,
+      previous: previous
+    };
+    const response = await axiosInstance.post(
+        `/ai/chord/${userId}`,
+        requestData
+    );
+    return response.data;
+  } catch (error) {
   }
 }
 
 
-export { getWorkspaceInfo, createSnapshot, setMember, getMember, callAI };
+export { getWorkspaceInfo, createSnapshot, setMember, getMember, callGenreAI, callChordAI };

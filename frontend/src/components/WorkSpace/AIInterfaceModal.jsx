@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import Button from "../common/Button";
-
 const ModalBackground = styled.div`
     position: fixed;
     top: 0;
@@ -111,53 +110,23 @@ const ModalInput = tw.input`
   dark:text-white
 `;
 
-const AiModal = ({onClose, accountId, handleAI}) => {
-    const [text, setText] = useState('');
-    const [value, setValue] = useState(16);
+const AIInterfaceModal = ({handleAIInterfaceModalClose, handleAIGenreModalOpen, handleAIChordModalOpen}) => {
 
     return (
-        <ModalBackground onClick={onClose}>
+        <ModalBackground onClick={handleAIInterfaceModalClose}>
             <ModalContainer onClick={e => e.stopPropagation()}>
                 <ModalMain>
                     <ModalHeader>
                         <ModalTitle>AI에게 어울리는 노트 추천받기</ModalTitle>
-                        <ModalCloseButton onClick={onClose}>X</ModalCloseButton>
+                        <ModalCloseButton onClick={handleAIInterfaceModalClose}>X</ModalCloseButton>
                     </ModalHeader>
                     <ModalBody>
                         <ModalForm>
-                            <div>
-                                추천받고 싶으신 음악 장르를 입력해 주세요
-                                <ModalInput
-                                    type="text"
-                                    placeholder=""
-                                    value={text}
-                                    onChange={(e) => setText(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                추천받고 싶으신 노트의 갯수를 입력해 주세요
-                                <div>
-                                    <div className={"w-full flex justify-between"}>
-                                        <span >0</span>
-                                        <span className={"pl-3"}>8</span>
-                                        <span>16</span>
-                                        <span>24</span>
-                                        <span>32</span>
-                                    </div>
-                                    <input
-                                        className={"w-full"}
-                                        type="range"
-                                        placeholder=""
-                                        min="0"
-                                        max="32"
-                                        step="8"
-                                        value={value}
-                                        onChange={(e) => setValue(e.target.value)}
-                                    />
-                                </div>
+                            <div className={"flex justify-center content-center"}>
+                                <Button type="button" onClick={handleAIGenreModalOpen}>장르 AI 모델</Button>
                             </div>
                             <div className={"flex justify-center content-center"}>
-                                <Button type="button" onClick={() => handleAI(accountId, text, value)}>생성</Button>
+                                <Button type="button" onClick={handleAIChordModalOpen}>화음 AI 모델</Button>
                             </div>
                         </ModalForm>
                     </ModalBody>
@@ -166,4 +135,5 @@ const AiModal = ({onClose, accountId, handleAI}) => {
         </ModalBackground>
     );
 };
-export default AiModal;
+
+export default AIInterfaceModal;

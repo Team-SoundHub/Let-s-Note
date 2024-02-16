@@ -22,7 +22,7 @@ public class AIModelService {
     private String baseUrl;
 
     public AIModelResponse.Note requestToGenreAPI(AIModelRequest.BasicRequest basicRequest) throws JsonProcessingException {
-        String url = baseUrl + "/api/v1/genre" + basicRequest.username();
+        String url = baseUrl + "/api/v1/genre/" + basicRequest.username();
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -41,7 +41,7 @@ public class AIModelService {
     }
 
     public AIModelResponse.Note requestToChordAPI(AIModelRequest.BasicRequest basicRequest) throws JsonProcessingException {
-        String url = baseUrl + "/api/v1/chord" + basicRequest.username();
+        String url = baseUrl + "/api/v1/chord/" + basicRequest.username();
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
