@@ -232,7 +232,7 @@ class BeatColumn extends Component {
           row={i}
           isSnapshot={isSnapshot}
           containerRef={containerRef}
-          playing={this.props.playing}
+          playing={playing}
         />
       );
     }

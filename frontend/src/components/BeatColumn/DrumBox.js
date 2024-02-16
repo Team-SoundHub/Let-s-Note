@@ -4,6 +4,12 @@ import styled from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
+  @keyframes fillAnimation {
+    100% {
+      background-color: white;
+    }
+  }
+
   flex: 1;
   margin: 0.05rem;
   background-color: ${(props) =>
@@ -16,6 +22,13 @@ const Container = styled.div`
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0)}rem;
   position: relative; /* Ensure the circle is positioned relative to this container */
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
+  transition: background-color 0.05s ease-out, opacity 0.05s ease-out;
+  ${(props) =>
+    props.playing &&
+    props.active.filter((isActive) => isActive).length > 0 &&
+    `
+    animation: fillAnimation 0.1s ease-in-out alternate;
+  `}
 
   &::after {
     content: ""; /* Create a pseudo-element for the circle */
@@ -40,24 +53,6 @@ const Container = styled.div`
     border-radius: 50%; /* Make it a circle */
   }
 `;
-
-// const Container = styled.div`
-//   flex: 1;
-//   margin: 0.1rem;
-//   background-color: ${(props) =>
-//     props.active &&
-//     props.visualizeInstrument[
-//       props.instrumentList.indexOf(props.instrument)
-//     ] === true
-//       ? pickActiveColor(props.instrument)
-//       : props.col % 8 < 4
-//       ? "lightgray"
-//       : props.inactiveColor};
-//   width: 2rem;
-//   height: 2rem;
-
-//   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
-// `;
 
 const pickActiveColor = (instrument) => {
   switch (instrument) {
