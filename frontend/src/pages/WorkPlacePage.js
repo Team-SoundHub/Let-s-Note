@@ -14,11 +14,13 @@ import NoteViewModal from "../containers/Note/NoteViewModal";
 import { RiRobot2Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 
-import {getWorkspaceInfo, createSnapshot, callAI} from "../api/workSpaceApi";
+import {getWorkspaceInfo, createSnapshot, callGenreAI, callChordAI} from "../api/workSpaceApi";
 import {setWorkspaceNotes, clearAllNotes, selectNotes, setClickedNotes} from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
-import AIModal from "../components/WorkSpace/AIModal";
+import AiInterfaceModal from "../components/WorkSpace/AIInterfaceModal";
+import AIGenreModal from "../components/WorkSpace/AIGenreModal";
+import AIChordModal from "../components/WorkSpace/AIChordModal";
 
 const Container = styled.div`
   position: relative;
@@ -37,7 +39,9 @@ const WorkPlacePage = () => {
   const [snapshotCreated, setSnapshotCreated] = useState(false);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
   const [isUrlModalOpen, setUrlModalOpen] = useState(false);
-  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [isAIGenreModalOpen, setIsAIGenreModalOpen] = useState(false);
+  const [isAIChordModalOpen, setIsChordAIModalOpen] = useState(false);
+  const [isAIInterfaceModalOpen, setIsAIInterfaceModalOpen] = useState(false);
   const [snapshotUrl, setSnapshotUrl] = useState("");
   const [snapshotId, setSnapshotId] = useState("");
   const [memberList, setMemberList] = useState([]);
@@ -211,17 +215,33 @@ const WorkPlacePage = () => {
     setSelectedImageUrl(null);
   };
 
-  const handleAIModalOpen = () => {
-    setIsAIModalOpen(true);
+  const handleAIInterfaceModalOpen = () => {
+    setIsAIInterfaceModalOpen(true);
   };
 
-  const handleAIModalClose = () => {
-    setIsAIModalOpen(false);
+  const handleAIInterfaceModalClose = () => {
+    setIsAIInterfaceModalOpen(false);
   };
 
-  const handleAI = async (accountId, text, value) => {
-    setLoading(true); // Set loading to true when API call is made
+  const handleAIGenreModalOpen = () => {
+    setIsAIGenreModalOpen(true);
+  };
 
+  const handleAIGenreModalClose = () => {
+    setIsAIGenreModalOpen(false);
+  };
+
+  const handleAIChordModalOpen = () => {
+    setIsChordAIModalOpen(true);
+  };
+
+  const handleAIChordModalClose = () => {
+    setIsChordAIModalOpen(false);
+  };
+
+
+  const handleGenreAI = async (accountId, text, value) => {
+    setLoading(true);
     try {
       const noteInfo = await getWorkspaceInfo(spaceId);
       var piano_data = noteInfo.response.notesList[0].notes;
@@ -233,7 +253,7 @@ const WorkPlacePage = () => {
         console.log(piano_data[i]["noteY"]);
         piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
       }
-      const result = await callAI(piano_list, accountId, text, value);
+      const result = await callGenreAI(piano_list, accountId, text, value);
 
       const formed_list = [{instrument: "piano", notes: []}, {instrument: "guitar", notes: []}, {instrument: "drum", notes: []}]
 
@@ -251,10 +271,48 @@ const WorkPlacePage = () => {
       alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
     } finally {
       setLoading(false);
-      handleAIModalClose();
+      handleAIGenreModalClose();
+      handleAIInterfaceModalClose();
     }
-
   };
+
+  const handleChordAI = async (accountId, text, value) => {
+    setLoading(true);
+
+    try {
+      const noteInfo = await getWorkspaceInfo(spaceId);
+      var piano_data = noteInfo.response.notesList[0].notes;
+
+      const piano_list = Array.from({ length: noteInfo.response.maxX + 1 }, () => []);
+
+      for(let i = 0; i < piano_data.length; i++){
+        console.log(piano_data[i]["noteX"]);
+        console.log(piano_data[i]["noteY"]);
+        piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
+      }
+      const result = await callChordAI(piano_list, accountId, text, value);
+
+      const formed_list = [{instrument: "piano", notes: []}, {instrument: "guitar", notes: []}, {instrument: "drum", notes: []}]
+
+      result.response.noteList.forEach(function(current_y, idx) {
+        if (current_y.length > 0) {
+          var current_x = noteInfo.response.maxX + 1 + idx;
+          current_y.forEach(function (inner_y){
+            formed_list[0].notes.push({noteX: current_x, noteY: parseInt(inner_y)})
+          });
+        }
+      });
+
+      dispatch(setWorkspaceNotes(formed_list));
+    }catch (error) {
+      alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
+    } finally {
+      setLoading(false);
+      handleAIChordModalClose();
+      handleAIInterfaceModalClose();
+    }
+  };
+
 
   return (
     <WebSocketContainer spaceId={spaceId}>
@@ -340,15 +398,29 @@ const WorkPlacePage = () => {
             nickname={myNickname}
           />
           <div className={"flex justify-center absolute bottom-[200px] left-0 w-[80px] h-[60px]"}>
-            <button className={"flex justify-center items-center w-[60px] h-[60px] rounded-full focus:ring-4 focus:outline-none focus:ring-lime-200 bg-[#49C5B6] hover:bg-[#367e76]"} onClick={handleAIModalOpen}>
+            <button className={"flex justify-center items-center w-[60px] h-[60px] rounded-full focus:ring-4 focus:outline-none focus:ring-lime-200 bg-[#49C5B6] hover:bg-[#367e76]"} onClick={handleAIInterfaceModalOpen}>
               <RiRobot2Line className={"w-8 h-8 fill-white"}/>
             </button>
           </div>
-          {isAIModalOpen && (
-              <AIModal
-                  onClose={handleAIModalClose}
+          {isAIInterfaceModalOpen && (
+              <AiInterfaceModal
+                  handleAIInterfaceModalClose={handleAIInterfaceModalClose}
+                  handleAIGenreModalOpen={handleAIGenreModalOpen}
+                  handleAIChordModalOpen={handleAIChordModalOpen}
+              />
+          )}
+          {isAIGenreModalOpen && (
+              <AIGenreModal
+                  handleAIGenreModalClose={handleAIGenreModalClose}
                   accountId={accountId}
-                  handleAI={handleAI}
+                  handleGenreAI={handleGenreAI}
+              />
+          )}
+          {isAIChordModalOpen && (
+              <AIChordModal
+                  handleAIChordModalClose={handleAIChordModalClose}
+                  accountId={accountId}
+                  handleChordAI={handleChordAI}
               />
           )}
         </Container>
