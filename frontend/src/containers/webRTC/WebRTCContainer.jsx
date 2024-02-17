@@ -16,6 +16,25 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
             }
         ]
     }
+
+    useEffect(() => {
+        return () => {
+            const sendUserExit = () => {
+                if(client){
+                    client.publish({
+                        destination: `/app/webrtc/${spaceId}/exit/sendExit`,
+                        body: JSON.stringify({
+                            exitUserId : mySocketId 
+                        }),
+                    });
+                }
+            };
+            
+            sendUserExit();
+            setUsers([]);
+        };
+    },[]);
+
     const fetchMyUsername = async () => {
         try {
           const response = await getMyUserId(accountId);
@@ -59,27 +78,6 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
         }
     }, [mySocketId, handleConnection]);
 
-    
-
-    
-
-    // }, []);
-
-	// const getLocalStream = useCallback(async () => {
-	// 	try {
-	// 		const localStream = await navigator.mediaDevices.getUserMedia({
-	// 			audio: true,
-	// 			video: true,
-	// 		});
-    //         localStreamRef.current = localStream;
-    //         console.log("localStream 획득", localStreamRef.current);
-	// 		if (localVideoRef.current) {
-    //             localVideoRef.current.srcObject = localStream;
-    //         };
-	// 	} catch (e) {
-	// 		console.log(`getUserMedia error: ${e}`);
-	// 	}
-	// }, [localStreamRef.current]);
 
 	const createPeerConnection = useCallback((socketId) => {
 		try {
@@ -95,7 +93,7 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 				console.log('onicecandidate : ',mySocketId , socketId);
                 
                 client.publish({
-                    destination: `/app/webrtc/${spaceId}/candidata/sendCandidate`,
+                    destination: `/app/webrtc/${spaceId}/candidate/sendCandidate`,
                     body: JSON.stringify({
                         candidate: e.candidate,
                         candidateSendId: mySocketId,
@@ -271,13 +269,13 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
         console.log("subscribe Start");
 
         // fetchMyUsername();
-        handleJoin();
+        
         console.log("handleOffer할떄 ", isConnected,client);
         handleOffer();
         handleAnswer();
         handleIceCandidate();
         handleUserExit();
-
+        handleJoin();
         fetchMyUsername().then(() => {
             getLocalStream();
         })
@@ -291,19 +289,9 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 				delete pcsRef.current[user.userId];
 			});
 
-            const sendUserExit = () => {
-                client.publish({
-                    destination: `/app/workspace/${spaceId}/exit/sendExit`,
-                    body: JSON.stringify({
-                        exitUserId : mySocketId 
-                    }),
-                });
-            };
-            
-            sendUserExit();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [createPeerConnection, isConnected, spaceId, localStreamRef.current, mySocketId, client]);
+	}, [createPeerConnection, isConnected, spaceId, mySocketId, client]);
 
     
 
@@ -327,173 +315,6 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
         
 	);
 } 
-  
-//     return (
-//       <div>
-//         <Button onClick={startAudioChat}>Start Audio Chat</Button>
-//       </div>
-//     );
-// };
 
 export default WebRTCContainer;
 
-// // VoiceChatContainer.js
-// import React, { useEffect, useRef, useState } from 'react';
-// import SimplePeer from 'simple-peer';
-// import Webcam from 'react-webcam';
-
-// const WebRTCContainer = ({ client, children, spaceId, isConnected }) => {
-//   const [peers, setPeers] = useState([]);
-//   const audioRef = useRef(null);
-//   const isSpeakingRef = useRef(false);
-
-//   useEffect(() => {
-//     return () => {
-//       endVoiceChat();
-//     };
-//   }, []);
-
-//   useEffect(() => {
-//     if (isConnected) {
-//       client.subscribe(`/topic/offer/${spaceId}`, (signal) => {
-//         const offer = JSON.parse(signal.body);
-//         const peerConnection = new SimplePeer({
-//           initiator: false,
-//           trickle: false,
-//         });
-//         console.log("소켓 받았음.");
-//         console.log(offer);
-//         peerConnection.signal(offer);
-//         setPeers((prevPeers) => [...prevPeers, {peerConnection, stream: null}]);
-//       }, {
-//         accessToken: client.connectHeaders.accessToken,
-//       });
-//     }
-//   }, [isConnected]);
-
-//   const startVoiceChat = async () => {
-//     const peerConnection = new SimplePeer({ initiator: true, trickle: false });
-
-//     peerConnection.on('signal', (signal) => {
-//       client.publish({
-//         destination: `/app/offer/${spaceId}`,
-//         body: JSON.stringify(signal),
-//       });
-//       console.log("소켓 전송함.");
-//       console.log(signal);
-//     });
-
-//     try {
-//         const userMediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-//         userMediaStream.getTracks().forEach((track) => {
-//           peerConnection.addTrack(track, userMediaStream);
-//         });
-//       } catch (error) {
-//         console.error('Error accessing user media:', error);
-//       }
-
-//     peerConnection.on('track', async (event) => {
-//         const [remoteStream] = event.streams;
-//         audioRef.srcObject = remoteStream;
-//         audioRef.play();
-//         console.log("track");
-
-//         setPeers((prevPeers) => [
-//             ...prevPeers,
-//             { peerConnection, remoteStream },
-//           ]);
-        
-//     })
-
-//     peerConnection.on('stream', (stream) => {
-//       // Handle the incoming audio stream
-//       console.log("stream coming");
-//       audioRef.srcObject = stream;
-//       audioRef.play();
-
-//       // Set peers with the new peer connection
-//       setPeers((prevPeers) => [
-//         ...prevPeers,
-//         { peerConnection, stream },
-//       ]);
-//       console.log("stream 받음")
-
-//       // Start detecting speaking
-//       startSpeakingDetection(stream);
-//     });
-
-    
-//   };
-
-//   const endVoiceChat = () => {
-//     peers.forEach((peer) => {
-//         peer.peerConnection.destroy();
-//       });
-//     setPeers([]);
-//     stopSpeakingDetection();
-//   };
-
-//   const startSpeakingDetection = (stream) => {
-//     const audioContext = new AudioContext();
-//     const analyser = audioContext.createAnalyser();
-//     const microphone = audioContext.createMediaStreamSource(stream);
-//     const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-
-//     analyser.smoothingTimeConstant = 0.8;
-//     analyser.fftSize = 1024;
-
-//     microphone.connect(analyser);
-//     analyser.connect(javascriptNode);
-//     javascriptNode.connect(audioContext.destination);
-
-//     javascriptNode.onaudioprocess = () => {
-//       const array = new Uint8Array(analyser.frequencyBinCount);
-//       analyser.getByteFrequencyData(array);
-
-//       const average = array.reduce((acc, value) => acc + value) / array.length;
-      
-//       if (average > 50) {
-//         // If average volume is above a threshold (adjust as needed), consider as speaking
-//         // if (!isSpeakingRef.current) {
-//           console.log("Someone is speaking!");
-//           isSpeakingRef.current = true;
-//           // Perform any action you want when someone starts speaking
-//         // }
-//       } else {
-//         // If average volume is below the threshold, consider as silence
-//         isSpeakingRef.current = false;
-//         // Perform any action you want when there is silence
-//       }
-//     };
-//   };
-
-//   const stopSpeakingDetection = () => {
-//     isSpeakingRef.current = false;
-//     // Stop any audio analysis or cleanup resources if needed
-//   };
-
-//   return (
-//     <div>
-//       {peers.map((peer,index) => (
-//         <div key={index}>
-//           <audio ref={audioRef => {
-//             if(audioRef){
-//                 audioRef.srcObject = peer.stream;
-//             }
-//             }} autoPlay />
-//           <Webcam audioRef={(audioRef)} autoPlay />
-//           {index}
-//         </div>
-//       ))}
-//       {peers.length === 0 && (
-//         <button onClick={startVoiceChat}>Start Voice Chat</button>
-//       )}
-//       {peers.length > 0 && (
-//         <button onClick={endVoiceChat}>End Voice Chat</button>
-//       )}
-//       <Webcam audioRef={audioRef} />
-//     </div>
-//   );
-// };
-
-// export default WebRTCContainer;
