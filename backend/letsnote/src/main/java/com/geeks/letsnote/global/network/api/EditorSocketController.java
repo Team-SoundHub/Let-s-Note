@@ -81,16 +81,6 @@ public class EditorSocketController {
 		return new SocketResponse.WorkSpace(spaceId);
 	}
 
-	@MessageMapping("/offer/{spaceId}")
-	@SendTo("/topic/offer/{spaceId}")
-	public WebRTCResponse.Offer sendSimpleOffer(@Valid @Payload WebRTCRequest.Offer offer, @DestinationVariable String spaceId) throws Exception {
-		WebRTCResponse.Offer responseOffer = WebRTCResponse.Offer.builder()
-				.type(offer.type())
-				.sdp(offer.sdp())
-				.build();
-		return responseOffer;
-	}
-
 	@MessageMapping("/workspace/{spaceId}/chat/sendMessage")
 	@SendTo("/topic/workspace/{spaceId}/chat/public")
 	public SocketResponse.Chat sendWorkSpaceMessage(
