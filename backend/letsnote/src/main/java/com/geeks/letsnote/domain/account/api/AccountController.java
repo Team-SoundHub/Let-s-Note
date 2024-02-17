@@ -107,4 +107,19 @@ public class AccountController
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @GetMapping("/username/{accountId}")
+    public ResponseEntity<CommonResponse> getAccountUsername(@PathVariable("accountId") Long accountId){
+        if(!accountService.checkPathVariableWithTokenUser(accountId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        ResponseAccount.Username username = accountService.getUsernameFromAccountId(accountId);
+
+        CommonResponse response = CommonResponse.builder()
+                .success(true)
+                .response(username)
+                .build();
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }

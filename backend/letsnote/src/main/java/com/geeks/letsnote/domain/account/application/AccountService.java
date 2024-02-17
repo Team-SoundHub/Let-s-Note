@@ -32,4 +32,6 @@ public interface AccountService {
     boolean checkPathVariableWithTokenUser(Long accountId);
 
     Optional<Account> getAccountFromUserId(String userId);
+
+    ResponseAccount.Username getUsernameFromAccountId(Long accountId);
 }
