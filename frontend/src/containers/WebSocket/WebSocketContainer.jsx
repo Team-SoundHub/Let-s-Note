@@ -22,16 +22,14 @@ const WebSocketContainer = ({ spaceId, children }) => {
     console.log("[WebSocketContainer] spaceId 받아옴:", spaceId);
 
     const client = new StompJS.Client({
-      // brokerURL: `${process.env.REACT_APP_SOCKET_URL}/letsnote/ws`,
-      brokerURL: 'ws://localhost:8080/letsnote/ws',
+      brokerURL: `${process.env.REACT_APP_SOCKET_URL}/letsnote/ws`,
       connectHeaders: {
         accessToken: accessToken,
         spaceId: spaceId,
         accountId: accountId,
       },
       webSocketFactory: () =>
-        // new SockJS(`${process.env.REACT_APP_SOCKET_HTTP}/letsnote/ws`),
-        new SockJS('http://localhost:8080/letsnote/ws'),
+        new SockJS(`${process.env.REACT_APP_SOCKET_HTTP}/letsnote/ws`),
       onConnect: () => {
         console.log("Connected: ");
         setIsConnected(true);

@@ -1,5 +1,5 @@
 import { Button } from 'flowbite-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { getMyUserId } from '../../api/userIdApi';
 
 const WebRTCContainer = ({ client, isConnected, spaceId }) => {
@@ -8,63 +8,96 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 	const localStreamRef = useRef(null);
     const localVideoRef = useRef(null);
 	const [users, setUsers] = useState([]);
-    const [mySocketId,setMySocketId] = useState;
-
-    useEffect(() => {
-        const fetchMyUsername = async () => {
-            try {
-              const response = await getMyUserId(accountId);
-              setMySocketId(response.response.username);
-              console.log("내 id:", response.response.username);
-            } catch (error) {
-              console.error("내 id 요청 Error:", error);
+    const [mySocketId,setMySocketId] = useState(null);
+    const pc_config = {
+        iceServers: [
+            {
+                urls:['stun:stun1.1.google.com:19302' , 'stun:stun2.1.google.com:19302'],
             }
-          };
+        ]
+    }
+    const fetchMyUsername = async () => {
+        try {
+          const response = await getMyUserId(accountId);
+          setMySocketId(response.response.username);
+          console.log("내 id:", response.response.username);
+        } catch (error) {
+          console.error("내 id 요청 Error:", error);
+        }
+    };
 
-        fetchMyUsername();
-    }, []);
-
-	const getLocalStream = useCallback(async () => {
-		try {
-			const localStream = await navigator.mediaDevices.getUserMedia({
-				audio: true,
-				video: true,
-			});
+    const getLocalStream = useCallback (async () => {
+        if(mySocketId === null) return;
+        try {
+            const localStream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: true,
+            });
             localStreamRef.current = localStream;
-			if (localVideoRef.current) {
+            console.log("localStream 획득", localStreamRef.current);
+            if (localVideoRef.current) {
                 localVideoRef.current.srcObject = localStream;
             };
-            if(!isConnected){
-                return;
-            }
-            client.publish({
-                destination: `/app/webrtc/${spaceId}/join`,
-                body: JSON.stringify({
-                    userId : mySocketId,
-                    spaceId,
-                }),
-            });
-		} catch (e) {
-			console.log(`getUserMedia error: ${e}`);
-		}
-	}, []);
+            handleConnection();
+        } catch (e) {
+            console.log(`getUserMedia error: ${e}`);
+        }
+    }, [mySocketId]);
+
+    const handleConnection = () => {
+        if(mySocketId === null) {
+            return;
+        }
+        console.log("내 id in Connection:", mySocketId);
+        console.log("join 전송 함");
+        client.publish({
+            destination: `/app/webrtc/${spaceId}/join`,
+            body: JSON.stringify({
+                userId : mySocketId,
+                spaceId,
+            }),
+        });
+    };
+
+    
+
+    // }, []);
+
+	// const getLocalStream = useCallback(async () => {
+	// 	try {
+	// 		const localStream = await navigator.mediaDevices.getUserMedia({
+	// 			audio: true,
+	// 			video: true,
+	// 		});
+    //         localStreamRef.current = localStream;
+    //         console.log("localStream 획득", localStreamRef.current);
+	// 		if (localVideoRef.current) {
+    //             localVideoRef.current.srcObject = localStream;
+    //         };
+	// 	} catch (e) {
+	// 		console.log(`getUserMedia error: ${e}`);
+	// 	}
+	// }, [localStreamRef.current]);
 
 	const createPeerConnection = useCallback((socketId) => {
 		try {
+            if(socketId === mySocketId || mySocketId === null){
+                return null;
+            }
 			const pc = new RTCPeerConnection(pc_config);
 
 			pc.onicecandidate = (e) => {
 				if (!client && e.candidate){
                     return;
                 }
-				console.log('onicecandidate');
-
+				console.log('onicecandidate : ',mySocketId , socketId);
+                
                 client.publish({
                     destination: `/app/webrtc/${spaceId}/candidata/sendCandidate`,
                     body: JSON.stringify({
                         candidate: e.candidate,
                         candidateSendId: mySocketId,
-                        candidateReceiveID: socketId,
+                        candidateReceiveId: socketId,
                     })
                 });
 			};
@@ -95,26 +128,39 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 			console.error(e);
 			return undefined;
 		}
-	}, []);
+	}, [isConnected,client,mySocketId]);
 
 	useEffect(() => {
         if(!isConnected){
             return;
         }
-        const handleJoin = () => {
+        fetchMyUsername().then(() => {
+            getLocalStream();
+        })
+
+        const handleJoin = async () => {
             client.subscribe(
-                `/user/topic/webrtc/${spaceId}/join`,
-                (response) => {
+                `/user/topic/webrtc/${spaceId}/join/public`,
+                async (response) => {
+                    console.log("입장 했다. 웹소켓 받음");
                     const allUsers = JSON.parse(response.body);
-                    allUsers.forEach(async (user) => {
-                        if (!localStreamRef.current) return;
+                    console.log("handleJoin logs: ",allUsers.allUsers);
+                    allUsers.allUsers.forEach(async (user) => {
+                        console.log("user : ",user);
+                        if (!localStreamRef.current){
+                            console.log("no localStream");
+                            return;
+                        }
+                        console.log("1 : ", user);
                         const pc = createPeerConnection(user.userId);
                         if (!pc) return;
+                        console.log("2");
                         pcsRef.current = { ...pcsRef.current, [user.userId]: pc };
                         try {
                             const offer = await pc.createOffer();
                             console.log('create offer success');
                             await pc.setLocalDescription(offer);
+                            console.log('offer전송 직전 id :' , user.userId, spaceId , mySocketId);
                             client.publish({
                                 destination : `/app/webrtc/${spaceId}/offer/sendOffer`,
                                 body: JSON.stringify({
@@ -123,18 +169,25 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
                                     offerReceiveId: user.userId,
                                 }) 
                             });
+                            console.log('offer전송 완료');
                         } catch (e) {
                             console.error(e);
                         }
                 });
-            });
+            },
+            {
+                accessToken: client.connectHeaders.accessToken,
+            }
+            );
         };
 
         const handleOffer = () => {
             client.subscribe(
-                `/user/topic/webrtc/${spaceId}/getOffer`,
+                `/user/topic/webrtc/${spaceId}/offer/public`,
                 async (response) => {
+                    console.log("누군가 들어와서 Offer 보냄");
                     const data = JSON.parse(response.body);
+                    console.log("handleOffer logs: ",data);
                     if(!localStreamRef.current) return;
                     const pc = createPeerConnection(data.offerSendId);
                     if(!pc) return;
@@ -144,7 +197,8 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
                         const answer = await pc.createAnswer();
                         await pc.setLocalDescription(answer);
                         client.publish({
-                            destination: JSON.stringify({
+                            destination: `/app/webrtc/${spaceId}/answer/sendAnswer`,
+                            body: JSON.stringify({
                                 sdp: answer,
                                 answerSendId: mySocketId,
                                 answerReceiveId: data.offerSendId,
@@ -156,54 +210,73 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
                             error
                         );
                     };
+                },
+                {
+                    accessToken: client.connectHeaders.accessToken,
                 }
             );
         };
 		
         const handleAnswer = () => {
             client.subscribe(
-                `/user/topic/webrtc/${spaceId}/getAnswer`,
+                `/user/topic/webrtc/${spaceId}/answer/public`,
                 async (response) => {
                     const data = JSON.parse(response.body);
-                    const pc = pcsRef.current[answerSendId];
+                    console.log("handleAnswer logs: ",data);
+                    const pc = pcsRef.current[data.answerSendId];
                     if(!pc) return;
                     pc.setRemoteDescription(data.sdp);
+                },
+                {
+                    accessToken: client.connectHeaders.accessToken,
                 }
             );
         };
 
         const handleIceCandidate = () => {
             client.subscribe(
-                `/user/topic/webrtc/${spaceId}/getCandidiate`,
+                `/user/topic/webrtc/${spaceId}/candidiate/public`,
                 async (response) => {
                     const data = JSON.parse(response.body);
+                    console.log("handlecand logs: ",data);
                     const pc = pcsRef.current[data.candidateSendId];
                     if(!pc) return;
                     await pc.addIceCandidate(data.candidate);
+                },
+                {
+                    accessToken: client.connectHeaders.accessToken,
                 }
             )
         };
 
         const handleUserExit = () => {
             client.subscribe(
-                `/topic/webrtc/${spaceId}/user/exit`,
+                `/topic/webrtc/${spaceId}/exit/public`,
                 (response) => {
                     const data = JSON.parse(response.body);
+                    console.log("exit logs: ",data);
+                    if(data.exitUserId === mySocketId) return;
                     const pc = pcsRef.current[data.exitUserId];
                     if(!pc) return;
                     pcsRef.current[data.exitUserId].close();
                     delete pcsRef.current[data.exitUserId];
                     setUsers((oldUsers) => oldUsers.filter((user) => user.userId !== data.exitUserId));
+                },
+                {
+                    accessToken: client.connectHeaders.accessToken,
                 }
             );
         };
+        console.log("subscribe Start");
+
+        // fetchMyUsername();
         handleJoin();
         handleOffer();
         handleAnswer();
         handleIceCandidate();
         handleUserExit();
 
-        getLocalStream();
+        // handleConnection();
 
 		return () => {
 			users.forEach((user) => {
@@ -211,9 +284,22 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 				pcsRef.current[user.userId].close();
 				delete pcsRef.current[user.userId];
 			});
+
+            const sendUserExit = () => {
+                client.publish({
+                    destination: `/app/workspace/${spaceId}/exit/sendExit`,
+                    body: JSON.stringify({
+                        exitUserId : mySocketId 
+                    }),
+                });
+            };
+            
+            sendUserExit();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [createPeerConnection, getLocalStream, isConnected, spaceId, localStreamRef.current]);
+	}, [createPeerConnection, isConnected, spaceId, localStreamRef.current, mySocketId, client]);
+
+    
 
 	return (
 		<div>
@@ -229,9 +315,10 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 				autoPlay
 			/>
 			{users.map((user, index) => (
-				<Video key={index} email={user.email} stream={user.stream} />
+				<video key={index} stream={user.stream} />
 			))}
 		</div>
+        
 	);
 } 
   
