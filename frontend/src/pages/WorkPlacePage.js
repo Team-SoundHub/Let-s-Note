@@ -227,13 +227,7 @@ const WorkPlacePage = () => {
           client = {stompClient}
           isConnected = {isConnected}
           spaceId = {spaceId}
-          audioRef={audioRef}
-          videoRef={videoRef}
-        >{({
-          peers,
-          endVoiceChat,
-          startVoiceChat,
-        }) => (
+        >
           <Container>
             {isReleaseModalOpen && (
               <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
@@ -292,15 +286,8 @@ const WorkPlacePage = () => {
               nickname={myNickname}
             />
             <WebRTC
-              peers = {peers}
-              endVoiceChat = {endVoiceChat}
-              startVoiceChat = {startVoiceChat}
-              audioRef={audioRef}
-              videoRef={videoRef}
             />
           </Container>
-          
-        )}
         </WebRTCContainer>
       )}
     </WebSocketContainer>
