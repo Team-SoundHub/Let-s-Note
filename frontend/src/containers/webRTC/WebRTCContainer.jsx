@@ -26,6 +26,21 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
         }
     };
 
+    const handleConnection = () => {
+        if(mySocketId === null) {
+            return;
+        }
+        console.log("내 id in Connection:", mySocketId);
+        console.log("join 전송 함");
+        client.publish({
+            destination: `/app/webrtc/${spaceId}/join`,
+            body: JSON.stringify({
+                userId : mySocketId,
+                spaceId,
+            }),
+        });
+    };
+
     const getLocalStream = useCallback (async () => {
         if(mySocketId === null) return;
         try {
@@ -42,22 +57,9 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
         } catch (e) {
             console.log(`getUserMedia error: ${e}`);
         }
-    }, [mySocketId]);
+    }, [mySocketId, handleConnection]);
 
-    const handleConnection = () => {
-        if(mySocketId === null) {
-            return;
-        }
-        console.log("내 id in Connection:", mySocketId);
-        console.log("join 전송 함");
-        client.publish({
-            destination: `/app/webrtc/${spaceId}/join`,
-            body: JSON.stringify({
-                userId : mySocketId,
-                spaceId,
-            }),
-        });
-    };
+    
 
     
 
@@ -128,15 +130,12 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 			console.error(e);
 			return undefined;
 		}
-	}, [isConnected,client,mySocketId]);
+	}, [isConnected,client,mySocketId,spaceId]);
 
 	useEffect(() => {
         if(!isConnected){
             return;
         }
-        fetchMyUsername().then(() => {
-            getLocalStream();
-        })
 
         const handleJoin = async () => {
             client.subscribe(
@@ -161,15 +160,17 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
                             console.log('create offer success');
                             await pc.setLocalDescription(offer);
                             console.log('offer전송 직전 id :' , user.userId, spaceId , mySocketId);
-                            client.publish({
-                                destination : `/app/webrtc/${spaceId}/offer/sendOffer`,
-                                body: JSON.stringify({
-                                    sdp: offer,
-                                    offerSendId: mySocketId,
-                                    offerReceiveId: user.userId,
-                                }) 
-                            });
-                            console.log('offer전송 완료');
+                            if(user.userId !== mySocketId){
+                                client.publish({
+                                    destination : `/app/webrtc/${spaceId}/offer/sendOffer`,
+                                    body: JSON.stringify({
+                                        sdp: offer,
+                                        offerSendId: mySocketId,
+                                        offerReceiveId: user.userId,
+                                    }) 
+                                });
+                                console.log('offer전송 완료');
+                            }
                         } catch (e) {
                             console.error(e);
                         }
@@ -271,10 +272,15 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
 
         // fetchMyUsername();
         handleJoin();
+        console.log("handleOffer할떄 ", isConnected,client);
         handleOffer();
         handleAnswer();
         handleIceCandidate();
         handleUserExit();
+
+        fetchMyUsername().then(() => {
+            getLocalStream();
+        })
 
         // handleConnection();
 
