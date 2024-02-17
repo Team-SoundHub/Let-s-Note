@@ -204,7 +204,7 @@ const MyPage = () => {
               onClick={() =>
                 handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)
               }
-            // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
+              // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
             >
               <PostCard
                 snapshotTitle={workspace.spaceTitle}
@@ -212,6 +212,8 @@ const MyPage = () => {
                 ownerNickname={workspace.ownerNickname}
                 memberNicknames={workspace.memberNicknames}
                 updateAt={workspace.updateAt}
+                spaceId={workspace.spaceId}
+                isMypage={true}
               />
             </div>
           ))}
@@ -223,9 +225,10 @@ const MyPage = () => {
             <div
               key={snapshot.snapshotId}
               onClick={() =>
-                navigate(`/snapshot/${snapshot.snapshotId}`,
-                  { state: { fromMyPage: true } }
-                )}
+                navigate(`/snapshot/${snapshot.snapshotId}`, {
+                  state: { fromMyPage: true },
+                })
+              }
             >
               <PostCard
                 snapshotTitle={snapshot.snapshotTitle}
@@ -233,6 +236,8 @@ const MyPage = () => {
                 ownerNickname={snapshot.ownerNickname}
                 memberNicknames={snapshot.memberNicknames}
                 updateAt={snapshot.updateAt}
+                snapshotId={snapshot.snapshotId}
+                isMypage={true}
               />
             </div>
           ))}

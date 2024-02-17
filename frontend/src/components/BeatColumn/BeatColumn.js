@@ -105,10 +105,10 @@ class BeatColumn extends Component {
         activeBoxes[i][instrumentIndex] = !activeBoxes[i][instrumentIndex]; // 활성화 여부 toggle
         console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`);
 
-        // 연주 코드 추가
-        if (synth && activeBoxes[i][instrumentIndex]) {
-          synth.playNote(scale[i]);
-        }
+        // // 연주 코드 추가
+        // if (synth && activeBoxes[i][instrumentIndex]) {
+        //   synth.playNote(scale[i]);
+        // }
 
         return { activeBoxes };
       },
@@ -132,10 +132,10 @@ class BeatColumn extends Component {
         activeBoxes[i][instrumentIndex] = !activeBoxes[i][instrumentIndex]; // 활성화 여부 toggle
         console.log(`activeBoxes[${i}]:", ${activeBoxes[i]}`);
 
-        // 연주 코드 추가
-        if (synth && activeBoxes[i][instrumentIndex]) {
-          synth.playNote(drumScale[idx], synth.time, "8n", "drum");
-        }
+        // // 연주 코드 추가
+        // if (synth && activeBoxes[i][instrumentIndex]) {
+        //   synth.playNote(drumScale[idx], synth.time, "8n", "drum");
+        // }
 
         return { activeBoxes, activeInstrument };
       },
@@ -214,6 +214,8 @@ class BeatColumn extends Component {
           isSnapshot={isSnapshot}
           containerRef={containerRef}
           playing={playing}
+          synth={synth}
+          scale={scale}
         />
       );
     }
@@ -233,6 +235,9 @@ class BeatColumn extends Component {
           isSnapshot={isSnapshot}
           containerRef={containerRef}
           playing={playing}
+          synth={synth}
+          scale={scale}
+          drumScale={drumScale}
         />
       );
     }

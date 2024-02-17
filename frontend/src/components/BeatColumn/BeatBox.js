@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
 import { setClickedNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   @keyframes fillAnimation {
     100% {
-      background-color: white;
+      background: white;
     }
   }
 
@@ -77,6 +77,8 @@ const BeatBox = ({
   isSnapshot,
   playing,
   containerRef,
+  synth,
+  scale,
 }) => {
   const dispatch = useDispatch();
 
@@ -137,6 +139,9 @@ const BeatBox = ({
       newActive[instrumentIndex] = !newActive[instrumentIndex];
       setActive(newActive);
       setActiveBoxes(row, innerContent.instrument, true);
+      if (synth) {
+        synth.playNote(scale[row], synth.time, "8n", innerContent.instrument);
+      }
     } else if (
       innerContent.x === col &&
       innerContent.y === row &&
