@@ -80,6 +80,9 @@ const DrumBox = ({
   isSnapshot,
   playing,
   containerRef,
+  synth,
+  scale,
+  drumScale,
 }) => {
   const dispatch = useDispatch();
 
@@ -127,6 +130,16 @@ const DrumBox = ({
       newActive[instrumentIndex] = !newActive[instrumentIndex];
       setActive(newActive);
       setActiveBoxes(row, innerContent.instrument, true);
+      console.log(row - scale.length);
+      console.log(drumScale);
+      if (synth) {
+        synth.playNote(
+          drumScale[row - scale.length],
+          synth.time,
+          "8n",
+          innerContent.instrument
+        );
+      }
     } else if (
       innerContent.x === col &&
       innerContent.y === row &&
