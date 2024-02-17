@@ -13,10 +13,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -27,18 +24,18 @@ public class WebRTCController {
     @MessageMapping("/webrtc/{spaceId}/join")
     public void sendJoin(@Valid @Payload WebRTCRequest.JoinAccount joinAccount, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         String senderSession = headerAccessor.getUser().getName();
-        List<String> allUsers = new ArrayList<>();
+        Set<WebRTCResponse.User> allUsers = new HashSet<>();
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
-            allUsers.add(entry.getValue());
+            allUsers.add(new WebRTCResponse.User(entry.getValue()));
         }
-        simpMessagingTemplate.convertAndSendToUser(senderSession, "/topic/webrtc/"+spaceId+"/join", new WebRTCResponse.AllUsers(allUsers));
+        simpMessagingTemplate.convertAndSendToUser(senderSession, "/topic/webrtc/"+spaceId+"/join/public", new WebRTCResponse.AllUsers(allUsers));
     }
 
     @MessageMapping("/webrtc/{spaceId}/offer/sendOffer")
     public void sendOffer(@Valid @Payload WebRTCRequest.Offer offer, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
             if(entry.getValue().equals(offer.offerReceiveId())){
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/getOffer", new WebRTCResponse.Offer(offer.sdp(),offer.offerSendId()));
+                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/offer/public", new WebRTCResponse.Offer(offer.sdp(),offer.offerSendId()));
             }
         }
     }
@@ -47,7 +44,7 @@ public class WebRTCController {
     public void sendAnswer(@Valid @Payload WebRTCRequest.Answer answer, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
             if(entry.getValue().equals(answer.answerReceiveId())){
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/getAnswer", new WebRTCResponse.Answer(answer.sdp(),answer.answerSendId()));
+                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/answer/public", new WebRTCResponse.Answer(answer.sdp(),answer.answerSendId()));
             }
         }
     }
@@ -56,13 +53,13 @@ public class WebRTCController {
     public void sendCandidate(@Valid @Payload WebRTCRequest.Candidate candidate, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
             if(entry.getValue().equals(candidate.candidateReceiveId())){
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/getCandidate", new WebRTCResponse.Candidate(candidate.candidate(),candidate.candidateSendId()));
+                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/candidate/public", new WebRTCResponse.Candidate(candidate.candidate(),candidate.candidateSendId()));
             }
         }
     }
 
     @MessageMapping("/webrtc/{spaceId}/exit/sendExit")
-    @SendTo("/topic/webrtc/{spaceId}/user/exit")
+    @SendTo("/topic/webrtc/{spaceId}/exit/public")
     public WebRTCResponse.ExitUser sendUserExit(@Valid @Payload WebRTCRequest.ExitUser user, @DestinationVariable String spaceId) throws Exception {
         return new WebRTCResponse.ExitUser(user.exitUserId());
     }

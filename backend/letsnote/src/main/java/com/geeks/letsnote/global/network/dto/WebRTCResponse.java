@@ -3,6 +3,7 @@ package com.geeks.letsnote.global.network.dto;
 import lombok.Builder;
 
 import java.util.List;
+import java.util.Set;
 
 public record WebRTCResponse() {
     @Builder
@@ -14,7 +15,12 @@ public record WebRTCResponse() {
 
     @Builder
     public record AllUsers(
-            List<String> allUsers
+            Set<User> allUsers
+    ){}
+
+    @Builder
+    public record User(
+            String userId
     ){}
 
     @Builder
