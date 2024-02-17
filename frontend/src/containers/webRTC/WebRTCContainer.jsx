@@ -21,7 +21,7 @@ const WebRTCContainer = ({ client, isConnected, spaceId }) => {
             }
           };
 
-          fetchMyUsername();
+        fetchMyUsername();
     }, []);
 
 	const getLocalStream = useCallback(async () => {
