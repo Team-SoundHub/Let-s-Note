@@ -66,7 +66,7 @@ const SnapshotHeader = ({ onOpenModal, fromMyPage }) => {
   const handleGoBack = () => {
     if (fromMyPage) {
       console.log(`뒤로가기 - fromMyPage: ${fromMyPage}`);
-      navigate("/mypage");
+      navigate("/");
     } else {
       console.log(`뒤로가기 - fromMyPage: ${fromMyPage}`);
       navigate("/");
