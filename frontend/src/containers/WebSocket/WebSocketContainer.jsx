@@ -36,6 +36,8 @@ const WebSocketContainer = ({ spaceId, children }) => {
         subscribeToTopics(client);
       },
       onDisconnect: () => {
+        console.log("Disconnected: ");
+        
         setIsConnected(false);
       },
       onStompError: (frame) => {
@@ -48,6 +50,19 @@ const WebSocketContainer = ({ spaceId, children }) => {
     setStompClient(client);
 
     return () => {
+      const sendUserExit = () => {
+        if(client){
+            client.publish({
+                destination: `/app/webrtc/${spaceId}/exit/sendExit`,
+                body: JSON.stringify({
+                  userId: accountId,
+                }),
+            });
+            console.log("전송 완료", client);
+          };
+      };
+
+      sendUserExit();
       client.deactivate();
     };
   }, []);
@@ -118,6 +133,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
 
   // 함수를 자식 컴포넌트에 전달
   return children({
+    stompClient,
     isConnected,
 
     sendCoordinate: (instrument, x, y) => {
