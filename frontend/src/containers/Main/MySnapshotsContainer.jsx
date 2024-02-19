@@ -17,8 +17,8 @@ const MenuContainerTitle = styled.h2`
   color: white;
   font-size: 35px;
   position: absolute; 
-  left: 7.2rem; 
-  top: 8rem; 
+  left: 14%; 
+  top: 18%;
   z-index: 15;
   animation: ${fadeInUp} 1s ease-out forwards;
 `;

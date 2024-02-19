@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import styled, { css, createGlobalStyle, keyframes } from 'styled-components';
 import Swal from "sweetalert2";
-// import music_note from '../../assets/images/music_notes.png';
+import mainImg from '../assets/landing/mainImage.png';
 
 import HeaderAnon from '../components/Main/HeaderAnon'
 import HeaderUser from '../components/Main/HeaderUser';
@@ -114,42 +114,6 @@ const LandingMainContainer = styled.div`
   }
 `;
 
-const InnerHeader = styled.div`
-  display: flex;
-  justify-content: center; // 가운데 정렬
-  align-items: center; // 세로 방향 가운데 정렬
-  width: 100%; // 너비를 부모 컨테이너의 100%로 설정
-  height: 100%; // 높이를 부모 컨테이너의 100%로 설정
-  position: relative; // 절대 위치 지정된 자식 요소를 위한 상대 위치
-`;
-
-const Title = styled.h1`
-  font-family: 'Lato', sans-serif; // Lato 폰트 적용
-  font-weight: 600;
-  letter-spacing: 2px;
-  font-size: 48px; // 기본 글자 크기
-  color: white; // 글자 색상
-
-  @media (max-width: 768px) {
-    font-size: 24px; // 화면 크기가 768px 이하일 때 글자 크기 조정
-  }
-`;
-
-
-// wave header 뒤에 입힐 이미지 컴포넌트
-// const MusicNoteImage = styled.div`
-//   position: absolute; // WaveHeader 내에서 자유롭게 위치 조정을 위해 절대 위치 사용
-//   top: 10rem; // 상단에서부터 50% 위치에 배치하여 중앙에 오도록 함
-//   left: 70rem; // 좌측에서부터 50% 위치에 배치
-//   transform: translate(-50%, -50%); // 정확한 중앙 정렬을 위한 조정
-//   width: 900px; // 이미지의 너비 설정
-//   height: 900px; // 이미지의 높이 설정
-//   background-image: url(${music_note}); // import한 이미지를 배경 이미지로 사용
-//   background-size: cover; // 배경 이미지가 컨테이너를 꽉 채우도록 설정
-//   z-index: 0;
-
-// `;
-
 
 // 타일 부분
 const fadeInRight = keyframes`
@@ -187,8 +151,8 @@ const MenuContainerTitle = styled.h2`
   color: white;
   font-size: 35px;
   position: absolute; 
-  left: 7.2rem; 
-  top: 8rem; 
+  left: 14%; 
+  top: 18%;
   z-index: 15;
   animation: ${fadeInUp} 2s ease-out forwards;
 `;
@@ -478,8 +442,7 @@ const LandingPage = () => {
           openRegisterModal={openRegisterModal}
         />
       )
-      }
-      {/* <MusicNoteImage /> */}
+      }      
 
       <LandingMainContainer mode={mode}>
         {/* <InnerHeader>

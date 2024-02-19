@@ -4,7 +4,29 @@ import styled from 'styled-components';
 
 const TileStyled = styled.div`
   width: 230px;
-  height: 300px;
+  height: 300px;  
+  
+
+  @media (max-width: 700px) {
+    width: 160px; 
+    height: 210px; 
+  }
+
+  @media (max-width: 1100px) {
+    width: 180px; 
+    height: 235px; 
+  }
+
+  @media (min-width: 1200px) {
+    width: 230px;
+    height: 300px; 
+  }
+
+  @media (min-width: 1500px) {
+    width: 309px; 
+    height: 403px; 
+  }
+
   margin: 10px;
   background-color: #99aeff;
   display: inline-block;
