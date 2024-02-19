@@ -17,9 +17,7 @@ import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
 import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
-import WebRTCContainer from "../containers/webRTC/WebRTCContainer";
 import { start } from "tone";
-import WebRTC from "../components/WebRTC/WebRTC";
 
 const Container = styled.div`
   position: relative;
@@ -50,7 +48,6 @@ const WorkPlacePage = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
   const audioRef = useRef(null);
-  const videoRef = useRef(null);
 
   const handleSearchModalOpen = () => {
     setisSearchModalOpen(true);
@@ -220,14 +217,9 @@ const WorkPlacePage = () => {
         sendMessage,
         sendMousePosition,
         isConnected,
-        sendLoop,
         stompClient,
+        sendLoop,
       }) => (
-        <WebRTCContainer 
-          client = {stompClient}
-          isConnected = {isConnected}
-          spaceId = {spaceId}
-        >
           <Container>
             {isReleaseModalOpen && (
               <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
@@ -259,11 +251,15 @@ const WorkPlacePage = () => {
               />
             )}
             <WorkSpaceHeader
+              spaceId = {spaceId}
               onOpenModal={handleModalOpen}
               isSnapshotExist={workspaceInfo.isSnapshotExist}
               openAddMemberModal={openAddMemberModal}
               handleAddMember={handleAddMember}
               memberList={memberList}
+              client = {stompClient}
+              isConnected={isConnected}
+              myNickname={myNickname}
             />
             {maxColumn > 0 && (
               <WorkSpaceContainer
@@ -285,10 +281,7 @@ const WorkPlacePage = () => {
               memberList={memberList}
               nickname={myNickname}
             />
-            <WebRTC
-            />
           </Container>
-        </WebRTCContainer>
       )}
     </WebSocketContainer>
   );
