@@ -2,13 +2,13 @@ import React from "react";
 import tw from "tailwind-styled-components";
 import BeatToggle from "./BeatToggle";
 import BeatsPerMinute from "./BeatsPerMinute";
-import BeatChange from "./BeatChange";
+import BeatsVolume from "./BeatVolume";
 import InstrumentChange from "../InstrumentControl/InstrumentChange";
 import BeatStop from "./BeatStop";
 import BeatProgressBar from "./BeatProgressBar";
 
 const Container = tw.div`
-  z-[500]
+  z-10
   bg-white
   flex
   items-center
@@ -45,46 +45,50 @@ const BeatControls = ({
   onStop,
   bpm,
   adjustBPM,
+  adjustVolume,
   changeInstrument,
   columns,
   count,
   handleIsPlaying,
   isPlaying,
+  isSnapshot,
 }) => {
   return (
-      <Container>
-        <LeftSection>
-          <BeatToggle
-              onClick={onPlay}
-              isPlaying={isPlaying}
-              handleIsPlaying={handleIsPlaying}
-          />
-          <BeatStop onClick={onStop}/>
-        </LeftSection>
-        <CenterSection>
-          <BeatProgressBar
-              columns={columns}
-              count={count}
-              onPlay={onPlay}
-              handleIsPlaying = {handleIsPlaying}
-          />
-        </CenterSection>
-        <RightSection>
-          <BeatsPerMinute bpm={bpm} handleChange={adjustBPM}/>
-          <InstrumentChange
+    <Container>
+      <LeftSection>
+        <BeatToggle
+          onClick={onPlay}
+          isPlaying={isPlaying}
+          handleIsPlaying={handleIsPlaying}
+        />
+        <BeatStop onClick={onStop} />
+      </LeftSection>
+      <CenterSection>
+        <BeatProgressBar
+          columns={columns}
+          count={count}
+          onPlay={onPlay}
+          handleIsPlaying={handleIsPlaying}
+        />
+      </CenterSection>
+      <RightSection>
+        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+        <BeatsVolume handleChange={adjustVolume} />
+
+        {!isSnapshot && (
+          <>
+            <InstrumentChange
               instrument="piano"
               changeInstrument={changeInstrument}
-          />
-          <InstrumentChange
+            />
+            <InstrumentChange
               instrument="guitar"
               changeInstrument={changeInstrument}
-          />
-          <InstrumentChange
-              instrument="drum"
-              changeInstrument={changeInstrument}
-          />
-        </RightSection>
-      </Container>
+            />
+          </>
+        )}
+      </RightSection>
+    </Container>
   );
 };
 

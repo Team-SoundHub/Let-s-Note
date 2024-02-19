@@ -1,7 +1,7 @@
 import React, { Component, createRef } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import BeatGrid, { getCount } from "../../components/BeatGrid/BeatGrid";
+import BeatGrid from "../../components/BeatGrid/BeatGrid";
 import Synth from "../../synth/Synth";
 import Loading from "../../components/Loading";
 import { availableNotes, availableDrumNotes } from "../../constants/scale";
@@ -12,7 +12,6 @@ import CseContainer from "./CseContainer";
 import { resetCount } from "../../components/BeatGrid/BeatGrid";
 
 const Container = styled.div`
-  margin-top: 1rem;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -23,15 +22,14 @@ const Container = styled.div`
 `;
 
 const GridContainer = tw.div`
-relative
+  relative
   flex
   flex-row
   items-center
   justify-start
   w-full
   bg-white
-  p-4
-  h-[84vh]
+  h-[80vh]
 `;
 
 const LeftPanel = tw.div`
@@ -39,35 +37,19 @@ const LeftPanel = tw.div`
   h-[98%]
   flex-shrink-0
   bg-white
-  mr-2
+  m-4
   items-center
   justify-center
   
 `;
 
 const MiddlePanel = tw.div`
-  w-[97%]
+  pr-2
+  pt-2
+  w-[94%]
   h-[98%]
   flex-shrink-0
 `;
-
-// const LoopButton = tw.button`
-//   text-black
-//   hover:bg-red-800
-//   focus:outline-none
-//   focus:ring-4
-//   focus:ring-red-300
-//   font-medium
-//   rounded-full
-//   text-sm
-//   px-2.5
-//   py-2.5
-//   text-center
-//   me-2
-//   mb-2
-//   dark:hover:bg-red-700
-//   dark:focus:ring-red-900
-// `;
 
 export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
@@ -98,8 +80,8 @@ class WorkSpaceContainer extends Component {
       "Received isSnapshot prop in WorkSpaceContainer:",
       this.props.isSnapshot
     );
-    
-    this.setState({ columns: this.props.maxColumn });  
+
+    this.setState({ columns: this.props.maxColumn });
     console.log(`[WorkSpaceContainer] column 설정: ${this.props.maxColumn}`);
 
     // 재생 문제가 didmount로 해결됨 그러나 간혹적으로 재생되지 않는 문제가 새로 발생
@@ -138,7 +120,7 @@ class WorkSpaceContainer extends Component {
 
   stop = () => {
     this.setState({ isPlaying: false });
-    resetCount()
+    resetCount();
     this.state.synth.stop();
   };
 
@@ -150,6 +132,11 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setBPM(event.target.value);
   };
 
+  adjustVolume = (event) => {
+    const volume = event.target.value; // 볼륨 값 가져오기
+    this.state.synth.setVolume(volume);
+  };
+
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
     if (currentCols + diff <= 8 || currentCols + diff > 500) return;
@@ -158,7 +145,6 @@ class WorkSpaceContainer extends Component {
   };
 
   changeInstrument = (instrument) => {
-    this.setState({ currentInstrument: instrument });
     this.state.synth.setInstrument(instrument);
   };
 
@@ -190,6 +176,8 @@ class WorkSpaceContainer extends Component {
 
   setInstrumentScale = (scale) => {
     scale = [
+      "C2",
+      "C#2",
       "D2",
       "D#2",
       "E2",
@@ -239,7 +227,6 @@ class WorkSpaceContainer extends Component {
     this.stop();
   }
 
-
   render() {
     const {
       loading,
@@ -251,7 +238,14 @@ class WorkSpaceContainer extends Component {
       isPlaying,
       count,
     } = this.state;
-    const { isConnected, isSnapshot } = this.props;
+    const {
+      isConnected,
+      isSnapshot,
+      spaceId,
+      sendCoordinate,
+      sendLoop,
+      sendMousePosition,
+    } = this.props;
 
     if (isSnapshot && loading) {
       return <Loading />;
@@ -279,31 +273,35 @@ class WorkSpaceContainer extends Component {
                 background="skyblue"
                 foreground="#ffffff"
                 visualizeInstrument={visualizeInstrument}
-                isSnapshot={this.props.isSnapshot}
-                spaceId={this.props.spaceId}
-                sendCoordinate={this.props.sendCoordinate}
+                isSnapshot={isSnapshot}
+                spaceId={spaceId}
+                sendCoordinate={sendCoordinate}
                 setCount={this.setCount}
-                sendLoop={this.props.sendLoop}
+                sendLoop={sendLoop}
                 changeColumns={this.changeColumns}
-                sendMousePosition={this.props.sendMousePosition}
-                isConnected={this.props.isConnected}
+                sendMousePosition={sendMousePosition}
+                isConnected={isConnected}
               />
             </MiddlePanel>
           </GridContainer>
-          <CseContainer
-            handleSearchModalOpen={this.props.handleSearchModalOpen}
-          />
+          {!isSnapshot && (
+            <CseContainer
+              handleSearchModalOpen={this.props.handleSearchModalOpen}
+            />
+          )}
           <BeatControls
             onPlay={this.play}
             onStop={this.stop}
             changeColumns={this.changeColumns}
             adjustBPM={this.adjustBPM}
+            adjustVolume={this.adjustVolume}
             bpm={this.initialBPM}
             changeInstrument={this.changeInstrument}
             columns={columns}
             count={count}
             handleIsPlaying={this.handleIsPlaying}
             isPlaying={isPlaying}
+            isSnapshot={isSnapshot}
           />
         </Container>
       );

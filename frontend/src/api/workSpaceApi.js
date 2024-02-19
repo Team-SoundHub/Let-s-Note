@@ -56,4 +56,37 @@ const getMember = async (spaceId) => {
   return response.data;
 };
 
-export { getWorkspaceInfo, createSnapshot, setMember, getMember };
+const callGenreAI = async (previous, userId, textContent, value) => {
+  try {
+    const requestData = {
+      text: textContent,
+      userId: userId,
+      value: value,
+      previous: previous
+    };
+    const response = await axiosInstance.post(
+        `/ai/genre/${userId}`,
+        requestData
+    );
+    return response.data;
+  } catch (error) {
+  }
+}
+
+const callChordAI = async (previous, userId) => {
+  try {
+    const requestData = {
+      userId: userId,
+      previous: previous
+    };
+    const response = await axiosInstance.post(
+        `/ai/chord/${userId}`,
+        requestData
+    );
+    return response.data;
+  } catch (error) {
+  }
+}
+
+
+export { getWorkspaceInfo, createSnapshot, setMember, getMember, callGenreAI, callChordAI };

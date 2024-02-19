@@ -1,4 +1,4 @@
-import { scale, pianoScale, drumScale } from "../constants/scale";
+import { scale, drumScale } from "../constants/scale";
 import * as Tone from "tone";
 
 const getTransport = () => {
@@ -27,16 +27,16 @@ class Synth {
           "/audio/" + instrument + "/"
         ).set({
           volume: -12,
-          type: "square", // 사각파
+          type: "triangle",
           attack: 0,
-          decay: 0.8,
+          decay: 0.5,
           sustain: 0,
-          release: 1.7,
+          release: 2,
         });
         this.samplers[instrument].connect(reverb);
       } else if (instrument === "piano") {
         this.samplers[instrument] = new Tone.Sampler(
-          pianoScale,
+          scale,
           callback,
           "/audio/" + instrument + "/"
         ).set({
@@ -54,13 +54,13 @@ class Synth {
           callback,
           "/audio/" + instrument + "/"
         ).set({
-          volume: -4,
+          volume: -6,
           oscillator: {
             type: "triangle17",
           },
           attack: 0.01,
           decay: 0.1,
-          sustain: 0.2,
+          sustain: 0,
           release: 1.0,
         });
       }
@@ -70,7 +70,11 @@ class Synth {
     // this.setVolume();
   }
 
-  setVolume(volume = -12) {
+  setVolume(volumePercent) {
+    // 볼륨 값을 0부터 100 사이로 정규화
+    const volume = Tone.gainToDb(volumePercent / 100);
+
+    // 모든 샘플러의 볼륨 조절
     Object.values(this.samplers).forEach((sampler) => {
       sampler.volume.value = volume;
     });

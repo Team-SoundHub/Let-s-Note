@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
@@ -11,13 +12,17 @@ import SaveCompleteModal from "../components/WorkSpace/SaveCompleteModal";
 import AddMemberModal from "../components/WorkSpace/AddMemberModal";
 import NoteSearchModal from "../containers/Note/NoteSearchModal";
 import NoteViewModal from "../containers/Note/NoteViewModal";
+import { RiRobot2Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 
-import { getWorkspaceInfo, createSnapshot } from "../api/workSpaceApi";
-import { setWorkspaceNotes, clearAllNotes } from "../app/slices/innerContentSlice";
+
+import {getWorkspaceInfo, createSnapshot, callGenreAI, callChordAI} from "../api/workSpaceApi";
+import {setWorkspaceNotes, clearAllNotes, selectNotes, setClickedNotes} from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
-import { start } from "tone";
+import AiInterfaceModal from "../components/WorkSpace/AIInterfaceModal";
+import AIGenreModal from "../components/WorkSpace/AIGenreModal";
+import AIChordModal from "../components/WorkSpace/AIChordModal";
 
 const Container = styled.div`
   position: relative;
@@ -31,11 +36,14 @@ const WorkPlacePage = () => {
   console.log("workPlacePage에서 accountId 꺼냄 2", accountId);
 
   const { spaceId } = useParams(); // 현재 spaceId 얻기
-
+  const [loading, setLoading] = useState(false);
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [snapshotCreated, setSnapshotCreated] = useState(false);
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
   const [isUrlModalOpen, setUrlModalOpen] = useState(false);
+  const [isAIGenreModalOpen, setIsAIGenreModalOpen] = useState(false);
+  const [isAIChordModalOpen, setIsChordAIModalOpen] = useState(false);
+  const [isAIInterfaceModalOpen, setIsAIInterfaceModalOpen] = useState(false);
   const [snapshotUrl, setSnapshotUrl] = useState("");
   const [snapshotId, setSnapshotId] = useState("");
   const [memberList, setMemberList] = useState([]);
@@ -210,6 +218,104 @@ const WorkPlacePage = () => {
     setSelectedImageUrl(null);
   };
 
+  const handleAIInterfaceModalOpen = () => {
+    setIsAIInterfaceModalOpen(true);
+  };
+
+  const handleAIInterfaceModalClose = () => {
+    setIsAIInterfaceModalOpen(false);
+  };
+
+  const handleAIGenreModalOpen = () => {
+    setIsAIGenreModalOpen(true);
+  };
+
+  const handleAIGenreModalClose = () => {
+    setIsAIGenreModalOpen(false);
+  };
+
+  const handleAIChordModalOpen = () => {
+    setIsChordAIModalOpen(true);
+  };
+
+  const handleAIChordModalClose = () => {
+    setIsChordAIModalOpen(false);
+  };
+
+
+  const handleGenreAI = async (accountId, text, value, sendCoordinate) => {
+    setLoading(true);
+    try {
+      const noteInfo = await getWorkspaceInfo(spaceId);
+      var piano_data = noteInfo.response.notesList[0].notes;
+
+      const piano_list = Array.from({ length: noteInfo.response.maxX + 1 }, () => []);
+
+      for(let i = 0; i < piano_data.length; i++){
+        console.log(piano_data[i]["noteX"]);
+        console.log(piano_data[i]["noteY"]);
+        piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
+      }
+      const result = await callGenreAI(piano_list, accountId, text, value);
+
+      const formed_list = [{instrument: "piano", notes: []}, {instrument: "guitar", notes: []}, {instrument: "drum", notes: []}]
+
+      result.response.noteList.forEach(function(current_y, idx) {
+        if (current_y.length > 0) {
+          var current_x = noteInfo.response.maxX + 1 + idx;
+          current_y.forEach(function (inner_y){
+            formed_list[0].notes.push({noteX: current_x, noteY: parseInt(inner_y)})
+            sendCoordinate("piano", current_x, parseInt(inner_y));
+          });
+        }
+      });
+      // dispatch(setWorkspaceNotes(formed_list));
+
+    }catch (error) {
+      alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
+    } finally {
+      setLoading(false);
+      handleAIGenreModalClose();
+      handleAIInterfaceModalClose();
+    }
+  };
+
+  const handleChordAI = async (accountId, sendCoordinate) => {
+    setLoading(true);
+
+    try {
+      const noteInfo = await getWorkspaceInfo(spaceId);
+      var piano_data = noteInfo.response.notesList[0].notes;
+
+      const piano_list = Array.from({ length: noteInfo.response.maxX + 1 }, () => []);
+
+      for(let i = 0; i < piano_data.length; i++){
+        console.log(piano_data[i]["noteX"]);
+        console.log(piano_data[i]["noteY"]);
+        piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
+      }
+      const result = await callChordAI(piano_list, accountId);
+
+      const formed_list = [{instrument: "piano", notes: []}, {instrument: "guitar", notes: []}, {instrument: "drum", notes: []}]
+
+      result.response.noteList.forEach(function(current_y, idx) {
+        if (current_y.length > 0) {
+          current_y.forEach(function (inner_y){
+            sendCoordinate("guitar", idx, parseInt(inner_y));
+            // formed_list[1].notes.push({noteX: idx, noteY: parseInt(inner_y)})
+          });
+        }
+      });
+    }catch (error) {
+      alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
+    } finally {
+      setLoading(false);
+      handleAIChordModalClose();
+      handleAIInterfaceModalClose();
+    }
+  };
+
+
   return (
     <WebSocketContainer spaceId={spaceId}>
       {({
@@ -220,38 +326,54 @@ const WorkPlacePage = () => {
         stompClient,
         sendLoop,
       }) => (
-          <Container>
-            {isReleaseModalOpen && (
-              <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
-            )}
-            {snapshotCreated && (
+        <Container>
+          {loading &&
+              <div role="status" className={"absolute w-full h-full bg-gray-200 z-[9000] opacity-80"}>
+                <div className={"flex flex-col w-full h-full justify-center items-center"}>
+                  <svg aria-hidden="true"
+                       className="inline w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-green-500"
+                       viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"/>
+                    <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"/>
+                  </svg>
+                  <span className="font-bold z-[9999]">Loading...</span>
+                </div>
+              </div>
+          }
+          {isReleaseModalOpen && (
+              <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave}/>
+          )}
+          {snapshotCreated && (
               <SaveCompleteModal
-                onClose={handleCloseSnapshotModal}
-                snapshotUrl={snapshotUrl}
-                snapshotId={snapshotId}
+                  onClose={handleCloseSnapshotModal}
+                  snapshotUrl={snapshotUrl}
+                  snapshotId={snapshotId}
               />
-            )}
-            {isAddMemberModalOpen && (
+          )}
+          {isAddMemberModalOpen && (
               <AddMemberModal
-                closeAddMemberModal={closeAddMemberModal}
-                handleAddMember={handleAddMember}
+                  closeAddMemberModal={closeAddMemberModal}
+                  handleAddMember={handleAddMember}
               />
-            )}
-            {isSearchModalOpen && (
+          )}
+          {isSearchModalOpen && (
               <NoteSearchModal
-                isSearchModalOpen={isSearchModalOpen}
-                handleSearchModalClose={handleSearchModalClose}
-                openImagePreview={openImagePreview}
+                  isSearchModalOpen={isSearchModalOpen}
+                  handleSearchModalClose={handleSearchModalClose}
+                  openImagePreview={openImagePreview}
               />
-            )}
-            {selectedImageUrl && (
+          )}
+          {selectedImageUrl && (
               <NoteViewModal
-                image_url={selectedImageUrl}
-                onClose={closeImagePreview}
+                  image_url={selectedImageUrl}
+                  onClose={closeImagePreview}
               />
-            )}
-            <WorkSpaceHeader
-              spaceId = {spaceId}
+          )}
+          <WorkSpaceHeader
               onOpenModal={handleModalOpen}
               isSnapshotExist={workspaceInfo.isSnapshotExist}
               openAddMemberModal={openAddMemberModal}
@@ -260,28 +382,56 @@ const WorkPlacePage = () => {
               client = {stompClient}
               isConnected={isConnected}
               myNickname={myNickname}
-            />
-            {maxColumn > 0 && (
+          />
+          {maxColumn > 0 && (
               <WorkSpaceContainer
-                isSnapshot={false}
-                spaceId={spaceId}
-                accountId={accountId}
-                sendCoordinate={sendCoordinate}
-                sendLoop={sendLoop}
-                openImagePreview={openImagePreview}
-                sendMousePosition={sendMousePosition}
-                isConnected={isConnected}
-                handleSearchModalOpen={handleSearchModalOpen}
-                maxColumn={maxColumn}
-              />
-            )}
-            <ChatContainer
-              sendMessage={sendMessage}
-              spaceId={spaceId}
-              memberList={memberList}
-              nickname={myNickname}
+                  isSnapshot={false}
+                  spaceId={spaceId}
+              accountId={accountId}
+              sendCoordinate={sendCoordinate}
+              sendLoop={sendLoop}
+              openImagePreview={openImagePreview}
+              sendMousePosition={sendMousePosition}
+              isConnected={isConnected}
+              handleSearchModalOpen={handleSearchModalOpen}
+              maxColumn={maxColumn}
             />
-          </Container>
+          )}
+          <ChatContainer
+            sendMessage={sendMessage}
+            spaceId={spaceId}
+            memberList={memberList}
+            nickname={myNickname}
+          />
+          <div className={"flex justify-center absolute bottom-[200px] left-0 w-[80px] h-[60px]"}>
+            <button className={"flex justify-center items-center w-[60px] h-[60px] rounded-full focus:ring-4 focus:outline-none focus:ring-lime-200 bg-[#49C5B6] hover:bg-[#367e76]"} onClick={handleAIInterfaceModalOpen}>
+              <RiRobot2Line className={"w-8 h-8 fill-white"}/>
+            </button>
+          </div>
+          {isAIInterfaceModalOpen && (
+              <AiInterfaceModal
+                  handleAIInterfaceModalClose={handleAIInterfaceModalClose}
+                  handleAIGenreModalOpen={handleAIGenreModalOpen}
+                  handleAIChordModalOpen={handleAIChordModalOpen}
+              />
+          )}
+          {isAIGenreModalOpen && (
+              <AIGenreModal
+                  handleAIGenreModalClose={handleAIGenreModalClose}
+                  accountId={accountId}
+                  handleGenreAI={handleGenreAI}
+                  sendCoordinate={sendCoordinate}
+              />
+          )}
+          {isAIChordModalOpen && (
+              <AIChordModal
+                  handleAIChordModalClose={handleAIChordModalClose}
+                  accountId={accountId}
+                  handleChordAI={handleChordAI}
+                  sendCoordinate={sendCoordinate}
+              />
+          )}
+        </Container>
       )}
     </WebSocketContainer>
   );

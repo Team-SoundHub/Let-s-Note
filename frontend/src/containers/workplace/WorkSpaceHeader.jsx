@@ -476,7 +476,7 @@ const WorkSpaceHeader = ({
   };
 
   const handleGoBack = () => {
-    navigate("/mypage");
+    navigate("/");
   };
 
   return (

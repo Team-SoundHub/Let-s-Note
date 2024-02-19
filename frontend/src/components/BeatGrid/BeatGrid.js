@@ -87,7 +87,7 @@ export const resetCount = () => {
 
 export const getCount = () => {
   return count;
-}
+};
 
 export const handleCountChange = (newCount) => {
   prevCount = count;
@@ -96,8 +96,7 @@ export const handleCountChange = (newCount) => {
     beatGridRef.props.setCount(newCount);
   }
   count = newCount;
-}
-
+};
 
 class BeatGrid extends React.PureComponent {
   constructor(props) {
@@ -105,21 +104,13 @@ class BeatGrid extends React.PureComponent {
     console.log("rerender");
     this.cols = [];
     beatGridRef = this;
-
-    this.state = {
-      clickedRow: null,
-    };
   }
 
   handleBoxClick = (column, row) => {
-    const instrument = this.props.synth.activeInstrument;
-
-    // 임시적으로 clickedRow 상태를 null로 설정 -> 비동기적으로 row값 업데이트 
-    // (같은 row 연속 클릭해도 매번 prop을 내려주도록 함)
-    this.setState({ clickedRow: null }, () => {
-      this.setState({ clickedRow: row });
-    });
-
+    let instrument = this.props.synth.activeInstrument;
+    const { scale } = this.props;
+    if (row >= scale.length) instrument = "drum";
+    console.log("instrument", instrument);
     this.props.sendCoordinate(instrument, column, row, this.props.spaceId);
   };
 
@@ -127,6 +118,22 @@ class BeatGrid extends React.PureComponent {
     const { columns } = this.props;
     const activeBeat = count % columns;
     const prevBeat = prevCount % columns;
+    const playColumn = document.getElementById(activeBeat);
+    const playColumnRect = playColumn.getBoundingClientRect();
+    const container = this.gridRef.current;
+
+    const containerRect = container.getBoundingClientRect();
+    const containerCenterX = containerRect.width / 2;
+
+    const playColumnCenterX = playColumnRect.left + playColumnRect.width / 2;
+    const scrollValue = playColumnCenterX - containerCenterX;
+
+    container.scrollBy({
+      top: 0,
+      left: scrollValue,
+      behavior: "smooth",
+    });
+
     this.props.setCount(activeBeat);
     console.log(count);
     console.log("activeBeat : ", activeBeat);
@@ -146,7 +153,7 @@ class BeatGrid extends React.PureComponent {
     if (prevBeat > -1) {
       this.cols[prevBeat].disablePlaying();
     }
-  }
+  };
 
   trigger = (time) => {
     handleCountChange(count + 1);
@@ -169,7 +176,6 @@ class BeatGrid extends React.PureComponent {
     } = this.props;
     const cols = [];
     for (let i = 0; i < columns; i++) {
-      console.log("i = ",i);
       cols.push(
         <BeatColumn
           ref={(BeatColumn) => (this.cols[i] = BeatColumn)}
@@ -209,26 +215,37 @@ class BeatGrid extends React.PureComponent {
     return cols;
   };
 
+  renderCursorPointer() {
+    const { isSnapshot, sendMousePosition, spaceId, accountId, isConnected } =
+      this.props;
+    if (!isSnapshot) {
+      return (
+        <>
+          <Cursors />
+          <CursorPointer
+            sendMousePosition={sendMousePosition}
+            spaceId={spaceId}
+            accountId={accountId}
+            isConnected={isConnected}
+            containerRef={this.gridRef}
+          />
+        </>
+      );
+    }
+  }
+
   render() {
-    const { background, sendMousePosition, spaceId, accountId, isConnected, count } = this.props;
+    const { background } = this.props;
     return (
       <Container ref={this.gridRef} background={background}>
-        <Cursors />
-        <CursorPointer
-          sendMousePosition={sendMousePosition}
-          spaceId={spaceId}
-          accountId={accountId}
-          isConnected={isConnected}
-          containerRef={this.gridRef}
-        />
+        {this.renderCursorPointer()}
         <LeftPanel>
           <VerticalPiano
             sendLoop={this.props.sendLoop}
             spaceLength={this.props.columns}
-            clickedRow={this.state.clickedRow}
           />
         </LeftPanel>
-        <RightPanel>{this.renderBeatColumns()}</RightPanel>
+        <RightPanel ref={this.scrollRef}>{this.renderBeatColumns()}</RightPanel>
       </Container>
     );
   }

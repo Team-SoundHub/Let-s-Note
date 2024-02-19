@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { handleCountChange } from "../BeatGrid/BeatGrid";
+import { getCount } from "../BeatGrid/BeatGrid";
 
 const ProgressBarContainer = tw.div`
     flex
@@ -59,12 +60,18 @@ const BeatProgressBar = ({ count, columns, onPlay, handleIsPlaying }) => {
 
   return (
     <ProgressBarContainer onMouseDown={handleMouseDown}>
-      <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-        <div
-          class="bg-[#49c5b6] h-2.5 rounded-full"
-          style={{ width: `${progressValue}%` }}
-        ></div>
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden p-1 border border-gray">
+        <div class="relative h-6 flex items-center justify-center">
+          <div
+            className="absolute top-0 bottom-0 left-0 rounded-lg bg-green-200"
+            style={{ width: `${progressValue}%` }}
+          ></div>
+        </div>
       </div>
+      {/* <div
+            class="bg-[#49c5b6] h-2.5 rounded-full"
+            style={{ width: `${progressValue}%` }}
+          ></div> */}
     </ProgressBarContainer>
   );
 };

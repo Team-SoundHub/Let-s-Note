@@ -4,10 +4,16 @@ import styled from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
 
 const Container = styled.div`
+  @keyframes fillAnimation {
+    100% {
+      background-color: white;
+    }
+  }
+
   flex: 1;
   margin: 0.05rem;
   background-color: ${(props) =>
-    props.active &&
+    props.active[props.instrumentList.indexOf("drum")] &&
     props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
       ? pickActiveColor("drum")
       : props.inactiveColor};
@@ -16,11 +22,18 @@ const Container = styled.div`
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0)}rem;
   position: relative; /* Ensure the circle is positioned relative to this container */
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
+  /* transition: background-color 0.05s ease-out, opacity 0.05s ease-out; */
+  ${(props) =>
+    props.playing &&
+    props.active.filter((isActive) => isActive).length > 0 &&
+    `
+    animation: fillAnimation 0.2s ease-in-out alternate;
+  `}
 
   &::after {
     content: ""; /* Create a pseudo-element for the circle */
     display: ${(props) =>
-      props.active &&
+      props.active[props.instrumentList.indexOf("drum")] &&
       props.visualizeInstrument[props.instrumentList.indexOf("drum")] === true
         ? "none" // Hide the circle when the condition is satisfied
         : "block"};
@@ -41,30 +54,12 @@ const Container = styled.div`
   }
 `;
 
-// const Container = styled.div`
-//   flex: 1;
-//   margin: 0.1rem;
-//   background-color: ${(props) =>
-//     props.active &&
-//     props.visualizeInstrument[
-//       props.instrumentList.indexOf(props.instrument)
-//     ] === true
-//       ? pickActiveColor(props.instrument)
-//       : props.col % 8 < 4
-//       ? "lightgray"
-//       : props.inactiveColor};
-//   width: 2rem;
-//   height: 2rem;
-
-//   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
-// `;
-
 const pickActiveColor = (instrument) => {
   switch (instrument) {
     case "piano":
-      return "rgb(248 113 113)";
+      return "#FFA1A1 50%";
     case "guitar":
-      return "rgb(74 222 128)";
+      return "#4886FF 50%";
     case "drum":
       return "rgb(250 204 21)";
     default:
@@ -79,17 +74,19 @@ const DrumBox = ({
   inactiveColor,
   activeColor,
   setActiveBoxes,
-  setActiveInstrument,
   visualizeInstrument,
   col,
   row,
   isSnapshot,
   playing,
   containerRef,
+  synth,
+  scale,
+  drumScale,
 }) => {
   const dispatch = useDispatch();
 
-  const [active, setActive] = useState(propActive);
+  const [active, setActive] = useState([false, false, false]);
   const innerContent = useSelector((state) => state.innerContent.innerContent);
   const instrumentList = ["piano", "guitar", "drum"];
   const workspaceNotes = useSelector(
@@ -99,57 +96,59 @@ const DrumBox = ({
     (state) => state.innerContent.snapshotNotes
   );
 
+  // 처음 마운트 시 전역상태의 노트정보 반영
   useEffect(() => {
-    let activeNote;
+    let activeNotes;
 
     if (isSnapshot) {
-      activeNote = snapshotNotes.find((n) => n.x === col && n.y === row);
-      // console.log("스냅샷 드럼:", activeNote);
+      activeNotes = snapshotNotes.filter((n) => n.x === col && n.y === row);
     } else {
-      activeNote = workspaceNotes.find((n) => n.x === col && n.y === row);
-      // console.log("작업실 드럼:", activeNote);
+      activeNotes = workspaceNotes.filter((n) => n.x === col && n.y === row);
     }
 
-    if (activeNote && !active) {
-      // 해당하는 노트가 있으면 상태 업데이트
-      setActive(true);
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, activeNote.instrument);
-    } else if (activeNote) {
-      setActive(false);
-      setActiveBoxes(row, false);
-      setActiveInstrument(row, undefined);
-    }
-  }, [
-    snapshotNotes,
-    workspaceNotes,
-    col,
-    row,
-    // active,
-    isSnapshot,
-    // setActiveBoxes,
-    // setActiveInstrument,
-  ]);
+    // 해당하는 노트가 있으면 상태 업데이트
+    activeNotes.forEach((activeNote) => {
+      const instrumentIndex = instrumentList.indexOf(activeNote.instrument);
+      setActive((prevActive) => {
+        const newActive = [...prevActive];
+        newActive[instrumentIndex] = !newActive[instrumentIndex];
+        return newActive;
+      });
+      setActiveBoxes(row, activeNote.instrument, !active[instrumentIndex]);
+    });
+  }, [workspaceNotes]);
 
   useEffect(() => {
+    const instrumentIndex = instrumentList.indexOf(innerContent.instrument);
+    // Check if x and y match col and row
     if (
-      innerContent.instrument === "drum" &&
       innerContent.x === col &&
       innerContent.y === row &&
-      !active
+      !active[instrumentIndex]
     ) {
-      setActive(true);
-      setActiveBoxes(row, true);
-      setActiveInstrument(row, innerContent.instrument);
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, true);
+      console.log(row - scale.length);
+      console.log(drumScale);
+      if (synth) {
+        synth.playNote(
+          drumScale[row - scale.length],
+          synth.time,
+          "8n",
+          innerContent.instrument
+        );
+      }
     } else if (
-      innerContent.instrument === "drum" &&
       innerContent.x === col &&
       innerContent.y === row &&
-      active
+      active[instrumentIndex]
     ) {
-      setActive(false);
-      setActiveBoxes(row, false);
-      setActiveInstrument(row, undefined);
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, false);
     }
   }, [innerContent]);
 
@@ -170,11 +169,11 @@ const DrumBox = ({
     const mouseY = e.clientY - boxRect.top;
 
     // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산
-    const relativeX = (boxRect.left + scrollLeft + mouseX) - gridRect.left;
-    const relativeY = (boxRect.top + scrollTop + mouseY) - gridRect.top;
+    const relativeX = boxRect.left + scrollLeft + mouseX - gridRect.left;
+    const relativeY = boxRect.top + scrollTop + mouseY - gridRect.top;
 
     dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
-  }
+  };
 
   return (
     <Container
