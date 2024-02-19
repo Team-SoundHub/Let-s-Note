@@ -15,8 +15,9 @@ const fadeInUp = keyframes`
 
 const MenuContainerTitle = styled.h2`
   color: white;
-  font-size: 35px;
-  position: absolute; 
+  /* font-weight: 700;   */
+  font-size: 32px;
+  position: absolute;
   left: 7.2rem; 
   top: 8rem; 
   z-index: 15;
@@ -38,7 +39,7 @@ const TilesContainer = styled.div`
 `;
 
 
-const MyWorkspacesContainer = ({accessToken, accountId, isMyWorkspace}) => {
+const MyWorkspacesContainer = ({accessToken, accountId, isMyWorkspace }) => {
   return (
     <>
       <MenuContainerTitle>오늘은 어떤 연주를 해볼까요?</MenuContainerTitle>

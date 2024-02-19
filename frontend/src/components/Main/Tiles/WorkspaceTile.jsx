@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import crown from './crown-svgrepo-com.svg';
+import { deleteWorkSpace } from '../../../api/myPageApi';
+
+import Swal from "sweetalert2";
 
 const TileStyled = styled.div`
   flex: none;
@@ -89,7 +92,7 @@ const Paragraph = styled.p`
   transition: all 0.6s ease-in-out;
 `;
 
-const Dots = styled.div`
+const Delete = styled.div`
   position: absolute;
   bottom: 20px;
   right: 0rem;
@@ -101,12 +104,15 @@ const Dots = styled.div`
   justify-content: space-around;
   transform: translateY(150%); 
   opacity: 0; 
+  color: #e63f3f;
   transition: transform 0.5s ease-out, opacity 0.5s ease-out;
 
   ${TileStyled}:hover & {
-    transform: translateY(220%); 
+    transform: translateY(220%);     
     opacity: 1; 
+    color: #e63f3f;
   }
+
 
   span {
     width: 5px;
@@ -116,8 +122,8 @@ const Dots = styled.div`
     display: block;
     transition: background-color 0.3s ease;
 
-    &:hover {
-      background-color: #fff; // 호버 시에 색상 변경
+    &:hover { 
+      background-color: #fff; // 호버 시에 색상 변경      
     }
   }
 
@@ -134,6 +140,7 @@ const Dots = styled.div`
 
     &:hover::before {
       width: 62%;
+      background: #e63f3f;
     }
 `;
 
@@ -213,13 +220,47 @@ export const WorkspaceTile = ({
   ownerNickname,
   memberNicknames,
   updateAt,
+  spaceId,  
 }) => {
+
+  const handleDeleteWorkspace = async (e) => {
+    e.stopPropagation();
+
+    Swal.fire({
+      title: '정말 삭제하시겠습니까?',
+      text: '한 번 삭제한 후에는 되돌릴 수 없습니다',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제합니다',
+      cancelButtonText: '돌아가기',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteWorkSpace(spaceId).then(() => {
+          Swal.fire(
+            '삭제되었습니다',
+            '해당 작업실이 성공적으로 삭제되었습니다.',
+            'success'
+          );
+          window.location.reload()          
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          '취소되었습니다',
+          '작업실이 안전하게 보존되었습니다.',
+          'error'
+        );
+      }
+    });
+  }
+
+
   return (
     <TileStyled>
       <Text>
         <Heading1>{workspaceTitle}</Heading1>
-        <Paragraph>{workspaceContent}</Paragraph> 
-        <MemberListTitle>참여 멤버</MemberListTitle> 
+        <Paragraph>{workspaceContent}</Paragraph>
+        <MemberListTitle>참여 멤버</MemberListTitle>
         <MembersList>
           {memberNicknames.map((member, index) => (
             <MemberItem key={index}>
@@ -230,7 +271,7 @@ export const WorkspaceTile = ({
           ))}
         </MembersList>
         <EditDate> {new Date(updateAt).toLocaleString()}</EditDate>
-        <Dots> 삭제하기 </Dots>
+        <Delete onClick={handleDeleteWorkspace}> 삭제하기 </Delete>
       </Text>
     </TileStyled>
   );

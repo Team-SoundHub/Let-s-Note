@@ -29,8 +29,7 @@ const LoginBox = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 27rem;
-  /* padding: 40px; */
+  width: 35rem;
   padding: 2.5rem;
   background: rgba(255, 255, 255, 1);
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
@@ -55,7 +54,7 @@ font-weight: 700;
 `;
 
 const UserBox = styled.div`
-  position: relative;
+  position: relative;  
   input {
     width: 100%;
     padding: 10px 0;
@@ -143,33 +142,50 @@ const FormButton2 = styled.a`
     }
 `;
 
-const LoginForm = ({ closeLoginModal, handleLogin, openRegisterModal }) => {
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+const ErrorMessage = styled.div`
+  color: #e64848;
+  text-align: center;    
+`;
+
+const RegisterForm = ({ closeRegisterModal, handleRegister }) => {
+  const [userId, setUserId] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [error, setError] = useState(null);
 
   const onChangeUserId = (e) => {
     setUserId(e.target.value);
   }
 
+  const onChangeNickname = (e) => {
+    setNickname(e.target.value);
+  };
+
   const onChangePassword = (e) => {
     setPassword(e.target.value);
   };
 
-  const onClickLogin = () => {
-    handleLogin(userId, password);
+  const onChangePasswordConfirm = (event) => {
+    setPasswordConfirm(event.target.value);
   };
 
-  const onClickRegister = () => {
-    closeLoginModal();
-    openRegisterModal();
+  const validateRegister = () => {
+    if (password !== passwordConfirm) {
+      setError("비밀번호가 일치하지 않습니다");
+      return;
+    }
+
+    const response = handleRegister(userId, nickname, password);
+    console.log(response);
   };
 
   return (
     <>
 
-      <Overlay onClick={closeLoginModal} />
+      <Overlay onClick={closeRegisterModal} />
       <LoginBox>
-        <H2>로그인</H2>
+        <H2>회원가입</H2>
         <form>
           <UserBox>
             <input
@@ -177,7 +193,15 @@ const LoginForm = ({ closeLoginModal, handleLogin, openRegisterModal }) => {
               required
               onChange={onChangeUserId}
             />
-            <label>아이디를 입력하세요</label>
+            <label>원하는 아이디를 입력하세요</label>
+          </UserBox>
+          <UserBox>
+            <input
+              type="text"
+              required
+              onChange={onChangeNickname}
+            />
+            <label>원하는 닉네임을 입력하세요</label>
           </UserBox>
           <UserBox>
             <input
@@ -187,13 +211,20 @@ const LoginForm = ({ closeLoginModal, handleLogin, openRegisterModal }) => {
             />
             <label>비밀번호를 입력하세요</label>
           </UserBox>
+          <UserBox>
+            <input
+              type="password"
+              required
+              onChange={onChangePasswordConfirm}
+            />
+            <label>비밀번호 확인</label>
+          </UserBox>
+
+          {error && <ErrorMessage>{error}</ErrorMessage>}
 
           <ButtonsContainer>
-            <FormButton onClick={onClickRegister}>
-              처음 왔어요
-            </FormButton>
-            <FormButton onClick={onClickLogin}>
-              로그인
+            <FormButton onClick={validateRegister}>
+              가입
             </FormButton>
           </ButtonsContainer>
         </form>
@@ -202,4 +233,4 @@ const LoginForm = ({ closeLoginModal, handleLogin, openRegisterModal }) => {
   )
 }
 
-export default LoginForm;
+export default RegisterForm;

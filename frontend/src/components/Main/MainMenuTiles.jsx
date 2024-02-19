@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components';
-import { MenuTile } from './MenuTile';
+import { MenuTile } from './Tiles/MenuTile';
 
 import piano_img from '../../assets/Main/goWorkplace.png';
 import workplace_img from '../../assets/Main/myWorkplace.png';
@@ -43,24 +43,21 @@ const MainMenuTiles = ({ openCreateModal, enterMyWorkspaces, enterMySnapshots, e
         title={"작업하기"}
         description={"누구나 음악을 연주하고, 나만의 작품을 남길 수 있어요"}
       />
-      <MenuTile
-        // onClick={() => enterMyWorkspaces()}
+      <MenuTile        
         onClick={enterMyWorkspaces}
         style={{ '--tile-index': '1' }}
         imgSrc={workplace_img}
         title={"내 작업실"}
         description={"이전 작업을 이어서 할 수 있어요"}
       />
-      <MenuTile
-        // onClick={() => enterMySnapshots()}
+      <MenuTile        
         onClick={enterMySnapshots}
         style={{ '--tile-index': '2' }}
         imgSrc={snapshot_img}
         title={"내 작품"}
         description={"내 작품들을 모아서 감상하세요"}
       />
-      <MenuTile
-        // onClick={() => enterFeed()}
+      <MenuTile        
         onClick={enterFeed}
         style={{ '--tile-index': '3' }}
         imgSrc={"https://i.pinimg.com/originals/48/1f/92/481f92a061e83e3cf32c683a1c808f79.jpg"}

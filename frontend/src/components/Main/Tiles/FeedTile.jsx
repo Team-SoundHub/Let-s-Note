@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import crown from './crown-svgrepo-com.svg';
-import Swal from "sweetalert2";
-
-import { deleteSnapshot } from '../../../api/myPageApi';
 
 const TileStyled = styled.div`
   flex: none;
@@ -92,58 +89,6 @@ const Paragraph = styled.p`
   transition: all 0.6s ease-in-out;
 `;
 
-const Delete = styled.div`
-  position: absolute;
-  bottom: 20px;
-  right: 0rem;
-  width: 6rem;
-  height: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  transform: translateY(150%); 
-  opacity: 0; 
-  color: #e63f3f;
-  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-
-  ${TileStyled}:hover & {
-    transform: translateY(220%);     
-    opacity: 1; 
-    color: #e63f3f;
-  }
-
-
-  span {
-    width: 5px;
-    height: 5px;
-    background-color: currentColor;
-    border-radius: 50%;
-    display: block;
-    transition: background-color 0.3s ease;
-
-    &:hover { 
-      background-color: #fff; // 호버 시에 색상 변경      
-    }
-  }
-
-  &::before {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 1.1rem;
-      width: 0;
-      height: 2px;
-      background: black;
-      transition: 0.3s;
-    }
-
-    &:hover::before {
-      width: 62%;
-      background: #e63f3f;
-    }
-`;
-
 
 const MemberListTitle = styled.p`
   font-weight: 700;
@@ -214,7 +159,7 @@ const EditDate = styled.p`
   margin-top: auto; 
 `;
 
-export const SnapshotTile = ({
+export const FeedTile = ({
   snapshotTitle,
   snapshotContent,
   ownerNickname,
@@ -222,38 +167,6 @@ export const SnapshotTile = ({
   updateAt,
   snapshotId,  
 }) => {
-
-  const handleDeleteSnapshot = async (e) => {
-    e.stopPropagation();
-
-    Swal.fire({
-      title: '정말 삭제하시겠습니까?',
-      text: '한 번 삭제한 후에는 되돌릴 수 없습니다',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: '삭제합니다',
-      cancelButtonText: '돌아가기',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteSnapshot(snapshotId).then(() => {
-          Swal.fire(
-            '삭제되었습니다',
-            '해당 작품이 성공적으로 삭제되었습니다.',
-            'success'
-          );
-          window.location.reload();
-        });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire(
-          '취소되었습니다',
-          '작품이 안전하게 보존되었습니다.',
-          'error'
-        );
-      }
-    });
-  }
-
   return (
     <TileStyled>
       <Text>
@@ -269,8 +182,7 @@ export const SnapshotTile = ({
             </MemberItem>
           ))}
         </MembersList>
-        <EditDate> {new Date(updateAt).toLocaleString()}</EditDate>
-        <Delete onClick={handleDeleteSnapshot}> 삭제하기 </Delete>
+        <EditDate> {new Date(updateAt).toLocaleString()}</EditDate>        
       </Text>
     </TileStyled>
   );

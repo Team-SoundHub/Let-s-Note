@@ -102,9 +102,12 @@ const TileSlider = ({ accessToken, accountId, isMyWorkspace }) => {
 
     const onDrag = (e) => {
         if (!isDragging) return;
+
+        console.log('드래그중');
         e.preventDefault();
         const x = e.pageX - carouselRef.current.offsetLeft;
-        const walk = (x - startX) * 0.1; // 드래그 민감도 조정
+        const walk = (x - startX) * 0.02; // 드래그 민감도 조정
+        // const walk = (x - startX); // 드래그 민감도 조정
 
         if (Math.abs(walk) > 10) {
             setDragged(true);
@@ -171,6 +174,7 @@ const TileSlider = ({ accessToken, accountId, isMyWorkspace }) => {
                             ownerNickname={workspace.ownerNickname}
                             memberNicknames={workspace.memberNicknames}
                             updateAt={workspace.updateAt}
+                            spaceId={workspace.spaceId}
                         />
                     </div>
                 ))
@@ -198,6 +202,7 @@ const TileSlider = ({ accessToken, accountId, isMyWorkspace }) => {
                             ownerNickname={snapshot.ownerNickname}
                             memberNicknames={snapshot.memberNicknames}
                             updateAt={snapshot.updateAt}
+                            snapshotId={snapshot.snapshotId}                            
                         />
                     </div>
                 ))
