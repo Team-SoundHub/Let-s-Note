@@ -276,7 +276,7 @@ const WorkPlacePage = () => {
     }
   };
 
-  const handleChordAI = async (accountId, text, value) => {
+  const handleChordAI = async (accountId) => {
     setLoading(true);
 
     try {
@@ -290,7 +290,7 @@ const WorkPlacePage = () => {
         console.log(piano_data[i]["noteY"]);
         piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
       }
-      const result = await callChordAI(piano_list, accountId, text, value);
+      const result = await callChordAI(piano_list, accountId);
 
       const formed_list = [{instrument: "piano", notes: []}, {instrument: "guitar", notes: []}, {instrument: "drum", notes: []}]
 
