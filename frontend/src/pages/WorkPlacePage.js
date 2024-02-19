@@ -297,7 +297,7 @@ const WorkPlacePage = () => {
       result.response.noteList.forEach(function(current_y, idx) {
         if (current_y.length > 0) {
           current_y.forEach(function (inner_y){
-            formed_list[0].notes.push({noteX: idx, noteY: parseInt(inner_y)})
+            formed_list[1].notes.push({noteX: idx, noteY: parseInt(inner_y)})
           });
         }
       });
