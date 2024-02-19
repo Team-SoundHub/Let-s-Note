@@ -206,4 +206,10 @@ public class AccountServiceImpl implements AccountService {
         }
         return null;
     }
+
+    @Override
+    public String getNicknameFromUsername(String username) {
+        Account user = getAccountFromUserId(username).get();
+        return user.getNickname();
+    }
 }

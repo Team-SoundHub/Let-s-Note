@@ -31,6 +31,7 @@ import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -149,7 +150,7 @@ public class EditorSocketController {
 	}
 
 	@EventListener
-	public void handleWebSocketSubcribe(SessionSubscribeEvent event) {
+	public void handleWebSocketSubscribe(SessionSubscribeEvent event) {
 		SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
 
 		String destination = headerAccessor.getDestination();
@@ -164,12 +165,28 @@ public class EditorSocketController {
 			if (!accountConnectedSessions.containsKey(spaceId)) {
 				accountConnectedSessions.put(spaceId, new HashMap<>());
 			}
-			accountConnectedSessions.get(spaceId).put(senderSession, username);
+
+			if (!accountConnectedSessions.get(spaceId).containsValue(username)){
+				accountConnectedSessions.get(spaceId).put(senderSession, username);
+			}
+			else{
+				Iterator<Map.Entry<String, String>> iterator = accountConnectedSessions.get(spaceId).entrySet().iterator();
+
+				while (iterator.hasNext()) {
+					Map.Entry<String, String> entry = iterator.next();
+					if (entry.getValue().equals(username)) {
+						iterator.remove();
+					}
+				}
+
+				accountConnectedSessions.get(spaceId).put(senderSession, username);
+			}
+
 		}
 	}
 
 	@EventListener
-	public void handleWebSocketUnSubcribe(SessionUnsubscribeEvent event) {
+	public void handleWebSocketUnSubscribe(SessionUnsubscribeEvent event) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
 		String destination = headerAccessor.getDestination();

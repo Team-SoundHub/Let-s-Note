@@ -6,9 +6,10 @@ public record WebRTCRequest() {
 
     @Builder
     public record Offer(
-            String sdp,
+            Object sdp,
             String offerSendId,
-            String offerReceiveId
+            String offerReceiveId,
+            String offerSenderNickname
     ) {}
 
     @Builder
@@ -19,7 +20,7 @@ public record WebRTCRequest() {
 
     @Builder
     public record Answer(
-            String sdp,
+            Object sdp,
             String answerSendId,
             String answerReceiveId
     ){
@@ -27,7 +28,7 @@ public record WebRTCRequest() {
 
     @Builder
     public record Candidate(
-            String candidate,
+            Object candidate,
             String candidateSendId,
             String candidateReceiveId
     ) {
@@ -35,7 +36,7 @@ public record WebRTCRequest() {
 
     @Builder
     public record ExitUser(
-            String exitUserId
+            String userId
     ) {
     }
 }

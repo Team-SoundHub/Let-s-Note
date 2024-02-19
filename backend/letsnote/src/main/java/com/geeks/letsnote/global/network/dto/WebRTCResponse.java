@@ -8,8 +8,9 @@ import java.util.Set;
 public record WebRTCResponse() {
     @Builder
     public record Offer(
-            String sdp,
-            String offerSendId
+            Object sdp,
+            String offerSendId,
+            String offerSenderNickname
 
     ){}
 
@@ -20,18 +21,19 @@ public record WebRTCResponse() {
 
     @Builder
     public record User(
-            String userId
+            String userId,
+            String userNickname
     ){}
 
     @Builder
     public record Answer(
-            String sdp,
+            Object sdp,
             String answerSendId
     ){}
 
     @Builder
     public record Candidate(
-            String candidate,
+            Object candidate,
             String candidateSendId
     ){}
 
