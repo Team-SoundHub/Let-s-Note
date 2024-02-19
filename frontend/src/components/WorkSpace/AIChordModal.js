@@ -111,7 +111,7 @@ const ModalInput = tw.input`
   dark:text-white
 `;
 
-const AiChordModal = ({handleAIChordModalClose, accountId, handleChordAI}) => {
+const AiChordModal = ({handleAIChordModalClose, accountId, handleChordAI, sendCoordinate}) => {
 
     return (
         <ModalBackground onClick={handleAIChordModalClose}>
@@ -131,7 +131,7 @@ const AiChordModal = ({handleAIChordModalClose, accountId, handleChordAI}) => {
                                 </div>
                             </div>
                             <div className={"flex justify-center content-center"}>
-                                <Button type="button" onClick={() => handleChordAI(accountId)}>생성</Button>
+                                <Button type="button" onClick={() => handleChordAI(accountId, sendCoordinate)}>생성</Button>
                             </div>
                         </ModalForm>
                     </ModalBody>

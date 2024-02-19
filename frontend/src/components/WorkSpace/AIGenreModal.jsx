@@ -111,7 +111,7 @@ const ModalInput = tw.input`
   dark:text-white
 `;
 
-const AIGenreModal = ({handleAIGenreModalClose, accountId, handleGenreAI}) => {
+const AIGenreModal = ({handleAIGenreModalClose, accountId, handleGenreAI, sendCoordinate}) => {
     const [text, setText] = useState('');
     const [value, setValue] = useState(16);
 
@@ -157,7 +157,7 @@ const AIGenreModal = ({handleAIGenreModalClose, accountId, handleGenreAI}) => {
                                 </div>
                             </div>
                             <div className={"flex justify-center content-center"}>
-                                <Button type="button" onClick={() => handleGenreAI(accountId, text, value)}>생성</Button>
+                                <Button type="button" onClick={() => handleGenreAI(accountId, text, value, sendCoordinate)}>생성</Button>
                             </div>
                         </ModalForm>
                     </ModalBody>
