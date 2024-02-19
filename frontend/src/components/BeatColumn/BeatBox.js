@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { setHoverPosition } from "../../app/slices/cursorSlice";
 import { setClickedNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
   @keyframes fillAnimation {
     100% {
-      background-image: none;
-      background-color: white;
+      background: white;
     }
   }
-
   flex: 1;
   margin: 0.05rem;
   background: ${(props) => {
@@ -24,13 +22,15 @@ const Container = styled.div`
         props.instrumentList.indexOf(props.instrument)
       ] === true
     ) {
+      const activeColors = props.active.map((isActive, index) =>
+        isActive ? pickActiveColor(props.instrumentList[index]) : null
+      );
+      const filteredColors = activeColors.filter((color) => color !== null);
       if (activeInstrumentCount > 1 && props.playing) {
-        return `linear-gradient(30deg, "white")`;
+        return css`
+          animation: ;
+        `;
       } else if (activeInstrumentCount > 1) {
-        const activeColors = props.active.map((isActive, index) =>
-          isActive ? pickActiveColor(props.instrumentList[index]) : null
-        );
-        const filteredColors = activeColors.filter((color) => color !== null);
         return `linear-gradient(30deg, ${filteredColors.join(", ")})`;
       } else {
         return pickActiveColor(
@@ -45,13 +45,13 @@ const Container = styled.div`
   height: 1.2rem;
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
-  transition: background-color 0.05s ease-out, background-image 0.05s ease-out,
-    opacity 0.05s ease-out;
+  /* transition: background-color 0.02s ease-in-out,
+    background-image 0.02s ease-in-out, opacity 0.02s ease-out; */
   ${(props) =>
     props.playing &&
     props.active.filter((isActive) => isActive).length > 0 &&
     `
-    animation: fillAnimation 0.1s ease-in-out alternate;
+    animation: fillAnimation 0.2s ease-in-out alternate;
   `}
 `;
 
