@@ -180,6 +180,7 @@ const MainMenuContainer = styled.div`
   justify-content: center; // 세로 방향 가운데 정렬
   align-items: center; // 가로 방향 가운데 정렬
   height: 100%; // 부모 컨테이너(WaveHeader)의 높이와 동일하게 설정
+  overflow: hidden;
 `;
 
 const MenuContainerTitle = styled.h2`

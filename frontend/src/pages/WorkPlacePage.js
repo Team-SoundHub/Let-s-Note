@@ -14,6 +14,7 @@ import NoteViewModal from "../containers/Note/NoteViewModal";
 import { RiRobot2Line } from "react-icons/ri";
 import Swal from "sweetalert2";
 
+
 import {getWorkspaceInfo, createSnapshot, callGenreAI, callChordAI} from "../api/workSpaceApi";
 import {setWorkspaceNotes, clearAllNotes, selectNotes, setClickedNotes} from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
@@ -240,7 +241,7 @@ const WorkPlacePage = () => {
   };
 
 
-  const handleGenreAI = async (accountId, text, value) => {
+  const handleGenreAI = async (accountId, text, value, sendCoordinate) => {
     setLoading(true);
     try {
       const noteInfo = await getWorkspaceInfo(spaceId);
@@ -262,11 +263,12 @@ const WorkPlacePage = () => {
           var current_x = noteInfo.response.maxX + 1 + idx;
           current_y.forEach(function (inner_y){
             formed_list[0].notes.push({noteX: current_x, noteY: parseInt(inner_y)})
+            sendCoordinate("piano", current_x, parseInt(inner_y));
           });
         }
       });
+      // dispatch(setWorkspaceNotes(formed_list));
 
-      dispatch(setWorkspaceNotes(formed_list));
     }catch (error) {
       alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
     } finally {
@@ -276,7 +278,7 @@ const WorkPlacePage = () => {
     }
   };
 
-  const handleChordAI = async (accountId) => {
+  const handleChordAI = async (accountId, sendCoordinate) => {
     setLoading(true);
 
     try {
@@ -297,12 +299,11 @@ const WorkPlacePage = () => {
       result.response.noteList.forEach(function(current_y, idx) {
         if (current_y.length > 0) {
           current_y.forEach(function (inner_y){
-            formed_list[1].notes.push({noteX: idx, noteY: parseInt(inner_y)})
+            sendCoordinate("guitar", idx, parseInt(inner_y));
+            // formed_list[1].notes.push({noteX: idx, noteY: parseInt(inner_y)})
           });
         }
       });
-
-      dispatch(setWorkspaceNotes(formed_list));
     }catch (error) {
       alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
     } finally {
@@ -413,6 +414,7 @@ const WorkPlacePage = () => {
                   handleAIGenreModalClose={handleAIGenreModalClose}
                   accountId={accountId}
                   handleGenreAI={handleGenreAI}
+                  sendCoordinate={sendCoordinate}
               />
           )}
           {isAIChordModalOpen && (
@@ -420,6 +422,7 @@ const WorkPlacePage = () => {
                   handleAIChordModalClose={handleAIChordModalClose}
                   accountId={accountId}
                   handleChordAI={handleChordAI}
+                  sendCoordinate={sendCoordinate}
               />
           )}
         </Container>
