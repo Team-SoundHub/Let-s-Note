@@ -132,6 +132,11 @@ class WorkSpaceContainer extends Component {
     this.state.synth.setBPM(event.target.value);
   };
 
+  adjustVolume = (event) => {
+    const volume = event.target.value; // 볼륨 값 가져오기
+    this.state.synth.setVolume(volume);
+  };
+
   changeColumns = (diff) => {
     const currentCols = this.state.columns;
     if (currentCols + diff <= 8 || currentCols + diff > 500) return;
@@ -289,6 +294,7 @@ class WorkSpaceContainer extends Component {
             onStop={this.stop}
             changeColumns={this.changeColumns}
             adjustBPM={this.adjustBPM}
+            adjustVolume={this.adjustVolume}
             bpm={this.initialBPM}
             changeInstrument={this.changeInstrument}
             columns={columns}
