@@ -2,13 +2,13 @@ import React from "react";
 import tw from "tailwind-styled-components";
 import BeatToggle from "./BeatToggle";
 import BeatsPerMinute from "./BeatsPerMinute";
-import BeatChange from "./BeatChange";
+import BeatsVolume from "./BeatVolume";
 import InstrumentChange from "../InstrumentControl/InstrumentChange";
 import BeatStop from "./BeatStop";
 import BeatProgressBar from "./BeatProgressBar";
 
 const Container = tw.div`
-  z-[500]
+  z-10
   bg-white
   flex
   items-center
@@ -45,6 +45,7 @@ const BeatControls = ({
   onStop,
   bpm,
   adjustBPM,
+  adjustVolume,
   changeInstrument,
   columns,
   count,
@@ -72,6 +73,8 @@ const BeatControls = ({
       </CenterSection>
       <RightSection>
         <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+        <BeatsVolume handleChange={adjustVolume} />
+
         {!isSnapshot && (
           <>
             <InstrumentChange

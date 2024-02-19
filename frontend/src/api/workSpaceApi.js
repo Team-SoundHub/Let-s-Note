@@ -73,12 +73,10 @@ const callGenreAI = async (previous, userId, textContent, value) => {
   }
 }
 
-const callChordAI = async (previous, userId, textContent, value) => {
+const callChordAI = async (previous, userId) => {
   try {
     const requestData = {
-      text: textContent,
       userId: userId,
-      value: value,
       previous: previous
     };
     const response = await axiosInstance.post(

@@ -112,15 +112,13 @@ const ModalInput = tw.input`
 `;
 
 const AiChordModal = ({handleAIChordModalClose, accountId, handleChordAI}) => {
-    const [text, setText] = useState('');
-    const [value, setValue] = useState(16);
 
     return (
         <ModalBackground onClick={handleAIChordModalClose}>
             <ModalContainer onClick={e => e.stopPropagation()}>
                 <ModalMain>
                     <ModalHeader>
-                        <ModalTitle>AI에게 어울리는 노트 추천받기</ModalTitle>
+                        <ModalTitle>AI에게 어울리는 화음 추천받기</ModalTitle>
                         <ModalCloseButton onClick={handleAIChordModalClose}>X</ModalCloseButton>
                     </ModalHeader>
                     <ModalBody>
@@ -128,31 +126,12 @@ const AiChordModal = ({handleAIChordModalClose, accountId, handleChordAI}) => {
                             <div>
                                 <div className={"pb-4"}>
                                     <span className={"pb-4"}>
-                                    추천받고 싶으신 화음 범위를 입력해 주세요
+                                    현재까지 입력하신 음을 바탕으로 어울리는 화음을 추천해 줍니다.
                                     </span>
-                                </div>
-                                <div className={"flex justify-center content-center"}>
-                                    <ModalInput
-                                        className={"w-[50px] mx-2"}
-                                        type="text"
-                                        placeholder=""
-                                        value={text}
-                                        onChange={(e) => setText(e.target.value)}
-                                    />
-                                    <span className={"flex items-center"}>
-                                        ~
-                                    </span>
-                                    <ModalInput
-                                        className={"w-[50px] mx-2"}
-                                        type="text"
-                                        placeholder=""
-                                        value={text}
-                                        onChange={(e) => setText(e.target.value)}
-                                    />
                                 </div>
                             </div>
                             <div className={"flex justify-center content-center"}>
-                                <Button type="button" onClick={() => handleChordAI(accountId, text, value)}>생성</Button>
+                                <Button type="button" onClick={() => handleChordAI(accountId)}>생성</Button>
                             </div>
                         </ModalForm>
                     </ModalBody>

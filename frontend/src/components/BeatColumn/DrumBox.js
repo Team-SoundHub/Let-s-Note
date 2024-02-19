@@ -22,12 +22,12 @@ const Container = styled.div`
   margin-bottom: ${(props) => (props.row % 7 === 0 ? 2 : 0)}rem;
   position: relative; /* Ensure the circle is positioned relative to this container */
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
-  transition: background-color 0.05s ease-out, opacity 0.05s ease-out;
+  /* transition: background-color 0.05s ease-out, opacity 0.05s ease-out; */
   ${(props) =>
     props.playing &&
     props.active.filter((isActive) => isActive).length > 0 &&
     `
-    animation: fillAnimation 0.1s ease-in-out alternate;
+    animation: fillAnimation 0.2s ease-in-out alternate;
   `}
 
   &::after {

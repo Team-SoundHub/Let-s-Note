@@ -16,8 +16,6 @@ const BeatButton = tw.button`
   px-3
   py-3 
   text-center
-
-  mx-1
   my-2
 `;
 

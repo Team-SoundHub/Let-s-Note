@@ -276,7 +276,7 @@ const WorkPlacePage = () => {
     }
   };
 
-  const handleChordAI = async (accountId, text, value) => {
+  const handleChordAI = async (accountId) => {
     setLoading(true);
 
     try {
@@ -290,15 +290,14 @@ const WorkPlacePage = () => {
         console.log(piano_data[i]["noteY"]);
         piano_list[piano_data[i]["noteX"]].push(String(piano_data[i]["noteY"]));
       }
-      const result = await callChordAI(piano_list, accountId, text, value);
+      const result = await callChordAI(piano_list, accountId);
 
       const formed_list = [{instrument: "piano", notes: []}, {instrument: "guitar", notes: []}, {instrument: "drum", notes: []}]
 
       result.response.noteList.forEach(function(current_y, idx) {
         if (current_y.length > 0) {
-          var current_x = noteInfo.response.maxX + 1 + idx;
           current_y.forEach(function (inner_y){
-            formed_list[0].notes.push({noteX: current_x, noteY: parseInt(inner_y)})
+            formed_list[1].notes.push({noteX: idx, noteY: parseInt(inner_y)})
           });
         }
       });

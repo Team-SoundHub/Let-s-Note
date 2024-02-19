@@ -54,7 +54,7 @@ class Synth {
           callback,
           "/audio/" + instrument + "/"
         ).set({
-          volume: 5,
+          volume: -6,
           oscillator: {
             type: "triangle17",
           },
@@ -70,7 +70,11 @@ class Synth {
     // this.setVolume();
   }
 
-  setVolume(volume = -12) {
+  setVolume(volumePercent) {
+    // 볼륨 값을 0부터 100 사이로 정규화
+    const volume = Tone.gainToDb(volumePercent / 100);
+
+    // 모든 샘플러의 볼륨 조절
     Object.values(this.samplers).forEach((sampler) => {
       sampler.volume.value = volume;
     });
