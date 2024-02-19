@@ -22,7 +22,7 @@ const HeaderStyled = styled.header`
   top: 0;
   left: 0;
   width: 100%;
-  padding: 20px 100px;
+  padding: 20px 14%; 
   background: transparent;
   display: flex;
   justify-content: space-between;

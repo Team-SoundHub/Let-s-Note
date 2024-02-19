@@ -21,14 +21,15 @@ const HeaderStyled = styled.header`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  padding: 20px 100px;
+  width: 100%;  
+  padding: 20px 14%; 
   background: transparent;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
 `;
+
 
 const Logo = styled.a`
   font-size: 32px;
