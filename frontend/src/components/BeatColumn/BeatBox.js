@@ -7,7 +7,8 @@ import { setClickedNotes } from "../../app/slices/innerContentSlice";
 const Container = styled.div`
   @keyframes fillAnimation {
     100% {
-      background: white;
+      background-image: none;
+      background-color: white;
     }
   }
 
@@ -23,7 +24,9 @@ const Container = styled.div`
         props.instrumentList.indexOf(props.instrument)
       ] === true
     ) {
-      if (activeInstrumentCount > 1) {
+      if (activeInstrumentCount > 1 && props.playing) {
+        return `linear-gradient(30deg, "white")`;
+      } else if (activeInstrumentCount > 1) {
         const activeColors = props.active.map((isActive, index) =>
           isActive ? pickActiveColor(props.instrumentList[index]) : null
         );
@@ -42,7 +45,8 @@ const Container = styled.div`
   height: 1.2rem;
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
-  transition: background-color 0.05s ease-out, opacity 0.05s ease-out;
+  transition: background-color 0.05s ease-out, background-image 0.05s ease-out,
+    opacity 0.05s ease-out;
   ${(props) =>
     props.playing &&
     props.active.filter((isActive) => isActive).length > 0 &&

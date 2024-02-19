@@ -37,17 +37,23 @@ const ModalMain = tw.div`
   rounded-lg
   shadow
   dark:bg-gray-700
+  resize
+  overflow-auto
 `;
 
 const ModalHeader = tw.div`
   flex
   items-center
   justify-between
+  bg-white
   p-4
   md:p-5
   border-b
   rounded-t
   dark:border-gray-600
+  sticky
+  top-0
+  z-20
 `;
 
 const ModalTitle = tw.h3`
@@ -76,8 +82,23 @@ const ModalCloseButton = tw.button`
 `;
 
 const ModalBody = tw.div`
+  px-4
+  z-10
+`;
+
+const ModalFooter = tw.div`
+  flex
+  items-center
+  justify-between
+  bg-white
   p-4
   md:p-5
+  border-b
+  rounded-t
+  dark:border-gray-600
+  sticky
+  bottom-0
+  z-20
 `;
 
 const NoteViewModal = ({ image_url, onClose }) => {
@@ -120,13 +141,12 @@ const NoteViewModal = ({ image_url, onClose }) => {
     <Overlay>
       <ModalContainer tabIndex="-1" aria-hidden="true">
         <ModalContent
-          onMouseDown={handleMouseDown}
           style={{
             transform: `translate(${translate.x}px, ${translate.y}px)`,
           }}
         >
           <ModalMain>
-            <ModalHeader>
+            <ModalHeader onMouseDown={handleMouseDown}>
               <ModalTitle>악보</ModalTitle>
               <ModalCloseButton onClick={onClose}>
                 <svg
@@ -152,12 +172,14 @@ const NoteViewModal = ({ image_url, onClose }) => {
                 className="w-full"
                 src={image_url} // 높이를 브라우저 뷰포트의 100% - 모달의 마진으로 설정
               />
-              <button
-                className="w-full text-white bg-[#49C5B6] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={onClose}
-              >
-                닫기
-              </button>
+              <ModalFooter>
+                <button
+                  className=" w-full text-white bg-[#49C5B6] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  onClick={onClose}
+                >
+                  닫기
+                </button>
+              </ModalFooter>
             </ModalBody>
           </ModalMain>
         </ModalContent>
