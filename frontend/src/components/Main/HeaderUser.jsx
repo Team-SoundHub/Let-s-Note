@@ -92,7 +92,7 @@ const HeaderUser = ({ handleLogout, backToUserHome, mode }) => {
         <Navbar>
           <btn onClick={() => backToUserHome()}>Home</btn>
           <btn onClick={() => handleVOC()}>피드백 주기</btn>
-          <btn href="#">회원정보 수정</btn>
+          {/* <btn href="#">회원정보 수정</btn> */}
           <btn onClick={() => handleLogout()}>로그아웃</btn>
         </Navbar>
       </HeaderStyled>

@@ -203,8 +203,7 @@ const MyPage = () => {
               className=" flex h-full"
               onClick={() =>
                 handleNavigateWorkspace(workspace.spaceId, workspace.spaceTitle)
-              }
-              // onClick={() => navigate(`/workspace/${workspace.spaceId}`)}
+              }              
             >
               <PostCard
                 snapshotTitle={workspace.spaceTitle}

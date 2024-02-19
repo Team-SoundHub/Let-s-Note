@@ -23,6 +23,7 @@ import CreateSpaceModal from '../components/MyPage/CreateSpaceModal';
 import { login, register } from '../api/authApi';
 import { getMyNickname } from '../api/nicknameApi';
 import { createWorkSpace } from '../api/myPageApi';
+import RegisterForm from '../components/Main/Modals/RegisterForm';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Lato:300,400');
@@ -240,16 +241,9 @@ const LandingPage = () => {
 
 
   // API 호출 관리
-  const handleRegister = async () => {
-    const usernameInput = document.getElementById("userId");
-    const nicknameInput = document.getElementById("nickname");
-    const passwordInput = document.getElementById("password");
+  const handleRegister = async (userId, nickname, password) => {
 
     try {
-      const userId = usernameInput.value;
-      const nickname = nicknameInput.value;
-      const password = passwordInput.value;
-
       const response = await register(userId, nickname, password);
 
       console.log("reigster response: ", response);
@@ -272,7 +266,7 @@ const LandingPage = () => {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: "회원가입이 완료되었습니다 !",
+              title: "회원가입이 완료되었습니다!",
               showConfirmButton: false,
               timer: 1500,
             });
@@ -285,13 +279,9 @@ const LandingPage = () => {
     }
   };
 
-  const handleLogin = async () => {
-    const usernameInput = document.getElementById("userId");
-    const passwordInput = document.getElementById("password");
+  const handleLogin = async (userId, password) => {
 
     try {
-      const userId = usernameInput.value;
-      const password = passwordInput.value;
       const response = await login(userId, password);
 
       const { accessToken, refreshToken, accountId } = response.response;
@@ -403,7 +393,16 @@ const LandingPage = () => {
 
     switch (mode) {
       case 0:
-        return <AnonLandingContainer />;
+        return (
+          <AnonLandingContainer>
+            <MainMenuTiles
+              openCreateModal={openCreateModal}
+              enterMyWorkspaces={enterMyWorkspaces}
+              enterMySnapshots={enterMySnapshots}
+              enterFeed={enterFeed}
+            />
+          </AnonLandingContainer>
+        );
       case 1:
         return (
           <MainMenuContainer>
@@ -431,9 +430,10 @@ const LandingPage = () => {
             isMyWorkspace={false}
           /> : null;
       case 4:
-        return showContainers ?
-          <FeedContainer
-          /> : null;
+        return null;
+      // return showContainers ?
+      //   <FeedContainer
+      //   /> : null;
       default:
         return showContainers ? <AnonLandingContainer /> : null;
     }
@@ -443,16 +443,16 @@ const LandingPage = () => {
     <>
       <GlobalStyle />
       {isLoginModalOpen && (
-        <AuthModal
-          type="login"
+        <LoginForm
           closeLoginModal={closeLoginModal}
           handleLogin={handleLogin}
+          openRegisterModal={openRegisterModal}
         />
       )}
       {isRegisterModalOpen && (
-        <AuthModal
+        <RegisterForm
           type="register"
-          closeLoginModal={closeRegisterModal}
+          closeRegisterModal={closeRegisterModal}
           handleRegister={handleRegister}
         />
       )}
@@ -500,7 +500,7 @@ const LandingPage = () => {
       }
       {mode === 4 &&
         <ScrollableContent>
-          {/* 여기에 피드 컨테이너 */}
+          <FeedContainer />
         </ScrollableContent>
       }
     </>

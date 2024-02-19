@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import styled, {keyframes} from 'styled-components';
 import { getAllSnapshotInfo } from '../../api/feedApi';
-import { SnapshotTile } from '../../components/Main/Tiles/SnapshotTile';
+import { FeedTile } from '../../components/Main/Tiles/FeedTile';
 
 const fadeInDown = keyframes`
   from {
     opacity: 0;
-    transform: translateY(3rem);
+    /* transform: translateY(3rem); */
+    transform: translateY(25rem);
   }
   to {
     opacity: 1;
@@ -62,7 +63,7 @@ const FeedContainer = () => {
                   { state: { fromMyPage: false } }
                 )}
             >
-              <SnapshotTile
+              <FeedTile
                 snapshotTitle={postList[i].snapshotTitle}
                 memberNicknames={postList[i].memberNicknames}
                 snapshotContent={postList[i].snapshotContent}
