@@ -28,6 +28,7 @@ import {
 } from "../app/slices/innerContentSlice";
 import { setMember, getMember } from "../api/workSpaceApi";
 import { getMyNickname } from "../api/nicknameApi";
+import { getMyUserId } from "../api/userIdApi";
 import AiInterfaceModal from "../components/WorkSpace/AIInterfaceModal";
 import AIGenreModal from "../components/WorkSpace/AIGenreModal";
 import AIChordModal from "../components/WorkSpace/AIChordModal";
@@ -63,6 +64,7 @@ const WorkPlacePage = () => {
   const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
+  const [myUsername, setMyUsername] = useState(null);
   const audioRef = useRef(null);
 
   const handleSearchModalOpen = () => {
@@ -132,6 +134,18 @@ const WorkPlacePage = () => {
         console.error("Error fetching workspace info:", error);
       }
     };
+
+    const fetchMyUsername = async () => {
+      try {
+        const response = await getMyUserId(accountId);
+        setMyUsername(response.response.username);
+        console.log("내 id:", response.response.username);
+      } catch (error) {
+        console.error("내 id 요청 Error:", error);
+      }
+  };
+
+    fetchMyUsername();
     fetchMyNickname();
     fetchMemberList();
   }, []);
@@ -213,6 +227,7 @@ const WorkPlacePage = () => {
         const newMemberName = response.response.nickname;
 
         setMemberList((prevMemberList) => [...prevMemberList, newMemberName]);
+        Swal.fire("멤버가 추가되었습니다!");
       } catch (error) {
         console.error("Add member error: ", error);
       }
@@ -418,7 +433,9 @@ const WorkPlacePage = () => {
               memberList={memberList}
               client = {stompClient}
               isConnected={isConnected}
+              spaceId={spaceId}
               myNickname={myNickname}
+              mySocketId={myUsername}
           />
           {maxColumn > 0 && (
             <WorkSpaceContainer

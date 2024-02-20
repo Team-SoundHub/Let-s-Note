@@ -32,8 +32,8 @@ const WebSocketContainer = ({ spaceId, children }) => {
         new SockJS(`${process.env.REACT_APP_SOCKET_HTTP}/letsnote/ws`),
       onConnect: () => {
         console.log("Connected: ");
-        setIsConnected(true);
         subscribeToTopics(client);
+        setIsConnected(true);
       },
       onDisconnect: () => {
         console.log("Disconnected: ");
