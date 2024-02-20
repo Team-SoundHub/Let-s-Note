@@ -102,6 +102,7 @@ const FormButton = styled.a`
   transition: 0.5s;
   margin-top: 40px;
   letter-spacing: 4px;
+  cursor: pointer;
 
   &::before {
     content: "";
@@ -165,7 +166,7 @@ const AddMemberModal = ({ closeAddMemberModal, handleAddMember }) => {
         onClick={handleContentClick}
       >
         <ModalHeader>
-          <H2>멤버 추가</H2>
+          <H2>멤버 추가하기</H2>
           <ModalCloseButton
             data-modal-hide="authentication-modal"
             onClick={closeAddMemberModal}

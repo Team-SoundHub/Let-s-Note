@@ -80,6 +80,11 @@ const GoogleCustomSearch = ({ isSearchModalOpen, handleSearchModalClose }) => {
     setHoveredImage(null);
   };
 
+  const closeFileSearchModals = () => {
+    setSelectedImage(null);
+    setStoredImage(null);
+  }
+
   return (
     <ModalBody>
       <SearchContainer>
@@ -148,6 +153,7 @@ const GoogleCustomSearch = ({ isSearchModalOpen, handleSearchModalClose }) => {
           <FileStoreModal
             image_url={storedImage}
             onClose={() => setStoredImage(null)}
+            closeFileSearchModals={closeFileSearchModals}
           />
         )}
       </ResultContainer>

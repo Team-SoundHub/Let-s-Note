@@ -227,8 +227,9 @@ const WorkPlacePage = () => {
         const newMemberName = response.response.nickname;
 
         setMemberList((prevMemberList) => [...prevMemberList, newMemberName]);
-        Swal.fire("멤버가 추가되었습니다!");
+        Swal.fire("멤버를 추가했어요");        
       } catch (error) {
+        Swal.fire("멤버 추가에 실패했어요. ID를 확인해주세요", "", "info");
         console.error("Add member error: ", error);
       }
     }
