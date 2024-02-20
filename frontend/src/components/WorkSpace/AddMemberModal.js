@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import tw from "tailwind-styled-components";
 
@@ -42,6 +42,7 @@ const ButtonsContainer = styled.div`
   display: flex;
   justify-content: flex-end; // 오른쪽 정렬
   gap: 1rem; // 버튼 사이 간격
+  margin-top: -2rem;
 `;
 
 const H2 = styled.h2`
@@ -146,14 +147,74 @@ const ModalCloseButton = tw.button`
   dark:hover:text-white
 `;
 
-const AddMemberModal = ({ closeAddMemberModal, handleAddMember }) => {
+
+// 멤버 목록 관련
+const MemberListTitle = styled.p`
+  font-weight: 700;
+  margin: 20px 0rem -0.5rem 0;
+  line-height: 25px;
+  /* transform: translateX(-200px); */
+  transition-delay: 0.2s;
+  color: #569d94;
+  opacity: 1;
+  transition: all 0.6s ease-in-out;
+`;
+
+const MembersList = styled.ul`
+  margin-top: 16px;
+  margin-bottom: 16px;
+  overflow-y: auto; 
+  background-color: #f3f4f6;
+  height: 10rem;
+  max-height: 80%; 
+  width: 100%;
+  padding-top: 0.5rem;
+  padding-right: 0.5rem; // Adds some space for the scrollbar
+  border: 1px solid #569d94;
+  border-radius: 5px;
+  /* box-shadow: inset 0 0 5px rgba(0,0,0,0.2); // Adds subtle inner shadow to indicate depth */
+  /* background-color: #f3f4f6; // Adjusted for better visibility against the crown icon */
+`;
+
+const MemberItem = styled.li`
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+`;
+
+const MemberNicknameSpan = styled.span`
+  display: flex;
+  /* width: 15rem; */
+  width: 90%;
+  align-items: center;
+  border-radius: 0.375rem; 
+  /* background-color: #f3f4f6; */
+  background-color: white;
+  padding: 0.75rem; 
+  margin: auto;  
+  font-size: 0.875rem; 
+  font-weight: bold; 
+  color: #1f2937; 
+  &:hover {
+    background-color: #84c4bd; 
+    box-shadow: 0 10px 15px -3px rgba(230, 113, 113, 0.1), 0 4px 6px -2px rgba(231, 145, 145, 0.05); 
+  }  
+`;
+
+const AddMemberModal = ({ closeAddMemberModal, handleAddMember, memberList }) => {
   const [userId, setUserId] = useState("");
+  const [members, setMembers] = useState(memberList);
+
+  useEffect(() => {
+    setMembers(memberList);
+  }, [memberList])
 
   const handleContentClick = (event) => {
     event.stopPropagation();
   };
 
   const handleInputChange = (event) => {
+    console.log("멤버 목록:", memberList);
     setUserId(event.target.value);
   };
 
@@ -189,18 +250,27 @@ const AddMemberModal = ({ closeAddMemberModal, handleAddMember }) => {
             <span className="sr-only">Close modal</span>
           </ModalCloseButton>
         </ModalHeader>
-        <div>
-          <UserBox>
-            <input
-              type="text"
-              id="userId"
-              onChange={handleInputChange}
-              value={userId}
-              required
-            />
-            <label>유저 ID</label>
-          </UserBox>
-        </div>
+
+        <UserBox>
+          <input
+            type="text"
+            id="userId"
+            onChange={handleInputChange}
+            value={userId}
+            required
+          />
+          <label>유저 ID</label>
+        </UserBox>
+
+        <MemberListTitle>참여 멤버: {members.length}명</MemberListTitle>
+        <MembersList>
+          {members.map((member, index) => (
+            <MemberItem key={index}>
+              <MemberNicknameSpan>{member}
+              </MemberNicknameSpan>
+            </MemberItem>
+          ))}
+        </MembersList>
         <ButtonsContainer>
           <FormButton type="submit" onClick={handleAddMember}>
             추가
