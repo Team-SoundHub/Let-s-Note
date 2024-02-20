@@ -19,38 +19,40 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContent = styled.div`
+  width: 40rem;
+  height: 15rem;
   background-color: white;  
   padding: 20px;
   border-radius: 10px;  
 `;
 
 const SaveCompleteModal = ({ onClose, snapshotUrl, snapshotId }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleGoSnapshot = () => {        
-        navigate(`/snapshot/${snapshotId}`);
-    }
+  const handleGoSnapshot = () => {
+    navigate(`/snapshot/${snapshotId}`);
+  }
 
-    return (
-        <ModalBackground onClick={onClose}>
-            <ModalContent onClick={e => e.stopPropagation()}>
-                <div className='text-center mb-5'>
-                  <h2 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">스냅샷이 저장되었습니다</h2>
-                  <p className="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">내 작품을 친구들과 공유하세요!</p>
-                </div>
-                <div className = "flex justify-center items-center mb-5">
-                    <input className="w-full" type="text" value={snapshotUrl} readOnly />
-                    <div className= "ml-3 flex items-center">
-                      <ShareButton  />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                  <Button onClick={handleGoSnapshot}> 보러가기 </Button>
-                </div>
-                
-            </ModalContent>
-        </ModalBackground>
-    );
+  return (
+    <ModalBackground onClick={onClose}>
+      <ModalContent onClick={e => e.stopPropagation()}>
+        <div className='text-center mb-5'>
+          <h2 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">작품을 저장했어요</h2>
+          <p className="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">내 작품의 링크를 친구들과 공유하세요!</p>
+        </div>
+        <div className="flex justify-center items-center mb-5">
+          <input className="w-full" type="text" value={snapshotUrl} readOnly />
+          <div className="ml-3 flex items-center">
+            <ShareButton />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <Button onClick={handleGoSnapshot}> 보러가기 </Button>
+        </div>
+
+      </ModalContent>
+    </ModalBackground>
+  );
 };
 
 export default SaveCompleteModal;
