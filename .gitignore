@@ -133,6 +133,7 @@ sketch
 /build
 
 # misc
+.env
 .DS_Store
 .env.local
 .env.development.local
@@ -142,9 +143,6 @@ sketch
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# mp3
-*.mp3
 
 
 # End of https://www.toptal.com/developers/gitignore/api/react

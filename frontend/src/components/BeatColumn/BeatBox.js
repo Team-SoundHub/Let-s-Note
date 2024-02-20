@@ -1,60 +1,204 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import styled, { css } from "styled-components";
+import { setHoverPosition } from "../../app/slices/cursorSlice";
+import { setClickedNotes } from "../../app/slices/innerContentSlice";
 
 const Container = styled.div`
-  // note를 담는 즉, 클릭 시 색이 채워지는 컨테이너를 의미
-
-  /*
-* flex: 1
-  * flex-grow: 유연한 공간을 채우는 데 대한 비율을 나타냄
-  * flex-shrink: 축소될 때 요소의 크기를 나타냄
-  * flex-basis: 유연한 공간을 채우기 전에 요소가 차지하는 기본 크기를 나타냄
-flex: 1;은 flex-grow: 1;, flex-shrink: 1;, flex-basis: 0%;와 동일
-*/
-  flex: 1; //
-  margin: 0.5px;
-  background-color: ${(props) =>
-    props.active ? props.activeColor : props.inactiveColor};
+  @keyframes fillAnimation {
+    100% {
+      background: white;
+    }
+  }
+  flex: 1;
+  margin: 0.05rem;
+  background: ${(props) => {
+    const activeInstrumentCount = props.active.filter(
+      (isActive) => isActive
+    ).length;
+    if (
+      activeInstrumentCount > 0 &&
+      props.visualizeInstrument[
+        props.instrumentList.indexOf(props.instrument)
+      ] === true
+    ) {
+      const activeColors = props.active.map((isActive, index) =>
+        isActive ? pickActiveColor(props.instrumentList[index]) : null
+      );
+      const filteredColors = activeColors.filter((color) => color !== null);
+      if (activeInstrumentCount > 1 && props.playing) {
+        return css`
+          animation: ;
+        `;
+      } else if (activeInstrumentCount > 1) {
+        return `linear-gradient(30deg, ${filteredColors.join(", ")})`;
+      } else {
+        return pickActiveColor(
+          props.instrumentList[props.active.indexOf(true)]
+        );
+      }
+    } else {
+      return props.col % 8 < 4 ? "lightgray" : props.inactiveColor;
+    }
+  }};
+  width: 3rem;
+  height: 1.2rem;
+  margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
+  opacity: ${(props) => (props.playing ? 0.7 : 1)};
+  /* transition: background-color 0.02s ease-in-out,
+    background-image 0.02s ease-in-out, opacity 0.02s ease-out; */
+  ${(props) =>
+    props.playing &&
+    props.active.filter((isActive) => isActive).length > 0 &&
+    `
+    animation: fillAnimation 0.2s ease-in-out alternate;
+  `}
 `;
 
-const pickActiveColor = (note) => {
-  let letter = note.split("")[0];
-  switch (letter) {
-    case "A":
-      return "#DFCC2B";
-    case "B":
-      return "#3BD531";
-    case "C":
-      return "#2929DF";
-    case "D":
-      return "#DF9329";
-    case "E":
-      return "#6CBBD5";
-    case "F":
-      return "#C82F3C";
-    case "G":
-      return "#8350DF";
+const pickActiveColor = (instrument) => {
+  switch (instrument) {
+    case "piano":
+      return "#FFA1A1 50%";
+    case "guitar":
+      return "#4886FF 50%";
+    case "drum":
+      return "rgb(250 204 21)";
     default:
       return "black";
   }
 };
 
-const BeatBox = ({ active, note, onClick, inactiveColor }) => {
-  const activeColor = pickActiveColor(note);
+const BeatBox = ({
+  note,
+  onClick,
+  inactiveColor,
+  activeColor,
+  activeInstrument,
+  setActiveBoxes,
+  visualizeInstrument,
+  col,
+  row,
+  isSnapshot,
+  playing,
+  containerRef,
+  synth,
+  scale,
+}) => {
+  const dispatch = useDispatch();
+
+  const [active, setActive] = useState([false, false, false]);
+  const [instrument, setInstrument] = useState("piano");
+  const instrumentList = ["piano", "guitar", "drum"];
+
+  const innerContent = useSelector((state) => state.innerContent.innerContent);
+  const workspaceNotes = useSelector(
+    (state) => state.innerContent.workspaceNotes
+  );
+  const snapshotNotes = useSelector(
+    (state) => state.innerContent.snapshotNotes
+  );
+
+  // 처음 마운트 시 전역상태의 노트정보 반영
+  useEffect(() => {
+    let activeNotes;
+
+    if (isSnapshot) {
+      activeNotes = snapshotNotes.filter((n) => n.x === col && n.y === row);
+    } else {
+      activeNotes = workspaceNotes.filter((n) => n.x === col && n.y === row);
+    }
+
+    // 해당하는 노트가 있으면 상태 업데이트
+    activeNotes.forEach((activeNote) => {
+      const instrumentIndex = instrumentList.indexOf(activeNote.instrument);
+      setActive((prevActive) => {
+        const newActive = [...prevActive];
+        newActive[instrumentIndex] = !newActive[instrumentIndex];
+        return newActive;
+      });
+      setActiveBoxes(row, activeNote.instrument, !active[instrumentIndex]);
+    });
+  }, [workspaceNotes]);
+
+  const handleClick = () => {
+    if (isSnapshot) {
+      // isSnapshot이 true일 경우 onClick 이벤트 무시
+      return;
+    }
+
+    dispatch(setClickedNotes(row));
+
+    onClick && onClick();
+  };
+
+  useEffect(() => {
+    const instrumentIndex = instrumentList.indexOf(innerContent.instrument);
+    // Check if x and y match col and row
+    if (
+      innerContent.x === col &&
+      innerContent.y === row &&
+      !active[instrumentIndex]
+    ) {
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, true);
+      if (synth) {
+        synth.playNote(scale[row], synth.time, "8n", innerContent.instrument);
+      }
+    } else if (
+      innerContent.x === col &&
+      innerContent.y === row &&
+      active[instrumentIndex]
+    ) {
+      const newActive = [...active];
+      newActive[instrumentIndex] = !newActive[instrumentIndex];
+      setActive(newActive);
+      setActiveBoxes(row, innerContent.instrument, false);
+    }
+  }, [innerContent]);
+
+  // for 마우스 커서 공유
+  const boxRef = useRef(null);
+
+  const handleMouseOver = (e) => {
+    // BeatBox와 BeatGrid의 절대 위치 추출
+    const boxRect = boxRef.current.getBoundingClientRect();
+    const gridRect = containerRef.current.getBoundingClientRect();
+
+    // BeatGrid 내의 스크롤 위치 고려
+    const scrollLeft = containerRef.current.scrollLeft;
+    const scrollTop = containerRef.current.scrollTop;
+
+    // BeatBox 내부에서의 상대 좌표 계산
+    const mouseX = e.clientX - boxRect.left;
+    const mouseY = e.clientY - boxRect.top;
+
+    // 스크롤 위치 + 박스 내부의 위치를 반영한 마우스 좌표 계산
+    const relativeX = boxRect.left + scrollLeft + mouseX - gridRect.left;
+    const relativeY = boxRect.top + scrollTop + mouseY - gridRect.top;
+
+    dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
+  };
+
   return (
     <Container
+      ref={boxRef}
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
-      onClick={onClick}
+      onClick={handleClick}
+      instrument={instrument}
+      activeInstrument={activeInstrument}
+      visualizeInstrument={visualizeInstrument}
+      note={note}
+      col={col}
+      row={row}
+      instrumentList={instrumentList}
+      playing={playing}
+      onMouseOver={handleMouseOver}
     />
   );
-};
-
-BeatBox.defaultProps = {
-  active: false,
-  activeColor: "red",
-  onClick: () => null,
 };
 
 export default BeatBox;

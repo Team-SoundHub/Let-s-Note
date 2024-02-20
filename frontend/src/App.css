@@ -36,3 +36,6 @@
     transform: rotate(360deg);
   }
 }
+.swal2-container {
+  z-index: 9999;
+}

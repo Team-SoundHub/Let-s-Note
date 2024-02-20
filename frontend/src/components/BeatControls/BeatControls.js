@@ -1,49 +1,95 @@
-import React from 'react'
-import styled from 'styled-components'
-import BeatToggle from './BeatToggle'
-import BeatsPerMinute from './BeatsPerMinute'
-import BeatChange from './BeatChange'
-import BeatReset from './BeatReset'
-import Subject from '../../observer/Subject'
+import React from "react";
+import tw from "tailwind-styled-components";
+import BeatToggle from "./BeatToggle";
+import BeatsPerMinute from "./BeatsPerMinute";
+import BeatsVolume from "./BeatVolume";
+import InstrumentChange from "../InstrumentControl/InstrumentChange";
+import BeatStop from "./BeatStop";
+import BeatProgressBar from "./BeatProgressBar";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  margin: 8px 0px;
-`
+const Container = tw.div`
+  z-10
+  bg-white
+  flex
+  items-center
+  justify-between
+  w-full
+  px-4
+  mt-1
+  border-2
+`;
 
-const BeatChangeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
+const LeftSection = tw.div`
+  flex
+  items-center
+  justify-center
+  gap-4
+`;
 
-const onReset = () => {
-  Subject.fire('reset')
-}
+const CenterSection = tw.div`
+  flex
+  flex-col
+  w-[50%]
+  items-center
+`;
 
-const BeatControls = ({ onPlay, bpm, adjustBPM, changeColumns }) => (
-  <Container>
-    <BeatReset onClick={onReset} />
-    <BeatToggle onClick={onPlay} />
-    <BeatChangeContainer>
-      <BeatChange
-        style={{ marginBottom: 5 }}
-        mode='add'
-        onClick={() => changeColumns(1)}
-      />
-      <BeatChange
-        style={{ marginTop: 5 }}
-        mode='subtract'
-        onClick={() => changeColumns(-1)}
-      />
-    </BeatChangeContainer>
-    <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
-  </Container>
-)
+const RightSection = tw.div`
+  flex
+  items-center
+  justify-center
+  gap-4
+`;
 
-export default BeatControls
+const BeatControls = ({
+  onPlay,
+  onStop,
+  bpm,
+  adjustBPM,
+  adjustVolume,
+  changeInstrument,
+  columns,
+  count,
+  handleIsPlaying,
+  isPlaying,
+  isSnapshot,
+}) => {
+  return (
+    <Container>
+      <LeftSection>
+        <BeatToggle
+          onClick={onPlay}
+          isPlaying={isPlaying}
+          handleIsPlaying={handleIsPlaying}
+        />
+        <BeatStop onClick={onStop} />
+      </LeftSection>
+      <CenterSection>
+        <BeatProgressBar
+          columns={columns}
+          count={count}
+          onPlay={onPlay}
+          handleIsPlaying={handleIsPlaying}
+        />
+      </CenterSection>
+      <RightSection>
+        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+        <BeatsVolume handleChange={adjustVolume} />
+
+        {!isSnapshot && (
+          <>
+            <InstrumentChange
+              instrument="piano"
+              changeInstrument={changeInstrument}
+            />
+            <InstrumentChange
+              instrument="guitar"
+              changeInstrument={changeInstrument}
+            />
+          </>
+        )}
+      </RightSection>
+    </Container>
+  );
+};
+
+export default BeatControls;

@@ -1,41 +1,42 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import BeatButton from './BeatButton'
+import React, { Component } from "react";
+import tw from "tailwind-styled-components";
+import BeatButton from "./BeatButton";
+import play from "../../assets/control/play-svgrepo-com.svg";
+import pause from "../../assets/control/pause-svgrepo-com.svg";
 
-const Play = styled.i`
-  font-size: 24px;
-  color: #363636;
-  margin-left: ${props => (props.playing ? 0 : 4)}px;
-`
+const Container = tw.div`
+  flex
+  items-center
+  justify-center
+`;
+
+const Play = tw.img`
+  w-5
+  h-5
+`;
 
 class BeatToggle extends Component {
-  state = { playing: false }
-
   onClick = () => {
-    const { onClick } = this.props
-    this.setState(
-      prev => ({
-        playing: !prev.playing
-      }),
-      onClick
-    )
-  }
+    const { onClick, handleIsPlaying } = this.props;
+    onClick();
+    handleIsPlaying();
+  };
 
-  render () {
-    const { playing } = this.state
+  render() {
+    const { isPlaying } = this.props;
+    const iconSrc = isPlaying ? pause : play;
     return (
-      <BeatButton onClick={this.onClick}>
-        <Play
-          playing={playing}
-          className={`fas ${playing ? 'fa-pause' : 'fa-play'}`}
-        />
-      </BeatButton>
-    )
+      <Container>
+        <BeatButton onClick={this.onClick}>
+          <Play src={iconSrc} />
+        </BeatButton>
+      </Container>
+    );
   }
 }
 
 BeatToggle.defaultProps = {
-  onClick: () => null
-}
+  onClick: () => null,
+};
 
-export default BeatToggle
+export default BeatToggle;

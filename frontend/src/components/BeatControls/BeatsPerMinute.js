@@ -3,19 +3,18 @@ import styled from "styled-components";
 import RangeInput from "./RangeInput";
 
 const Container = styled.div`
-  margin-left: 8px;
   display: flex;
-  min-width: 200px;
+  width: 250px;
   align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
+  justify-content: flex-end;
 `;
 
 const Label = styled.span`
-  color: white;
-  font-size: 16px;
+  color: #49c5b6;
+  font-size: 15px;
   font-weight: 700;
-  width: 100%;
+  width: 90%;
+  margin-right: 0.5rem;
 `;
 
 class BeatsPerMinute extends Component {
@@ -62,7 +61,7 @@ class BeatsPerMinute extends Component {
     return (
       <Container>
         <Label>{`Beats / Minute - ${bpm}`}</Label>
-        <RangeInput ref={this.input} type="range" min="80" max="200" />
+        <RangeInput ref={this.input} type="range" min="80" max="300" />
       </Container>
     );
   }
