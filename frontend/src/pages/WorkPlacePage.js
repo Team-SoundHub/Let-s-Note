@@ -56,7 +56,7 @@ const WorkPlacePage = () => {
   const [snapshotUrl, setSnapshotUrl] = useState("");
   const [snapshotId, setSnapshotId] = useState("");
   const [memberList, setMemberList] = useState([]);
-  const [myNickname, setMyNickname] = useState([]);
+  const [myNickname, setMyNickname] = useState(null);
   const [workspaceInfo, setWorkspaceInfo] = useState({
     notesList: [],
     isSnapshotExist: false,
@@ -431,7 +431,6 @@ const WorkPlacePage = () => {
               onOpenModal={handleModalOpen}
               isSnapshotExist={workspaceInfo.isSnapshotExist}
               openAddMemberModal={openAddMemberModal}
-              handleAddMember={handleAddMember}
               memberList={memberList}
               client = {stompClient}
               isConnected={isConnected}
