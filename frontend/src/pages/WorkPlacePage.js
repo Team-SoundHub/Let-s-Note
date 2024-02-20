@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import {useDispatch, useSelector} from "react-redux";
+
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
 import WebSocketContainer from "../containers/WebSocket/WebSocketContainer";
@@ -62,6 +63,7 @@ const WorkPlacePage = () => {
   const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
+  const audioRef = useRef(null);
 
   const handleSearchModalOpen = () => {
     setisSearchModalOpen(true);
@@ -96,11 +98,11 @@ const WorkPlacePage = () => {
       try {
         const response = await getWorkspaceInfo(spaceId);
         setWorkspaceInfo(response.response);
-
-        // console.log("작업실 입장 데이터 요청:", response.response.notesList);
-        // console.log("작업실 입장 데이터 요청 maxX:", response.response.maxX);
-
-        setMaxColumn(calculateColumns(response.response.maxX));
+        
+        console.log("작업실 입장 데이터 요청:", response.response.notesList);
+        console.log("작업실 입장 데이터 요청 maxX:", response.response.maxX);
+        
+        setMaxColumn(calculateColumns(response.response.maxX));      
 
         dispatch(setWorkspaceNotes(response.response.notesList));
       } catch (error) {
@@ -250,7 +252,7 @@ const WorkPlacePage = () => {
     setIsChordAIModalOpen(false);
   };
 
-  const handleGenreAI = async (accountId, text, value) => {
+  const handleGenreAI = async (accountId, text, value, sendCoordinate) => {
     setLoading(true);
     try {
       const noteInfo = await getWorkspaceInfo(spaceId);
@@ -277,17 +279,15 @@ const WorkPlacePage = () => {
       result.response.noteList.forEach(function (current_y, idx) {
         if (current_y.length > 0) {
           var current_x = noteInfo.response.maxX + 1 + idx;
-          current_y.forEach(function (inner_y) {
-            formed_list[0].notes.push({
-              noteX: current_x,
-              noteY: parseInt(inner_y),
-            });
+          current_y.forEach(function (inner_y){
+            formed_list[0].notes.push({noteX: current_x, noteY: parseInt(inner_y)})
+            sendCoordinate("piano", current_x, parseInt(inner_y));
           });
         }
       });
+      // dispatch(setWorkspaceNotes(formed_list));
 
-      dispatch(setWorkspaceNotes(formed_list));
-    } catch (error) {
+    }catch (error) {
       alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
     } finally {
       setLoading(false);
@@ -296,7 +296,7 @@ const WorkPlacePage = () => {
     }
   };
 
-  const handleChordAI = async (accountId) => {
+  const handleChordAI = async (accountId, sendCoordinate) => {
     setLoading(true);
 
     try {
@@ -323,14 +323,13 @@ const WorkPlacePage = () => {
 
       result.response.noteList.forEach(function (current_y, idx) {
         if (current_y.length > 0) {
-          current_y.forEach(function (inner_y) {
-            formed_list[1].notes.push({ noteX: idx, noteY: parseInt(inner_y) });
+          current_y.forEach(function (inner_y){
+            sendCoordinate("guitar", idx, parseInt(inner_y));
+            // formed_list[1].notes.push({noteX: idx, noteY: parseInt(inner_y)})
           });
         }
       });
-
-      dispatch(setWorkspaceNotes(formed_list));
-    } catch (error) {
+    }catch (error) {
       alert("API 호출 중 오류가 발생했습니다 ㅠㅠ");
     } finally {
       setLoading(false);
@@ -346,6 +345,7 @@ const WorkPlacePage = () => {
         sendMessage,
         sendMousePosition,
         isConnected,
+        stompClient,
         sendLoop,
       }) => (
         <Container>
@@ -411,11 +411,14 @@ const WorkPlacePage = () => {
             />
           )}
           <WorkSpaceHeader
-            onOpenModal={handleModalOpen}
-            isSnapshotExist={workspaceInfo.isSnapshotExist}
-            openAddMemberModal={openAddMemberModal}
-            handleAddMember={handleAddMember}
-            memberList={memberList}
+              onOpenModal={handleModalOpen}
+              isSnapshotExist={workspaceInfo.isSnapshotExist}
+              openAddMemberModal={openAddMemberModal}
+              handleAddMember={handleAddMember}
+              memberList={memberList}
+              client = {stompClient}
+              isConnected={isConnected}
+              myNickname={myNickname}
           />
           {maxColumn > 0 && (
             <WorkSpaceContainer
@@ -446,18 +449,20 @@ const WorkPlacePage = () => {
             />
           )}
           {isAIGenreModalOpen && (
-            <AIGenreModal
-              handleAIGenreModalClose={handleAIGenreModalClose}
-              accountId={accountId}
-              handleGenreAI={handleGenreAI}
-            />
+              <AIGenreModal
+                  handleAIGenreModalClose={handleAIGenreModalClose}
+                  accountId={accountId}
+                  handleGenreAI={handleGenreAI}
+                  sendCoordinate={sendCoordinate}
+              />
           )}
           {isAIChordModalOpen && (
-            <AIChordModal
-              handleAIChordModalClose={handleAIChordModalClose}
-              accountId={accountId}
-              handleChordAI={handleChordAI}
-            />
+              <AIChordModal
+                  handleAIChordModalClose={handleAIChordModalClose}
+                  accountId={accountId}
+                  handleChordAI={handleChordAI}
+                  sendCoordinate={sendCoordinate}
+              />
           )}
         </Container>
       )}

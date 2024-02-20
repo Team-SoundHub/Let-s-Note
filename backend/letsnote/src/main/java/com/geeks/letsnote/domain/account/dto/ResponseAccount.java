@@ -61,4 +61,9 @@ public record ResponseAccount() {
     ){
     }
 
+    @Builder
+    public record Username(
+            String username
+    ){}
+
 }

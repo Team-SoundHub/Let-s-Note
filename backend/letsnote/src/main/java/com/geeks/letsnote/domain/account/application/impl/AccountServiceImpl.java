@@ -193,4 +193,23 @@ public class AccountServiceImpl implements AccountService {
         }
         return null;
     }
+
+    @Override
+    public ResponseAccount.Username getUsernameFromAccountId(Long accountId) {
+        Optional<Account> user = accountRepository.findById(accountId);
+        if(user.isPresent()) {
+            ResponseAccount.Username username = ResponseAccount.Username.builder()
+                    .username(user.get().getUsername())
+                    .build();
+
+            return username;
+        }
+        return null;
+    }
+
+    @Override
+    public String getNicknameFromUsername(String username) {
+        Account user = getAccountFromUserId(username).get();
+        return user.getNickname();
+    }
 }

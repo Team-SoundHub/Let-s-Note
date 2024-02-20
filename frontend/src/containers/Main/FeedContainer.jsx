@@ -16,8 +16,6 @@ const fadeInDown = keyframes`
   }
 `;
 
-
-
 const CardContainer = styled.div`
   position: absolute;
   top: -10rem;
@@ -31,7 +29,7 @@ const CardContainer = styled.div`
 `;
 
 
-const FeedContainer = () => {
+const FeedContainer = ({isLoggedIn}) => {
   const navigate = useNavigate();
 
   const [postList, setPostList] = useState([]);
