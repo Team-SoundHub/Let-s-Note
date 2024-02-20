@@ -346,6 +346,7 @@ const LandingPage = () => {
     }
   }, [mode]);
 
+  const backToAnonHome = () => { setMode(0); }
   const backToUserHome = () => { setMode(1); }
   const enterMyWorkspaces = () => { setMode(2); }
   const enterMySnapshots = () => { setMode(3); }
@@ -359,7 +360,9 @@ const LandingPage = () => {
     switch (mode) {
       case 0:
         return (
-          <AnonLandingContainer>
+          <AnonLandingContainer
+            enterFeed={enterFeed}
+          >
             <MainMenuTiles
               openCreateModal={openCreateModal}
               enterMyWorkspaces={enterMyWorkspaces}
@@ -437,9 +440,10 @@ const LandingPage = () => {
           mode={mode}
         />
       ) : (
-        <HeaderAnon
+        <HeaderAnon        
           openLoginModal={openLoginModal}
           openRegisterModal={openRegisterModal}
+          backToAnonHome={backToAnonHome}
         />
       )
       }      

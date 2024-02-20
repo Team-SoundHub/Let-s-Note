@@ -36,6 +36,7 @@ const Logo = styled.a`
   color: white;
   text-decoration: none;
   font-weight: 700;
+  cursor: pointer;
 `;
 
 const Navbar = styled.nav`
@@ -65,7 +66,7 @@ const Navbar = styled.nav`
   }
 `;
 
-const HeaderAnon = ({ openLoginModal, openRegisterModal }) => {
+const HeaderAnon = ({ openLoginModal, openRegisterModal, backToAnonHome }) => {
   const handleVOC = () => {
     window.open(
       "https://docs.google.com/forms/d/e/1FAIpQLSf3QUyckdsNEJXwg1eJva4tegCo0eoeq4nCSTWCxAQjjrk4wQ/viewform",
@@ -77,7 +78,7 @@ const HeaderAnon = ({ openLoginModal, openRegisterModal }) => {
     <>
       <GlobalStyle />
       <HeaderStyled>
-        <Logo href="#">Let's Note</Logo>
+        <Logo onClick={backToAnonHome}>Let's Note</Logo>
         <Navbar>
           <btn onClick={() => handleVOC()}>피드백 주기</btn>
           <btn onClick={() => openRegisterModal()}>회원가입</btn>

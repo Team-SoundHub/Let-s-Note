@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 // import mainImg from '../../assets/landing/mainImage.png'
 // import mainImg from '../../assets/landing/mainImage2.jpeg'
 import mainImg from '../../assets/landing/mainImage3.png'
+import logoIcon from '../../assets/landing/letsnote.png'
 
 const InnerHeader = styled.div`
   display: flex;
@@ -64,24 +65,37 @@ const ButtonContainer = styled.div`
 `;
 
 const Button1 = styled.button`
-  width: 10rem;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  width: 12rem;
+  /* width: auto;  */
   height: 3rem;
-  padding: 10px 20px; 
+  /* padding: px;  */
   font-size: 1.2rem; 
   /* text-align: left; */
   text-align: center;
   font-weight: 400;
   color: #ffffff; 
-  background-color: #1665af;
-  border: none; 
+  background-color: #280909;
+  background-color: none;
+  /* border: 1px solid;  */
   border-radius: 15px;
   cursor: pointer; 
   transition: background-color 0.3s;
   z-index: 100;
   
   &:hover {
-    background-color: #487e76; 
+    /* background-color: #487e76;  */
+    background-color: #27aa96; 
     cursor: pointer; 
+  }
+
+  img {
+    margin-left: 0.5rem;
+    /* margin-right: 1rem; */
+    width: 2rem;
+    height: 2rem;
   }
 `;
 
@@ -94,15 +108,17 @@ const Button2 = styled.button`
   text-align: center;
   font-weight: 400;
   color: #ffffff; 
-  background-color: #33ab93;
-  border: none; 
+  background-color: #280909;
+  /* background-color: none; */
+  /* border: 1px solid;    */
   border-radius: 15px;
   cursor: pointer; 
   transition: background-color 0.3s;
   z-index: 100;
   
   &:hover {
-    background-color: #487e76; 
+    background-color: #F0564A; 
+    /* background-color: #0f3d69;  */
     cursor: pointer; 
   }
 `;
@@ -143,7 +159,7 @@ const MainImage = styled.div`
 
 
 
-const AnonLandingContainer = () => {
+const AnonLandingContainer = ({enterFeed}) => {
   return (
     <div>
       <Catchphrase>
@@ -151,8 +167,8 @@ const AnonLandingContainer = () => {
         <Line>느낄 수 있도록,</Line>
         <Line>Let's Note!</Line>
         <ButtonContainer>
-          <Button1>바로 체험하기</Button1>
-          <Button2>작품 둘러보기</Button2>
+          <Button1>바로 체험하기 <img src={logoIcon} alt="Logo" /></Button1>
+          <Button2 onClick={enterFeed}>작품 둘러보기</Button2>
         </ButtonContainer>
       </Catchphrase>
       <MainImage />

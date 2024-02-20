@@ -8,6 +8,7 @@ import LandingPageBefore from "./pages/LandingPageBefore";
 import MyPage from "./pages/MyPage";
 import SnapshotPage from "./pages/SnapshotPage";
 import VOC from "./VOC";
+import DemoWorkPlacePage from "./pages/DemoWorkPlacePage";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/landing" element={<LandingPageBefore />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/demo" element={<DemoWorkPlacePage />} />
           <Route path="/workspace/:spaceId" element={<WorkPlacePage />} />
           <Route path="/snapshot/:snapshotId" element={<SnapshotPage />} /> 
         </Routes>
