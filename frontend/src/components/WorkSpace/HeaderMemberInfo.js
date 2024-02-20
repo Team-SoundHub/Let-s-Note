@@ -1,10 +1,10 @@
-import React, { useState, useEffect , useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
-import add from "../../assets/control/plus-large-svgrepo-com.svg";
-// import memberIcon from "../../assets/workspace/memberIcon2.png";
-import memberIcon from "../../assets/workspace/memberIcon.png";
-// import memberIcon from "../../assets/workspace/memberIcon.svg";
+
+import muteIcon from "../../assets/workspace/mute.png";
+import micIcon from "../../assets/workspace/mic.png";
+
 import Audio from "../Audio";
 import Button from "../common/Button";
 
@@ -14,9 +14,13 @@ const Container = styled.div`
   gap: 0.3rem; /* Approximation of space-x-2 */
 `;
 
-const AddMemberButton = styled.button`
-  color: #4B5563; 
-  background-color: #FFFFFF; 
+const MicButton = styled.button`
+  color: white; 
+  /* background-color: ${({ mySoundMuted }) => (mySoundMuted ? '#A7F3D0' : '#F0564A')};  */
+  background-color: ${({ mySoundMuted }) => (mySoundMuted ? '#A7F3D0' : '#cfcdcd')}; 
+
+  /* background-color: #A7F3D0; */
+
   &:hover {
     background-color: #AFDED5; 
   }
@@ -29,35 +33,45 @@ const AddMemberButton = styled.button`
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
   font-size: 0.875rem; 
   /* padding: 0.75rem;  */
-  padding: 0.4rem; 
+  padding: 0.4rem;   
   text-align: center;
-  margin: 0.5rem 0.25rem; 
+  height: 2rem;
+  width: 2rem;  
+  margin: 0.2rem 0.2rem; 
+  margin-left: 1rem;
 `;
 
-const SvgImage = styled.img`
-  width: 1.8rem;
-  height: 1.5rem;
-  /* margin-left: -0.1rem;
-  margin-right: -0.1rem; */
+
+const ContentContainer = styled.div`
+  display: flex;
+  justify-content: flex-end; 
+  width: 100%; 
+  height: 100%; 
 `;
 
-const MemberInfo = ({ memberList, openAddMemberModal,users,localVideo, myNickname, mySoundMuted, handleMySoundMute }) => {
+
+const MemberInfo = ({ memberList, users, localVideo, myNickname, mySoundMuted, handleMySoundMute }) => {
   const streamRef = useRef();
 
   const renderMemberList = () => {
     return (
       <div className="flex items-center space-x-2">
-        <Button onClick={handleMySoundMute}>{mySoundMuted ? "내 소리 켜기" : "내 소리 끄기"}</Button>
         <button className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-5 py-2.5 rounded-xl dark:bg-blue-900 dark:text-blue-300">{myNickname}</button>
         {users.map((user, index) => (
           <Audio key={index} className="flex items-center space-x-2" stream={user.stream} username={user.nickname} />
         ))}
-			  <audio
+        <audio
           muted
           ref={streamRef}
           autoPlay
         />
-		  </div>
+        <MicButton
+          onClick={handleMySoundMute}
+          mySoundMuted={mySoundMuted}
+        >
+          <img src={mySoundMuted ?  micIcon : muteIcon} alt="sound icon" />
+        </MicButton>
+      </div>
     );
     // return memberList.map((member, index) => (
     //   <div key={index} className="flex items-center space-x-2">
@@ -74,19 +88,16 @@ const MemberInfo = ({ memberList, openAddMemberModal,users,localVideo, myNicknam
   };
 
   useEffect(() => {
-    if(localVideo) {
+    if (localVideo) {
       streamRef.current.srcObject = localVideo;
     }
     renderMemberList();
     console.log(users);
-  }, [localVideo , users, memberList]);
+  }, [localVideo, users, memberList]);
 
   return (
     <Container>
       {renderMemberList()}
-      <AddMemberButton onClick={openAddMemberModal}>      
-        <SvgImage src={memberIcon} />
-      </AddMemberButton>
     </Container>
   );
 };

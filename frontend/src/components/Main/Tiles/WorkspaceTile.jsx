@@ -304,7 +304,7 @@ export const WorkspaceTile = ({
       <Text>
         <Heading1>{workspaceTitle}</Heading1>
         <Paragraph>{workspaceContent}</Paragraph>
-        <MemberListTitle>참여 멤버: {memberNicknames.length}명</MemberListTitle>
+        <MemberListTitle>참여중 멤버: {memberNicknames.length}명</MemberListTitle>
         <MembersList>
           {memberNicknames.map((member, index) => (
             <MemberItem key={index}>
