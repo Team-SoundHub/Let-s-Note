@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
-import CseContainer from "./CseContainer";
-import BeatButton from "../../components/BeatControls/BeatButton";
-import quarterNote from "../../assets/Instrument/quarter-note-8-svgrepo-com.png";
 import Button from "../../components/common/Button";
 
 // 메시지가 나타나는 애니메이션
@@ -88,7 +85,7 @@ const ButtonContainer = styled.div`
 const SnapshotButton = styled.button`
   width: 70px;
   height: 70px;
-  
+
   background-color: #3498db;
   display: flex;
   flex-direction: column;
@@ -98,7 +95,6 @@ const SnapshotButton = styled.button`
   cursor: pointer;
   white-space: nowrap;
   text-align: center;
-  
 
   &:hover {
     transform: scale(1.1);
@@ -121,7 +117,7 @@ const WorkSpaceHeader = ({
   onOpenModal,
   isSnapshotExist,
   openAddMemberModal,
-  memberList
+  memberList,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
@@ -184,9 +180,10 @@ const WorkSpaceHeader = ({
           />
         </ButtonContainer>
         <ButtonContainer>
-          <Button className="rounded-full" onClick={onOpenModal}>저장</Button>
+          <Button className="rounded-full" onClick={onOpenModal}>
+            저장
+          </Button>
         </ButtonContainer>
-        
       </RightSection>
     </Header>
   );
