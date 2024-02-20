@@ -5,6 +5,9 @@ import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
 import Button from "../../components/common/Button";
 import { getMyUserId } from "../../api/userIdApi";
+import memberIcon from "../../assets/workspace/memberIcon.png";
+import muteIcon from "../../assets/workspace/mute.png";
+import micIcon from "../../assets/workspace/mic.png";
 // 메시지가 나타나는 애니메이션
 const fadeIn = keyframes`
   from {
@@ -77,9 +80,61 @@ const RightSection = styled.div`
   justify-content: flex-end;
 `;
 
+const ContentContainer = styled.div`
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  width: 100%; /* 부모 컨테이너(OnAirContainer)의 전체 너비를 차지 */
+  height: 100%; /* 부모 컨테이너의 전체 높이를 차지 */
+`;
+
+const OnAirContainer = styled.div`
+  height: 90%;
+  min-width: 30%;
+  padding-right: 0.5rem; 
+  background-color: #f3f3f3;
+  border-radius: 20px;
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.4),
+    inset -1px -1px 1px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 2px #f0f0f0,
+    inset -2px -2px 2px 2px rgba(255, 255, 255, 0.4),
+    inset -4px -4px 4px 2px rgba(255, 255, 255, 0.4),
+    -1px -1px 4px 0px rgba(255, 255, 255, 0.4),
+    -2px -2px 8px 0px rgba(255, 255, 255, 0.4),
+    inset 2px 2px 2px 2px rgba(0, 0, 0, 0.04),
+    inset 4px 4px 4px 2px rgba(0, 0, 0, 0.04),
+    1px 1px 4px 0px rgba(0, 0, 0, 0.04),
+    2px 2px 8px 0px rgba(0, 0, 0, 0.04);  
+`;
+
+
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
+`;
+
+
+const MicButton = styled.button`
+  color: white; 
+  background-color: #49C5B6; 
+  &:hover {
+    background-color: #AFDED5; 
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px #A7F3D0; 
+  }
+  font-weight: 500; 
+  border-radius: 9999px; 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
+  font-size: 0.875rem; 
+  /* padding: 0.75rem;  */
+  padding: 0.4rem; 
+  text-align: center;
+  height: 2rem;
+  width: 2rem;
+  margin: 0.2rem 0.2rem; 
+  margin-left: 1rem;
 `;
 
 const SnapshotButton = styled.button`
@@ -111,6 +166,59 @@ const Message = styled.div`
   display: ${({ show }) => (show ? "block" : "none")};
   animation: ${({ show }) => (show ? fadeIn : fadeOut)} 0.5s ease-out;
   animation-fill-mode: forwards; // 애니메이션 종료 후 최종 상태 유지
+`;
+
+const AddMemberButton = styled.button`
+  color: #4B5563; 
+  background-color: #FFFFFF; 
+  &:hover {
+    background-color: #AFDED5; 
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px #A7F3D0; 
+  }
+  font-weight: 500; 
+  border-radius: 9999px; 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
+  font-size: 0.875rem; 
+  
+  height: 2.4rem;
+  width: 2.5rem;
+  padding: 0.4rem; 
+  text-align: center;
+  margin: 0.25rem 0.25rem; 
+  margin-left: 1rem;
+`;
+
+const SaveButton = styled.button`
+  color: white; 
+  background-color: #49C5B6; 
+  &:hover {
+    background-color: #AFDED5; 
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px #A7F3D0; 
+  }
+  font-weight: 500; 
+  border-radius: 9999px; 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
+  font-size: 0.875rem; 
+  /* padding: 0.75rem;  */
+  padding: 0.4rem; 
+  text-align: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  margin: 0.2rem 0.2rem; 
+  margin-left: 0rem;
+`;
+
+const SvgImage = styled.img`
+  width: 1.8rem;
+  height: 1.3rem;
+  /* margin-left: -0.1rem;
+  margin-right: -0.1rem; */
 `;
 
 const WorkSpaceHeader = ({
@@ -471,24 +579,32 @@ const WorkSpaceHeader = ({
       </LeftSection>
 
       <RightSection>
+        <OnAirContainer>
+          <ContentContainer>
+            <ButtonContainer>
+              <MemberInfo
+                memberList={memberList}
+                localVideo={localVideo}
+                users={users}
+                myNickname={myNickname}
+                mySoundMuted={mySoundMuted}
+                handleMySoundMute={handleMySoundMute}
+              />
+            </ButtonContainer>
+          </ContentContainer>
+        </OnAirContainer>
+
         <ButtonContainer>
-          <MemberInfo
-            memberList={memberList}
-            openAddMemberModal={openAddMemberModal}
-            localVideo = {localVideo}
-            users = {users}
-            myNickname = {myNickname}
-            mySoundMuted = {mySoundMuted}
-            handleMySoundMute={handleMySoundMute}
-          />
-        </ButtonContainer>
-        <ButtonContainer>
-          <Button className="rounded-full" onClick={onOpenModal}>
+          <AddMemberButton onClick={openAddMemberModal}>
+            <SvgImage src={memberIcon} />
+          </AddMemberButton>
+          <SaveButton
+            onClick={onOpenModal}>
             저장
-          </Button>
+          </SaveButton>
         </ButtonContainer>
       </RightSection>
-    </Header>
+    </Header >
   );
 };
 
