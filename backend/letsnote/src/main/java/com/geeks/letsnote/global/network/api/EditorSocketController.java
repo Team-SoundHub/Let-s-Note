@@ -158,6 +158,7 @@ public class EditorSocketController {
 			String senderSession = headerAccessor.getSessionId();
 			String token = headerAccessor.getFirstNativeHeader("accessToken");
 			String username = accessTokenProvider.getUsernameFromToken(token);
+			System.out.println("이벤트리스너 : " + username);
 
 			String[] destinationSplit = destination.split("/");
 			String spaceId = destinationSplit[destinationSplit.length - 3];

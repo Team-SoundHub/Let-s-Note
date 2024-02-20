@@ -126,6 +126,7 @@ const WorkSpaceHeader = ({
   isConnected,
   spaceId,
   myNickname,
+  mySocketId,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
@@ -136,7 +137,6 @@ const WorkSpaceHeader = ({
   const localVideoRef = useRef(null);
   const [localVideo,setLocalVideo] = useState(null);
 	const [users, setUsers] = useState([]);
-  const [mySocketId,setMySocketId] = useState(null);
   const [mySoundMuted , setMySoundMuted] = useState(false);
   const pc_config = {
       iceServers: [
@@ -153,17 +153,6 @@ const WorkSpaceHeader = ({
 
   const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
-    const fetchMyUsername = async () => {
-        try {
-          const response = await getMyUserId(accountId);
-          setMySocketId(response.response.username);
-          console.log("내 id:", response.response.username);
-        } catch (error) {
-          console.error("내 id 요청 Error:", error);
-        }
-    };
-
-    fetchMyUsername();
 
     if(!isConnected){
         return;
@@ -171,7 +160,7 @@ const WorkSpaceHeader = ({
 
     const getLocalStream = async () => {
         try {
-            if(!client) {
+            if(!client || !mySocketId || !isConnected) {
                 return;
             }
             const localStream = await navigator.mediaDevices.getUserMedia({
@@ -439,7 +428,7 @@ const WorkSpaceHeader = ({
           
           setUsers([]);
       };
-  }, [isConnected, client, spaceId]);
+  }, [isConnected, client, spaceId, mySocketId]);
 
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가

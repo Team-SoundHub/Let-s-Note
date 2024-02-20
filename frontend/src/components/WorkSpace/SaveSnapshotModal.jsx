@@ -167,7 +167,7 @@ const SaveSnapshotModal = ({ onClose, onSave }) => {
     <Overlay onClick={onClose}>
       <AddMemberBox onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
-          <H2>스냅샷 저장하기</H2>
+          <H2>내 작품 저장하기</H2>
           <ModalCloseButton onClick={onClose}>X</ModalCloseButton>
         </ModalHeader>
         <UserBox>
