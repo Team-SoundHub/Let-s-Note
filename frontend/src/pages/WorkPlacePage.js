@@ -411,6 +411,7 @@ const WorkPlacePage = () => {
             <AddMemberModal
               closeAddMemberModal={closeAddMemberModal}
               handleAddMember={handleAddMember}
+              memberList={memberList}
             />
           )}
           {isSearchModalOpen && (
