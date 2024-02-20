@@ -60,10 +60,10 @@ const BeatProgressBar = ({ count, columns, onPlay, handleIsPlaying }) => {
 
   return (
     <ProgressBarContainer onMouseDown={handleMouseDown}>
-      <div class="bg-white rounded-xl shadow-sm overflow-hidden p-1 border border-gray">
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden p-1 border border-green-200">
         <div class="relative h-6 flex items-center justify-center">
           <div
-            className="absolute top-0 bottom-0 left-0 rounded-lg bg-green-200"
+            className="absolute top-0 bottom-0 left-0 rounded-lg bg-green-200 transition-all duration-300 ease-in-out"
             style={{ width: `${progressValue}%` }}
           ></div>
         </div>

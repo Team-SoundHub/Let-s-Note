@@ -10,6 +10,7 @@ import InstrumentVisualize from "../../components/InstrumentControl/InstrumentVi
 import * as Tone from "tone";
 import CseContainer from "./CseContainer";
 import { resetCount } from "../../components/BeatGrid/BeatGrid";
+import { RiRobot2Line } from "react-icons/ri";
 
 const Container = styled.div`
   background-color: white;
@@ -33,13 +34,14 @@ const GridContainer = tw.div`
 `;
 
 const LeftPanel = tw.div`
+  flex
   w-[3%]
   h-[98%]
-  flex-shrink-0
+  flex-col
   bg-white
   m-4
   items-center
-  justify-center
+  justify-between
   
 `;
 
@@ -245,6 +247,7 @@ class WorkSpaceContainer extends Component {
       sendCoordinate,
       sendLoop,
       sendMousePosition,
+      handleAIInterfaceModalOpen,
     } = this.props;
 
     if (isSnapshot && loading) {
@@ -256,12 +259,31 @@ class WorkSpaceContainer extends Component {
         <Container ref={this.containerRef}>
           <GridContainer>
             <LeftPanel>
-              {instrumentOptions.map((instrument, index) => (
-                <InstrumentVisualize
-                  instrument={instrument}
-                  changeVisualizeInstrument={this.changeVisualizeInstrument}
-                />
-              ))}
+              <div>
+                {instrumentOptions.map((instrument, index) => (
+                  <InstrumentVisualize
+                    instrument={instrument}
+                    changeVisualizeInstrument={this.changeVisualizeInstrument}
+                  />
+                ))}
+              </div>
+              <div className="flex flex-col items-center justify-center mb-4">
+                {!isSnapshot && (
+                  <>
+                    <CseContainer
+                      handleSearchModalOpen={this.props.handleSearchModalOpen}
+                    />
+                    <button
+                      className={
+                        "flex justify-center items-center w-[60px] h-[60px] rounded-full focus:ring-4 focus:outline-none focus:ring-lime-200 bg-[#49C5B6] hover:bg-[#367e76]"
+                      }
+                      onClick={handleAIInterfaceModalOpen}
+                    >
+                      <RiRobot2Line className={"w-8 h-8 fill-white"} />
+                    </button>
+                  </>
+                )}
+              </div>
             </LeftPanel>
             <MiddlePanel>
               <BeatGrid
@@ -284,11 +306,7 @@ class WorkSpaceContainer extends Component {
               />
             </MiddlePanel>
           </GridContainer>
-          {!isSnapshot && (
-            <CseContainer
-              handleSearchModalOpen={this.props.handleSearchModalOpen}
-            />
-          )}
+
           <BeatControls
             onPlay={this.play}
             onStop={this.stop}
