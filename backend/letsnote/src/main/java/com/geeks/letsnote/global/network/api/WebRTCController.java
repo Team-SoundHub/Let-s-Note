@@ -80,11 +80,12 @@ public class WebRTCController {
         String senderId = accountConnectedSessions.get(spaceId).get(senderSession);
         System.out.println("senderId == "+ senderId);
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
-            if (entry.getValue().equals(user.userId())) {
+            if (!entry.getValue().equals(user.userId())) {
+                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/exit/public", new WebRTCResponse.ExitUser(senderId));
+            }
+            else{
                 accountConnectedSessions.get(spaceId).remove(entry.getKey());
                 System.out.println("삭제 완료 : "+entry.getValue());
-            } else {
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/exit/public", new WebRTCResponse.ExitUser(senderId));
             }
         }
     }

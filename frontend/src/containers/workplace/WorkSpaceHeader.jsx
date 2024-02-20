@@ -239,7 +239,7 @@ const WorkSpaceHeader = ({
     };
 
     const handleJoin = async () => {
-        console.log("handleJoin 진입 전 my socket Id ? : " , mySocketId);
+        console.log("handleJoin 진입 전 my socket Id ? : " , mySocketId, spaceId);
         client.subscribe(
             `/user/topic/webrtc/${spaceId}/join/public`,
             async (response) => {
@@ -285,9 +285,8 @@ const WorkSpaceHeader = ({
     };
 
     const handleOffer = async () => {
-        console.log("handleOffer 진입 전: ",mySocketId);
+        console.log("handleOffer 진입 전: ",mySocketId, spaceId);
         client.subscribe(
-            // `/user/${mySocketId}/${spaceId}/queue/offer`,
             `/user/topic/webrtc/${spaceId}/offer/public`,
             async (response) => {
                 console.log("누군가 들어와서 Offer 보냄");
@@ -326,7 +325,7 @@ const WorkSpaceHeader = ({
     };
 
     const handleAnswer = () => {
-        console.log(1);
+        console.log("handleAnswer 진입 전: ",mySocketId, spaceId);
         client.subscribe(
             `/user/topic/webrtc/${spaceId}/answer/public`,
             async (response) => {
@@ -424,7 +423,7 @@ const WorkSpaceHeader = ({
           
           setUsers([]);
       };
-  }, [isConnected, client, spaceId, mySocketId]);
+  }, [isConnected, client, spaceId, mySocketId, myNickname]);
 
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가

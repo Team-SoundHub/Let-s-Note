@@ -100,7 +100,6 @@ public class EditorSocketController {
 		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
-	@Async
 	@MessageMapping("/workspace/{spaceId}/editor/sendCoordinate")
 	@SendTo("/topic/workspace/{spaceId}/editor/public")
 	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
@@ -110,7 +109,7 @@ public class EditorSocketController {
 	}
 
 	@MessageMapping("/workspace/{spaceId}/mouse/sendMousePosition")
-	public void sendEditorCoordinateInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+	public void sendMousePositionInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 		String senderSession = headerAccessor.getUser().getName();
 		String senderId = accountConnectedSessions.get(spaceId).get(senderSession);
 		for(Map.Entry<String, String> entry: accountConnectedSessions.get(spaceId).entrySet()) {
@@ -170,6 +169,19 @@ public class EditorSocketController {
 			}
 
 			if (!accountConnectedSessions.get(spaceId).containsValue(username)) {
+				accountConnectedSessions.get(spaceId).put(senderSession, username);
+			}
+			else
+			{
+				Iterator<Map.Entry<String, String>> iterator = accountConnectedSessions.get(spaceId).entrySet().iterator();
+
+				while (iterator.hasNext()) {
+					Map.Entry<String, String> entry = iterator.next();
+					if (entry.getValue().equals(username)) {
+						iterator.remove();
+					}
+				}
+
 				accountConnectedSessions.get(spaceId).put(senderSession, username);
 			}
 		}
