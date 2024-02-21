@@ -69,7 +69,7 @@ class WorkSpaceContainer extends Component {
       visualizeInstrument: [true, true, true],
       isPlaying: false,
     };
-    this.initialBPM = 160;
+    this.initialBPM = 220;
   }
 
   // 노트 관련
