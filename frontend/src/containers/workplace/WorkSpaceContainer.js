@@ -53,6 +53,23 @@ const MiddlePanel = tw.div`
   flex-shrink-0
 `;
 
+const FeatureContainer = styled.div`
+  height: 6rem;
+  min-width: 30%;
+  padding-right: 0.5rem;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.4),
+    inset -1px -1px 1px rgba(0, 0, 0, 0.04), inset 0 0 0 2px #f0f0f0,
+    inset -2px -2px 2px 2px rgba(255, 255, 255, 0.4),
+    inset -4px -4px 4px 2px rgba(255, 255, 255, 0.4),
+    -1px -1px 4px 0px rgba(255, 255, 255, 0.4),
+    -2px -2px 8px 0px rgba(255, 255, 255, 0.4),
+    inset 2px 2px 2px 2px rgba(0, 0, 0, 0.04),
+    inset 4px 4px 4px 2px rgba(0, 0, 0, 0.04),
+    1px 1px 4px 0px rgba(0, 0, 0, 0.04), 2px 2px 8px 0px rgba(0, 0, 0, 0.04);
+`;
+
 export const instrumentOptions = ["All", "piano", "guitar", "drum"];
 
 class WorkSpaceContainer extends Component {
@@ -270,20 +287,22 @@ class WorkSpaceContainer extends Component {
               <div className="flex flex-col items-center justify-center mb-4">
                 {!isSnapshot && (
                   <>
-                    <CseContainer
-                      handleSearchModalOpen={this.props.handleSearchModalOpen}
-                    />
-                    <button
-                      className={
-                        "flex flex-col justify-center bg-[#49c5b6] items-center w-16 h-16 rounded-md my-1 p-1 hover:opacity-70"
-                      }
-                      onClick={handleAIInterfaceModalOpen}
-                    >
-                      <RiRobot2Line className={"w-10 h-10 fill-white"} />
-                      <div className="text-white font-bold text-sm">
-                        AI 추천
-                      </div>
-                    </button>
+                    {/* <FeatureContainer> */}
+                      <CseContainer
+                        handleSearchModalOpen={this.props.handleSearchModalOpen}
+                      />
+                      <button
+                        className={
+                          "flex flex-col justify-center bg-[#49c5b6] items-center w-16 h-16 rounded-md my-1 p-1 hover:opacity-70"
+                        }
+                        onClick={handleAIInterfaceModalOpen}
+                      >
+                        <RiRobot2Line className={"w-10 h-10 fill-white"} />
+                        <div className="text-white font-bold text-sm">
+                          AI 추천
+                        </div>
+                      </button>
+                    {/* </FeatureContainer> */}
                   </>
                 )}
               </div>

@@ -35,16 +35,6 @@ const fadeOut = keyframes`
   }
 `;
 
-// const Header = styled.div`
-//   background-color: #f3f3f3;
-//   padding: 10px 20px;
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   border-bottom: 1px solid #ddd;
-//   height: 7vh;
-// `;
-
 const SpaceTitle = styled.div`
   flex: 1;
   text-align: center;
