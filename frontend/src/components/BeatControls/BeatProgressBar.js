@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
+import styled from "styled-components";
 import { handleCountChange } from "../BeatGrid/BeatGrid";
 import { getCount } from "../BeatGrid/BeatGrid";
 
-const ProgressBarContainer = tw.div`
-    flex
-    flex-col
-    w-full dark:bg-gray-700
+// const ProgressBarContainer = tw.div`
+//     flex
+//     flex-col
+//     w-full dark:bg-gray-700
+// `;
+
+const ProgressBarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;  
+
+  @media (max-width: 1550px) {
+    width: 90%;
+  }
+
+  @media (max-width: 850px) {
+    display: none;
+  }
 `;
+
 
 const BeatProgressBar = ({ count, columns, onPlay, handleIsPlaying }) => {
   const [isDragging, setIsDragging] = useState(false);
