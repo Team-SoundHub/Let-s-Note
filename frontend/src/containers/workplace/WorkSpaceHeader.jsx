@@ -231,6 +231,7 @@ const WorkSpaceHeader = ({
   spaceId,
   myNickname,
   mySocketId,
+  spaceTitle,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
@@ -263,7 +264,7 @@ const WorkSpaceHeader = ({
     setMySoundMuted(!mySoundMuted);
   }
 
-  const spaceTitle = localStorage.getItem("title");
+  // const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
 
     if(!isConnected){

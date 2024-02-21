@@ -65,6 +65,7 @@ const WorkPlacePage = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
   const [myUsername, setMyUsername] = useState(null);
+  const [spaceTitle, setSpaceTitle] = useState(null);
   const audioRef = useRef(null);
 
   const handleSearchModalOpen = () => {
@@ -144,6 +145,7 @@ const WorkPlacePage = () => {
         console.error("내 id 요청 Error:", error);
       }
   };
+    setSpaceTitle(localStorage.getItem("title"));
 
     fetchMyUsername();
     fetchMyNickname();
@@ -437,6 +439,7 @@ const WorkPlacePage = () => {
               spaceId={spaceId}
               myNickname={myNickname}
               mySocketId={myUsername}
+              spaceTitle={spaceTitle}
           />
           {maxColumn > 0 && (
             <WorkSpaceContainer
