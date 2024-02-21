@@ -7,11 +7,11 @@ const Cursors = () => {
 
     return (
         <>
-            {Object.entries(positions).map(([accountId, { x, y, nickname }]) => (
+            {Object.entries(positions).map(([accountId, { x, y, userId }]) => (
                 <div key={accountId} style={{ position: 'absolute', left: x, top: y }} className={"z-[5]"}>
                     <img src={cursorImage} alt="cursor" style={{ width: 20, height: 20 }} />
                     <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                        {nickname}
+                        {userId}
                     </span>
                 </div>
             ))}
