@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import tw from "tailwind-styled-components";
 import BeatButton from "./BeatButton";
-import stop from "../../assets/control/stop-svgrepo-com.svg";
 import { resetCount } from "../BeatGrid/BeatGrid";
 
 const Stop = tw.img`
@@ -27,7 +26,23 @@ class BeatStop extends Component {
     const { playing } = this.state;
     return (
       <BeatButton onClick={this.onClick}>
-        <Stop playing={playing} src={stop} />
+        <svg
+          width="1.5rem"
+          height="1.5rem"
+          fill="#ffffff"
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            <path d="M8 8h16v16H8z"></path>
+          </g>
+        </svg>
       </BeatButton>
     );
   }

@@ -1,16 +1,16 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
 const Container = styled.div`
   margin: auto;
   width: 100vw;
   height: 100vh;
-  background-color: #232323;
+  background-color: #ffffff;
   text-align: center;
   font-size: 10px;
 
   & > div {
-    background-color: #363636;
+    background-color: #49c5b6;
     height: 100%;
     width: 35px;
     margin: 5px;
@@ -26,8 +26,8 @@ const Container = styled.div`
   }
 
   & .rect3 {
-    -webkit-animation-delay: -1.0s;
-    animation-delay: -1.0s;
+    -webkit-animation-delay: -1s;
+    animation-delay: -1s;
   }
 
   & .rect4 {
@@ -41,29 +41,42 @@ const Container = styled.div`
   }
 
   @-webkit-keyframes sk-stretchdelay {
-    0%, 40%, 100% { -webkit-transform: scaleY(0.2) }  
-    20% { -webkit-transform: scaleY(0.7) }
+    0%,
+    40%,
+    100% {
+      -webkit-transform: scaleY(0.2);
+      opacity: 1;
+    }
+    20% {
+      -webkit-transform: scaleY(0.7);
+      opacity: 0.7;
+    }
   }
 
   @keyframes sk-stretchdelay {
-    0%, 40%, 100% { 
+    0%,
+    40%,
+    100% {
       transform: scaleY(0.2);
       -webkit-transform: scaleY(0.2);
-    }  20% { 
+      opacity: 0.5;
+    }
+    20% {
       transform: scaleY(0.7);
       -webkit-transform: scaleY(0.7);
+      opacity: 1;
     }
   }
-`
+`;
 
 const Loading = () => (
   <Container>
-    <div className='rect1' />
-    <div className='rect2' />
-    <div className='rect3' />
-    <div className='rect4' />
-    <div className='rect5' />
+    <div className="rect1" />
+    <div className="rect2" />
+    <div className="rect3" />
+    <div className="rect4" />
+    <div className="rect5" />
   </Container>
-)
+);
 
-export default Loading
+export default Loading;
