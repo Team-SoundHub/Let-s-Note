@@ -203,4 +203,9 @@ public class EditorSocketController {
 				accountConnectedSessions.remove(spaceId);
 		}
 	}
+
+	public void deleteUserInAccountConnectedSessions (Map.Entry<String, String> entry, String spaceId){
+		System.out.println("삭제 완료 : "+entry.getValue());
+		accountConnectedSessions.get(spaceId).remove(entry.getKey());
+	}
 }
