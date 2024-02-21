@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import tw from "tailwind-styled-components";
 import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
 import Button from "../../components/common/Button";
 import { getMyUserId } from "../../api/userIdApi";
+import { clearCursorPosition } from "../../app/slices/cursorSlice";
+
 import memberIcon from "../../assets/workspace/memberIcon.png";
 import muteIcon from "../../assets/workspace/mute.png";
 import micIcon from "../../assets/workspace/mic.png";
@@ -234,6 +237,8 @@ const WorkSpaceHeader = ({
   spaceTitle,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
   const accountId = sessionStorage.getItem("accountId");
@@ -363,6 +368,8 @@ const WorkSpaceHeader = ({
                 console.log("입장 했다. 웹소켓 받음");
                 const allUsers = JSON.parse(response.body);
                 console.log("handleJoin logs: ",allUsers.allUsers);
+                console.log("handleJoin logs - allUsers: ",allUsers);
+                console.log("-----------------------------------");
                 allUsers.allUsers.forEach(async (user) => {
                     if(user.userId !== mySocketId){
                     console.log("user : ",user);
@@ -487,12 +494,16 @@ const WorkSpaceHeader = ({
             (response) => {
                 const data = JSON.parse(response.body);
                 console.log("exit logs: ",data);
+                // -> userId 받는중
                 if(data.exitUserId === mySocketId) return;
                 const pc = pcsRef.current[data.exitUserId];
                 if(!pc) return;
                 pcsRef.current[data.exitUserId].close();
                 delete pcsRef.current[data.exitUserId];
-                setUsers((oldUsers) => oldUsers.filter((user) => user.id !== data.exitUserId));
+                setUsers((oldUsers) => oldUsers.filter((user) => user.id !== data.exitUserId));   
+
+                const userId = data.exitUserId;
+                dispatch(clearCursorPosition({userId}));
                 console.log("유저 삭제 성공", users);
             },
             {

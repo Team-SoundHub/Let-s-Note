@@ -100,9 +100,9 @@ const WebSocketContainer = ({ spaceId, children }) => {
         let x = cursorData.x;
         let y = cursorData.y;
         let accountId = cursorData.accountId;
-        let nickname = cursorData.nickname;
+        let userId = cursorData.nickname;
         console.log(`응답 받은 좌표: x: ${x} y: ${y}`);
-        dispatch(updateCursorPosition({ accountId, x, y, nickname }));
+        dispatch(updateCursorPosition({ accountId, x, y, userId }));
       },
       {
         accessToken: client.connectHeaders.accessToken,
