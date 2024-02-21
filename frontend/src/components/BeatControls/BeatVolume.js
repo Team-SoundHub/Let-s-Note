@@ -60,7 +60,7 @@ class BeatsVolume extends Component {
     const { volume } = this.state;
     return (
       <Container>
-        <Label>{`volume - ${volume}`}</Label>
+        <Label>{`volume (${volume})`}</Label>
         <RangeInput ref={this.input} type="range" min="0" max="100" />
       </Container>
     );

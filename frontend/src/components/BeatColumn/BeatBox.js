@@ -10,8 +10,9 @@ const Container = styled.div`
       background: white;
     }
   }
-  flex: 1;
-  margin: 0.05rem;
+  flex: 1;  
+  margin: 0.05rem;  
+
   background: ${(props) => {
     const activeInstrumentCount = props.active.filter(
       (isActive) => isActive
@@ -42,7 +43,7 @@ const Container = styled.div`
     }
   }};
   width: 3rem;
-  height: 1.2rem;
+  height: 1.2rem;  
   margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
   /* transition: background-color 0.02s ease-in-out,
