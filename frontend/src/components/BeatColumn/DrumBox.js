@@ -175,13 +175,19 @@ const DrumBox = ({
     dispatch(setHoverPosition({ i: col, j: row, x: relativeX, y: relativeY }));
   };
 
+  const handleClick = (e) => {
+    onClick()
+    handleMouseOver(e)
+  }
+
   return (
     <Container
       ref={boxRef}
       active={active}
       activeColor={activeColor}
       inactiveColor={inactiveColor}
-      onClick={() => (onClick === null ? null : onClick())}
+      // onClick={() => (onClick === null ? null : onClick())}
+      onClick={handleClick}
       visualizeInstrument={visualizeInstrument}
       instrumentList={instrumentList}
       row={row}

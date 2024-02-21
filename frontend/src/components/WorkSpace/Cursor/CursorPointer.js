@@ -31,22 +31,30 @@ const CursorPointer = ({
     const { x: hoverX, y: hoverY } = hoverRef.current;
     sendMousePosition(hoverX, hoverY, accountId);
   }, 200)).current;
+
+  useEffect(()=>{
+    throttledMouseMove();
+
+    // 언마운트시 조건 추가하면 throttle이 적용이 안됨.. useEffect 작동방식과 충돌하는 듯
+    // return () => {
+    //   throttledMouseMove.cancel();
+    // }
+  }, [hover])
   
-
   // 이벤트 리스너 -> 마우스 좌표 전달 실행
-  useEffect(() => {
-    const element = containerRef.current;
-    if (element) {
-      element.addEventListener('mousemove', throttledMouseMove);
-    }
+  // useEffect(() => {
+  //   const element = containerRef.current;
+  //   if (element) {
+  //     element.addEventListener('mousemove', throttledMouseMove);
+  //   }
 
-    return () => {
-      if (element) {
-        element.removeEventListener('mousemove', throttledMouseMove);
-      }
-      throttledMouseMove.cancel();
-    };
-  }, [throttledMouseMove, containerRef]);
+  //   return () => {
+  //     if (element) {
+  //       element.removeEventListener('mousemove', throttledMouseMove);
+  //     }
+  //     throttledMouseMove.cancel();
+  //   };
+  // }, [throttledMouseMove, containerRef]);
 
   return null;
 };

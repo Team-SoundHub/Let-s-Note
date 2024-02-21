@@ -100,6 +100,7 @@ const FormButton = styled.a`
   transition: 0.5s;
   margin-top: 40px;
   letter-spacing: 4px;
+  cursor: pointer;
 
   &::before {
     content: "";
