@@ -275,11 +275,14 @@ class WorkSpaceContainer extends Component {
                     />
                     <button
                       className={
-                        "flex justify-center items-center w-[60px] h-[60px] rounded-full focus:ring-4 focus:outline-none focus:ring-lime-200 bg-[#49C5B6] hover:bg-[#367e76]"
+                        "flex flex-col justify-center bg-[#49c5b6] items-center w-16 h-16 rounded-md my-1 p-1 hover:opacity-70"
                       }
                       onClick={handleAIInterfaceModalOpen}
                     >
-                      <RiRobot2Line className={"w-8 h-8 fill-white"} />
+                      <RiRobot2Line className={"w-10 h-10 fill-white"} />
+                      <div className="text-white font-bold text-sm">
+                        AI 추천
+                      </div>
                     </button>
                   </>
                 )}

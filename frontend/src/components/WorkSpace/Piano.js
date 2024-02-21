@@ -83,6 +83,7 @@ const DrumButton = styled.div`
   border: 1px solid #000;
   transition: background-color 0.3s ease;
   height: 3.1rem;
+  margin-top: 0.4rem;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 
