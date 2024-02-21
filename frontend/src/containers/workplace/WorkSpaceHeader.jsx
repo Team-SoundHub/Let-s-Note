@@ -42,13 +42,13 @@ const fadeOut = keyframes`
 const SpaceTitle = styled.div`
   flex: 1;
   text-align: center;
-  color: grey;
+  color: white;
   font-size: 25px;
   font-weight: bold;
 `;
 
 const Header = styled.div`
-  background-color: #f3f3f3;
+  background-color: #49c5b6;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -129,286 +129,291 @@ const WorkSpaceHeader = ({
   const [displayMessage, setDisplayMessage] = useState(false);
   const accountId = sessionStorage.getItem("accountId");
   const pcsRef = useRef({});
-	const localStreamRef = useRef(null);
+  const localStreamRef = useRef(null);
   const localVideoRef = useRef(null);
-  const [localVideo,setLocalVideo] = useState(null);
-	const [users, setUsers] = useState([]);
-  const [mySoundMuted , setMySoundMuted] = useState(false);
+  const [localVideo, setLocalVideo] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [mySoundMuted, setMySoundMuted] = useState(false);
   const pc_config = {
-      iceServers: [
-          {
-              urls: "stun:stun2.1.google.com:19302"
-          },
-      ]
-  }
+    iceServers: [
+      {
+        urls: "stun:stun2.1.google.com:19302",
+      },
+    ],
+  };
 
   const handleMySoundMute = () => {
-    localStreamRef.current.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+    localStreamRef.current
+      .getAudioTracks()
+      .forEach((track) => (track.enabled = !track.enabled));
     setMySoundMuted(!mySoundMuted);
-  }
+  };
 
   const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
-
-    if(!isConnected){
-        return;
+    if (!isConnected) {
+      return;
     }
 
     const getLocalStream = async () => {
-        try {
-            if(!client || !mySocketId || !isConnected) {
-                return;
-            }
-            const localStream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                  echoCancellation: true,
-                  noiseSuppression: true,
-                }
-            });
-            setLocalVideo(localStream);
-            localStreamRef.current = localStream;
-            console.log("localStream 획득", localStreamRef.current);
-            if (localVideoRef.current) {
-                localVideoRef.current.srcObject = localStream;
-            };
-            
-            console.log("내 id in Connection:", mySocketId);
-            console.log("join 전송 함");
-            client.publish({
-                destination: `/app/webrtc/${spaceId}/join`,
-                body: JSON.stringify({
-                    userId : mySocketId,
-                    spaceId,
-                }),
-            });
-        } catch (e) {
-            console.log(`getUserMedia error: ${e}`);
+      try {
+        if (!client || !mySocketId || !isConnected) {
+          return;
         }
+        const localStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+          },
+        });
+        setLocalVideo(localStream);
+        localStreamRef.current = localStream;
+        console.log("localStream 획득", localStreamRef.current);
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = localStream;
+        }
+
+        console.log("내 id in Connection:", mySocketId);
+        console.log("join 전송 함");
+        client.publish({
+          destination: `/app/webrtc/${spaceId}/join`,
+          body: JSON.stringify({
+            userId: mySocketId,
+            spaceId,
+          }),
+        });
+      } catch (e) {
+        console.log(`getUserMedia error: ${e}`);
+      }
     };
 
     const createPeerConnection = (socketId, userNickname) => {
-        try {
-            if(socketId === mySocketId || mySocketId === null || !isConnected){
-                return null;
-            }
-            const pc = new RTCPeerConnection(pc_config);
-
-            pc.onicecandidate = (e) => {
-                if (!e.candidate){
-                    return;
-                }
-                console.log('onicecandidate : ', e.candidate, socketId);
-                
-                client.publish({
-                    destination: `/app/webrtc/${spaceId}/candidate/sendCandidate`,
-                    body: JSON.stringify({
-                        candidate: e.candidate,
-                        candidateSendId: mySocketId,
-                        candidateReceiveId: socketId,
-                    }),
-                });
-            };
-
-            pc.ontrack = (e) => {
-                console.log('track event 상대한테 받았음 @@@@', e.streams[0]);
-                setUsers((oldUsers) =>
-                    oldUsers
-                        .filter((user) => user.id !== socketId)
-                        .concat({
-                            id: socketId,
-                            stream: e.streams[0],
-                            nickname: userNickname,
-                        }),
-                );
-            };
-
-            if (localStreamRef.current) {
-                console.log('localstream add' , mySocketId , socketId);
-                localStreamRef.current.getTracks().forEach((track) => {
-                    pc.addTrack(track, localStreamRef.current);
-                });
-            } else {
-                console.log('no local stream');
-            }
-
-            return pc;
-        } catch (e) {
-            console.error(e);
-            return undefined;
+      try {
+        if (socketId === mySocketId || mySocketId === null || !isConnected) {
+          return null;
         }
+        const pc = new RTCPeerConnection(pc_config);
+
+        pc.onicecandidate = (e) => {
+          if (!e.candidate) {
+            return;
+          }
+          console.log("onicecandidate : ", e.candidate, socketId);
+
+          client.publish({
+            destination: `/app/webrtc/${spaceId}/candidate/sendCandidate`,
+            body: JSON.stringify({
+              candidate: e.candidate,
+              candidateSendId: mySocketId,
+              candidateReceiveId: socketId,
+            }),
+          });
+        };
+
+        pc.ontrack = (e) => {
+          console.log("track event 상대한테 받았음 @@@@", e.streams[0]);
+          setUsers((oldUsers) =>
+            oldUsers
+              .filter((user) => user.id !== socketId)
+              .concat({
+                id: socketId,
+                stream: e.streams[0],
+                nickname: userNickname,
+              })
+          );
+        };
+
+        if (localStreamRef.current) {
+          console.log("localstream add", mySocketId, socketId);
+          localStreamRef.current.getTracks().forEach((track) => {
+            pc.addTrack(track, localStreamRef.current);
+          });
+        } else {
+          console.log("no local stream");
+        }
+
+        return pc;
+      } catch (e) {
+        console.error(e);
+        return undefined;
+      }
     };
 
     const handleJoin = async () => {
-        console.log("handleJoin 진입 전 my socket Id ? : " , mySocketId);
-        client.subscribe(
-            `/user/topic/webrtc/${spaceId}/join/public`,
-            async (response) => {
-                console.log("입장 했다. 웹소켓 받음");
-                const allUsers = JSON.parse(response.body);
-                console.log("handleJoin logs: ",allUsers.allUsers);
-                allUsers.allUsers.forEach(async (user) => {
-                    if(user.userId !== mySocketId){
-                    console.log("user : ",user);
-                    if (!localStreamRef.current){
-                        console.log("no localStream");
-                        return;
-                    }
-                    console.log("1 : ", user);
-                    const pc = createPeerConnection(user.userId, user.userNickname);
-                    if (!pc) return;
-                    pcsRef.current = { ...pcsRef.current, [user.userId]: pc };
-                    try {
-                        const offer = await pc.createOffer();
-                        await pc.setLocalDescription(offer);
-                        console.log('create offer success : ' , offer);
-                        console.log('offer전송 직전 id :' , user.userId, spaceId , mySocketId);
-                        client.publish({
-                            destination: `/app/webrtc/${spaceId}/offer/sendOffer`,
-                            body: JSON.stringify({
-                                sdp: offer,
-                                offerSendId: mySocketId,
-                                offerReceiveId: user.userId,
-                                offerSenderNickname: myNickname,
-                            }),
-                        });
-                        console.log('offer전송 완료');
-                        // )};
-                    } catch (e) {
-                        console.error(e);
-                    }}
+      console.log("handleJoin 진입 전 my socket Id ? : ", mySocketId);
+      client.subscribe(
+        `/user/topic/webrtc/${spaceId}/join/public`,
+        async (response) => {
+          console.log("입장 했다. 웹소켓 받음");
+          const allUsers = JSON.parse(response.body);
+          console.log("handleJoin logs: ", allUsers.allUsers);
+          allUsers.allUsers.forEach(async (user) => {
+            if (user.userId !== mySocketId) {
+              console.log("user : ", user);
+              if (!localStreamRef.current) {
+                console.log("no localStream");
+                return;
+              }
+              console.log("1 : ", user);
+              const pc = createPeerConnection(user.userId, user.userNickname);
+              if (!pc) return;
+              pcsRef.current = { ...pcsRef.current, [user.userId]: pc };
+              try {
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+                console.log("create offer success : ", offer);
+                console.log(
+                  "offer전송 직전 id :",
+                  user.userId,
+                  spaceId,
+                  mySocketId
+                );
+                client.publish({
+                  destination: `/app/webrtc/${spaceId}/offer/sendOffer`,
+                  body: JSON.stringify({
+                    sdp: offer,
+                    offerSendId: mySocketId,
+                    offerReceiveId: user.userId,
+                    offerSenderNickname: myNickname,
+                  }),
                 });
-            },
-            {
-                accessToken: client.connectHeaders.accessToken,
+                console.log("offer전송 완료");
+                // )};
+              } catch (e) {
+                console.error(e);
+              }
             }
-        );
+          });
+        },
+        {
+          accessToken: client.connectHeaders.accessToken,
+        }
+      );
     };
 
     const handleOffer = async () => {
-        console.log("handleOffer 진입 전: ",mySocketId);
-        client.subscribe(
-            // `/user/${mySocketId}/${spaceId}/queue/offer`,
-            `/user/topic/webrtc/${spaceId}/offer/public`,
-            async (response) => {
-                console.log("누군가 들어와서 Offer 보냄");
-                const data = JSON.parse(response.body);
-                console.log("handleOffer logs: ",data);
-                if(data.offerSendId === mySocketId) return;
-                if(!localStreamRef.current) return;
-                const pc = createPeerConnection(data.offerSendId, data.offerSenderNickname);
-                if(!pc) return;
-                pcsRef.current = { ...pcsRef.current , [data.offerSendId]: pc};
-                try{
-                    console.log(typeof(data.sdp));
-                    await pc.setRemoteDescription(data.sdp);
-                    console.log("offer 저장 완료",data.sdp);
-                    const answer = await pc.createAnswer();
-                    await pc.setLocalDescription(answer);
-                    client.publish({
-                        destination: `/app/webrtc/${spaceId}/answer/sendAnswer`,
-                        body: JSON.stringify({
-                            sdp: answer,
-                            answerSendId: mySocketId,
-                            answerReceiveId: data.offerSendId,
-                        }),
-                    });
-                } catch (error) {
-                    console.error(
-                        "Error during offer reception and answer process:",
-                        error
-                    );
-                };
-            },
-            {
-                accessToken: client.connectHeaders.accessToken,
-            }
-        );
+      console.log("handleOffer 진입 전: ", mySocketId);
+      client.subscribe(
+        // `/user/${mySocketId}/${spaceId}/queue/offer`,
+        `/user/topic/webrtc/${spaceId}/offer/public`,
+        async (response) => {
+          console.log("누군가 들어와서 Offer 보냄");
+          const data = JSON.parse(response.body);
+          console.log("handleOffer logs: ", data);
+          if (data.offerSendId === mySocketId) return;
+          if (!localStreamRef.current) return;
+          const pc = createPeerConnection(
+            data.offerSendId,
+            data.offerSenderNickname
+          );
+          if (!pc) return;
+          pcsRef.current = { ...pcsRef.current, [data.offerSendId]: pc };
+          try {
+            console.log(typeof data.sdp);
+            await pc.setRemoteDescription(data.sdp);
+            console.log("offer 저장 완료", data.sdp);
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+            client.publish({
+              destination: `/app/webrtc/${spaceId}/answer/sendAnswer`,
+              body: JSON.stringify({
+                sdp: answer,
+                answerSendId: mySocketId,
+                answerReceiveId: data.offerSendId,
+              }),
+            });
+          } catch (error) {
+            console.error(
+              "Error during offer reception and answer process:",
+              error
+            );
+          }
+        },
+        {
+          accessToken: client.connectHeaders.accessToken,
+        }
+      );
     };
 
     const handleAnswer = () => {
-        console.log(1);
-        client.subscribe(
-            `/user/topic/webrtc/${spaceId}/answer/public`,
-            async (response) => {
-                
-                const data = JSON.parse(response.body);
-                console.log("handleAnswer logs: ",data);
-                if(data.answerSendId === mySocketId) return;
-                const pc = pcsRef.current[data.answerSendId];
-                if(!pc) return;
-                console.log("answer 저장 시도",data.sdp);
-                await pc.setRemoteDescription(data.sdp);
-                
-            },
-            {
-                accessToken: client.connectHeaders.accessToken,
-            }
-        );
+      console.log(1);
+      client.subscribe(
+        `/user/topic/webrtc/${spaceId}/answer/public`,
+        async (response) => {
+          const data = JSON.parse(response.body);
+          console.log("handleAnswer logs: ", data);
+          if (data.answerSendId === mySocketId) return;
+          const pc = pcsRef.current[data.answerSendId];
+          if (!pc) return;
+          console.log("answer 저장 시도", data.sdp);
+          await pc.setRemoteDescription(data.sdp);
+        },
+        {
+          accessToken: client.connectHeaders.accessToken,
+        }
+      );
     };
 
     const handleIceCandidate = () => {
-        console.log(2);
-        client.subscribe(
-            `/user/topic/webrtc/${spaceId}/candidate/public`,
-            async (response) => {
-                const data = JSON.parse(response.body);
-                console.log("handlecand logs: ",data);
-                if(data.candidateSendId === mySocketId) return;
-                const pc = pcsRef.current[data.candidateSendId];
-                if(!pc) return;
-                console.log("ice 저장 시도",data.candidate);
-                await pc.addIceCandidate(data.candidate);
-            },
-            {
-                accessToken: client.connectHeaders.accessToken,
-            }
-        );
+      console.log(2);
+      client.subscribe(
+        `/user/topic/webrtc/${spaceId}/candidate/public`,
+        async (response) => {
+          const data = JSON.parse(response.body);
+          console.log("handlecand logs: ", data);
+          if (data.candidateSendId === mySocketId) return;
+          const pc = pcsRef.current[data.candidateSendId];
+          if (!pc) return;
+          console.log("ice 저장 시도", data.candidate);
+          await pc.addIceCandidate(data.candidate);
+        },
+        {
+          accessToken: client.connectHeaders.accessToken,
+        }
+      );
     };
 
     const handleUserExit = () => {
-        client.subscribe(
-            `/user/topic/webrtc/${spaceId}/exit/public`,
-            (response) => {
-                const data = JSON.parse(response.body);
-                console.log("exit logs: ",data);
-                if(data.exitUserId === mySocketId) return;
-                const pc = pcsRef.current[data.exitUserId];
-                if(!pc) return;
-                pcsRef.current[data.exitUserId].close();
-                delete pcsRef.current[data.exitUserId];
-                setUsers((oldUsers) => oldUsers.filter((user) => user.id !== data.exitUserId));
-                console.log("유저 삭제 성공", users);
-            },
-            {
-                accessToken: client.connectHeaders.accessToken,
-            }
-        );
+      client.subscribe(
+        `/user/topic/webrtc/${spaceId}/exit/public`,
+        (response) => {
+          const data = JSON.parse(response.body);
+          console.log("exit logs: ", data);
+          if (data.exitUserId === mySocketId) return;
+          const pc = pcsRef.current[data.exitUserId];
+          if (!pc) return;
+          pcsRef.current[data.exitUserId].close();
+          delete pcsRef.current[data.exitUserId];
+          setUsers((oldUsers) =>
+            oldUsers.filter((user) => user.id !== data.exitUserId)
+          );
+          console.log("유저 삭제 성공", users);
+        },
+        {
+          accessToken: client.connectHeaders.accessToken,
+        }
+      );
     };
 
-    
-
-    
     const pageStart = async () => {
-        console.log(client , isConnected , mySocketId);
-        // await fetchMyUsername();
-        // if(!spaceId || !client || !mySocketId) return;
-        console.log("subscribe Start");
+      console.log(client, isConnected, mySocketId);
+      // await fetchMyUsername();
+      // if(!spaceId || !client || !mySocketId) return;
+      console.log("subscribe Start");
 
-        
-        
-        console.log("handleOffer할떄 ", isConnected,client);
-        // fetchMyUsername();
-        handleAnswer();
-        handleIceCandidate();
-        handleOffer();
-        
-        handleUserExit();
-        await handleJoin();
-        await getLocalStream();
-    }
+      console.log("handleOffer할떄 ", isConnected, client);
+      // fetchMyUsername();
+      handleAnswer();
+      handleIceCandidate();
+      handleOffer();
+
+      handleUserExit();
+      await handleJoin();
+      await getLocalStream();
+    };
 
     pageStart();
-    
+
     // fetchMyUsername().then(() => {
     //     getLocalStream();
     // })
@@ -416,16 +421,15 @@ const WorkSpaceHeader = ({
     // handleConnection();
 
     return () => {
-    users.forEach((user) => {
-      if (!pcsRef.current[user.userId]) return;
-      pcsRef.current[user.userId].close();
-      delete pcsRef.current[user.userId];
-    });
-          
-          setUsers([]);
-      };
-  }, [isConnected, client, spaceId, mySocketId]);
+      users.forEach((user) => {
+        if (!pcsRef.current[user.userId]) return;
+        pcsRef.current[user.userId].close();
+        delete pcsRef.current[user.userId];
+      });
 
+      setUsers([]);
+    };
+  }, [isConnected, client, spaceId, mySocketId]);
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
@@ -467,7 +471,43 @@ const WorkSpaceHeader = ({
   return (
     <Header>
       <LeftSection>
-        <button onClick={handleGoBack}>⬅️</button>
+        <button onClick={handleGoBack}>
+          <svg
+            fill="#ffffff"
+            width="1.5rem"
+            height="1.5rem"
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 8 8"
+            enable-background="new 0 0 8 8"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              {" "}
+              <rect
+                x="-0.226"
+                y="4.614"
+                transform="matrix(0.7071 0.7071 -0.7071 0.7071 4.4884 -0.1417)"
+                width="5.283"
+                height="1.466"
+              ></rect>{" "}
+              <rect x="1.607" y="3.161" width="6.375" height="1.683"></rect>{" "}
+              <rect
+                x="-0.233"
+                y="1.921"
+                transform="matrix(0.7069 -0.7073 0.7073 0.7069 -1.1708 2.4817)"
+                width="5.284"
+                height="1.465"
+              ></rect>{" "}
+            </g>
+          </svg>
+        </button>
         <SpaceTitle>{spaceTitle}</SpaceTitle>
       </LeftSection>
 
@@ -476,15 +516,18 @@ const WorkSpaceHeader = ({
           <MemberInfo
             memberList={memberList}
             openAddMemberModal={openAddMemberModal}
-            localVideo = {localVideo}
-            users = {users}
-            myNickname = {myNickname}
-            mySoundMuted = {mySoundMuted}
+            localVideo={localVideo}
+            users={users}
+            myNickname={myNickname}
+            mySoundMuted={mySoundMuted}
             handleMySoundMute={handleMySoundMute}
           />
         </ButtonContainer>
         <ButtonContainer>
-          <Button className="rounded-full" onClick={onOpenModal}>
+          <Button
+            className="bg-black text-white shadow-2xl rounded-full"
+            onClick={onOpenModal}
+          >
             저장
           </Button>
         </ButtonContainer>

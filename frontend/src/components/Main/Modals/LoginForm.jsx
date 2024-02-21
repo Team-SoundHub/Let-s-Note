@@ -158,6 +158,8 @@ const LoginForm = ({ closeLoginModal, handleLogin, openRegisterModal }) => {
   };
 
   const onClickLogin = () => {
+    const sound = new Audio("/audio/loginEffect.mp3");
+    sound.play();
     handleLogin(userId, password);
   };
 
