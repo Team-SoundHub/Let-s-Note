@@ -231,6 +231,7 @@ const WorkSpaceHeader = ({
   spaceId,
   myNickname,
   mySocketId,
+  spaceTitle,
 }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
@@ -247,6 +248,14 @@ const WorkSpaceHeader = ({
           {
               urls: "stun:stun2.1.google.com:19302"
           },
+          {
+            urls: [
+              "stun:" + process.env.REACT_APP_TURN_SERVER + ":3478",
+              "turn:" + process.env.REACT_APP_TURN_SERVER + ":3478?transport=udp",
+            ],
+            username: "songarden",
+            credential: "letsnote",
+          },
       ]
   }
 
@@ -255,7 +264,7 @@ const WorkSpaceHeader = ({
     setMySoundMuted(!mySoundMuted);
   }
 
-  const spaceTitle = localStorage.getItem("title");
+  // const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
 
     if(!isConnected){
