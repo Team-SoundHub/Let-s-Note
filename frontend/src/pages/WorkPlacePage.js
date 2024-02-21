@@ -56,7 +56,7 @@ const WorkPlacePage = () => {
   const [snapshotUrl, setSnapshotUrl] = useState("");
   const [snapshotId, setSnapshotId] = useState("");
   const [memberList, setMemberList] = useState([]);
-  const [myNickname, setMyNickname] = useState([]);
+  const [myNickname, setMyNickname] = useState(null);
   const [workspaceInfo, setWorkspaceInfo] = useState({
     notesList: [],
     isSnapshotExist: false,
@@ -65,6 +65,7 @@ const WorkPlacePage = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
   const [myUsername, setMyUsername] = useState(null);
+  const [spaceTitle, setSpaceTitle] = useState(null);
   const audioRef = useRef(null);
 
   const handleSearchModalOpen = () => {
@@ -144,6 +145,7 @@ const WorkPlacePage = () => {
         console.error("내 id 요청 Error:", error);
       }
   };
+    setSpaceTitle(localStorage.getItem("title"));
 
     fetchMyUsername();
     fetchMyNickname();
@@ -169,18 +171,18 @@ const WorkPlacePage = () => {
   const handleSave = (title, description) => {
     // console.log("스냅샷 생성 시도");
     Swal.fire({
-      title: "스냅샷을 저장할까요?",
+      title: "작업한 작품을 저장할까요?",
       showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonText: "Save",
-      denyButtonText: `Don't save`,
+      // showCancelButton: true,
+      confirmButtonText: "네, 저장합니다",
+      denyButtonText: `아니요`,
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         try {
           const response = await createSnapshot(spaceId, title, description);
           // console.log("snapshotId:", response.response.snapshotId);
-          Swal.fire("스냅샷이 저장되었습니다 !", "", "success");
+          Swal.fire("내 작품이 저장되었습니다!", "", "success");
           setSnapshotUrl(
             `https://www.letsnote.co.kr/snapshot/${response.response.snapshotId}`
           );
@@ -188,10 +190,10 @@ const WorkPlacePage = () => {
           setSnapshotCreated(true);
           setIsReleaseModalOpen(false);
         } catch (error) {
-          console.error("스냅샷 저장 오류:", error);
+          console.error("작품 저장 오류:", error);
         }
       } else if (result.isDenied) {
-        Swal.fire("스냅샷 저장이 취소되었습니다.", "", "info");
+        Swal.fire("내 작품 저장이 취소되었습니다.", "", "info");
       }
     });
   };
@@ -227,8 +229,9 @@ const WorkPlacePage = () => {
         const newMemberName = response.response.nickname;
 
         setMemberList((prevMemberList) => [...prevMemberList, newMemberName]);
-        Swal.fire("멤버가 추가되었습니다!");
+        Swal.fire("멤버를 추가했어요");        
       } catch (error) {
+        Swal.fire("멤버 추가에 실패했어요. ID를 확인해주세요", "", "info");
         console.error("Add member error: ", error);
       }
     }
@@ -410,6 +413,7 @@ const WorkPlacePage = () => {
             <AddMemberModal
               closeAddMemberModal={closeAddMemberModal}
               handleAddMember={handleAddMember}
+              memberList={memberList}
             />
           )}
           {isSearchModalOpen && (
@@ -429,13 +433,13 @@ const WorkPlacePage = () => {
               onOpenModal={handleModalOpen}
               isSnapshotExist={workspaceInfo.isSnapshotExist}
               openAddMemberModal={openAddMemberModal}
-              handleAddMember={handleAddMember}
               memberList={memberList}
               client = {stompClient}
               isConnected={isConnected}
               spaceId={spaceId}
               myNickname={myNickname}
               mySocketId={myUsername}
+              spaceTitle={spaceTitle}
           />
           {maxColumn > 0 && (
             <WorkSpaceContainer

@@ -24,6 +24,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
@@ -108,7 +109,7 @@ public class EditorSocketController {
 	}
 
 	@MessageMapping("/workspace/{spaceId}/mouse/sendMousePosition")
-	public void sendEditorCoordinateInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+	public void sendMousePositionInfo(@Valid @Payload SocketRequest.MousePosition mousePosition, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
 		String senderSession = headerAccessor.getUser().getName();
 		String senderId = accountConnectedSessions.get(spaceId).get(senderSession);
 		for(Map.Entry<String, String> entry: accountConnectedSessions.get(spaceId).entrySet()) {
@@ -167,10 +168,11 @@ public class EditorSocketController {
 				accountConnectedSessions.put(spaceId, new HashMap<>());
 			}
 
-			if (!accountConnectedSessions.get(spaceId).containsValue(username)){
+			if (!accountConnectedSessions.get(spaceId).containsValue(username)) {
 				accountConnectedSessions.get(spaceId).put(senderSession, username);
 			}
-			else{
+			else
+			{
 				Iterator<Map.Entry<String, String>> iterator = accountConnectedSessions.get(spaceId).entrySet().iterator();
 
 				while (iterator.hasNext()) {
@@ -182,7 +184,6 @@ public class EditorSocketController {
 
 				accountConnectedSessions.get(spaceId).put(senderSession, username);
 			}
-
 		}
 	}
 

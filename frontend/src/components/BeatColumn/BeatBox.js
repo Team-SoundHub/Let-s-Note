@@ -120,13 +120,14 @@ const BeatBox = ({
     });
   }, [workspaceNotes]);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     if (isSnapshot) {
       // isSnapshot이 true일 경우 onClick 이벤트 무시
       return;
     }
 
     dispatch(setClickedNotes(row));
+    handleMouseOver(e);
 
     onClick && onClick();
   };

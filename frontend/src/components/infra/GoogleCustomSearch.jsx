@@ -80,12 +80,17 @@ const GoogleCustomSearch = ({ isSearchModalOpen, handleSearchModalClose }) => {
     setHoveredImage(null);
   };
 
+  const closeFileSearchModals = () => {
+    setSelectedImage(null);
+    setStoredImage(null);
+  }
+
   return (
     <ModalBody>
       <SearchContainer>
         <TextInput
           id="input-info"
-          placeholder="노래 이름 입력"
+          placeholder="원하는 노래를 검색하세요"
           className="w-[30%]"
           required
           color="info"
@@ -95,8 +100,8 @@ const GoogleCustomSearch = ({ isSearchModalOpen, handleSearchModalClose }) => {
         </Button>
       </SearchContainer>
       <ResultContainer>
-        {loading && <p>Loading...</p>}
-        {!loading && images.length === 0 && <p>No images found.</p>}
+        {loading && <p>악보를 검색 중 입니다...</p>}
+        {!loading && images.length === 0 && <p></p>}
         {!loading && images.length > 0 && (
           <ul className="flex">
             {images.map((image, index) => (
@@ -148,6 +153,7 @@ const GoogleCustomSearch = ({ isSearchModalOpen, handleSearchModalClose }) => {
           <FileStoreModal
             image_url={storedImage}
             onClose={() => setStoredImage(null)}
+            closeFileSearchModals={closeFileSearchModals}
           />
         )}
       </ResultContainer>

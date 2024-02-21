@@ -144,35 +144,78 @@ const Delete = styled.div`
     }
 `;
 
-
-const MemberListTitle = styled.p`
-  font-weight: 700;
-  margin: 20px 0rem -1rem 0;
-  line-height: 25px;
-  /* transform: translateX(-200px); */
-  transition-delay: 0.2s;
-  opacity: 1;
-  transition: all 0.6s ease-in-out;
-`;
-
+// 멤버 리스트 관련
+// const MemberListTitle = styled.p`
+//   font-weight: 700;
+//   margin: 20px 0rem -1rem 0;
+//   line-height: 25px;
+//   /* transform: translateX(-200px); */
+//   transition-delay: 0.2s;
+//   opacity: 1;
+//   transition: all 0.6s ease-in-out;
+// `;
 
 // const MembersList = styled.ul`
 //   margin-top: 16px;
 //   margin-bottom: 16px;
+//   overflow-y: auto; 
+//   max-height: 80%; 
 //   width: 16.2rem;
-//   max-height: 80%;
-//   background-color: red;
+//   padding-right: 0.5rem; // Adds some space for the scrollbar
 //   border-radius: 5px;
+//   /* box-shadow: inset 0 0 5px rgba(0,0,0,0.2); // Adds subtle inner shadow to indicate depth */
+//   /* background-color: #f3f4f6; // Adjusted for better visibility against the crown icon */
 // `;
+
+// const MemberItem = styled.li`
+//   margin-bottom: 12px;
+//   display: flex;
+//   align-items: center;
+// `;
+
+
+// const MemberNicknameSpan = styled.span`
+//   display: flex;
+//   /* width: 15rem; */
+//   width: 90%;
+//   align-items: center;
+//   border-radius: 0.375rem; 
+//   background-color: #f3f4f6;
+//   padding: 0.75rem; 
+//   font-size: 0.875rem; 
+//   font-weight: bold; 
+//   color: #1f2937; 
+//   &:hover {
+//     background-color: #84c4bd; 
+//     box-shadow: 0 10px 15px -3px rgba(230, 113, 113, 0.1), 0 4px 6px -2px rgba(231, 145, 145, 0.05); 
+//   }  
+// `;
+
+
+const MemberListTitle = styled.p`
+  font-weight: 700;
+  margin: 20px 0rem -0.5rem 0.2rem;
+  line-height: 25px;
+  /* transform: translateX(-200px); */
+  transition-delay: 0.2s;
+  color: #569d94;
+  opacity: 1;
+  transition: all 0.6s ease-in-out;
+`;
 
 const MembersList = styled.ul`
   margin-top: 16px;
   margin-bottom: 16px;
   overflow-y: auto; 
+  /* background-color: #f3f4f6; */
+  background-color: white;
+  height: 10rem;
   max-height: 80%; 
-  width: 16.2rem;
+  width: 16.5rem;
+  padding-top: 0.5rem;
   padding-right: 0.5rem; // Adds some space for the scrollbar
-  border-radius: 5px;
+  border: 1px solid #569d94;
+  border-radius: 10px;
   /* box-shadow: inset 0 0 5px rgba(0,0,0,0.2); // Adds subtle inner shadow to indicate depth */
   /* background-color: #f3f4f6; // Adjusted for better visibility against the crown icon */
 `;
@@ -183,15 +226,16 @@ const MemberItem = styled.li`
   align-items: center;
 `;
 
-
 const MemberNicknameSpan = styled.span`
   display: flex;
   /* width: 15rem; */
   width: 90%;
   align-items: center;
   border-radius: 0.375rem; 
-  background-color: #f3f4f6;
+  /* background-color: #f3f4f6; */
+  background-color: #cfe3e1;
   padding: 0.75rem; 
+  margin: auto;  
   font-size: 0.875rem; 
   font-weight: bold; 
   color: #1f2937; 
@@ -200,6 +244,7 @@ const MemberNicknameSpan = styled.span`
     box-shadow: 0 10px 15px -3px rgba(230, 113, 113, 0.1), 0 4px 6px -2px rgba(231, 145, 145, 0.05); 
   }  
 `;
+
 
 const CrownIcon = styled.img`
   width: 20px;
@@ -254,13 +299,12 @@ export const WorkspaceTile = ({
     });
   }
 
-
   return (
     <TileStyled>
       <Text>
         <Heading1>{workspaceTitle}</Heading1>
         <Paragraph>{workspaceContent}</Paragraph>
-        <MemberListTitle>참여 멤버</MemberListTitle>
+        <MemberListTitle>참여중 멤버: {memberNicknames.length}명</MemberListTitle>
         <MembersList>
           {memberNicknames.map((member, index) => (
             <MemberItem key={index}>

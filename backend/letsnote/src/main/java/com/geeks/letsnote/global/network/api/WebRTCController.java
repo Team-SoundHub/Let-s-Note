@@ -30,9 +30,11 @@ public class WebRTCController {
         System.out.println("join : for문 시작 @@@@@");
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
             System.out.println(entry.getKey() +" 왼쪽은 키 오른쪽은 밸류 / join " + entry.getValue());
-            if(!entry.getValue().equals(joinAccount.userId())){
-                String userNickname = accountService.getNicknameFromUsername(entry.getValue());
-                allUsers.add(new WebRTCResponse.User(entry.getValue(), userNickname));
+            if(entry.getValue() != null){
+                if(!entry.getValue().equals(joinAccount.userId())){
+                    String userNickname = accountService.getNicknameFromUsername(entry.getValue());
+                    allUsers.add(new WebRTCResponse.User(entry.getValue(), userNickname));
+                }
             }
         }
         System.out.println("join : for문 종료 @@@@@");
@@ -42,8 +44,10 @@ public class WebRTCController {
     @MessageMapping("/webrtc/{spaceId}/offer/sendOffer")
     public void sendOffer(@Valid @Payload WebRTCRequest.Offer offer, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
-            if(entry.getValue().equals(offer.offerReceiveId())){
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/offer/public", new WebRTCResponse.Offer(offer.sdp(),offer.offerSendId(), offer.offerSenderNickname()));
+            if(entry.getValue() != null){
+                if(entry.getValue().equals(offer.offerReceiveId())){
+                    simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/offer/public", new WebRTCResponse.Offer(offer.sdp(),offer.offerSendId(), offer.offerSenderNickname()));
+                }
             }
         }
     }
@@ -51,8 +55,10 @@ public class WebRTCController {
     @MessageMapping("/webrtc/{spaceId}/answer/sendAnswer")
     public void sendAnswer(@Valid @Payload WebRTCRequest.Answer answer, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
-            if(entry.getValue().equals(answer.answerReceiveId())){
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/answer/public", new WebRTCResponse.Answer(answer.sdp(),answer.answerSendId()));
+            if(entry.getValue() != null) {
+                if (entry.getValue().equals(answer.answerReceiveId())) {
+                    simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/answer/public", new WebRTCResponse.Answer(answer.sdp(), answer.answerSendId()));
+                }
             }
         }
     }
@@ -60,8 +66,10 @@ public class WebRTCController {
     @MessageMapping("/webrtc/{spaceId}/candidate/sendCandidate")
     public void sendCandidate(@Valid @Payload WebRTCRequest.Candidate candidate, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
-            if(entry.getValue().equals(candidate.candidateReceiveId())){
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/"+spaceId+"/candidate/public", new WebRTCResponse.Candidate(candidate.candidate(),candidate.candidateSendId()));
+            if(entry.getValue() != null) {
+                if (entry.getValue().equals(candidate.candidateReceiveId())) {
+                    simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/candidate/public", new WebRTCResponse.Candidate(candidate.candidate(), candidate.candidateSendId()));
+                }
             }
         }
     }
@@ -72,11 +80,12 @@ public class WebRTCController {
         String senderId = accountConnectedSessions.get(spaceId).get(senderSession);
         System.out.println("senderId == "+ senderId);
         for(Map.Entry<String, String> entry : accountConnectedSessions.get(spaceId).entrySet()) {
-            if (entry.getValue().equals(user.userId())) {
+            if (!entry.getValue().equals(user.userId())) {
+                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/exit/public", new WebRTCResponse.ExitUser(senderId));
+            }
+            else{
                 accountConnectedSessions.get(spaceId).remove(entry.getKey());
                 System.out.println("삭제 완료 : "+entry.getValue());
-            } else {
-                simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/exit/public", new WebRTCResponse.ExitUser(senderId));
             }
         }
     }

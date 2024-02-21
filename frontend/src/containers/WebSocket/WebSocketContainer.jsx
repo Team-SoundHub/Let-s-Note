@@ -32,8 +32,8 @@ const WebSocketContainer = ({ spaceId, children }) => {
         new SockJS(`${process.env.REACT_APP_SOCKET_HTTP}/letsnote/ws`),
       onConnect: () => {
         console.log("Connected: ");
-        subscribeToTopics(client);
         setIsConnected(true);
+        subscribeToTopics(client);
       },
       onDisconnect: () => {
         console.log("Disconnected: ");
@@ -101,7 +101,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
         let y = cursorData.y;
         let accountId = cursorData.accountId;
         let nickname = cursorData.nickname;
-        // console.log(`응답 받은 좌표: x: ${x} y: ${y}`);
+        console.log(`응답 받은 좌표: x: ${x} y: ${y}`);
         dispatch(updateCursorPosition({ accountId, x, y, nickname }));
       },
       {
@@ -192,6 +192,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
         }),
       });
       // console.log(`마우스 커서 소켓 요청: x: ${x} y: ${y} timestamp:${formatTimestamp(timestamp)}`);
+      console.log(`마우스 커서 소켓 요청: x: ${x} y: ${y}`);
     },
 
     sendLoop: (instrument, spaceLength) => {
