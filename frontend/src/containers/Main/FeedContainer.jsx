@@ -17,15 +17,18 @@ const fadeInDown = keyframes`
 `;
 
 const CardContainer = styled.div`
-  position: absolute;
-  top: -10rem;
-  margin-top: 24rem; 
-  margin-left: 9%;
-  margin-right: 9%; 
+  position: absolute;  
+  left: 50%; 
+  right: 50%; 
+  transform: translate(-50%, -50%); 
   display: grid;
   grid-template-columns: repeat(3, 1fr); 
-  gap: 1.5rem; 
+  gap: 1.5rem;
   animation: ${fadeInDown} 2s ease-out forwards;
+  justify-content: center; // 그리드 아이템들을 수평 중앙 정렬
+  align-items: center; // 그리드 아이템들을 수직 중앙 정렬 (그리드 컨테이너가 충분히 높이가 있을 경우에 적용됨)
+  width: auto; 
+  max-width: 90vw;
 `;
 
 
