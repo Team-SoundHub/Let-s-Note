@@ -21,7 +21,7 @@ class BeatsPerMinute extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bpm: this.props.bpm || 160,
+      bpm: this.props.bpm || 220,
     };
 
     this.input = React.createRef();
