@@ -357,7 +357,7 @@ const WorkPlacePage = () => {
   };
 
   return (
-    <WebSocketContainer spaceId={spaceId}>
+    <WebSocketContainer spaceId={spaceId} mySocketId={myUsername}>
       {({
         sendCoordinate,
         sendMessage,

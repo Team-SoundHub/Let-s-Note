@@ -79,14 +79,14 @@ public class WebRTCController {
     public void sendUserExit(@Valid @Payload WebRTCRequest.ExitUser user, @DestinationVariable String spaceId, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         String senderSession = headerAccessor.getUser().getName();
         String senderId = editorSocketController.accountConnectedSessions.get(spaceId).get(senderSession);
-        System.out.println("senderId == "+ senderId);
+        System.out.println("senderId == "+ senderId +" "+ user.userId());
         for(Map.Entry<String, String> entry : editorSocketController.accountConnectedSessions.get(spaceId).entrySet()) {
-            if (!entry.getValue().equals(user.userId())) {
+            if (!entry.getValue().equals(senderId)) {
                 simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/exit/public", new WebRTCResponse.ExitUser(senderId));
             }
             else{
-                editorSocketController.accountConnectedSessions.get(spaceId).remove(entry.getKey());
-                System.out.println("삭제 완료 : "+entry.getValue());
+                System.out.println("삭제 시도 : "+entry.getValue());
+                editorSocketController.deleteUserInAccountConnectedSessions(entry, spaceId);
             }
         }
     }

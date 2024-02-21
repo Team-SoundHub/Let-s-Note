@@ -9,7 +9,7 @@ import {
 import { addMessage } from "../../app/slices/chatSlice";
 import { updateCursorPosition } from "../../app/slices/cursorSlice";
 
-const WebSocketContainer = ({ spaceId, children }) => {
+const WebSocketContainer = ({ spaceId, mySocketId, children }) => {
   const dispatch = useDispatch();
   const [stompClient, setStompClient] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -55,7 +55,7 @@ const WebSocketContainer = ({ spaceId, children }) => {
             client.publish({
                 destination: `/app/webrtc/${spaceId}/exit/sendExit`,
                 body: JSON.stringify({
-                  userId: accountId,
+                  userId: mySocketId,
                 }),
             });
             console.log("전송 완료", client);
