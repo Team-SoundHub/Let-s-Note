@@ -17,17 +17,18 @@ const Container = styled.div`
 const MicButton = styled.button`
   color: white; 
   /* background-color: ${({ mySoundMuted }) => (mySoundMuted ? '#A7F3D0' : '#F0564A')};  */
-  background-color: ${({ mySoundMuted }) => (mySoundMuted ? '#A7F3D0' : '#cfcdcd')}; 
+  /* background-color: ${({ mySoundMuted }) => (mySoundMuted ? '#A7F3D0' : '#cfcdcd')};  */
+  background-color: ${({ mySoundMuted }) => (mySoundMuted ? '#cfcdcd' : '#A7F3D0')}; 
 
   /* background-color: #A7F3D0; */
 
   &:hover {
     background-color: #AFDED5; 
   }
-  &:focus {
+  /* &:focus {
     outline: none;
     box-shadow: 0 0 0 4px #A7F3D0; 
-  }
+  } */
   font-weight: 500; 
   border-radius: 9999px; 
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
@@ -69,7 +70,7 @@ const MemberInfo = ({ memberList, users, localVideo, myNickname, mySoundMuted, h
           onClick={handleMySoundMute}
           mySoundMuted={mySoundMuted}
         >
-          <img src={mySoundMuted ?  micIcon : muteIcon} alt="sound icon" />
+          <img src={mySoundMuted ? muteIcon : micIcon } alt="sound icon" />
         </MicButton>
       </div>
     );
