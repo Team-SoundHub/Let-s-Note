@@ -11,7 +11,7 @@ const Container = styled.div`
     }
   }
   flex: 1;
-  margin: 0.05rem;
+  border-bottom: 0.05rem solid skyblue;
   background: ${(props) => {
     const activeInstrumentCount = props.active.filter(
       (isActive) => isActive
