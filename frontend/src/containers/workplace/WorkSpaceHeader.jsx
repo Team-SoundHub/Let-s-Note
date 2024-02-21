@@ -243,12 +243,20 @@ const WorkSpaceHeader = ({
 	const [users, setUsers] = useState([]);
   const [mySoundMuted , setMySoundMuted] = useState(false);
   const pc_config = {
-      iceServers: [
-          {
-              urls: "stun:stun2.1.google.com:19302"
-          },
-      ]
-  }
+    iceServers: [
+        {
+            urls: "stun:stun2.1.google.com:19302"
+        },
+        {
+          urls: [
+            "stun:" + process.env.REACT_APP_TURN_SERVER + ":3478",
+            "turn:" + process.env.REACT_APP_TURN_SERVER + ":3478?transport=udp",
+          ],
+          username: "songarden",
+          credential: "letsnote",
+        },
+    ]
+}
 
   const handleMySoundMute = () => {
     localStreamRef.current.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));

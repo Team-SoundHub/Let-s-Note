@@ -238,6 +238,7 @@ const LandingPage = () => {
           }
         }
         closeRegisterModal();
+        openLoginModal();
       } else return response.response;
     } catch (error) {
       console.error("회원가입 오류:", error);
@@ -421,7 +422,7 @@ const LandingPage = () => {
         <RegisterForm
           type="register"
           closeRegisterModal={closeRegisterModal}
-          handleRegister={handleRegister}
+          handleRegister={handleRegister}          
         />
       )}
       {isCreateModalOpen && (
