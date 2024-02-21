@@ -10,8 +10,9 @@ const Container = styled.div`
       background: white;
     }
   }
-  flex: 1;  
-  margin: 0.05rem;  
+
+  flex: 1;
+  border-bottom: 0.05rem solid skyblue;
 
   background: ${(props) => {
     const activeInstrumentCount = props.active.filter(
