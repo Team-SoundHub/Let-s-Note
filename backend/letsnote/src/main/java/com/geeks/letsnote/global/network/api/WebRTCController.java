@@ -84,11 +84,9 @@ public class WebRTCController {
             if (!entry.getValue().equals(senderId)) {
                 simpMessagingTemplate.convertAndSendToUser(entry.getKey(), "/topic/webrtc/" + spaceId + "/exit/public", new WebRTCResponse.ExitUser(senderId));
             }
-            else{
-                System.out.println("삭제 시도 : "+entry.getValue());
-                editorSocketController.deleteUserInAccountConnectedSessions(entry, spaceId);
-            }
         }
+        System.out.println("삭제 시도 : "+ senderId);
+        editorSocketController.deleteUserInAccountConnectedSessions(senderId, spaceId);
     }
 
 }

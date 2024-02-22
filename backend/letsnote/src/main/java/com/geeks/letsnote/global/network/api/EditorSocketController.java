@@ -204,8 +204,16 @@ public class EditorSocketController {
 		}
 	}
 
-	public void deleteUserInAccountConnectedSessions (Map.Entry<String, String> entry, String spaceId){
-		System.out.println("삭제 완료 : "+entry.getValue());
-		accountConnectedSessions.get(spaceId).remove(entry.getKey());
+	public void deleteUserInAccountConnectedSessions (String senderId, String spaceId){
+		Iterator<Map.Entry<String, String>> iterator = accountConnectedSessions.get(spaceId).entrySet().iterator();
+
+		while (iterator.hasNext()) {
+			Map.Entry<String, String> entry = iterator.next();
+			if (entry.getValue().equals(senderId)) {
+				iterator.remove();
+				System.out.println("삭제 완료 : "+senderId);
+				break;
+			}
+		}
 	}
 }
