@@ -86,7 +86,15 @@ class WorkSpaceContainer extends Component {
       visualizeInstrument: [true, true, true],
       isPlaying: false,
     };
-    this.initialBPM = 220;
+    
+    if(this.props.isSnapshot){
+      this.initialBPM = this.props.snapshotBpm;
+      console.log(`[스냅샷] 스냅샷 여부?: ${this.props.isSnapshot}`);      
+      console.log(`[스냅샷] 초기 bpm 설정: ${this.props.snapshotBpm}`);      
+      console.log(`[스냅샷] props 목록: ${this.props}`);      
+    } else {
+      this.initialBPM = 160;
+    }
   }
 
   // 노트 관련
@@ -264,7 +272,8 @@ class WorkSpaceContainer extends Component {
       sendCoordinate,
       sendLoop,
       sendMousePosition,
-      handleAIInterfaceModalOpen,
+      handleAIInterfaceModalOpen, 
+      snapshotBpm,      
     } = this.props;
 
     if (isSnapshot && loading) {
@@ -341,7 +350,7 @@ class WorkSpaceContainer extends Component {
             count={count}
             handleIsPlaying={this.handleIsPlaying}
             isPlaying={isPlaying}
-            isSnapshot={isSnapshot}
+            isSnapshot={isSnapshot}                     
           />
         </Container>
       );

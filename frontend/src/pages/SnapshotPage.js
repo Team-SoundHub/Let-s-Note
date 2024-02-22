@@ -24,6 +24,7 @@ const SnapshotPage = () => {
   const [isFromMyPage, setIsFromMyPage] = useState(false);
   const [maxColumn, setMaxColumn] = useState(0);
   const [spaceTitle, setSpaceTitle] = useState("");
+  const [snapshotBpm, setSnapshotBpm] = useState(160);
 
   const calculateColumns = (maxColumn) => {
     const multiple = parseInt(maxColumn / 8);
@@ -49,6 +50,8 @@ const SnapshotPage = () => {
         console.log("스냅샷 데이터 요청:", response.response);
         setMaxColumn(calculateColumns(response.response.maxX));
         setSpaceTitle(response.response.snapshotTitle);
+        setSnapshotBpm(response.response.bpm);
+        console.log("[스냅샷] 스냅샷 bpm: ", response.response.bpm);
 
         if (response && response.response) {
           dispatch(setSnapshotNotes(response.response.notes));
@@ -99,6 +102,7 @@ const SnapshotPage = () => {
           isSnapshot={true}
           spaceId={false}
           maxColumn={maxColumn}
+          snapshotBpm={snapshotBpm}
         />
       )}
     </Container>

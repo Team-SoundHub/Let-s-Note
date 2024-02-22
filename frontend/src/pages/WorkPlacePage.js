@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {useDispatch, useSelector} from "react-redux";
-
 import { useParams, useNavigate } from "react-router-dom";
+import { store } from '../app/store';
 import styled from "styled-components";
 import WorkSpaceContainer from "../containers/workplace/WorkSpaceContainer";
 import WebSocketContainer from "../containers/WebSocket/WebSocketContainer";
@@ -66,6 +66,7 @@ const WorkPlacePage = () => {
   const [maxColumn, setMaxColumn] = useState(0);
   const [myUsername, setMyUsername] = useState(null);
   const [spaceTitle, setSpaceTitle] = useState(null);
+  
   const audioRef = useRef(null);
 
   const handleSearchModalOpen = () => {
@@ -168,8 +169,8 @@ const WorkPlacePage = () => {
     setIsReleaseModalOpen(false);
   };
 
-  const handleSave = (title, description) => {
-    // console.log("스냅샷 생성 시도");
+
+  const handleSave = (title, description) => {    
     Swal.fire({
       title: "작업한 작품을 저장할까요?",
       showDenyButton: true,
@@ -179,16 +180,20 @@ const WorkPlacePage = () => {
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        try {
-          const response = await createSnapshot(spaceId, title, description);
-          // console.log("snapshotId:", response.response.snapshotId);
+        const currentState = store.getState(); // 스토어의 현재 상태 조회
+        const bpm = currentState.bpm.bpm; // bpm 상태 접근
+        console.log(`[handleSave] bpm: ${bpm}`);
+        
+        try {          
+          const response = await createSnapshot(spaceId, title, description, bpm);          
           Swal.fire("내 작품이 저장되었습니다!", "", "success");
           setSnapshotUrl(
             `https://www.letsnote.co.kr/snapshot/${response.response.snapshotId}`
           );
           setSnapshotId(`${response.response.snapshotId}`);
           setSnapshotCreated(true);
-          setIsReleaseModalOpen(false);
+          setIsReleaseModalOpen(false);          
+                  
         } catch (error) {
           console.error("작품 저장 오류:", error);
         }
@@ -454,6 +459,7 @@ const WorkPlacePage = () => {
               handleSearchModalOpen={handleSearchModalOpen}
               handleAIInterfaceModalOpen={handleAIInterfaceModalOpen}
               maxColumn={maxColumn}
+              handleSave={handleSave}
             />
           )}
           <ChatContainer
