@@ -48,6 +48,7 @@ const SnapshotPage = () => {
         const response = await getSnapshotInfo(snapshotId);
         console.log("스냅샷 데이터 요청:", response.response);
         setMaxColumn(calculateColumns(response.response.maxX));
+        setSpaceTitle(response.response.snapshotTitle);
 
         if (response && response.response) {
           dispatch(setSnapshotNotes(response.response.notes));
