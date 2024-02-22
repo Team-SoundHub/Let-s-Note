@@ -6,7 +6,7 @@ import styled, { keyframes } from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
 import Button from "../../components/common/Button";
 import { getMyUserId } from "../../api/userIdApi";
-import { clearCursorPosition } from "../../app/slices/cursorSlice";
+import { deleteCursorPosition } from "../../app/slices/cursorSlice";
 
 import memberIcon from "../../assets/workspace/memberIcon.png";
 import muteIcon from "../../assets/workspace/mute.png";
@@ -495,7 +495,7 @@ const WorkSpaceHeader = ({
                 setUsers((oldUsers) => oldUsers.filter((user) => user.id !== data.exitUserId));   
 
                 const userId = data.exitUserId;
-                dispatch(clearCursorPosition({userId}));
+                dispatch(deleteCursorPosition({userId}));
                 console.log("유저 삭제 성공", users);
             },
             {

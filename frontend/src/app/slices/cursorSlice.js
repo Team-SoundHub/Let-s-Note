@@ -8,13 +8,13 @@ export const cursorSlice = createSlice({
   },
   reducers: {
     updateCursorPosition: (state, action) => {
-        const { accountId, x, y, userId } = action.payload;
-        state.positions[accountId] = { x, y, userId }; 
+      const { accountId, x, y, userId } = action.payload;
+      state.positions[accountId] = { x, y, userId };
     },
     setHoverPosition: (state, action) => {
       state.hover = action.payload; // Update hover position
     },
-    clearCursorPosition: (state, action) => {
+    deleteCursorPosition: (state, action) => {
       const { userId } = action.payload;
       // positions 객체 내의 각 요소를 순회하며 주어진 userId와 일치하는 요소 찾기
       Object.keys(state.positions).forEach((accountId) => {
@@ -24,10 +24,14 @@ export const cursorSlice = createSlice({
           delete state.positions[accountId];
         }
       });
+    },
+    clearCursorPosition: (state) => {
+      state.positions = {}
     }
+
   },
 });
 
-export const { updateCursorPosition, setHoverPosition, clearCursorPosition } = cursorSlice.actions;
+export const { updateCursorPosition, setHoverPosition, deleteCursorPosition, clearCursorPosition } = cursorSlice.actions;
 
 export default cursorSlice.reducer;
