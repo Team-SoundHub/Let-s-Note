@@ -6,6 +6,7 @@ public record RequestSnapshot() {
     @Builder
     public record SnapshotDto(
             String snapshotTitle,
-            String snapshotContent
+            String snapshotContent,
+            Integer bpm
     ){}
 }

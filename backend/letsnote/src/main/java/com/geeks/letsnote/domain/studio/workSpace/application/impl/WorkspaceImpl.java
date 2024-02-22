@@ -84,6 +84,7 @@ public class WorkspaceImpl implements WorkspaceService {
                 .spaceTitle(workspaceDto.spaceTitle())
                 .spaceContent(workspaceDto.spaceContent())
                 .snapshotCount(0)
+                .workspaceBpm(160)
                 .build();
         workspaceRepository.save(workspace);
 
@@ -104,6 +105,7 @@ public class WorkspaceImpl implements WorkspaceService {
 
     @Override
     public ResponseWorkspaces.WorkspaceIn getAllNotesOfWorkspace(String spaceId) {
+        Optional<Workspace> thisWorkSpace = workspaceRepository.findById(spaceId);
         List<ResponseNotes.Notes> allNotes = new ArrayList<>();
         ResponseNotes.Notes pianoNotes = noteInstrumentMapService.getAllInstrumentNoteBySpaceId(spaceId, Instrument.Piano);
         allNotes.add(pianoNotes);
@@ -128,7 +130,9 @@ public class WorkspaceImpl implements WorkspaceService {
         return ResponseWorkspaces.WorkspaceIn.builder()
                 .notesList(allNotes)
                 .isSnapshotExist(isSnapshotExist)
-                .maxX(maxNoteX).build();
+                .maxX(maxNoteX)
+                .bpm(thisWorkSpace.get().getWorkspaceBpm())
+                .build();
     }
 
     //for db delete
