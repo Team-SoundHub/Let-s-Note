@@ -269,7 +269,7 @@ const WorkSpaceHeader = ({
 
     const getLocalStream = async () => {
       try {
-        if (!client || !mySocketId || !isConnected) {
+        if (!client || !mySocketId || !isConnected || !myNickname) {
           return;
         }
         const localStream = await navigator.mediaDevices.getUserMedia({
@@ -301,7 +301,7 @@ const WorkSpaceHeader = ({
 
     const createPeerConnection = (socketId, userNickname) => {
       try {
-        if (socketId === mySocketId || mySocketId === null || !isConnected) {
+        if (socketId === mySocketId || mySocketId === null || !isConnected || myNickname === null) {
           return null;
         }
         const pc = new RTCPeerConnection(pc_config);
@@ -506,6 +506,9 @@ const WorkSpaceHeader = ({
 
     const pageStart = async () => {
       console.log(client, isConnected, mySocketId);
+      if (!client || !mySocketId || !isConnected || !myNickname) {
+        return;
+      }
       // await fetchMyUsername();
       // if(!spaceId || !client || !mySocketId) return;
       console.log("subscribe Start");
