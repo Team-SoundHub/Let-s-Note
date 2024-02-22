@@ -8,6 +8,7 @@ import java.util.List;
 public record ResponseNotes() {
     @Builder
     public record NotesDto(
+            String snapshotTitle,
             List<Notes> notes,
             Integer maxX
     ){}

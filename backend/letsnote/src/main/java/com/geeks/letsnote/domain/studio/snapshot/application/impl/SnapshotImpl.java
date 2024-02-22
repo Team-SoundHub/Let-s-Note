@@ -98,9 +98,12 @@ public class SnapshotImpl implements SnapshotService {
         ResponseNotes.Notes drumNotes = snapshotInstrumentMapService.getAllInstrumentNoteBySpaceId(snapshotId, Instrument.Drum);
         allNotes.add(drumNotes);
 
+        Optional<Snapshot> thisSnapshot = snapshotRepository.findById(snapshotId);
+
 
 
         ResponseNotes.NotesDto notesDto = ResponseNotes.NotesDto.builder()
+                .snapshotTitle(thisSnapshot.get().getSnapshotTitle())
                 .notes(allNotes)
                 .maxX(maxNoteX)
                 .build();
