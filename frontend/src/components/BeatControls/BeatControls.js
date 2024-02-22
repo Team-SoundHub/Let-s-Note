@@ -52,6 +52,7 @@ const BeatControls = ({
   handleIsPlaying,
   isPlaying,
   isSnapshot,
+  saveChangedBPM,  
 }) => {
   return (
     <Container>
@@ -72,7 +73,12 @@ const BeatControls = ({
         />
       </CenterSection>
       <RightSection>
-        <BeatsPerMinute bpm={bpm} handleChange={adjustBPM} />
+        <BeatsPerMinute
+          bpm={bpm}
+          handleChange={adjustBPM}
+          saveChangedBPM={saveChangedBPM}
+          isSnapshot={isSnapshot}
+        />
         <BeatsVolume handleChange={adjustVolume} />
 
         {!isSnapshot && (

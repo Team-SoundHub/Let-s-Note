@@ -13,13 +13,14 @@ const getWorkspaceInfo = async (spaceId) => {
   }
 };
 
-const createSnapshot = async (spaceId, snapshotTitle, snapshotContent) => {
+const createSnapshot = async (spaceId, snapshotTitle, snapshotContent, bpm) => {
   try {
     const response = await axiosInstance.post(
       `/snapshots/space-id?v=${spaceId}`,
       {
         snapshotTitle: snapshotTitle,
         snapshotContent: snapshotContent,
+        bpm: bpm,
       }
     );
     // console.log("createSnapshot API 요청");
