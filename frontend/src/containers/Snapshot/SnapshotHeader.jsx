@@ -39,6 +39,12 @@ const Header = styled.div`
   height: 7vh;
 `;
 
+const LeftSection = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -64,6 +70,7 @@ const SpaceTitle = styled.div`
   color: white;
   font-size: 25px;
   font-weight: bold;
+  margin-left: 1rem;
 `;
 
 const SnapshotHeader = ({ onOpenModal, fromMyPage, spaceTitle }) => {
@@ -94,44 +101,46 @@ const SnapshotHeader = ({ onOpenModal, fromMyPage, spaceTitle }) => {
 
   return (
     <Header>
-      <button onClick={handleGoBack}>
-        <svg
-          fill="#ffffff"
-          width="1.5rem"
-          height="1.5rem"
-          version="1.1"
-          id="Layer_1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 8 8"
-          enable-background="new 0 0 8 8"
-        >
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g
-            id="SVGRepo_tracerCarrier"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></g>
-          <g id="SVGRepo_iconCarrier">
-            {" "}
-            <rect
-              x="-0.226"
-              y="4.614"
-              transform="matrix(0.7071 0.7071 -0.7071 0.7071 4.4884 -0.1417)"
-              width="5.283"
-              height="1.466"
-            ></rect>{" "}
-            <rect x="1.607" y="3.161" width="6.375" height="1.683"></rect>{" "}
-            <rect
-              x="-0.233"
-              y="1.921"
-              transform="matrix(0.7069 -0.7073 0.7073 0.7069 -1.1708 2.4817)"
-              width="5.284"
-              height="1.465"
-            ></rect>{" "}
-          </g>
-        </svg>
-      </button>
-      <SpaceTitle>{spaceTitle}</SpaceTitle>
+      <LeftSection>
+        <button onClick={handleGoBack}>
+          <svg
+            fill="#ffffff"
+            width="1.5rem"
+            height="1.5rem"
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 8 8"
+            enable-background="new 0 0 8 8"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              {" "}
+              <rect
+                x="-0.226"
+                y="4.614"
+                transform="matrix(0.7071 0.7071 -0.7071 0.7071 4.4884 -0.1417)"
+                width="5.283"
+                height="1.466"
+              ></rect>{" "}
+              <rect x="1.607" y="3.161" width="6.375" height="1.683"></rect>{" "}
+              <rect
+                x="-0.233"
+                y="1.921"
+                transform="matrix(0.7069 -0.7073 0.7073 0.7069 -1.1708 2.4817)"
+                width="5.284"
+                height="1.465"
+              ></rect>{" "}
+            </g>
+          </svg>
+        </button>
+        <SpaceTitle>{spaceTitle}</SpaceTitle>
+      </LeftSection>
       <ButtonContainer>
         <ShareButton />
       </ButtonContainer>
