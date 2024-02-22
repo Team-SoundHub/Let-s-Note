@@ -38,6 +38,7 @@ public class SnapshotImpl implements SnapshotService {
                 .snapshotTitle(snapshotDto.snapshotTitle())
                 .spaceId(spaceId)
                 .views(0L)
+                .snapshotBpm(snapshotDto.bpm())
                 .build();
         snapshotRepository.save(snapshot);
 
@@ -106,6 +107,7 @@ public class SnapshotImpl implements SnapshotService {
                 .snapshotTitle(thisSnapshot.get().getSnapshotTitle())
                 .notes(allNotes)
                 .maxX(maxNoteX)
+                .bpm(thisSnapshot.get().getSnapshotBpm())
                 .build();
 
 
