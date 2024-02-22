@@ -23,13 +23,14 @@ const SnapshotPage = () => {
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [isFromMyPage, setIsFromMyPage] = useState(false);
   const [maxColumn, setMaxColumn] = useState(0);
+  const [spaceTitle, setSpaceTitle] = useState("");
 
   const calculateColumns = (maxColumn) => {
     const multiple = parseInt(maxColumn / 8);
     // const remainder = maxColumn % 8;
 
     let newColumns;
-    newColumns = 8 * (multiple + 1);    
+    newColumns = 8 * (multiple + 1);
 
     if (newColumns < 32) {
       newColumns = 32;
@@ -81,7 +82,11 @@ const SnapshotPage = () => {
 
   return (
     <Container>
-      <SnapshotHeader onOpenModal={handleModalOpen} fromMyPage={isFromMyPage} />
+      <SnapshotHeader
+        onOpenModal={handleModalOpen}
+        fromMyPage={isFromMyPage}
+        spaceTitle={spaceTitle}
+      />
       {isReleaseModalOpen && (
         <SaveSnapshotModal
           onClose={handleModalClose}

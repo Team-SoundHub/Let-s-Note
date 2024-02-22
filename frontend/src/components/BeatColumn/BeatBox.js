@@ -44,8 +44,8 @@ const Container = styled.div`
     }
   }};
   width: 3rem;
-  height: 1.2rem;  
-  margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.2 : 0)}rem;
+  height: 1.25rem;
+  margin-bottom: ${(props) => (props.row % 12 === 11 ? 0.15 : 0)}rem;
   opacity: ${(props) => (props.playing ? 0.7 : 1)};
   /* transition: background-color 0.02s ease-in-out,
     background-image 0.02s ease-in-out, opacity 0.02s ease-out; */

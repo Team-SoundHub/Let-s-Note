@@ -58,7 +58,15 @@ const Message = styled.div`
   animation-fill-mode: forwards; // 애니메이션 종료 후 최종 상태 유지
 `;
 
-const SnapshotHeader = ({ onOpenModal, fromMyPage }) => {
+const SpaceTitle = styled.div`
+  flex: 1;
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+`;
+
+const SnapshotHeader = ({ onOpenModal, fromMyPage, spaceTitle }) => {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
@@ -123,6 +131,7 @@ const SnapshotHeader = ({ onOpenModal, fromMyPage }) => {
           </g>
         </svg>
       </button>
+      <SpaceTitle>{spaceTitle}</SpaceTitle>
       <ButtonContainer>
         <ShareButton />
       </ButtonContainer>
