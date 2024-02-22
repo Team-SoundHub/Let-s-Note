@@ -25,7 +25,8 @@ public record ResponseWorkspaces() {
     public record WorkspaceIn(
             List<ResponseNotes.Notes> notesList,
             boolean isSnapshotExist,
-            Integer maxX
+            Integer maxX,
+            Integer bpm
     ){}
 
     @Builder

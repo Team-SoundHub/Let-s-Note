@@ -31,13 +31,17 @@ public class Snapshot {
     @Column(name = "views")
     private Long views;
 
+    @Column (name = "snapshot_bpm")
+    private Integer snapshotBpm;
+
     @Builder
-    public Snapshot(String snapshotId, String spaceId, String snapshotTitle, String snapshotContent, Timestamp updateAt, Long views) {
+    public Snapshot(String snapshotId, String spaceId, String snapshotTitle, String snapshotContent, Timestamp updateAt, Long views, Integer snapshotBpm) {
         this.snapshotId = snapshotId;
         this.spaceId = spaceId;
         this.snapshotTitle = snapshotTitle;
         this.snapshotContent = snapshotContent;
         this.updateAt = updateAt;
         this.views = views;
+        this.snapshotBpm = snapshotBpm;
     }
 }

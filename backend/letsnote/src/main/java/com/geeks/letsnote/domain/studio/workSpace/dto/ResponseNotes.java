@@ -10,7 +10,8 @@ public record ResponseNotes() {
     public record NotesDto(
             String snapshotTitle,
             List<Notes> notes,
-            Integer maxX
+            Integer maxX,
+            Integer bpm
     ){}
 
     @Builder
