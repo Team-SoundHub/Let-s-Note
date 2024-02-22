@@ -100,6 +100,7 @@ public class EditorSocketController {
 		return new SocketResponse.Chat(spaceId, nickName.nickname(), result.msgContent(), result.timestamp());
 	}
 
+	@Async
 	@MessageMapping("/workspace/{spaceId}/editor/sendCoordinate")
 	@SendTo("/topic/workspace/{spaceId}/editor/public")
 	public SocketResponse.Coordinate sendEditorCoordinateInfo(@Valid @Payload SocketRequest.Coordinate content, @DestinationVariable String spaceId) throws Exception {
