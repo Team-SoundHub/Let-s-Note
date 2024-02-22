@@ -176,9 +176,9 @@ const DrumBox = ({
   };
 
   const handleClick = (e) => {
-    onClick()
-    handleMouseOver(e)
-  }
+    onClick();
+    handleMouseOver(e);
+  };
 
   return (
     <Container
