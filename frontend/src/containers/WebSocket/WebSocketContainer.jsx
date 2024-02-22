@@ -71,6 +71,7 @@ const WebSocketContainer = ({ spaceId, mySocketId, children }) => {
     client.subscribe(
       `/topic/workspace/${spaceId}/editor/public`,
       (response) => {
+        console.log(new Date().getTime());
         const inner_content = JSON.parse(response.body);
         console.log(inner_content);
         dispatch(setInnerContent(inner_content));
