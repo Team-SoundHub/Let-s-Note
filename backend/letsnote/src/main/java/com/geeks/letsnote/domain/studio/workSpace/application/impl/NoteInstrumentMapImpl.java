@@ -7,6 +7,7 @@ import com.geeks.letsnote.domain.studio.workSpace.dao.NoteInstrumentMapRepositor
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseNotes;
 import com.geeks.letsnote.domain.studio.workSpace.entity.NoteInstrumentMap;
+import com.geeks.letsnote.domain.studio.workSpace.semaphore.SemaphoreService;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,12 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
     private final NoteInstrumentMapRepository noteInstrumentMapRepository;
     private final NoteService noteService;
+    private final SemaphoreService semaphoreService;
 
-    public NoteInstrumentMapImpl(NoteInstrumentMapRepository noteInstrumentMapRepository, NoteService noteService) {
+    public NoteInstrumentMapImpl(NoteInstrumentMapRepository noteInstrumentMapRepository, NoteService noteService, SemaphoreService semaphoreService) {
         this.noteInstrumentMapRepository = noteInstrumentMapRepository;
         this.noteService = noteService;
+        this.semaphoreService = semaphoreService;
     }
 
     @Override
@@ -54,8 +57,10 @@ public class NoteInstrumentMapImpl implements NoteInstrumentMapService {
 
     @Override
     public void clickNoteMap(SocketRequest.Coordinate coordinate) {
+        semaphoreService.acquireSemaphore(coordinate.spaceId());
         Optional<NoteInstrumentMap> noteInstrumentMap = noteInstrumentMapRepository.findBySpaceIdAndInstrument(coordinate.spaceId(), Instrument.fromString(coordinate.instrument()));
         noteService.clickNote(noteInstrumentMap.get().getMapId(), RequestNotes.NoteDto.builder().instrument(Instrument.fromString(coordinate.instrument())).noteY(coordinate.y()).noteX(coordinate.x()).build());
+        semaphoreService.releaseSemaphore(coordinate.spaceId());
     }
 
     @Override
