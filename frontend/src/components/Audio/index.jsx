@@ -65,7 +65,7 @@ const Audio = ({ stream, muted, username, users }) => {
       <UserLabel onClick={handleMute} muted={isMuted}>
         {username} 
       </UserLabel>
-      <VideoContainer ref={ref} muted={isMuted} autoPlay volume="0.5" />
+      <VideoContainer ref={ref} muted={isMuted} autoPlay volume="1" />
     </Container>
   );
 };

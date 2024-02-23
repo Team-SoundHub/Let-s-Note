@@ -192,7 +192,7 @@ const WebSocketContainer = ({ spaceId, mySocketId, children }) => {
         }),
       });
       // console.log(`마우스 커서 소켓 요청: x: ${x} y: ${y} timestamp:${formatTimestamp(timestamp)}`);
-      // console.log(`마우스 커서 소켓 요청: x: ${x} y: ${y}`);
+      console.log(`마우스 커서 소켓 요청: x: ${x} y: ${y}`);
     },
 
     sendLoop: (instrument, spaceLength) => {
