@@ -9,6 +9,9 @@ const getWorkspaceInfo = async (spaceId) => {
     );
     return response.data;
   } catch (error) {
+    if(error.response.status == 509){
+      return "509"
+    }
     console.error("getWorkspaceInfo 에러:", error);
   }
 };

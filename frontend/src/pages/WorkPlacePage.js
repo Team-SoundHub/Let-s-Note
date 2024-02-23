@@ -66,7 +66,7 @@ const WorkPlacePage = () => {
   const [maxColumn, setMaxColumn] = useState(0);
   const [myUsername, setMyUsername] = useState(null);
   const [spaceTitle, setSpaceTitle] = useState(null);
-  
+  const navigate = useNavigate();
   const audioRef = useRef(null);
 
   const handleSearchModalOpen = () => {
@@ -101,6 +101,10 @@ const WorkPlacePage = () => {
     const fetchWorkspaceInfo = async () => {
       try {
         const response = await getWorkspaceInfo(spaceId);
+        if(response == "509"){
+          navigate("/");
+          return;
+        }
         setWorkspaceInfo(response.response);
         
         console.log("작업실 입장 데이터 요청:", response.response.notesList);

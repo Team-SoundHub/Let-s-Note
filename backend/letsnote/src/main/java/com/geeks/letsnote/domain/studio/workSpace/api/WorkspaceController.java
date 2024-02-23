@@ -9,6 +9,7 @@ import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestWorkspaces;
 import com.geeks.letsnote.domain.studio.workSpace.dto.ResponseWorkspaces;
+import com.geeks.letsnote.global.network.api.EditorSocketController;
 import com.geeks.letsnote.global.network.dto.SocketRequest;
 import com.geeks.letsnote.global.network.dto.SocketResponse;
 import com.geeks.letsnote.global.security.dto.CommonResponse;
@@ -33,11 +34,14 @@ public class WorkspaceController {
     private final NoteService noteService;
     private final AccountService accountService;
 
-    public WorkspaceController(WorkspaceService workspaceService, NoteInstrumentMapService noteInstrumentMapService, NoteService noteService, AccountService accountService) {
+    private final EditorSocketController editorSocketController;
+
+    public WorkspaceController(WorkspaceService workspaceService, NoteInstrumentMapService noteInstrumentMapService, NoteService noteService, AccountService accountService, EditorSocketController editorSocketController) {
         this.workspaceService = workspaceService;
         this.noteInstrumentMapService = noteInstrumentMapService;
         this.noteService = noteService;
         this.accountService = accountService;
+        this.editorSocketController = editorSocketController;
     }
 
     @Operation(summary = "모든 워크스페이스 출력", description = "AccountId에 해당하는 모든 메세지를 리턴합니다.")
@@ -80,6 +84,14 @@ public class WorkspaceController {
 
     @GetMapping("/space-id")
     public ResponseEntity<CommonResponse> getAllNote(@RequestParam("v") String spaceId){
+        int size = editorSocketController.accountConnectedSessions.get(spaceId).size();
+        if(size < 8){
+            CommonResponse response = CommonResponse.builder()
+                    .success(false)
+                    .response("")
+                    .build();
+            return new ResponseEntity<>(response,HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+        }
         ResponseWorkspaces.WorkspaceIn allNotes = workspaceService.getAllNotesOfWorkspace(spaceId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
