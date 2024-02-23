@@ -176,7 +176,7 @@ public class WorkspaceController {
     public ResponseEntity<CommonResponse> checkRoomIsFull(@PathVariable("spaceId") String spaceId){
         if(editorSocketController.accountConnectedSessions.get(spaceId) != null){
             int size = editorSocketController.accountConnectedSessions.get(spaceId).size();
-            if(size > 8){
+            if(size > 10){
                 CommonResponse response = CommonResponse.builder()
                         .success(false)
                         .response("Room Full")
