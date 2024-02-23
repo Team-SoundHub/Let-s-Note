@@ -66,7 +66,7 @@ const WorkPlacePage = () => {
   const [maxColumn, setMaxColumn] = useState(0);
   const [myUsername, setMyUsername] = useState(null);
   const [spaceTitle, setSpaceTitle] = useState(null);
-  
+
   const audioRef = useRef(null);
 
   const handleSearchModalOpen = () => {

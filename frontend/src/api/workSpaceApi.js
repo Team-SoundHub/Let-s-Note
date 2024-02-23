@@ -9,6 +9,9 @@ const getWorkspaceInfo = async (spaceId) => {
     );
     return response.data;
   } catch (error) {
+    if(error.response.status == 509){
+      return "509"
+    }
     console.error("getWorkspaceInfo 에러:", error);
   }
 };
@@ -89,5 +92,16 @@ const callChordAI = async (previous, userId) => {
   }
 }
 
+const isRoomFull = async (spaceId) => {
+  try {
+    const response = await axiosInstance.get(
+        `/workspaces/check-full/${spaceId}`,
+    );
+    return response.data;
+  } catch (error) {
+    return error.response.status;
+  }
+}
 
-export { getWorkspaceInfo, createSnapshot, setMember, getMember, callGenreAI, callChordAI };
+
+export { getWorkspaceInfo, createSnapshot, setMember, getMember, callGenreAI, callChordAI, isRoomFull };
