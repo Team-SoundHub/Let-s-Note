@@ -1,12 +1,18 @@
+<style>
+   td, th {
+      border: none!important;
+   }
+   </style>
+
 # Let’s note
 
-|                                                              |                                                                                     |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| ![Untitled](assets/Untitled.png){: width="100" height="100"} | ![스크린샷 2024-02-22 110945.png](assets/Workspace.png){: width="100" height="100"} |
+|                                             |                                              |
+| ------------------------------------------- | -------------------------------------------- |
+| <img src="assets/Untitled.png" width="400"> | <img src="assets/Workspace.png" width="410"> |
 
 ## 서비스 소개
 
-**Let’s Note**는 누구나 음악을 쉽고 재미있게 play 할 수 있도록 하는 악기 연주 플랫폼 입니다.
+<span style="color: #49C5B6; font-size: 15pt;">**Let’s Note**</span>는 누구나 음악을 쉽고 재미있게 play 할 수 있도록 하는 악기 연주 플랫폼 입니다.
 
 함께하고 싶은 친구들을 나의 작업실에 초대하고, 음성 채팅과 커서 공유를 통해 소통하세요. 그리고 여러 가상악기로 이루어진 우리만의 음악을 만들어보세요!
 
@@ -42,7 +48,6 @@ REACT_APP_TURN_SERVER = {TURN 서버 주소}
 ### 실행
 
 ```bash
-$ cd src
 $ npm install && npm start
 ```
 
@@ -117,7 +122,7 @@ $ java -jar build/libs/letsnote.jar
    1. WebRTC 기반 음성채팅 기능
       |1. Signaling|2. P2P Connection|
       |--|--|
-      |![Untitled](assets/Untitled%201.png)|![Untitled](assets/Untitled%202.png)|
+      |<img src="assets/Untitled%201.png" width="400">|<img src="assets/Untitled%202.png" width="400">|
 
    - P2P Mesh 방식을 활용하여 다중 음성채팅 활성화
    - 웹소켓을 통해 연결 후보 Signal 교환
@@ -138,64 +143,115 @@ $ java -jar build/libs/letsnote.jar
 
 ## 기술적 챌린지
 
-1. 음질 개선
-   |![Untitled](assets/Untitled%205.png){: width="40" height="20"}|![Untitled](assets/Untitled%207.png){: width="40" height="20"}|
-   |--|--|
-   |![Untitled](assets/Untitled%206.png)|![Untitled](assets/Untitled%208.png)|
+### 1. 음질 개선
 
-2. 웹 소켓 지연 개선
+| <p align="center"><img src="assets/Untitled%205.png" height="40" ></p> | <p align="center"><img src="assets/Untitled%207.png" height="40" ></p> |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| ![Untitled](assets/Untitled%206.png)                                   | ![Untitled](assets/Untitled%208.png)                                   |
 
-   | ![Untitled](assets/Untitled%205.png){: width="40" height="20"}                 | ![Untitled](assets/Untitled%207.png){: width="40" height="20"}                    |
-   | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-   | - 노트 정보가 server → DB → server → Client순으로 동기적 전달- 지연시간: 0.18s | - DB에서 server, client에게 비동기적으로 정보를 전달하도록 변경 - 지연시간: 0.04s |
+### 2. 웹 소켓 지연 개선
 
-3. 노트 중복 생성 문제
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/Untitled%205.png" height="40">
+    </td>
+    <td align="center">
+      <img src="assets/Untitled%207.png" height="40">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li>노트 정보가 server → DB → server → Client순으로 동기적 전달</li>
+        <li><span style="color: tomato;">지연시간: 0.18s</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>DB에서 server, client에게 비동기적으로 정보를 전달하도록 변경</li>
+        <li><span style="color: skyblue;">지연시간: 0.04s</span></li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-   ![Untitled](assets/Untitled%205.png)
+### 3. 노트 중복 생성 문제
 
-   - 여러 사용자가 하나의 노트에 대해 접근 시 동기화 문제 발생
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/Untitled%205.png" height="40">
+    </td>
+    <td align="center">
+      <img src="assets/Untitled%207.png" height="40">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li>여러 사용자가 하나의 노트에 대해 접근 시 동기화 문제 발생</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>DB 노트 정보 접근 시 세마포어를 도입하여 동기화 보장</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-   ![Untitled](assets/Untitled%207.png)
+### 4. 마우스 위치 공유시 과도한 소켓 요청 문제
 
-   - DB 노트 정보 접근 시 세마포어를 도입하여 동기화 보장
+<table style="width: 100%;">
+  <colgroup>
+    <col style="width: 33.33%;">
+    <col style="width: 33.33%;">
+    <col style="width: 33.33%;">
+  </colgroup>
+  <tr>
+    <td align="center"><img src="assets/Untitled%205.png" height="40"></td>
+    <td align="center"><img src="assets/Untitled%209.png" height="40"></td>
+    <td align="center"><img src="assets/Untitled%207.png" height="40"></td>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li>mousemove 이벤트 기반</li>
+        <li>8ms 마다 요청(125회/s)</li>
+        <li><span style="color: tomato;">소켓 서버 부하</span></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>스로틀링, 디바운싱 활용</li>
+        <li>최대 요청 빈도 제한(<span style="color: skyblue;">5회/s</span>)</li>
+        <li>음표 노트 내에서의 움직임은 무시하도록 재설계 → 불필요한 요청 제거</li>
+        <li>움직임에 따른 위치 공유는 줄어들었으나, 음표 노트를 클릭할 때에도 마우스 좌표를 공유하도록 하여, 사용자의 불편함은 최소화하고자 했음</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li><span style="color: skyblue;">소켓 서버 부하를 줄여</span> 즉각적인 반응 유지</li>
+        <li>협업 관련 <span style="color: skyblue;">사용자 경험 개선</span></li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-4. 마우스 위치 공유시 과도한 소켓 요청 문제
+### 5. 웹 소켓 보안 계층 추가
 
-   ![Untitled](assets/Untitled%205.png)
+| <img src="assets/Untitled%2010.png" height="40">                                                                                                                                                                     |     |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| <ul><li>Stomp 프로토콜을 활용하여 메세지들을 브로드캐스팅 할 수 있도록 구현</li><li>인가되지 않은 사용자가 소켓 연결 메세지를 보내도 <span style="color: tomato;">인증 절차의 부재로 보안 문제 발생</span></li></ul> |     |
 
-   - mousemove 이벤트 기반
-   - 8ms 마다 요청(125회/s)
-     소켓 서버 부하
+| <img src="assets/Untitled%2011.png" height="40">                                                                                                                   |     |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --- |
+| <ul><li>특정 유저가 메세지 브로커에 웹소켓 연결 요청 시, JWT 토큰을 파싱하여</li><li>해당 유저가 음악 작업실의 멤버인지 판단하는 인증 인터셉터 계층 추가</li></ul> |     |
 
-   ![Untitled](assets/Untitled%209.png)
-
-   - 스로틀링, 디바운싱 활용
-   - 최대 요청 빈도 제한(5회/s)
-   - 불필요한 요청 제거
-
-   ![Untitled](assets/Untitled%207.png)
-
-   - 소켓 서버 부하를 줄여 즉각적인 반응 유지
-   - 협업 관련 사용자 경험 개선
-
-5. 웹 소켓 보안 계층 추가
-
-![Untitled](assets/Untitled%2010.png)
-
-- Stomp 프로토콜을 활용하여 메세지들을 브로드캐스팅 할 수 있도록 구현
-- 인가되지 않은 사용자가 소켓 연결 메세지를 보내도 인증 절차의 부재로 보안 문제 발생
-
-![Untitled](assets/Untitled%2011.png)
-
-- 특정 유저가 메세지 브로커에 웹소켓 연결 요청 시, JWT 토큰을 파싱하여
-- 해당 유저가 음악 작업실의 멤버인지 판단하는 인증 인터셉터 계층 추가
-
-![Untitled](assets/Untitled%2012.png)
-
-- 웹소켓 연결 시 엑세스 토큰으로 유저의 인가 여부를 판단
-- 인가되지 않은 사용자는 웹소켓 연결을 거부하여 보안을 강화
-
----
+| <img src="assets/Untitled%2012.png" height="40">                                                                                                                                |     |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| <ul><li><span style="color: skyblue;">웹소켓 연결 시 엑세스 토큰으로 유저의 인가 여부를 판단</span></li><li>인가되지 않은 사용자는 웹소켓 연결을 거부하여 보안을 강화</li></ul> |     |
 
 ## 아키텍쳐
 
