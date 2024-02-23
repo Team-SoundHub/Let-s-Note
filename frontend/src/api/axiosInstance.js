@@ -1,4 +1,5 @@
 import axios from 'axios';
+import AuthModule from "../components/auth/AuthModule";
 
 // Axios 인스턴스 생성
 const axiosInstance = axios.create({
@@ -17,5 +18,15 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+axiosInstance.interceptors.response.use(
+    (response) => {
+        return response;
+    }, async (error) => {
+        if(error.response?.status === 401) {
+            AuthModule();
+        }
+    }
+)
 
 export default axiosInstance;

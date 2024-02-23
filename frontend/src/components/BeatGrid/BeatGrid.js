@@ -112,6 +112,7 @@ class BeatGrid extends React.PureComponent {
     if (row >= scale.length) instrument = "drum";
     console.log("instrument", instrument);
     this.props.sendCoordinate(instrument, column, row, this.props.spaceId);
+    console.log(new Date().getTime());
   };
 
   playBeat = (time) => {

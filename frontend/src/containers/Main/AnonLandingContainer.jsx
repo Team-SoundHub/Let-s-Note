@@ -1,9 +1,9 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components';
+import React from "react";
+import styled, { keyframes } from "styled-components";
 // import mainImg from '../../assets/landing/mainImage.png'
 // import mainImg from '../../assets/landing/mainImage2.jpeg'
-import mainImg from '../../assets/landing/mainImage3.png'
-import logoIcon from '../../assets/landing/letsnote.png'
+import mainImg from "../../assets/landing/mainImage3.png";
+import logoIcon from "../../assets/landing/letsnote.png";
 
 const InnerHeader = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const InnerHeader = styled.div`
 `;
 
 const Title = styled.h1`
-  font-family: 'Lato', sans-serif; // Lato 폰트 적용
+  font-family: "Lato", sans-serif; // Lato 폰트 적용
   font-weight: 600;
   letter-spacing: 2px;
   font-size: 48px; // 기본 글자 크기
@@ -26,10 +26,9 @@ const Title = styled.h1`
   }
 `;
 
-
 const Catchphrase = styled.div`
   position: absolute;
-  top: 37%; 
+  top: 37%;
   left: 32%;
   transform: translate(-50%, -50%);
   width: auto; // 자동 너비 조정
@@ -40,9 +39,9 @@ const Catchphrase = styled.div`
   line-height: 1.2; // 줄 간격 조정
 
   @media (min-width: 1500px) {
-    top: 37%; 
+    top: 37%;
     left: 30%;
-  }  
+  }
 `;
 
 const Line = styled.span`
@@ -50,45 +49,45 @@ const Line = styled.span`
   margin: 1rem;
 `;
 
-const ButtonContainer = styled.div`  
-  position: absolute;    
-  left: 3%;   
+const ButtonContainer = styled.div`
+  position: absolute;
+  left: 3%;
   display: flex;
   /* flex-direction: column;    */
-  flex-direction: row;   
-  gap: 20px;   
+  flex-direction: row;
+  gap: 20px;
   margin-top: 2rem;
 
   @media (min-width: 1500px) {
     margin-top: 2rem;
-  }  
+  }
 `;
 
 const Button1 = styled.button`
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   width: 12rem;
   /* width: auto;  */
   height: 3rem;
   /* padding: px;  */
-  font-size: 1.2rem; 
+  font-size: 1.2rem;
   /* text-align: left; */
   text-align: center;
   font-weight: 400;
-  color: #ffffff; 
+  color: #ffffff;
   background-color: #280909;
   background-color: none;
   /* border: 1px solid;  */
   border-radius: 15px;
-  cursor: pointer; 
+  cursor: pointer;
   transition: background-color 0.3s;
   z-index: 100;
-  
+
   &:hover {
     /* background-color: #487e76;  */
-    background-color: #27aa96; 
-    cursor: pointer; 
+    background-color: #27aa96;
+    cursor: pointer;
   }
 
   img {
@@ -102,31 +101,31 @@ const Button1 = styled.button`
 const Button2 = styled.button`
   width: 10rem;
   height: 3rem;
-  padding: 10px 20px; 
-  font-size: 1.2rem; 
+  padding: 10px 20px;
+  font-size: 1.1rem;
   /* text-align: left; */
   text-align: center;
   font-weight: 400;
-  color: #ffffff; 
+  color: #ffffff;
   background-color: #280909;
   /* background-color: none; */
   /* border: 1px solid;    */
   border-radius: 15px;
-  cursor: pointer; 
+  cursor: pointer;
   transition: background-color 0.3s;
   z-index: 100;
-  
+
   &:hover {
-    background-color: #F0564A; 
+    background-color: #f0564a;
     /* background-color: #0f3d69;  */
-    cursor: pointer; 
+    cursor: pointer;
   }
 `;
 
 const MainImage = styled.div`
   position: absolute; // WaveHeader 내에서 자유롭게 위치 조정을 위해 절대 위치 사용
-  top: 45%; 
-  left: 71%; 
+  top: 45%;
+  left: 71%;
   transform: translate(-50%, -50%); // 정확한 중앙 정렬을 위한 조정
   width: 40%; // 이미지의 너비 설정
   height: 70%; // 이미지의 높이 설정
@@ -135,8 +134,8 @@ const MainImage = styled.div`
   z-index: 0;
 
   @media (min-width: 1500px) {
-    top: 45%; 
-    left: 65%; 
+    top: 45%;
+    left: 65%;
     width: 35%; // 이미지의 너비 설정
     height: 60%; // 이미지의 높이 설정
   }
@@ -156,10 +155,7 @@ const MainImage = styled.div`
   }
 `;
 
-
-
-
-const AnonLandingContainer = ({enterFeed}) => {
+const AnonLandingContainer = ({ enterFeed }) => {
   return (
     <div>
       <Catchphrase>
@@ -167,13 +163,15 @@ const AnonLandingContainer = ({enterFeed}) => {
         <Line>느낄 수 있도록,</Line>
         <Line>Let's Note!</Line>
         <ButtonContainer>
-          <Button1>바로 체험하기 <img src={logoIcon} alt="Logo" /></Button1>
+          <Button1>
+            바로 체험하기 <img src={logoIcon} alt="Logo" />
+          </Button1>
           <Button2 onClick={enterFeed}>작품 둘러보기</Button2>
         </ButtonContainer>
       </Catchphrase>
       <MainImage />
     </div>
-  )
-}
+  );
+};
 
-export default AnonLandingContainer
+export default AnonLandingContainer;
