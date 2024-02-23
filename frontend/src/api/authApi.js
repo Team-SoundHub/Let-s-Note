@@ -53,3 +53,24 @@ export const register = async (userId, nickname, password) => {
     console.error("회원가입 요청 오류:", error);
   }
 };
+
+export const refreshToken = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refresh");
+    const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/accounts/token`,
+        {
+          token: refreshToken
+        }
+    );
+    return response.data;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "토큰 재발급에 실패 했어요",
+      text: "다시 로그인 해주세요",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+};
