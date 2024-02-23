@@ -540,6 +540,24 @@ const WorkSpaceHeader = ({
       });
 
       setUsers([]);
+
+      if (localStreamRef.current) {
+        // localStreamRef.current에서 모든 트랙 얻기
+        const tracks = localStreamRef.current.getTracks();
+      
+        // 각 트랙을 중지(stop)시키기
+        tracks.forEach(track => track.stop());
+      
+        // MediaStream 객체도 해제
+        localStreamRef.current = null;
+      
+        // 로컬 비디오 엘리먼트의 srcObject를 비우기
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = null;
+        }
+      
+        console.log("localStream 정지");
+      };
     };
   }, [isConnected, client, spaceId, mySocketId, myNickname]);
 
