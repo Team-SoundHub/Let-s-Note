@@ -84,14 +84,6 @@ public class WorkspaceController {
 
     @GetMapping("/space-id")
     public ResponseEntity<CommonResponse> getAllNote(@RequestParam("v") String spaceId){
-        int size = editorSocketController.accountConnectedSessions.get(spaceId).size();
-        if(size < 8){
-            CommonResponse response = CommonResponse.builder()
-                    .success(false)
-                    .response("")
-                    .build();
-            return new ResponseEntity<>(response,HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
-        }
         ResponseWorkspaces.WorkspaceIn allNotes = workspaceService.getAllNotesOfWorkspace(spaceId);
         CommonResponse response = CommonResponse.builder()
                 .success(true)
@@ -179,4 +171,34 @@ public class WorkspaceController {
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @GetMapping("/check-full/{spaceId}")
+    public ResponseEntity<CommonResponse> checkRoomIsFull(@PathVariable("spaceId") String spaceId){
+        if(editorSocketController.accountConnectedSessions.get(spaceId) != null){
+            int size = editorSocketController.accountConnectedSessions.get(spaceId).size();
+            if(size > 8){
+                CommonResponse response = CommonResponse.builder()
+                        .success(false)
+                        .response("Room Full")
+                        .build();
+
+                return new ResponseEntity<>(response,HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+            }else{
+                CommonResponse response = CommonResponse.builder()
+                        .success(true)
+                        .response("Room Checked")
+                        .build();
+
+                return new ResponseEntity<>(response,HttpStatus.OK);
+            }
+        }else{
+            CommonResponse response = CommonResponse.builder()
+                    .success(true)
+                    .response("Room Checked")
+                    .build();
+
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }
+    }
+
 }

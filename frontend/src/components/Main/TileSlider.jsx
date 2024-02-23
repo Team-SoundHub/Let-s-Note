@@ -4,7 +4,7 @@ import styled, { keyframes } from "styled-components";
 import { WorkspaceTile } from "./Tiles/WorkspaceTile";
 import { getMyPageInfo, getMySnapshotInfo } from "../../api/myPageApi";
 import { SnapshotTile } from "./Tiles/SnapshotTile";
-import { getWorkspaceInfo } from "../../api/workSpaceApi";
+import {getWorkspaceInfo, isRoomFull} from "../../api/workSpaceApi";
 
 const fadeInUp = keyframes`
   from {
@@ -140,10 +140,13 @@ const TileSlider = ({ accessToken, accountId, isMyWorkspace }) => {
   // 작업실, 작품 입장 관련
   const handleNavigateWorkspace = async (spaceId, spaceTitle) => {
     try {
-      const response = await getWorkspaceInfo(spaceId);
-      if (response === "509") {
+      const checkIsFull =  await isRoomFull(spaceId);
+      if (checkIsFull === 509) {
+        alert("방이 꽉 찼습니다!");
         navigate("/");
+        return;
       }
+      const response = await getWorkspaceInfo(spaceId)
     } catch (error) {
       console.error("Error fetching workspace info:", error);
     }

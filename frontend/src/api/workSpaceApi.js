@@ -92,5 +92,16 @@ const callChordAI = async (previous, userId) => {
   }
 }
 
+const isRoomFull = async (spaceId) => {
+  try {
+    const response = await axiosInstance.get(
+        `/workspaces/check-full/${spaceId}`,
+    );
+    return response.data;
+  } catch (error) {
+    return error.response.status;
+  }
+}
 
-export { getWorkspaceInfo, createSnapshot, setMember, getMember, callGenreAI, callChordAI };
+
+export { getWorkspaceInfo, createSnapshot, setMember, getMember, callGenreAI, callChordAI, isRoomFull };
