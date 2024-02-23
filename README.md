@@ -1,14 +1,17 @@
 # Let’s note
+## 서비스 소개
 
 |                                             |                                              |
 | ------------------------------------------- | -------------------------------------------- |
 | <img src="assets/Untitled.png" width="400"> | <img src="assets/Workspace.png" width="410"> |
 
-## 서비스 소개
 
 <span style="color: #49C5B6; font-size: 15pt;">**Let’s Note**</span>는 누구나 음악을 쉽고 재미있게 play 할 수 있도록 하는 악기 연주 플랫폼 입니다.
 
-함께하고 싶은 친구들을 나의 작업실에 초대하고, 음성 채팅과 커서 공유를 통해 소통하세요. 그리고 여러 가상악기로 이루어진 우리만의 음악을 만들어보세요!
+함께하고 싶은 친구들을 나의 작업실에 초대하고, 음성 채팅과 커서 공유를 통해 소통하세요. <br>
+그리고 여러 가상악기로 이루어진 우리만의 음악을 만들어보세요!
+
+사이트: www.letsnote.co.kr
 
 ---
 
@@ -21,7 +24,7 @@ $ git clone [https://github.com/Team-SoundHub/Let-s-Note.git](https://github.com
 $ cd Let-s-Note/frontend
 ```
 
-### 환경변수 설정
+**환경변수 설정**
 
 ```bash
 vim .env
@@ -39,7 +42,7 @@ REACT_APP_SOCKET_HTTP = {백엔드 서버 https 주소}
 REACT_APP_TURN_SERVER = {TURN 서버 주소}
 ```
 
-### 실행
+**실행**
 
 ```bash
 $ npm install && npm start
@@ -53,7 +56,7 @@ $ git clone [https://github.com/Team-SoundHub/Let-s-Note.git](https://github.com
 $ cd Let-s-Note/backend/letsnote/src/main/resource/static
 ```
 
-### properties 파일 설정
+**properties 파일 설정**
 
 ```bash
 $ vim application.yml
@@ -88,7 +91,7 @@ ai-server:
   baseUrl: { 모델 서버 주소 }
 ```
 
-### 실행
+**실행**
 
 ```bash
 $ ./gradlew build
@@ -100,38 +103,48 @@ $ java -jar build/libs/letsnote.jar
 
 ## 기능 소개
 
-1. 가상악기 연주 및 작업물 저장
-   - 가로축은 박자 , 세로축은 음계로 배치하여 격자에 해당하는 음을 진행하는 방식
-   - Tone.js 를 활용하여 피아노, 기타, 드럼 악기 음원 출력 및 음질 조정
-   - 완성된 음악을 저장해 나의 작품으로 남기고, 피드에 공유하는 기능
-2. 악보 검색 & 보관 기능
-   - 악보 검색에 최적화시킨 Google Custom Search Engine으로 악보 이미지 제공
-   - API를 통해 받아온 이미지를 저장하는 이미지 보관 기능
-3. 동시 편집 기능
+### 1. 가상악기 연주
+- 가로축은 박자 , 세로축은 음계로 배치하여 격자에 해당하는 음을 진행하는 방식
+- Tone.js 를 활용하여 피아노, 기타, 드럼 악기 음원 출력 및 음질 조정
 
-   1. 웹소켓 기반 작업 내용 공유
+### 2. 작품 저장 및 둘러보기
+- 완성된 음악을 저장해 나의 작품으로 남기고, 피드에 공유하는 기능
+- 다른 사람의 작품도 열람 가능
 
-      - 실시간으로 작업실의 음표 노트 정보, 커서 위치, 채팅 공유
+### 3. 악보 검색 & 보관
+- 악보 검색에 최적화시킨 Google Custom Search Engine으로 악보 이미지 제공
+- API를 통해 받아온 이미지를 저장하는 이미지 보관 기능
 
-   2. WebRTC 기반 음성채팅 기능
-      |1. Signaling|2. P2P Connection|
-      |--|--|
-      |<img src="assets/Untitled%201.png" width="400">|<img src="assets/Untitled%202.png" width="400">|
+### 4. 협업 기능
 
-      - P2P Mesh 방식을 활용하여 다중 음성채팅 활성화
-      - 웹소켓을 통해 연결 후보 Signal 교환
+**1. 작업실에 멤버 초대**
+- 작업실에 다른 유저를 초대할 수 있음
 
-4. 드럼 루프 자동 생성
+**2. 웹소켓 기반 작업 내용 공유**
+- 실시간으로 작업실의 음표 노트 정보, 커서 위치, 채팅 공유
 
-   - 일부 드럼 비트 입력 후 드럼 클릭 시 자동 완성
+**3. WebRTC 기반 음성채팅 기능**
 
-   ![Untitled](assets/Untitled%203.png)
+|1. Signaling|2. P2P Connection|
+|--|--|
+|<img src="assets/Untitled%201.png" width="400">|<img src="assets/Untitled%202.png" width="400">|
 
-5. AI 노트 추천 기능
+- P2P Mesh 방식을 활용하여 다중 음성채팅 활성화
+- 웹소켓을 통해 연결 후보 Signal 교환
 
-   - GPT 3.5 Assistant 기반 GPT API 공식 문서에 소개된 프롬프트 엔지니어링 방법론을 활용하여 도메인 지식을 주입하고, 응답 형식 정확도를 올리기 위해 입, 출력 형식을 프롬프트로 조정
+### 5. 연주 편의성 기능
 
-   ![Untitled](assets/Untitled%204.png)
+**1. 드럼 루프 자동 생성**
+
+- 일부 드럼 비트 입력 후 드럼 클릭 시 자동 완성
+
+![Untitled](assets/Untitled%203.png)
+
+**2. AI 노트 추천 기능**
+
+- GPT 3.5 Assistant 기반 GPT API 공식 문서에 소개된 프롬프트 엔지니어링 방법론을 활용하여 도메인 지식을 주입하고, 응답 형식 정확도를 올리기 위해 입, 출력 형식을 프롬프트로 조정
+
+![Untitled](assets/Untitled%204.png)
 
 ---
 
