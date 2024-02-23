@@ -118,8 +118,8 @@ $ java -jar build/libs/letsnote.jar
       |--|--|
       |<img src="assets/Untitled%201.png" width="400">|<img src="assets/Untitled%202.png" width="400">|
 
-   - P2P Mesh 방식을 활용하여 다중 음성채팅 활성화
-   - 웹소켓을 통해 연결 후보 Signal 교환
+      - P2P Mesh 방식을 활용하여 다중 음성채팅 활성화
+      - 웹소켓을 통해 연결 후보 Signal 교환
 
 4. 드럼 루프 자동 생성
 
