@@ -9,6 +9,7 @@ import com.geeks.letsnote.domain.studio.instrument.Instrument;
 import com.geeks.letsnote.domain.studio.workSpace.application.NoteInstrumentMapService;
 import com.geeks.letsnote.domain.studio.workSpace.application.WorkspaceService;
 import com.geeks.letsnote.domain.studio.workSpace.dto.RequestNotes;
+import com.geeks.letsnote.domain.studio.workSpace.semaphore.SemaphoreService;
 import com.geeks.letsnote.global.network.dto.WebRTCRequest;
 import com.geeks.letsnote.global.network.dto.WebRTCResponse;
 import com.geeks.letsnote.global.network.exception.CustomWebSocketHandlerDecorator;
@@ -51,6 +52,7 @@ public class EditorSocketController {
 	public static HashMap<String, Map<String, String>> accountConnectedSessions = new HashMap<>();
 
 	private final WorkspaceService workspaceService;
+	private final SemaphoreService semaphoreService;
 
     @MessageMapping("/editor/coordinate")
 	@SendTo("/topic/editor/coordinate")
@@ -165,9 +167,12 @@ public class EditorSocketController {
 			String[] destinationSplit = destination.split("/");
 			String spaceId = destinationSplit[destinationSplit.length - 3];
 
+			semaphoreService.acquireInitialSema();
 			if (!accountConnectedSessions.containsKey(spaceId)) {
 				accountConnectedSessions.put(spaceId, new HashMap<>());
+				semaphoreService.initializeSemaphore(spaceId);
 			}
+			semaphoreService.releaseInitialSema();
 
 			if (!accountConnectedSessions.get(spaceId).containsValue(username)) {
 				accountConnectedSessions.get(spaceId).put(senderSession, username);
@@ -216,5 +221,11 @@ public class EditorSocketController {
 				break;
 			}
 		}
+
+		semaphoreService.acquireInitialSema();
+		if(accountConnectedSessions.get(spaceId).size() == 0){
+			semaphoreService.removeSemaphore(spaceId);
+		}
+		semaphoreService.releaseInitialSema();
 	}
 }
