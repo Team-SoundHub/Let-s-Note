@@ -163,10 +163,10 @@ const MemberListTitle = styled.p`
 const MembersList = styled.ul`
   margin-top: 16px;
   margin-bottom: 16px;
-  overflow-y: auto; 
+  overflow-y: auto;
   background-color: #f3f4f6;
   height: 10rem;
-  max-height: 80%; 
+  max-height: 80%;
   width: 100%;
   padding-top: 0.5rem;
   padding-right: 0.5rem; // Adds some space for the scrollbar
@@ -187,18 +187,18 @@ const MemberNicknameSpan = styled.span`
   /* width: 15rem; */
   width: 90%;
   align-items: center;
-  border-radius: 0.375rem; 
+  border-radius: 0.375rem;
   /* background-color: #f3f4f6; */
   background-color: white;
-  padding: 0.75rem; 
-  margin: auto;  
-  font-size: 0.875rem; 
-  font-weight: bold; 
-  color: #1f2937; 
+  padding: 0.75rem;
+  margin: auto;
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: #1f2937;
   &:hover {
-    background-color: #84c4bd; 
-    box-shadow: 0 10px 15px -3px rgba(230, 113, 113, 0.1), 0 4px 6px -2px rgba(231, 145, 145, 0.05); 
-  }  
+    background-color: #84c4bd;
+    box-shadow: 0 10px 15px -3px rgba(230, 113, 113, 0.1), 0 4px 6px -2px rgba(231, 145, 145, 0.05);
+  }
 `;
 
 const AddMemberModal = ({ closeAddMemberModal, handleAddMember, memberList }) => {
