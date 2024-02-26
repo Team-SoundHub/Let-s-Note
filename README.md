@@ -1,10 +1,10 @@
 # Let’s note
+
 ## 서비스 소개
 
 |                                             |                                              |
 | ------------------------------------------- | -------------------------------------------- |
 | <img src="assets/Untitled.png" width="400"> | <img src="assets/Workspace.png" width="410"> |
-
 
 <span style="color: #49C5B6; font-size: 15pt;">**Let’s Note**</span>는 누구나 음악을 쉽고 재미있게 play 할 수 있도록 하는 악기 연주 플랫폼 입니다.
 
@@ -104,30 +104,35 @@ $ java -jar build/libs/letsnote.jar
 ## 기능 소개
 
 ### 1. 가상악기 연주
+
 - 가로축은 박자 , 세로축은 음계로 배치하여 격자에 해당하는 음을 진행하는 방식
 - Tone.js 를 활용하여 피아노, 기타, 드럼 악기 음원 출력 및 음질 조정
 
 ### 2. 작품 저장 및 둘러보기
+
 - 완성된 음악을 저장해 나의 작품으로 남기고, 피드에 공유하는 기능
 - 다른 사람의 작품도 열람 가능
 
 ### 3. 악보 검색 & 보관
+
 - 악보 검색에 최적화시킨 Google Custom Search Engine으로 악보 이미지 제공
 - API를 통해 받아온 이미지를 저장하는 이미지 보관 기능
 
 ### 4. 협업 기능
 
 **1. 작업실에 멤버 초대**
+
 - 작업실에 다른 유저를 초대할 수 있음
 
 **2. 웹소켓 기반 작업 내용 공유**
+
 - 실시간으로 작업실의 음표 노트 정보, 커서 위치, 채팅 공유
 
 **3. WebRTC 기반 음성채팅 기능**
 
-|1. Signaling|2. P2P Connection|
-|--|--|
-|<img src="assets/Untitled%201.png" width="400">|<img src="assets/Untitled%202.png" width="400">|
+| 1. Signaling                                    | 2. P2P Connection                               |
+| ----------------------------------------------- | ----------------------------------------------- |
+| <img src="assets/Untitled%201.png" width="400"> | <img src="assets/Untitled%202.png" width="400"> |
 
 - P2P Mesh 방식을 활용하여 다중 음성채팅 활성화
 - 웹소켓을 통해 연결 후보 Signal 교환
@@ -266,6 +271,12 @@ $ java -jar build/libs/letsnote.jar
 
 ---
 
+## Our Team
+
+| <img src="assets/Ellipse37.png" height="100">         | <img src="assets/Ellipse34.png" height="100"> | <img src="assets/Ellipse36.png" height="100">  | <img src="assets/Ellipse35.png" height="100"> |
+| ----------------------------------------------------- | --------------------------------------------- | ---------------------------------------------- | --------------------------------------------- |
+| **팀장** [손정원](https://github.com/songarden)<br>BE | [김주영](https://github.com/Vacayy)<br>FE     | [이찬우](https://github.com/1stApplePie)<br>FE | [김민규](https://github.com/Kyumin98)<br>BE   |
+
 ## Dependency
 
 ```jsx
@@ -304,4 +315,53 @@ frontend@0.1.0
 ├── web-vitals@2.1.4
 ├── webmidi@3.1.8
 └── websocket@1.0.34
+
+backend@0.1.0
++--- jjwt-api:0.11.5
++--- spring-boot-starter-data-jpa -> 3.2.2
+|    +--- spring-boot-starter-aop:3.2.2
+|    +--- spring-boot-starter-jdbc:3.2.2
+|    +--- hibernate-core:6.4.1.Final
+|    +--- spring-data-jpa:3.2.2
+|    \--- spring-aspects:6.1.3
+|         \--- aspectjweaver:1.9.21
++--- spring-boot-starter-security -> 3.2.2
+|    +--- spring-boot-starter:3.2.2 (*)
+|    +--- spring-aop:6.1.3 (*)
+|    +--- spring-security-config:6.2.1
+|    \--- spring-security-web:6.2.1
++--- spring-boot-starter-validation -> 3.2.2
+|    +--- spring-boot-starter:3.2.2 (*)
+|    +--- tomcat-embed-el:10.1.18
+|    \--- hibernate-validator:8.0.1.Final
++--- spring-boot-starter-web -> 3.2.2
+|    +--- spring-boot-starter:3.2.2 (*)
+|    +--- spring-boot-starter-json:3.2.2
+|    +--- spring-boot-starter-tomcat:3.2.2
+|    +--- spring-web:6.1.3 (*)
+|    \--- spring-webmvc:6.1.3
++--- spring-boot-starter-websocket -> 3.2.2
+|    +--- spring-boot-starter-web:3.2.2 (*)
+|    +--- spring-messaging:6.1.3
++--- springdoc-openapi-starter-webmvc-ui:2.3.0
+|    +--- springdoc-openapi-starter-webmvc-api:2.3.0
+|    \--- org.webjars:swagger-ui:5.10.3
++--- spring-boot-starter-test -> 3.2.2
+|    +--- spring-boot-starter:3.2.2 (*)
+|    +--- spring-boot-test:3.2.2
+|    +--- spring-boot-test-autoconfigure:3.2.2
+|    +--- com.jayway.jsonpath:json-path:2.8.0
+|    +--- jakarta.xml.bind-api:4.0.1 (*)
+|    +--- json-smart:2.5.0
+|    +--- assertj-core:3.24.2
+|    +--- awaitility:4.2.0
+|    +--- hamcrest:2.2
+|    +--- junit-jupiter:5.10.1
+|    +--- mockito-core:5.7.0
+|    +--- mockito-junit-jupiter:5.7.0
+|    +--- org.skyscreamer:jsonassert:1.5.1
+|    +--- spring-core:6.1.3 (*)
+|    +--- spring-test:6.1.3
+|    \--- org.xmlunit:xmlunit-core:2.9.1
+\--- spring-security-test -> 6.2.1
 ```
