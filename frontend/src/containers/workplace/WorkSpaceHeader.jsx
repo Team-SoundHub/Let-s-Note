@@ -267,7 +267,7 @@ const WorkSpaceHeader = ({
 
   // const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
-    if (!isConnected || isDemo) {
+    if (!isConnected) {
       return;
     }
 
@@ -583,9 +583,6 @@ const WorkSpaceHeader = ({
   // }
 
   const handleShare = () => {
-    if (isDemo){
-      return;
-    }
     navigator.clipboard.writeText(window.location.href);
     setShowMessage(true);
     setDisplayMessage(true);
