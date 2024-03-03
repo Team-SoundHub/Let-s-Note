@@ -23,17 +23,13 @@ import AiInterfaceModal from "../components/WorkSpace/AIInterfaceModal";
 import AIGenreModal from "../components/WorkSpace/AIGenreModal";
 import AIChordModal from "../components/WorkSpace/AIChordModal";
 
-const Container = styled.div`
-  position: relative;
-  background-color: white;
-  height: 100vh;
-`;
+
 
 const DemoWorkPlacePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { spaceId } = "demo" // 현재 spaceId 얻기
+  const [spaceId,setSpaceId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
   const [snapshotCreated, setSnapshotCreated] = useState(false);
@@ -96,6 +92,7 @@ const DemoWorkPlacePage = () => {
         setMaxColumn(96);
         setIsDemo(true);
         setIsConnected(true);
+        setSpaceId("demo");
       },500);
     };
 
@@ -374,5 +371,11 @@ const DemoWorkPlacePage = () => {
     </Container>
   );
 };
+
+const Container = styled.div`
+  position: relative;
+  background-color: white;
+  height: 100vh;
+`;
 
 export default DemoWorkPlacePage;
