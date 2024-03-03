@@ -256,12 +256,11 @@ const WorkSpaceHeader = ({
   };
 
   const handleMySoundMute = () => {
-    if(isDemo){
-      return;
-    }
-    localStreamRef.current
+    if(localStreamRef.current){
+      localStreamRef.current
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
+    }
     setMySoundMuted(!mySoundMuted);
   };
 
