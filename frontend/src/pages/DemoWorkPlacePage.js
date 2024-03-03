@@ -22,6 +22,7 @@ import { getMyNickname } from "../api/nicknameApi";
 import AiInterfaceModal from "../components/WorkSpace/AIInterfaceModal";
 import AIGenreModal from "../components/WorkSpace/AIGenreModal";
 import AIChordModal from "../components/WorkSpace/AIChordModal";
+import DemoHeader from "../containers/workplace/DemoHeader";
 
 const Container = styled.div`
   position: relative;
@@ -89,17 +90,11 @@ const DemoWorkPlacePage = () => {
   // 작업실 입장 시 데이터 요청
 
   useEffect(() => {
-    const setUpDemo = async() => {
-      setTimeout(() => {
-        setMyNickname("손님");
-        setSpaceTitle("데모 작업실");
-        setMaxColumn(96);
-        setIsDemo(true);
-        setIsConnected(true);
-      },500);
-    };
-
-    setUpDemo();
+    setMyNickname("손님");
+    setSpaceTitle("데모 작업실");
+    setMaxColumn(96);
+    setIsDemo(true);
+    setIsConnected(true);
   },[]);
 
 
@@ -343,17 +338,12 @@ const DemoWorkPlacePage = () => {
       {isReleaseModalOpen && (
         <SaveSnapshotModal onClose={handleModalClose} onSave={handleSave} />
       )}          
-      <WorkSpaceHeader
+      <DemoHeader
         onOpenModal={handleModalOpen}
-        isDemo={isDemo}
         myNickname={myNickname}
         openAddMemberModal={openAddMemberModal}
         memberList={memberList}
         spaceTitle={spaceTitle}
-        isConnected={isConnected}
-        spaceId={spaceId}
-        mySocketId={null}
-        client={null}
       />
       {maxColumn > 0 && (
         <WorkSpaceContainer
