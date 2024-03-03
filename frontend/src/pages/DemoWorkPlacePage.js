@@ -54,10 +54,10 @@ const DemoWorkPlacePage = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   const handleSearchModalOpen = () => {
-    Swal.fire({
-      icon: "error",
-      title: "<div style='font-size:1.8rem'>" + "데모 작업실은 악보검색을 할 수 없어요." + "</div>",
-    });
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "<div style='font-size:1.8rem'>" + "데모 작업실은 악보검색을 할 수 없어요." + "</div>",
+    // });
     setisSearchModalOpen(true);
   };
 
@@ -153,10 +153,10 @@ const DemoWorkPlacePage = () => {
   /* Add member control */
   const openAddMemberModal = () => {
     // setIsAddMemberModalOpen(true);
-    Swal.fire({
-      icon: "error",
-      title: "<div style='font-size:1.8rem'>" + "데모 작업실은 멤버추가를 할 수 없어요." + "</div>",
-    });
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "<div style='font-size:1.8rem'>" + "데모 작업실은 멤버추가를 할 수 없어요." + "</div>",
+    // });
     console.log("isAddMemberModalOpen: ", isAddMemberModalOpen);
   };
 
@@ -193,10 +193,10 @@ const DemoWorkPlacePage = () => {
   };
 
   const handleAIInterfaceModalOpen = () => {
-    Swal.fire({
-      icon: "error",
-      title: "<div style='font-size:2rem'>" + "데모 작업실은 AI 음악 생성 기능을 사용할 수 없어요." + "</div>",
-    });
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "<div style='font-size:2rem'>" + "데모 작업실은 AI 음악 생성 기능을 사용할 수 없어요." + "</div>",
+    // });
     // setIsAIInterfaceModalOpen(true);
   };
 
@@ -312,10 +312,10 @@ const DemoWorkPlacePage = () => {
 
 
   const sendLoop = () => {
-    Swal.fire({
-      icon: "error",
-      title: "<div style='font-size:1.8rem'>" + "데모 작업실은 드럼 루프 생성 기능을 사용할 수 없어요." + "</div>",
-    });
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "<div style='font-size:1.8rem'>" + "데모 작업실은 드럼 루프 생성 기능을 사용할 수 없어요." + "</div>",
+    // });
   }
 
   return (
