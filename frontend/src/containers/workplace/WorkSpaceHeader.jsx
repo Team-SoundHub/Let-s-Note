@@ -12,28 +12,28 @@ import memberIcon from "../../assets/workspace/memberIcon.png";
 import muteIcon from "../../assets/workspace/mute.png";
 import micIcon from "../../assets/workspace/mic.png";
 // 메시지가 나타나는 애니메이션
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+// const fadeIn = keyframes`
+//   from {
+//     opacity: 0;
+//     transform: translateY(-20px);
+//   }
+//   to {
+//     opacity: 1;
+//     transform: translateY(0);
+//   }
+// `;
 
-// 메시지가 사라지는 애니메이션
-const fadeOut = keyframes`
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-`;
+// // 메시지가 사라지는 애니메이션
+// const fadeOut = keyframes`
+//   from {
+//     opacity: 1;
+//     transform: translateY(0);
+//   }
+//   to {
+//     opacity: 0;
+//     transform: translateY(-20px);
+//   }
+// `;
 
 const SpaceTitle = styled.div`
   flex: 1;
@@ -60,12 +60,12 @@ justify-center
 gap-4
 `;
 
-const CenterSection = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const CenterSection = styled.div`
+//   flex: 1;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const RightSection = styled.div`
   flex: 1;
@@ -103,60 +103,60 @@ const ButtonContainer = styled.div`
   gap: 10px;
 `;
 
-const MicButton = styled.button`
-  color: white;
-  background-color: #49c5b6;
-  &:hover {
-    background-color: #afded5;
-  }
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px #a7f3d0;
-  }
-  font-weight: 500;
-  border-radius: 9999px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  font-size: 0.875rem;
-  /* padding: 0.75rem;  */
-  padding: 0.4rem;
-  text-align: center;
-  height: 2rem;
-  width: 2rem;
-  margin: 0.2rem 0.2rem;
-  margin-left: 1rem;
-`;
+// const MicButton = styled.button`
+//   color: white;
+//   background-color: #49c5b6;
+//   &:hover {
+//     background-color: #afded5;
+//   }
+//   &:focus {
+//     outline: none;
+//     box-shadow: 0 0 0 4px #a7f3d0;
+//   }
+//   font-weight: 500;
+//   border-radius: 9999px;
+//   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+//     0 2px 4px -2px rgba(0, 0, 0, 0.1);
+//   font-size: 0.875rem;
+//   /* padding: 0.75rem;  */
+//   padding: 0.4rem;
+//   text-align: center;
+//   height: 2rem;
+//   width: 2rem;
+//   margin: 0.2rem 0.2rem;
+//   margin-left: 1rem;
+// `;
 
-const SnapshotButton = styled.button`
-  width: 70px;
-  height: 70px;
+// const SnapshotButton = styled.button`
+//   width: 70px;
+//   height: 70px;
 
-  background-color: #3498db;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  cursor: pointer;
-  white-space: nowrap;
-  text-align: center;
+//   background-color: #3498db;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   color: #fff;
+//   cursor: pointer;
+//   white-space: nowrap;
+//   text-align: center;
 
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
+//   &:hover {
+//     transform: scale(1.1);
+//   }
+// `;
 
-const Message = styled.div`
-  color: grey;
-  padding: 5px 10px;
-  position: fixed;
-  top: 20px;
-  left: 30rem;
-  border-radius: 4px;
-  display: ${({ show }) => (show ? "block" : "none")};
-  animation: ${({ show }) => (show ? fadeIn : fadeOut)} 0.5s ease-out;
-  animation-fill-mode: forwards; // 애니메이션 종료 후 최종 상태 유지
-`;
+// const Message = styled.div`
+//   color: grey;
+//   padding: 5px 10px;
+//   position: fixed;
+//   top: 20px;
+//   left: 30rem;
+//   border-radius: 4px;
+//   display: ${({ show }) => (show ? "block" : "none")};
+//   animation: ${({ show }) => (show ? fadeIn : fadeOut)} 0.5s ease-out;
+//   animation-fill-mode: forwards; // 애니메이션 종료 후 최종 상태 유지
+// `;
 
 const AddMemberButton = styled.button`
   color: #4b5563;
@@ -207,16 +207,15 @@ const SaveButton = styled.button`
   margin-left: 0rem;
 `;
 
-const SvgImage = styled.img`
-  width: 1.8rem;
-  height: 1.3rem;
-  /* margin-left: -0.1rem;
-  margin-right: -0.1rem; */
-`;
+// const SvgImage = styled.img`
+//   width: 1.8rem;
+//   height: 1.3rem;
+//   /* margin-left: -0.1rem;
+//   margin-right: -0.1rem; */
+// `;
 
 const WorkSpaceHeader = ({
   onOpenModal,
-  isSnapshotExist,
   openAddMemberModal,
   memberList,
   client,
@@ -266,7 +265,7 @@ const WorkSpaceHeader = ({
 
   // const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected && !isDemo) {
       return;
     }
 
