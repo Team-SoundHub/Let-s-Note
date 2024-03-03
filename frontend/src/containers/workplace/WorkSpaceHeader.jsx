@@ -583,9 +583,6 @@ const WorkSpaceHeader = ({
   // }
 
   const handleShare = () => {
-    if (isDemo){
-      return;
-    }
     navigator.clipboard.writeText(window.location.href);
     setShowMessage(true);
     setDisplayMessage(true);
