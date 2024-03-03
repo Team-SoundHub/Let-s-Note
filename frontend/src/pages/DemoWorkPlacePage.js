@@ -55,6 +55,7 @@ const DemoWorkPlacePage = () => {
   const myNickname = "손님"
   const spaceTitle = "데모 작업실"
   const [isDemo , setIsDemo] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const handleSearchModalOpen = () => {
     Swal.fire({
@@ -90,6 +91,7 @@ const DemoWorkPlacePage = () => {
   useEffect(() => {
     setMaxColumn(96);
     setIsDemo(true);
+    setIsConnected(true);
   },[])
 
 
@@ -303,7 +305,6 @@ const DemoWorkPlacePage = () => {
     return;
   }
 
-  const isConnected = true;
 
   const sendLoop = () => {
     Swal.fire({
@@ -343,6 +344,7 @@ const DemoWorkPlacePage = () => {
         handleAddMember={handleAddMember}
         memberList={memberList}
         spaceTitle={spaceTitle}
+        isConnected={isConnected}
       />
       {maxColumn > 0 && (
         <WorkSpaceContainer
