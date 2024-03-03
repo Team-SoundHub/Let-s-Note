@@ -89,12 +89,18 @@ const DemoWorkPlacePage = () => {
   // 작업실 입장 시 데이터 요청
 
   useEffect(() => {
-    setMyNickname("손님")
-    setSpaceTitle("데모 작업실")
-    setMaxColumn(96);
-    setIsDemo(true);
-    setIsConnected(true);
-  },[])
+    const setUpDemo = async() => {
+      setTimeout(() => {
+        setMyNickname("손님");
+        setSpaceTitle("데모 작업실");
+        setMaxColumn(96);
+        setIsDemo(true);
+        setIsConnected(true);
+      },500);
+    };
+
+    setUpDemo();
+  },[]);
 
 
   useEffect(() => {
