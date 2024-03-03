@@ -155,7 +155,7 @@ const MainImage = styled.div`
   }
 `;
 
-const AnonLandingContainer = ({ enterFeed }) => {
+const AnonLandingContainer = ({ enterFeed, enterDemo }) => {
   return (
     <div>
       <Catchphrase>
@@ -163,7 +163,7 @@ const AnonLandingContainer = ({ enterFeed }) => {
         <Line>느낄 수 있도록,</Line>
         <Line>Let's Note!</Line>
         <ButtonContainer>
-          <Button1>
+          <Button1 onClick={enterDemo}>
             바로 체험하기 <img src={logoIcon} alt="Logo" />
           </Button1>
           <Button2 onClick={enterFeed}>작품 둘러보기</Button2>

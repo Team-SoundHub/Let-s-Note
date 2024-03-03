@@ -437,6 +437,7 @@ const WorkPlacePage = () => {
           <WorkSpaceHeader
               onOpenModal={handleModalOpen}
               isSnapshotExist={workspaceInfo.isSnapshotExist}
+              isDemo={false}
               openAddMemberModal={openAddMemberModal}
               memberList={memberList}
               client = {stompClient}
