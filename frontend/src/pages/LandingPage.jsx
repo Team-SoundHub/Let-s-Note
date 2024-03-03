@@ -353,7 +353,7 @@ const LandingPage = () => {
   const enterMyWorkspaces = () => { setMode(2); }
   const enterMySnapshots = () => { setMode(3); }
   const enterFeed = () => { setMode(4); }
-  const enterDemo = () => {
+  const enterDemo = async () => {
     navigate("/demo")
   }
 
