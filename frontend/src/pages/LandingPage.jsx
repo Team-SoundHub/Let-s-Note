@@ -353,6 +353,9 @@ const LandingPage = () => {
   const enterMyWorkspaces = () => { setMode(2); }
   const enterMySnapshots = () => { setMode(3); }
   const enterFeed = () => { setMode(4); }
+  const enterDemo = () => {
+    navigate("/demo")
+  }
 
   // 메뉴별 렌더링 관리
   const renderMainContainer = () => {
@@ -364,6 +367,7 @@ const LandingPage = () => {
         return (
           <AnonLandingContainer
             enterFeed={enterFeed}
+            enterDemo={enterDemo}
           >
             <MainMenuTiles
               openCreateModal={openCreateModal}

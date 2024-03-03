@@ -61,7 +61,7 @@ const FeedContainer = ({isLoggedIn}) => {
               key={postList[i].snapshotId}
               onClick={() =>
                 navigate(`/snapshot/${postList[i].snapshotId}`,
-                  { state: { fromMyPage: false } }
+                  { state: { isFromMyPage: false } }
                 )}
             >
               <FeedTile

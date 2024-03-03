@@ -225,6 +225,7 @@ const WorkSpaceHeader = ({
   myNickname,
   mySocketId,
   spaceTitle,
+  isDemo,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -255,6 +256,9 @@ const WorkSpaceHeader = ({
   };
 
   const handleMySoundMute = () => {
+    if(isDemo){
+      return;
+    }
     localStreamRef.current
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
@@ -263,7 +267,7 @@ const WorkSpaceHeader = ({
 
   // const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected || isDemo) {
       return;
     }
 
@@ -506,7 +510,7 @@ const WorkSpaceHeader = ({
 
     const pageStart = async () => {
       console.log(client, isConnected, mySocketId);
-      if (!client || !mySocketId || !isConnected || !myNickname) {
+      if (!client || !mySocketId || !isConnected || !myNickname || isDemo) {
         return;
       }
       // await fetchMyUsername();
@@ -559,7 +563,7 @@ const WorkSpaceHeader = ({
         console.log("localStream 정지");
       };
     };
-  }, [isConnected, client, spaceId, mySocketId, myNickname]);
+  }, [isConnected, client, spaceId, mySocketId, myNickname, isDemo]);
 
   // 방장인지 여부 체크하고 발매하기 버튼 보이기/ 안보이기 추가
   // 이미 발매했는지 여부 확인하고 발매하기/ 수정하기 추가
@@ -579,6 +583,9 @@ const WorkSpaceHeader = ({
   // }
 
   const handleShare = () => {
+    if (isDemo){
+      return;
+    }
     navigator.clipboard.writeText(window.location.href);
     setShowMessage(true);
     setDisplayMessage(true);
