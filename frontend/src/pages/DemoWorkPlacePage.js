@@ -52,8 +52,8 @@ const DemoWorkPlacePage = () => {
   const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
-  const myNickname = "손님"
-  const spaceTitle = "데모 작업실"
+  const [myNickname,setMyNickname] = useState(null);
+  const [spaceTitle,setSpaceTitle] = useState(null);
   const [isDemo , setIsDemo] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -89,6 +89,8 @@ const DemoWorkPlacePage = () => {
   // 작업실 입장 시 데이터 요청
 
   useEffect(() => {
+    setMyNickname("손님")
+    setSpaceTitle("데모 작업실")
     setMaxColumn(96);
     setIsDemo(true);
     setIsConnected(true);
@@ -337,14 +339,15 @@ const DemoWorkPlacePage = () => {
       )}          
       <WorkSpaceHeader
         onOpenModal={handleModalOpen}
-        isSnapshotExist={workspaceInfo.isSnapshotExist}
         isDemo={isDemo}
         myNickname={myNickname}
         openAddMemberModal={openAddMemberModal}
-        handleAddMember={handleAddMember}
         memberList={memberList}
         spaceTitle={spaceTitle}
         isConnected={isConnected}
+        spaceId={spaceId}
+        mySocketId={null}
+        client={null}
       />
       {maxColumn > 0 && (
         <WorkSpaceContainer
