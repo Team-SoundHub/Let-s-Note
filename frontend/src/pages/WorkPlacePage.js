@@ -152,6 +152,7 @@ const WorkPlacePage = () => {
     fetchMyUsername();
     fetchMyNickname();
     fetchMemberList();
+    setIsDemo(false);
   }, []);
 
   useEffect(() => {
