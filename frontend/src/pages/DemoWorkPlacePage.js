@@ -311,8 +311,6 @@ const DemoWorkPlacePage = () => {
       title: "<div style='font-size:1.8rem'>" + "데모 작업실은 드럼 루프 생성 기능을 사용할 수 없어요." + "</div>",
     });
   }
-  
-
 
   return (
     <Container>
