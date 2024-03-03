@@ -267,7 +267,7 @@ const WorkSpaceHeader = ({
 
   // const spaceTitle = localStorage.getItem("title");
   useEffect(() => {
-    if (!isConnected || isDemo) {
+    if (!isConnected) {
       return;
     }
 
