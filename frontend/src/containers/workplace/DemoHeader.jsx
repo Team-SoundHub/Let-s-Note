@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
 import MemberInfo from "../../components/WorkSpace/HeaderMemberInfo";
+import DemoHeaderMemberInfo from "../../components/Demo/DemoHeaderMemberInfo";
 
 const SpaceTitle = styled.div`
   flex: 1;
@@ -137,7 +138,9 @@ const DemoHeader = ({
     setMySoundMuted(!mySoundMuted);
   };
 
-  useEffect(() => {},[]);
+  useEffect(() => {
+    setMySoundMuted(false);
+  },[]);
 
   const handleGoBack = () => {
     navigate("/");
@@ -190,10 +193,7 @@ const DemoHeader = ({
         <OnAirContainer>
           <ContentContainer>
             <ButtonContainer>
-              <MemberInfo
-                memberList={memberList}
-                localVideo={localVideo}
-                users={users}
+              <DemoHeaderMemberInfo
                 myNickname={myNickname}
                 mySoundMuted={mySoundMuted}
                 handleMySoundMute={handleMySoundMute}
