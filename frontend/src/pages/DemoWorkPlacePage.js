@@ -45,7 +45,6 @@ const DemoWorkPlacePage = () => {
   const [snapshotUrl, setSnapshotUrl] = useState("");
   const [snapshotId, setSnapshotId] = useState("");
   const [memberList, setMemberList] = useState([]);
-  const [myNickname, setMyNickname] = useState([]);
   const [workspaceInfo, setWorkspaceInfo] = useState({
     notesList: [],
     isSnapshotExist: false,
@@ -53,6 +52,9 @@ const DemoWorkPlacePage = () => {
   const [isSearchModalOpen, setisSearchModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [maxColumn, setMaxColumn] = useState(0);
+  const myNickname = "손님"
+  const spaceTitle = "데모 작업실"
+  const [isDemo , setIsDemo] = useState(false);
 
   const handleSearchModalOpen = () => {
     Swal.fire({
@@ -87,6 +89,7 @@ const DemoWorkPlacePage = () => {
 
   useEffect(() => {
     setMaxColumn(96);
+    setIsDemo(true);
   },[])
 
 
@@ -309,7 +312,6 @@ const DemoWorkPlacePage = () => {
     });
   }
 
-
   return (
     <Container>
       {loading &&
@@ -335,17 +337,17 @@ const DemoWorkPlacePage = () => {
       <WorkSpaceHeader
         onOpenModal={handleModalOpen}
         isSnapshotExist={workspaceInfo.isSnapshotExist}
-        isDemo={true}
-        myNickname="손님"
+        isDemo={isDemo}
+        myNickname={myNickname}
         openAddMemberModal={openAddMemberModal}
         handleAddMember={handleAddMember}
         memberList={memberList}
-        spaceTitle="데모 작업실"
+        spaceTitle={spaceTitle}
       />
       {maxColumn > 0 && (
         <WorkSpaceContainer
           isSnapshot={false}
-          isDemo = {true}
+          isDemo = {isDemo}
           spaceId={spaceId}
           sendCoordinate={sendCoordinate}
           sendLoop={sendLoop}

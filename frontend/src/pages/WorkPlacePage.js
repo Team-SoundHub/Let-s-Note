@@ -66,6 +66,7 @@ const WorkPlacePage = () => {
   const [maxColumn, setMaxColumn] = useState(0);
   const [myUsername, setMyUsername] = useState(null);
   const [spaceTitle, setSpaceTitle] = useState(null);
+  const [isDemo, setIsDemo] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -151,6 +152,7 @@ const WorkPlacePage = () => {
     fetchMyUsername();
     fetchMyNickname();
     fetchMemberList();
+    setIsDemo(false);
   }, []);
 
   useEffect(() => {
@@ -437,7 +439,7 @@ const WorkPlacePage = () => {
           <WorkSpaceHeader
               onOpenModal={handleModalOpen}
               isSnapshotExist={workspaceInfo.isSnapshotExist}
-              isDemo={false}
+              isDemo={isDemo}
               openAddMemberModal={openAddMemberModal}
               memberList={memberList}
               client = {stompClient}
