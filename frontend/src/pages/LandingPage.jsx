@@ -354,7 +354,7 @@ const LandingPage = () => {
   const enterMySnapshots = () => { setMode(3); }
   const enterFeed = () => { setMode(4); }
   const enterDemo = async () => {
-    navigate("/demo")
+    navigate("/demo");
   }
 
   // 메뉴별 렌더링 관리
