@@ -466,12 +466,11 @@ const LandingPage = () => {
 
       </LandingMainContainer>
 
-
-      {mode === 0 &&
+      {/* {mode === 0 &&
         <ScrollableContent>
           <LandingScroll />
-        </ScrollableContent>
-      }
+        </ScrollableContent>} */}
+
       {mode === 4 &&
         <ScrollableContent>
           <FeedContainer />
